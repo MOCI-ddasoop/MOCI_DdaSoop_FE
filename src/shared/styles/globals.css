@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./_theme.css";
+@import "./_base.css";
+@import "./_utilities.css";
 
 :root {
   --background: #fafafa;
@@ -8,13 +11,6 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
