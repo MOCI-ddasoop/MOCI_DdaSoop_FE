@@ -1,0 +1,35 @@
+@theme {
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  --color-white: #fafafa;
+  --color-black: #121212;
+
+  --color-mainblue: #237db1;
+  --color-skyBlue: #237db1;
+  --color-pastelblue: #e4eff6;
+  --color-pastelblue-selected: #e8f6ff;
+  --color-pastelblue-border: #92cdf3;
+
+  --color-mainred: #eb5353;
+  --color-pastelred: #f5e7e4;
+  --color-pastelred-selected: #ffe7e2;
+  --color-pastelred-border: #e37a7a;
+
+  --color-pastelgreen: #e9f5e4;
+
+  --color-pastelyellow: #f5f5e4;
+}
+
+@theme {
+  --shadow-xs: 0 1px 2px 0 var(--shadow-color);
+  --shadow-sm: 0 1px 2px 0 var(--shadow-color);
+  --shadow: 0 1px 3px 0 var(--shadow-color), 0 1px 2px 0 var(--shadow-color);
+  --shadow-md: 0 4px 6px -1px var(--shadow-color),
+    0 2px 4px -2px var(--shadow-color);
+  --shadow-lg: 0 10px 15px -3px var(--shadow-color),
+    0 4px 6px -4px var(--shadow-color);
+  --shadow-xl: 0 20px 25px -5px var(--shadow-color),
+    0 8px 10px -6px var(--shadow-color);
+  --shadow-2xl: 0 25px 50px -12px var(--shadow-color);
+  --shadow-inner: inset 0 2px 4px 0 var(--shadow-color);
+}
