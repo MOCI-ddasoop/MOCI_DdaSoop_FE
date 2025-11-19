@@ -20,7 +20,11 @@ function NavLink({
   return (
     <div
       className={`${
-        tabBar ? (type === "mypage" ? "w-1/5 h-30" : "w-1/5 h-15") : ""
+        tabBar
+          ? type === "mypage" && isActive
+            ? "w-1/5 h-30"
+            : "w-1/5 h-15"
+          : ""
       }
       flex flex-col items-center relative`}
     >

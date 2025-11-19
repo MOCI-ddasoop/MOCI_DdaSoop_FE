@@ -18,10 +18,10 @@ export const mypageTabContents = [
     ],
   },
   {
-    href: "/",
+    href: "/mypage/donate/join",
     name: "나의 후원하기",
     children: [
-      { href: "/", name: "참여한 후원" },
+      { href: "/mypage/donate/join", name: "참여한 후원" },
       { href: "/mypage/donate/create", name: "개설한 후원" },
     ],
   },
