@@ -35,7 +35,7 @@ function Header() {
               style={{ width: "auto", height: "24px" }}
               loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
             ></Image>
-            <a
+            <Link
               href="/mypage"
               className="h-hover:bg-gray-100 flex justify-center items-center"
             >
@@ -46,7 +46,7 @@ function Header() {
                 alt="마이페이지 아이콘"
                 loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
               ></Image>
-            </a>
+            </Link>
           </ul>
         </nav>
       </header>

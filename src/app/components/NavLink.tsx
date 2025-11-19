@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 function NavLink({
@@ -28,7 +29,7 @@ function NavLink({
       }
       flex flex-col items-center relative`}
     >
-      <a
+      <Link
         href={href}
         className={`h-15 hover:bg-gray-100 flex justify-center items-center text-xl whitespace-nowrap ${
           tabBar
@@ -39,13 +40,13 @@ function NavLink({
         } ${isActive ? "font-semibold border-b-2" : ""}`}
       >
         {name}
-      </a>
+      </Link>
       <ul
         className={`${isActive ? "visible" : "invisible"} flex top-15 absolute`}
       >
         {children &&
           children.map(({ href, name }) => (
-            <a
+            <Link
               key={href}
               href={href}
               className={`h-15 hover:bg-gray-100 flex justify-center items-center text-xl w-fit whitespace-nowrap px-3 lg:px-7 xl:px-10 ${
@@ -53,7 +54,7 @@ function NavLink({
               }`}
             >
               {name}
-            </a>
+            </Link>
           ))}
       </ul>
     </div>
