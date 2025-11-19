@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React from "react";
 
 function NavLink({
   href,
@@ -12,14 +13,14 @@ function NavLink({
   href: string;
   name: string;
   tabBar?: boolean;
-  children?: { href: string; name: string }[];
+  children?: React.ReactNode;
   type?: "donate" | "together" | "mypage";
 }) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
-    <div
+    <li
       className={`${
         tabBar
           ? type === "mypage" && isActive
@@ -31,33 +32,26 @@ function NavLink({
     >
       <Link
         href={href}
-        className={`h-15 hover:bg-gray-100 flex justify-center items-center text-xl whitespace-nowrap ${
+        className={`h-15 hover:bg-gray-100 flex justify-center items-center text-xl whitespace-nowrap border-b-2 ${
           tabBar
-            ? type === "donate"
-              ? "w-full border-mainred"
-              : "w-full border-mainblue"
-            : "w-20 sm:w-25 md:w-30 lg:w-40 xl:w-45 border-black"
-        } ${isActive ? "font-semibold border-b-2" : ""}`}
+            ? `w-full ${
+                type === "donate"
+                  ? isActive
+                    ? "border-mainred"
+                    : "border-pastelred"
+                  : isActive
+                  ? "border-mainblue"
+                  : "border-pastelblue"
+              }`
+            : `${
+                isActive ? "border-black" : "border-transparent"
+              } w-20 sm:w-25 md:w-30 lg:w-40 xl:w-45`
+        } ${isActive ? "font-semibold" : ""}`}
       >
         {name}
       </Link>
-      <ul
-        className={`${isActive ? "visible" : "invisible"} flex top-15 absolute`}
-      >
-        {children &&
-          children.map(({ href, name }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`h-15 hover:bg-gray-100 flex justify-center items-center text-xl w-fit whitespace-nowrap px-3 lg:px-7 xl:px-10 ${
-                pathname === href ? "font-semibold text-mainblue" : ""
-              }`}
-            >
-              {name}
-            </Link>
-          ))}
-      </ul>
-    </div>
+      {isActive && children}
+    </li>
   );
 }
 

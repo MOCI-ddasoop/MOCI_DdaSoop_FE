@@ -27,26 +27,30 @@ function Header() {
             ))}
           </ul>
           <ul className="h-full flex items-center justify-center gap-6 lg:gap-8">
-            <Image
-              src={notification}
-              width={0}
-              height={0}
-              alt="알림 아이콘"
-              style={{ width: "auto", height: "24px" }}
-              loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
-            ></Image>
-            <Link
-              href="/mypage"
-              className="h-hover:bg-gray-100 flex justify-center items-center"
-            >
+            <li>
               <Image
-                src={mypage}
-                width={28}
-                height={28}
-                alt="마이페이지 아이콘"
+                src={notification}
+                width={0}
+                height={0}
+                alt="알림 아이콘"
+                style={{ width: "auto", height: "24px" }}
                 loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
               ></Image>
-            </Link>
+            </li>
+            <li>
+              <Link
+                href="/mypage"
+                className="h-hover:bg-gray-100 flex justify-center items-center"
+              >
+                <Image
+                  src={mypage}
+                  width={28}
+                  height={28}
+                  alt="마이페이지 아이콘"
+                  loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
+                ></Image>
+              </Link>
+            </li>
           </ul>
         </nav>
       </header>
