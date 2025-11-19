@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import tw from "../utils/tw";
-import { useState } from "react";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
 
@@ -12,6 +11,7 @@ interface CardImageProps {
   className?: string;
 }
 
+// NOTE : 세로축 높낮이를 다르게 하고 싶다면 세로축 정렬로 세워야 할 듯함. 현재는 가로축 정렬
 function CardImage({ src, alt, className }: CardImageProps) {
   return (
     <div
