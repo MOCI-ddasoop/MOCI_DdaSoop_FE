@@ -11,4 +11,5 @@ interface FeedDetailCardProps {
 function FeedDetailCard() {
   return <div>FeedDetailCard</div>;
 }
+
 export default FeedDetailCard;

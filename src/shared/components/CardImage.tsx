@@ -48,4 +48,5 @@ function CardImage({ src, alt, className }: CardImageProps) {
     </div>
   );
 }
+
 export default CardImage;

@@ -1,5 +1,7 @@
 import localFont from "next/font/local";
 import "@/src/shared/styles/globals.css";
+import TanstackProvider from "../shared/providers/TanstackProvider";
+import GTMInit from "@/src/shared/config/GTMInit";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -8,14 +10,18 @@ const pretendard = localFont({
   variable: "--font-pretendard",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="ko-KR" className={pretendard.variable}>
-      <body>{children}</body>
+      <body>
+        <GTMInit />
+        <TanstackProvider>{children}</TanstackProvider>
+      </body>
     </html>
   );
 }
