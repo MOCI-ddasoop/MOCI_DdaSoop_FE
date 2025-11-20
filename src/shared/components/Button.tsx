@@ -13,6 +13,7 @@ const buttonVariants = cva(
         color:{
             skyblue : "bg-skyBlue text-black hover:ring-2 hover:ring-mainblue disabled:hover:ring-0",
             red : "bg-mainred text-white hover:ring-2 hover:ring-mainred-hover disabled:hover:ring-0", 
+            gray : "bg-gray text-black hover:bg-skyBlue",
         } 
       },
       //기본 값 : 하늘색 md 사이즈 버튼 
