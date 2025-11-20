@@ -1,7 +1,7 @@
 import localFont from "next/font/local";
-import "../shared/styles/globals.css";
+import "@/src/shared/styles/globals.css";
 import TanstackProvider from "../shared/providers/TanstackProvider";
-import GTMInit from "../shared/config/GTMInit";
+import GTMInit from "@/shared/config/GTMInit";
 import Header from "./components/Header";
 
 const pretendard = localFont({
