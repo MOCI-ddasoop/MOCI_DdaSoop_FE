@@ -1,5 +1,5 @@
 import localFont from "next/font/local";
-import "@/src/shared/styles/globals.css";
+import "../shared/styles/globals.css";
 import TanstackProvider from "../shared/providers/TanstackProvider";
 import GTMInit from "../shared/config/GTMInit";
 import Header from "./components/Header";

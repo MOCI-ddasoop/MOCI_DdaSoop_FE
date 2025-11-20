@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import tw from "../utils/tw";
+import tw from "../../../shared/utils/tw";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
 

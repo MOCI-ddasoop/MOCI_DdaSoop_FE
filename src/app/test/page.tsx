@@ -1,5 +1,4 @@
-import CardContainer from "@/src/shared/components/CardContainer";
-import CardImage from "@/src/shared/components/CardImage";
+import CardContainer from "@/domain/my-page/components/CardContainer";
 
 function TestPage() {
   const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
