@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "@/src/shared/styles/globals.css";
 import TanstackProvider from "../shared/providers/TanstackProvider";
 import GTMInit from "@/src/shared/config/GTMInit";
+import Header from "./components/Header";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -20,7 +21,13 @@ export default async function RootLayout({
     <html lang="ko-KR" className={pretendard.variable}>
       <body>
         <GTMInit />
-        <TanstackProvider>{children}</TanstackProvider>
+
+        <Header />
+        <TanstackProvider>
+          <main className="pt-[60px] px-15 md:px-25 lg:px-30 xl:px-35">
+            {children}
+          </main>
+        </TanstackProvider>
       </body>
     </html>
   );
