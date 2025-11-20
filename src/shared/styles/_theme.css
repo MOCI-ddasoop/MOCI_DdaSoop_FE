@@ -5,7 +5,7 @@
   --color-black: #121212;
 
   --color-mainblue: #237db1;
-  --color-skyBlue: #237db1;
+  --color-skyBlue: #a1d4f1;
   --color-pastelblue: #e4eff6;
   --color-pastelblue-selected: #e8f6ff;
   --color-pastelblue-border: #92cdf3;
@@ -14,10 +14,13 @@
   --color-pastelred: #f5e7e4;
   --color-pastelred-selected: #ffe7e2;
   --color-pastelred-border: #e37a7a;
+  --color-mainred-hover: #eb1313;
 
   --color-pastelgreen: #e9f5e4;
 
   --color-pastelyellow: #f5f5e4;
+
+  --color-gray: #ededed;
 }
 
 @theme {
