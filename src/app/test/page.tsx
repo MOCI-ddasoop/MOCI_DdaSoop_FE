@@ -8,7 +8,7 @@ function TestPage() {
   }));
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col items-center justify-center">
       <CardContainer data={CARD_DATA} />
     </div>
   );
