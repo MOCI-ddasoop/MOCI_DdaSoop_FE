@@ -7,7 +7,7 @@ import FeedModal from "./FeedModal";
 
 const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: index,
-  src: "https://i.namu.wiki/i/bjhl-c4YuugxXFaZaFRbPvU0IGuNuSPvqVoujzeccTdP39XErpUKxRO6HWPeNj9CWIMe_mEnEj5xfuZgB8BrNawRlD1X9gSxsHJsBSVf82G71Mdw4OROpopv0sa4SwRyDINrp08r3mD9WPCv1Xpsow.webp",
+  src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
   alt: "test",
 }));
 

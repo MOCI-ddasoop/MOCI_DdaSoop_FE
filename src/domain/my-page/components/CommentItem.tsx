@@ -7,6 +7,7 @@ interface CommentItemProps {
   author: string;
   date: string;
   content: string;
+  onCommentTargetClick?: (nickname: string | null) => void;
 }
 
 function CommentItem({
@@ -14,6 +15,7 @@ function CommentItem({
   author,
   date,
   content,
+  onCommentTargetClick,
 }: CommentItemProps) {
   const [isHover, setIsHover] = useState(false);
 
@@ -28,8 +30,7 @@ function CommentItem({
           <Image
             src={profileImage}
             alt={author}
-            width={44}
-            height={44}
+            fill
             className="object-cover"
           />
         </div>
@@ -47,6 +48,9 @@ function CommentItem({
           <button
             type="button"
             className="cursor-pointer text-sm text-gray-500"
+            onClick={() => {
+              console.log("author", author);
+              onCommentTargetClick?.(author ?? null);}}
           >
             답글 달기
           </button>

@@ -68,9 +68,9 @@ function FeedDetailCard({
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 p-2">
         {/* 내용 영역 */}
-        <div className="p-4 min-h-[200px]">
+        <div className="p-2 min-h-[200px]">
           <h1 className="text-lg font-bold">{title}</h1>
           <p className="text-sm text-gray-500">{content}</p>
         </div>
@@ -104,7 +104,7 @@ function FeedDetailCard({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="text-[#237DB1] cursor-pointer hover:underline"
+              className="text-mainblue cursor-pointer hover:underline"
             >
               #{tag}
             </span>
