@@ -44,6 +44,7 @@ function FeedModal({
 
   const handleClose = () => {
     onClose();
+    setTargetNickname(null);
     contentRef.current?.scrollTo({ top: 0 });
   };
 
