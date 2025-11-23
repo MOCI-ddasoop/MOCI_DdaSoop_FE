@@ -12,7 +12,7 @@ const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   author: "author 1",
   content: "Feed 1 content",
   category: "category 1",
-  date: "2025-01-01",
+  date: "2025년 1월 1일",
   likeCount: 10,
   commentCount: 10,
   tags: ["tag1", "tag2", "tag3"],
@@ -26,7 +26,7 @@ const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
   profileImage:
     "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
   author: "John Doe",
-  date: "2025-01-01",
+  date: "2025년 1월 1일",
   content: "Hello, world!",
 }));
 
@@ -47,7 +47,7 @@ function FeedModal({
     contentRef.current?.scrollTo({ top: 0 });
   };
 
-  const handleCommentTargetClick = (nickname: string | null ) => {
+  const handleCommentTargetClick = (nickname: string | null) => {
     setTargetNickname(nickname ?? null);
   };
 
@@ -92,7 +92,10 @@ function FeedModal({
           </div>
 
           {/* content 영역 */}
-          <div ref={contentRef} className="relative w-2/5 h-full overflow-y-auto">
+          <div
+            ref={contentRef}
+            className="relative w-2/5 h-full overflow-y-auto"
+          >
             <FeedDetailCard
               id={FEED_DATA[Number(feedId)].id}
               title={FEED_DATA[Number(feedId)].title}
@@ -108,10 +111,16 @@ function FeedModal({
             />
 
             {/* comment 영역 */}
-            <CommentContainer commentList={COMMENT_LIST} onCommentTargetClick={handleCommentTargetClick}/>
+            <CommentContainer
+              commentList={COMMENT_LIST}
+              onCommentTargetClick={handleCommentTargetClick}
+            />
 
             <div className="p-2 border-t border-gray-200 sticky bottom-0 left-0 w-full bg-white">
-              <CommentInput targetNickname={targetNickname} onCommentTargetClick={handleCommentTargetClick} />
+              <CommentInput
+                targetNickname={targetNickname}
+                onCommentTargetClick={handleCommentTargetClick}
+              />
             </div>
           </div>
         </div>

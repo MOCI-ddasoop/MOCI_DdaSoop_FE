@@ -123,7 +123,7 @@ function FeedDetailCard({
             className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
           >
             <BsChatRight size={24} className="group-hover:text-amber-400" />
-            <p className="group-hover:text-amber-400">10</p>
+            <p className="group-hover:text-amber-400">{commentCount}</p>
           </button>
 
           {/* 좋아요 영역 */}
@@ -132,7 +132,7 @@ function FeedDetailCard({
             className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
           >
             <BsHeart size={24} className="group-hover:text-amber-400" />
-            <p className="group-hover:text-amber-400">10</p>
+            <p className="group-hover:text-amber-400">{likeCount}</p>
           </button>
         </div>
 

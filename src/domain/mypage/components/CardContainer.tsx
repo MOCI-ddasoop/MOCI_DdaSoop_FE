@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CardImage from "./CardImage";
 import FeedModal from "./FeedModal";
+import tw from "@/shared/utils/tw";
 
 
 const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
@@ -24,7 +25,7 @@ const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
 // 기존 구현 계획처럼 서버에서 width, height를 받아올 수 있다면 메타데이터 이용
 // 서버에서 w/h를 받아올 수 없다면 batch 단위를 임의로 선택해야 함. << 이 경우는 배치 책임이 container에 있어야 함.
 
-function CardContainer() {
+function CardContainer({ className }: { className?: string }) {
   const [feedId, setFeedId] = useState<number | null>(null);
 
   // TODO: 데이터 조회 로직 추가
@@ -35,7 +36,7 @@ function CardContainer() {
   };
 
   return (
-    <div className="w-fit grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div className={tw("w-fit grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4", className)}>
       {CARD_DATA.map((item) => (
         <CardImage
           key={item.id}
