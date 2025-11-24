@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 const capsule = cva(
-  "w-fit px-2 py-2 rounded-full text-sm whitespace-nowrap transition-all duration-100 select-none",
+  "w-fit px-2 py-1 rounded-full text-sm whitespace-nowrap transition-all duration-100 select-none",
   {
     variants: {
       type: {
@@ -73,6 +73,7 @@ function Capsule({
   const isSelected = readOnlyCapsule ? false : selected;
   return (
     <button
+      type="button"
       className={capsule({
         type,
         selected: isSelected,
@@ -81,6 +82,7 @@ function Capsule({
       onClick={isReadOnly ? undefined : onClick}
       aria-pressed={!isReadOnly ? selected ?? false : false}
       aria-label={`${text} ${type}`}
+      disabled={isReadOnly ?? false}
     >
       {text}
     </button>
