@@ -71,7 +71,7 @@ function FeedDetailCard({
       <div className="border-b border-gray-200 p-2">
         {/* 내용 영역 */}
         <div className="p-2 min-h-[200px]">
-          <h1 className="text-lg font-bold">{title}</h1>
+          {title && <h1 className="text-lg font-bold">{title}</h1>}
           <p className="text-sm text-gray-500">{content}</p>
         </div>
 
