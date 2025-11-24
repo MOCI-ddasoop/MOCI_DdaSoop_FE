@@ -1,9 +1,10 @@
 "use client";
-import { Activity, useEffect, useRef } from "react";
+import { Activity, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import FeedDetailCard from "./FeedDetailCard";
 import CommentContainer from "./CommentContainer";
+import CommentInput from "./CommentInput";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: 1,
@@ -11,21 +12,21 @@ const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   author: "author 1",
   content: "Feed 1 content",
   category: "category 1",
-  date: "2025-01-01",
+  date: "2025년 1월 1일",
   likeCount: 10,
   commentCount: 10,
   tags: ["tag1", "tag2", "tag3"],
   likedByMe: false,
   image:
-    "https://i.namu.wiki/i/bjhl-c4YuugxXFaZaFRbPvU0IGuNuSPvqVoujzeccTdP39XErpUKxRO6HWPeNj9CWIMe_mEnEj5xfuZgB8BrNawRlD1X9gSxsHJsBSVf82G71Mdw4OROpopv0sa4SwRyDINrp08r3mD9WPCv1Xpsow.webp",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
 }));
 
 const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
   id: index,
   profileImage:
-    "https://i.namu.wiki/i/bjhl-c4YuugxXFaZaFRbPvU0IGuNuSPvqVoujzeccTdP39XErpUKxRO6HWPeNj9CWIMe_mEnEj5xfuZgB8BrNawRlD1X9gSxsHJsBSVf82G71Mdw4OROpopv0sa4SwRyDINrp08r3mD9WPCv1Xpsow.webp",
+    "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
   author: "John Doe",
-  date: "2025-01-01",
+  date: "2025년 1월 1일",
   content: "Hello, world!",
 }));
 
@@ -39,14 +40,19 @@ function FeedModal({
   isOpen: boolean;
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [targetNickname, setTargetNickname] = useState<string | null>(null);
 
   const handleClose = () => {
     onClose();
+    setTargetNickname(null);
     contentRef.current?.scrollTo({ top: 0 });
   };
 
-  // TODO: query를 여기서 조회하고 모달에 출력
+  const handleCommentTargetClick = (nickname: string | null) => {
+    setTargetNickname(nickname ?? null);
+  };
 
+  // TODO: query를 여기서 조회하고 모달에 출력
 
   useEffect(() => {
     if (!isOpen) return;
@@ -87,7 +93,10 @@ function FeedModal({
           </div>
 
           {/* content 영역 */}
-          <div ref={contentRef} className="w-2/5 h-full overflow-y-auto">
+          <div
+            ref={contentRef}
+            className="relative w-2/5 h-full overflow-y-auto"
+          >
             <FeedDetailCard
               id={FEED_DATA[Number(feedId)].id}
               title={FEED_DATA[Number(feedId)].title}
@@ -103,7 +112,17 @@ function FeedModal({
             />
 
             {/* comment 영역 */}
-            <CommentContainer commentList={COMMENT_LIST} />
+            <CommentContainer
+              commentList={COMMENT_LIST}
+              onCommentTargetClick={handleCommentTargetClick}
+            />
+
+            <div className="p-2 border-t border-gray-200 sticky bottom-0 left-0 w-full bg-white">
+              <CommentInput
+                targetNickname={targetNickname}
+                onCommentTargetClick={handleCommentTargetClick}
+              />
+            </div>
           </div>
         </div>
       </div>
