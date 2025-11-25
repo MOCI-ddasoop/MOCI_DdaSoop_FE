@@ -11,7 +11,8 @@ function SearchInput({ className }: InputHTMLAttributes<HTMLInputElement>) {
 	const { replace } = useRouter();
 
 	const handleSearch = debounce((arg: unknown) => {
-		const term = arg as string;
+		if(typeof arg !== "string")return;
+		const term = arg;
 		const params = new URLSearchParams(searchParams);
 		if (term) {
 			params.set("query", term);
