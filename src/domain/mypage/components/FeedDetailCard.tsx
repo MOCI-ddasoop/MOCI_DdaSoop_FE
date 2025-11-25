@@ -1,3 +1,4 @@
+import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
 import { useState } from "react";
@@ -34,6 +35,7 @@ function FeedDetailCard({
   className,
 }: FeedDetailCardProps) {
   const [isLiked, setIsLiked] = useState<boolean>(likedByMe || false);
+  const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(null);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -46,8 +48,25 @@ function FeedDetailCard({
     }
   };
 
+    // 옵션은 switch문으로 처리
+    const handleOwnerOptionClick = (option: string) => {
+      setSelectedOwnerOption(option);
+      switch (option) {
+        case "수정":
+          console.log("수정");
+          break;
+        case "삭제":
+          console.log("삭제");
+          break;
+        case "신고":
+          console.log("신고");
+          break;
+      }
+    };
+  
+
   return (
-    <div className={tw("bg-white  h-fit", className)}>
+    <div className={tw("bg-white h-fit", className)}>
       {/* 작성자 정보 영역 */}
       <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
         <div className="flex items-center gap-2">
@@ -62,9 +81,15 @@ function FeedDetailCard({
           </div>
           <div className="text-sm text-nowrap">{author}</div>
         </div>
-        <button type="button" className="cursor-pointer">
-          <BsThreeDots size={24} className="text-gray-500" />
-        </button>
+        <DropdownButton
+          options={["수정", "삭제", "신고"]}
+          selected={selectedOwnerOption ?? ""}
+          setSelected={handleOwnerOptionClick}
+          size="md"
+          menuSize="md"
+          placement="bottom-end"
+          hilightingLastOption={true}
+          />
       </div>
 
       {/* 컨텐츠 영역 */}
@@ -137,7 +162,10 @@ function FeedDetailCard({
         </div>
 
         <button type="button" className="cursor-pointer duration-100 group">
-          <MdIosShare size={24} className="text-gray-500 group-hover:text-amber-400" />
+          <MdIosShare
+            size={24}
+            className="text-gray-500 group-hover:text-amber-400"
+          />
         </button>
       </div>
     </div>
