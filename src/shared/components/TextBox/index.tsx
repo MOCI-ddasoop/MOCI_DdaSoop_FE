@@ -1,8 +1,9 @@
 "use client";
-import { getCurrentBlock } from "@/shared/utils/getCurrentBlock";
-import { processUrlWrap } from "@/shared/utils/processUrlWrap";
+
 import tw from "@/shared/utils/tw";
 import { useCallback, useRef, useState } from "react";
+import { processUrlWrap } from "./utils/processUrlWrap";
+import { getCurrentBlock } from "./utils/getCurrentBlock";
 
 function TextBox({
 	className,
