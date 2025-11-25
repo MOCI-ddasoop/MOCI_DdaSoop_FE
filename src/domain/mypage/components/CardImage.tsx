@@ -9,12 +9,13 @@ interface CardImageProps {
   src: string;
   alt: string;
   className?: string;
+  onClick?: () => void;
 }
 
-// NOTE : 세로축 높낮이를 다르게 하고 싶다면 세로축 정렬로 세워야 할 듯함. 현재는 가로축 정렬
-function CardImage({ src, alt, className }: CardImageProps) {
+function CardImage({ src, alt, className, onClick }: CardImageProps) {
   return (
     <div
+      onClick={onClick}
       className={tw(
         "bg-gray-100 rounded-md relative cursor-pointer group",
         className
