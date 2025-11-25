@@ -81,7 +81,6 @@ function CommentItem({
           selected={selectedOption ?? ""}
           setSelected={handleOptionClick}
           buttonStyle="horizontal"
-          variant="secondary"
           size="sm"
           menuSize="sm"
           placement="bottom-end"
