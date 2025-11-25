@@ -28,7 +28,7 @@ function TogetherListItem({
       </div>
       <div className="w-38 flex-1 flex gap-2 flex-col">
         <p className="font-medium truncate">{name}</p>
-        <div className="flex justify-baseline align-center gap-2">
+        <div className="flex flex-wrap justify-baseline align-center gap-2">
           <Capsule
             text={category}
             type="category"
