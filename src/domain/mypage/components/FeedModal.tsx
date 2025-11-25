@@ -48,6 +48,7 @@ function FeedModal({
     contentRef.current?.scrollTo({ top: 0 });
   };
 
+
   const handleCommentTargetClick = (nickname: string | null) => {
     setTargetNickname(nickname ?? null);
   };
@@ -95,7 +96,7 @@ function FeedModal({
           {/* content 영역 */}
           <div
             ref={contentRef}
-            className="relative w-2/5 h-full overflow-y-auto"
+            className="relative w-2/5 h-full overflow-y-auto overflow-x-hidden"
           >
             <FeedDetailCard
               id={FEED_DATA[Number(feedId)].id}
