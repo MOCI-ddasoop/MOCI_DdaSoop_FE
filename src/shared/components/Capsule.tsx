@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import tw from "../utils/tw";
 
 const capsule = cva(
   "w-fit px-2 py-1 rounded-full text-sm whitespace-nowrap transition-all duration-100 select-none",
@@ -59,6 +60,7 @@ const capsule = cva(
 interface CapsuleProps extends VariantProps<typeof capsule> {
   text: string;
   onClick?: () => void;
+  className?: string;
 }
 
 function Capsule({
@@ -67,6 +69,7 @@ function Capsule({
   selected = false,
   readOnly = false,
   onClick,
+  className,
 }: CapsuleProps) {
   const readOnlyCapsule = type === "status" || type === "participant";
   const isReadOnly = readOnlyCapsule || readOnly;
@@ -74,11 +77,14 @@ function Capsule({
   return (
     <button
       type="button"
-      className={capsule({
-        type,
-        selected: isSelected,
-        readOnly: isReadOnly,
-      })}
+      className={tw(
+        capsule({
+          type,
+          selected: isSelected,
+          readOnly: isReadOnly,
+        }),
+        className
+      )}
       onClick={isReadOnly ? undefined : onClick}
       aria-pressed={!isReadOnly ? selected ?? false : false}
       aria-label={`${text} ${type}`}

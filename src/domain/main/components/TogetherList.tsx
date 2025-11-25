@@ -1,0 +1,36 @@
+import TogetherListItem, {
+  TogetherListItemProps,
+} from "@/shared/components/TogetherListItem";
+import Link from "next/link";
+
+function TogetherList({
+  togetherList,
+}: {
+  togetherList: TogetherListItemProps[];
+}) {
+  return (
+    <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
+      <div className="flex justify-between items-center">
+        <h3>함께하기</h3>
+        <Link
+          href="/together"
+          className="text-sm hover:underline hover:underline-offset-2"
+        >
+          더보기
+        </Link>
+      </div>
+      {togetherList.map(({ image, name, category, isOnline, href }, index) => (
+        <TogetherListItem
+          key={index}
+          image={image}
+          name={name}
+          category={category}
+          isOnline={isOnline}
+          href={href}
+        />
+      ))}
+    </div>
+  );
+}
+
+export default TogetherList;
