@@ -19,7 +19,7 @@ function DonationListItem({
   return (
     <Link
       href={href}
-      className="w-56 h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg hover:bg-gray-100 hover:shadow transition-colors transition-shadow"
+      className="w-56 h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg hover:bg-gray-100 hover:shadow transition-all"
     >
       <div className="shrink-0 relative w-12 h-12 rounded-full overflow-hidden border border-gray-300">
         <Image src={donationImage} alt={name} fill />
