@@ -15,13 +15,13 @@ const dropdownButton = cva(
     variants: {
       variant: {
         primary: "hover:bg-gray-100 text-gray-500",
-        secondary: "hover:bg-blue-50 text-blue-600",
-        danger: "hover:bg-red-50 text-red-600",
+        secondary: "hover:bg-blue-50 text-mainblue",
+        danger: "hover:bg-red-50 text-mainred",
       },
       size: {
         sm: "p-1",
         md: "p-2",
-        lg: "p-3",
+        lg: "p-3",  
       },
       disabled: {
         true: "cursor-not-allowed opacity-50",
@@ -58,9 +58,9 @@ const dropdownItem = cva(
     variants: {
       variant: {
         default: "hover:bg-gray-100 text-gray-700",
-        secondary: "hover:bg-blue-50 text-blue-600",
-        danger: "hover:bg-red-50 text-red-600",
-        success: "hover:bg-green-50 text-green-600",
+        secondary: "hover:bg-blue-50 text-mainblue",
+        danger: "hover:bg-red-50 text-mainred",
+        success: "hover:bg-green-50 text-pastelgreen",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",
