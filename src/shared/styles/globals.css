@@ -56,17 +56,4 @@ body {
     color: #9ca3af; /* gray-400 */
     pointer-events: none;
   }
-
-  @keyframes slide {
-    from {
-      transform: translateX(-100%);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-
-  .progress-animate {
-    animation: slide 0.5s ease-out forwards;
-  }
 }

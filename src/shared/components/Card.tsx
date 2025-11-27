@@ -71,34 +71,25 @@ function Card(props: TogetherCardProps | DonateCardProps) {
             <ProgressBar type={type} cardUI progress={props.progress} />
           )}
         </div>
-        <h1
-          className={`font-semibold text-lg min-w-full ${
-            type === "together" && props.status
-              ? "line-clamp-1"
-              : "line-clamp-2"
-          }`}
-        >
+        <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>
           {title}
         </h1>
-        <div
-          className={`flex flex-wrap gap-1.5 items-center overflow-hidden ${
-            type === "together" && props.status ? "max-h-16" : "max-h-7"
-          }`}
-        >
-          <Capsule text={category} readOnly />
-          {type === "together" && (
-            <>
+        <div className={`w-full overflow-x-clip`}>
+          <div className="flex gap-1.5 items-center w-max hover:overflow-scroll-animation">
+            <Capsule text={category} readOnly />
+            {type === "together" && (
               <Capsule type="isOnline" text={props.isOnline} readOnly />
-              {props.status && (
-                <Capsule text={props.status} type="status" readOnly />
-              )}
-            </>
-          )}
+            )}
+          </div>
         </div>
-        {type === "together" && props.capacity && props.participant && (
+        {type === "together" && props.status && (
           <Capsule
             type="participant"
-            text={`모집인원 ${props.participant}/${props.capacity}`}
+            text={
+              props.status === "모집중"
+                ? `${props.status} ${props.participant}/${props.capacity}`
+                : props.status
+            }
             className="absolute top-3 right-3"
           />
         )}
