@@ -1,0 +1,214 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import { MdKeyboardDoubleArrowLeft,MdKeyboardArrowLeft,MdKeyboardArrowRight} from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+
+interface BasePaginationProps {
+  totalPages: number;
+  pageGroupSize?: number;
+}
+
+interface UrlPaginationProps extends BasePaginationProps {
+  mode?: "url";
+  pageParamName?: string;
+}
+
+interface StatePaginationProps extends BasePaginationProps {
+  mode: "state";
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}
+
+type PaginationProps = UrlPaginationProps | StatePaginationProps;
+
+const baseButton = "w-9 h-9 flex items-center justify-center rounded-full text-base font-medium ";
+const pageButtonActive = `${baseButton} bg-mainblue text-white`;
+const pageButtonNormal = `${baseButton} bg-pastelblue text-black`;
+const navButton = `${baseButton}`;
+const navButtonDisabled = `${baseButton} cursor-not-allowed`;
+
+type NavButtonProps = {
+    targetPage: number;
+    disabled: boolean;
+    children: React.ReactNode;
+    mode: "url" | "state";
+    createPageHref: (page: number) => string;
+    handleStateChange: (page: number) => void;
+  };
+
+  // Navigation 버튼
+  const NavButton = ({
+    targetPage, 
+    disabled, 
+    children, 
+    mode, 
+    createPageHref, 
+    handleStateChange
+   }: NavButtonProps) => {
+  if (disabled) {
+    return (
+      <button className={navButtonDisabled} disabled>
+        {children}
+      </button>
+    );
+  }
+
+   if(mode === "state"){
+    return (
+      <button 
+        className={navButton}
+        onClick={() => handleStateChange(targetPage)}
+      >
+        {children}
+      </button>
+    )
+  }
+
+  return (
+    <Link 
+      href={createPageHref(targetPage)} 
+      className={navButton}
+    >
+      {children}
+    </Link>
+    ) 
+  };
+
+  // 페이지네이션 버튼
+  type PageButtonProps = {
+  page: number;
+  currentPage: number;
+  mode: "url" | "state";
+  createPageHref: (page: number) => string;
+  handleStateChange: (page: number) => void;
+  };
+
+  const PageButton = ({ 
+    page, 
+    currentPage, 
+    mode, 
+    createPageHref, 
+    handleStateChange 
+  }: PageButtonProps) => {
+  const isActive = page === currentPage;
+  const className = isActive ? pageButtonActive : pageButtonNormal;
+
+    if(mode === "state"){
+      return (
+        <button
+          className={className}
+          onClick={() => handleStateChange(page)}
+        >
+          {page}
+        </button>
+      )
+    }
+    return (
+      <Link
+        href={createPageHref(page)}
+        className={className}
+      >
+        {page}
+      </Link>
+    )
+  };
+
+function Pagination(props: PaginationProps) {
+  const { totalPages, pageGroupSize = 5 } = props;
+  const mode = props.mode ?? "url";
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  if(totalPages <= 1) return null;
+
+  const currentPage = mode === "url"
+    ? Number(
+        searchParams.get((props as UrlPaginationProps).pageParamName || "page")
+      ) || 1
+    : (props as StatePaginationProps).currentPage;
+
+  const groupSize = pageGroupSize;
+  const currentGroup = Math.ceil(currentPage / groupSize);
+  const startPage = (currentGroup - 1) * groupSize + 1;
+  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+  const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+  const createPageHref = (page: number) => {
+  if (mode === "url") {
+    const params = new URLSearchParams(searchParams);
+    const pageParamName = (props as UrlPaginationProps).pageParamName || "page";
+    params.set(pageParamName, page.toString());
+    return `${pathname}?${params.toString()}`;
+  }
+  return "#";
+};
+
+  const handleStateChange = (page:number) => {
+    if(mode === "state"){
+      (props as StatePaginationProps).onPageChange(page);
+    }
+  }
+
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
+
+  return (
+    <div className="py-8 flex items-center justify-center gap-2">
+      <NavButton 
+        targetPage = {1} 
+        disabled={isFirstPage}
+        mode={mode}
+        createPageHref={createPageHref}
+        handleStateChange={handleStateChange}
+      >
+        <MdKeyboardDoubleArrowLeft size={24} className={isFirstPage ? "text-gray" : "text-mainblue"} />
+      </NavButton>
+
+      <NavButton 
+        targetPage={currentPage - 1} 
+        disabled={isFirstPage}
+        mode={mode}
+        createPageHref={createPageHref}
+        handleStateChange={handleStateChange}
+      >
+        <MdKeyboardArrowLeft size={24} className={isFirstPage ? "text-gray" : "text-mainblue"} />
+      </NavButton>
+
+      {pageNumbers.map((page) => (
+        <PageButton 
+          key={page} 
+          page={page}
+          currentPage={currentPage}
+          mode={mode}
+          createPageHref={createPageHref}
+          handleStateChange={handleStateChange}
+        />
+      ))}
+
+      <NavButton 
+        targetPage={currentPage + 1} 
+        disabled={isLastPage}
+        mode={mode}
+        createPageHref={createPageHref}
+        handleStateChange={handleStateChange}
+      >
+        <MdKeyboardArrowRight size={24} className={isLastPage ? "text-gray" : "text-mainblue"} />
+      </NavButton>
+
+      <NavButton 
+        targetPage={totalPages} 
+        disabled={isLastPage}
+        mode={mode}
+        createPageHref={createPageHref}
+        handleStateChange={handleStateChange}
+      >
+        <MdKeyboardDoubleArrowRight size={24} className={isLastPage ? "text-gray" : "text-mainblue"} />
+      </NavButton>
+    </div>
+  );
+}
+export default Pagination
