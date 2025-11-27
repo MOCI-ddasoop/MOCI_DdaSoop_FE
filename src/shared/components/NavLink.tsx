@@ -18,12 +18,11 @@ function NavLink({
 }) {
   const pathname = usePathname();
   const isActive = pathname === href;
-
   return (
     <li
       className={`${
         tabBar
-          ? type === "mypage" && isActive
+          ? type === "mypage" && isActive && children
             ? "w-1/5 h-30"
             : "w-1/5 h-15"
           : ""
