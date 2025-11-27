@@ -1,4 +1,5 @@
 import CardContainer from "@/domain/mypage/components/CardContainer";
+import MyCommentContiner from "@/domain/mypage/components/MyCommentContiner";
 
 function TestPage() {
   const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
@@ -9,7 +10,7 @@ function TestPage() {
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <CardContainer />
+      <MyCommentContiner />
     </div>
   );
 }

@@ -21,7 +21,7 @@ const dropdownButton = cva(
       size: {
         sm: "p-1",
         md: "p-2",
-        lg: "p-3",  
+        lg: "p-3",
       },
       disabled: {
         true: "cursor-not-allowed opacity-50",
@@ -140,7 +140,9 @@ function DropdownButton({
             size,
             disabled,
           }),
-          className
+          className,
+          // 열린 상태면 항상 보이도록 설정
+          isOpen && "opacity-100"
         )}
         disabled={disabled ?? false}
         aria-expanded={isOpen}
