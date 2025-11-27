@@ -2,20 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { MdKeyboardDoubleArrowLeft,MdKeyboardArrowLeft,MdKeyboardArrowRight} from "react-icons/md";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowLeft,MdKeyboardArrowLeft,MdKeyboardArrowRight,MdKeyboardDoubleArrowRight} from "react-icons/md";
 
-interface BasePaginationProps {
+interface UrlPaginationProps {
   totalPages: number;
-  pageGroupSize?: number;
-}
-
-interface UrlPaginationProps extends BasePaginationProps {
   mode?: "url";
   pageParamName?: string;
 }
 
-interface StatePaginationProps extends BasePaginationProps {
+interface StatePaginationProps {
+  totalPages: number;
   mode: "state";
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -29,6 +25,7 @@ const pageButtonNormal = `${baseButton} bg-pastelblue text-black`;
 const navButton = `${baseButton}`;
 const navButtonDisabled = `${baseButton} cursor-not-allowed`;
 
+// Navigation 버튼
 type NavButtonProps = {
     targetPage: number;
     disabled: boolean;
@@ -38,7 +35,6 @@ type NavButtonProps = {
     handleStateChange: (page: number) => void;
   };
 
-  // Navigation 버튼
   const NavButton = ({
     targetPage, 
     disabled, 
@@ -116,9 +112,8 @@ type NavButtonProps = {
   };
 
 function Pagination(props: PaginationProps) {
-  const { totalPages, pageGroupSize = 5 } = props;
+  const { totalPages } = props;
   const mode = props.mode ?? "url";
-
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -130,13 +125,14 @@ function Pagination(props: PaginationProps) {
       ) || 1
     : (props as StatePaginationProps).currentPage;
 
-  const groupSize = pageGroupSize;
-  const currentGroup = Math.ceil(currentPage / groupSize);
-  const startPage = (currentGroup - 1) * groupSize + 1;
-  const endPage = Math.min(startPage + groupSize - 1, totalPages);
+  const PAGE_GROUP_SIZE = 5;
+  const currentGroup = Math.ceil(currentPage / PAGE_GROUP_SIZE);
+  const startPage = (currentGroup - 1) * PAGE_GROUP_SIZE + 1;
+  const endPage = Math.min(startPage + PAGE_GROUP_SIZE - 1, totalPages);
 
   const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
 
+  //url 생성 함수 
   const createPageHref = (page: number) => {
   if (mode === "url") {
     const params = new URLSearchParams(searchParams);
@@ -144,7 +140,7 @@ function Pagination(props: PaginationProps) {
     params.set(pageParamName, page.toString());
     return `${pathname}?${params.toString()}`;
   }
-  return "#";
+  return "#"; //state 모드일 때는 사용되지 않음
 };
 
   const handleStateChange = (page:number) => {
@@ -157,7 +153,7 @@ function Pagination(props: PaginationProps) {
   const isLastPage = currentPage === totalPages;
 
   return (
-    <div className="py-8 flex items-center justify-center gap-2">
+    <div className="py-5 flex items-center justify-center gap-4">
       <NavButton 
         targetPage = {1} 
         disabled={isFirstPage}
@@ -211,4 +207,4 @@ function Pagination(props: PaginationProps) {
     </div>
   );
 }
-export default Pagination
+export default Pagination;
