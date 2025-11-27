@@ -10,3 +10,32 @@
   justify-content: center;
   align-items: center;
 }
+
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@utility progress-animate {
+  animation: slide 0.5s ease-out forwards;
+}
+
+@keyframes scroll-x {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(min(calc(-100% + 190px), 0px));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@utility overflow-scroll-animation {
+  animation: scroll-x 3s linear infinite;
+}
