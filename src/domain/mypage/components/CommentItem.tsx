@@ -1,7 +1,9 @@
+"use client";
+
 import DropdownButton from "@/shared/components/DropdownButton";
+import tw from "@/shared/utils/tw";
 import Image from "next/image";
 import { useState } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
 
 interface CommentItemProps {
   profileImage: string;
@@ -9,6 +11,7 @@ interface CommentItemProps {
   date: string;
   content: string;
   onCommentTargetClick?: (nickname: string | null) => void;
+  className?: string;
 }
 
 function CommentItem({
@@ -17,8 +20,8 @@ function CommentItem({
   date,
   content,
   onCommentTargetClick,
+  className,
 }: CommentItemProps) {
-  const [isHover, setIsHover] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleOptionClick = (option: string) => {
@@ -38,9 +41,10 @@ function CommentItem({
 
   return (
     <li
-      className="relative flex flex-col items-start p-2 w-full border-b border-gray-100 gap-1 hover:bg-gray-100"
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      className={tw(
+        "relative flex flex-col items-start p-2 w-full border-b border-gray-100 gap-1 hover:bg-gray-100 group",
+        className
+      )}
     >
       <div className="flex items-center gap-2">
         <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
@@ -74,19 +78,17 @@ function CommentItem({
           </button>
         </div>
       </div>
-      {isHover && (
-        <DropdownButton
-          className="absolute right-2 bottom-2"
-          options={["수정", "삭제", "신고"]}
-          selected={selectedOption ?? ""}
-          setSelected={handleOptionClick}
-          buttonStyle="horizontal"
-          size="sm"
-          menuSize="sm"
-          placement="bottom-end"
-          hilightingLastOption={true}
-        />
-      )}
+      <DropdownButton
+        className="absolute right-2 bottom-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        options={["수정", "삭제", "신고"]}
+        selected={selectedOption ?? ""}
+        setSelected={handleOptionClick}
+        buttonStyle="horizontal"
+        size="sm"
+        menuSize="sm"
+        placement="bottom-end"
+        hilightingLastOption={true}
+      />
     </li>
   );
 }

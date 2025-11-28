@@ -15,8 +15,8 @@ const dropdownButton = cva(
     variants: {
       variant: {
         primary: "hover:bg-gray-100 text-gray-500",
-        secondary: "hover:bg-blue-50 text-blue-600",
-        danger: "hover:bg-red-50 text-red-600",
+        secondary: "hover:bg-blue-50 text-mainblue",
+        danger: "hover:bg-red-50 text-mainred",
       },
       size: {
         sm: "p-1",
@@ -58,9 +58,9 @@ const dropdownItem = cva(
     variants: {
       variant: {
         default: "hover:bg-gray-100 text-gray-700",
-        secondary: "hover:bg-blue-50 text-blue-600",
-        danger: "hover:bg-red-50 text-red-600",
-        success: "hover:bg-green-50 text-green-600",
+        secondary: "hover:bg-blue-50 text-mainblue",
+        danger: "hover:bg-red-50 text-mainred",
+        success: "hover:bg-green-50 text-pastelgreen",
       },
       size: {
         sm: "px-3 py-1.5 text-sm",
@@ -140,7 +140,9 @@ function DropdownButton({
             size,
             disabled,
           }),
-          className
+          className,
+          // 열린 상태면 항상 보이도록 설정
+          isOpen && "opacity-100"
         )}
         disabled={disabled ?? false}
         aria-expanded={isOpen}

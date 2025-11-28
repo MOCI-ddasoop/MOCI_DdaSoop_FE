@@ -1,4 +1,5 @@
 "use client";
+import TextBox from "@/shared/components/TextBox";
 import tw from "@/shared/utils/tw";
 import { Activity, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
@@ -14,22 +15,12 @@ function CommentInput({
   onSubmit,
   onCommentTargetClick,
 }: CommentInputProps) {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [comment, setComment] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit?.(comment);
     onCommentTargetClick?.(null);
-  };
-
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value);
-
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = "auto";
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-    }
   };
 
   return (
@@ -59,15 +50,7 @@ function CommentInput({
 
       <div className="flex justify-center items-stretch gap-2 w-full h-full">
         <div className="flex-1 flex items-center border-gray-300">
-          <textarea
-            ref={textAreaRef}
-            value={comment}
-            onChange={onChange}
-            placeholder="댓글을 입력해주세요."
-            rows={1}
-            className="w-full p-2 resize-none overflow-hidden focus:outline-none border-none"
-            style={{ lineHeight: "1.2" }}
-          />
+          <TextBox placeholder="댓글을 입력해주세요." setValue={setComment} />
         </div>
 
         <div className="self-stretch py-2">
