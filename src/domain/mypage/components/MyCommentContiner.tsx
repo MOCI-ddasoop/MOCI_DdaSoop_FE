@@ -1,5 +1,9 @@
+"use client";
+
+import { groupById } from "@/shared/utils/groupById";
 import CommentItem from "./CommentItem";
 import FeedSummary from "./FeedSummary";
+import { useState } from "react";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: index,
@@ -27,13 +31,19 @@ const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
 }));
 
 function MyCommentContiner() {
+  const [commentList, setCommentList] = useState(() =>
+    groupById([...COMMENT_LIST, ...COMMENT_LIST], "feedId")
+  );
+
   return (
     <ul className="flex flex-col gap-2 w-full">
       {COMMENT_LIST.map((comment) => {
         const feed = FEED_DATA.find((feed) => feed.id === comment.feedId);
-
         return (
-          <div className="flex gap-4 w-full border-b border-gray-100" key={comment.id}>
+          <div
+            className="flex gap-4 w-full border-b border-gray-100"
+            key={comment.id}
+          >
             <FeedSummary
               id={feed?.id ?? 0}
               content={feed?.content ?? ""}
@@ -41,14 +51,20 @@ function MyCommentContiner() {
               createdAt={feed?.date ?? ""}
               profileImage={feed?.image ?? ""}
               FeedImage={feed?.image ?? ""}
+              className="h-fit"
             />
-            <CommentItem
-              profileImage={comment.profileImage}
-              author={comment.author}
-              date={comment.date}
-              content={comment.content}
-              className="w-fit flex-1"
-            />
+            <div className="flex flex-col gap-2 w-fit flex-1">
+              {commentList[comment.feedId].slice(0, 2).map((comment) => (
+                <CommentItem
+                  key={comment.id}
+                  profileImage={comment.profileImage}
+                  author={comment.author}
+                  date={comment.date}
+                  content={comment.content}
+                  className="w-full"
+                />
+              ))}
+            </div>
           </div>
         );
       })}

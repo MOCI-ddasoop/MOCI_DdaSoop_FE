@@ -74,7 +74,7 @@ function CommentItem({
               onCommentTargetClick?.(author ?? null);
             }}
           >
-            답글 달기
+            답글
           </button>
         </div>
       </div>
