@@ -21,9 +21,9 @@ function TabBar({
     <ul className="w-full h-fit flex justify-start items-baseline">
       {tabContents.map(({ href, name, children }) => (
         <NavLink key={href} href={href} name={name} tabBar type={type}>
-          <ul className="flex top-15 left-1/2 -translate-x-1/2 absolute">
-            {children &&
-              children.map(({ href, name }) => (
+          {children && (
+            <ul className="flex top-15 left-1/2 -translate-x-1/2 absolute">
+              {children.map(({ href, name }) => (
                 <li key={href}>
                   <Link
                     href={href}
@@ -35,7 +35,8 @@ function TabBar({
                   </Link>
                 </li>
               ))}
-          </ul>
+            </ul>
+          )}
         </NavLink>
       ))}
     </ul>
