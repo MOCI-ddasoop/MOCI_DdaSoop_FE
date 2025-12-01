@@ -2,7 +2,7 @@ import localFont from "next/font/local";
 import "@/shared/styles/globals.css";
 import TanstackProvider from "../shared/providers/TanstackProvider";
 import GTMInit from "@/shared/config/GTMInit";
-import Header from "@/shared/components/Header/Header";
+import Header from "@/shared/components/Header";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
