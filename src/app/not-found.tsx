@@ -6,7 +6,7 @@ import BackButton from "@/shared/components/BackButton";
 const stars = Array.from({ length: 50 }, (_, i) => ({
   id: i,
   left: (i * 7.3) % 100,
-  top: (i * 11.7) % 70, // 상단 70%에만 배치
+  top: (i * 11.7) % 70,
   delay: (i * 0.1) % 3,
   duration: 2 + (i % 3),
 }));
@@ -32,13 +32,16 @@ function NotFound() {
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
         {/* 타이틀 */}
-        <h1 className="text-4xl font-bold mb-2">따숲</h1>
+        <h1 className="text-5xl font-bold mb-8">따숲</h1>
         <p className="text-lg text-gray-300 mb-8">페이지를 찾을 수 없습니다.</p>
 
         <BackButton className="px-6 py-3 bg-transparent border border-gray-400 text-gray-300 rounded-lg hover:bg-gray-700 hover:text-white transition-colors cursor-pointer">
           이전으로 돌아가기
         </BackButton>
       </div>
+
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[#1c140b] to-gray-900/40" />
+
 
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
         <div
@@ -78,7 +81,6 @@ function NotFound() {
               </linearGradient>
             </defs>
 
-            {/* 메인 서치라이트 빔 - 조금 더 넓게 */}
             <path
               d="M 90 600 L 30 0 L 150 0 Z"
               fill="url(#searchlightGradient)"
