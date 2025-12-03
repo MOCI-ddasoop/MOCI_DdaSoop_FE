@@ -39,3 +39,29 @@
 @utility overflow-scroll-animation {
   animation: scroll-x 3s linear infinite;
 }
+
+@utility shake-rotate-animation {
+  animation: shake-rotate 4s ease-in-out infinite;
+  transform-origin: center bottom
+}
+
+@keyframes shake-rotate {
+  0% {
+    transform: rotate(20deg);
+  }
+  10% {
+    transform: rotate(20deg);
+  }
+  45% {
+    transform: rotate(-20deg);
+  }
+  55% {
+    transform: rotate(-20deg);
+  }
+  90% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
