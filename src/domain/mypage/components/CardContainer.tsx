@@ -63,7 +63,7 @@ function CardContainer({ className }: { className?: string }) {
 
     return CARD_DATA.map((item) => {
       const aspectRatio = item.width / item.height;
-      const itemHeight = itemWidth / aspectRatio;
+      const itemHeight = Math.min(itemWidth / aspectRatio, 500);
 
       // 가장 짧은 컬럼 찾기
       const shortestColumnIndex = currentColumnHeights.indexOf(
