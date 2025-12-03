@@ -31,12 +31,10 @@ function FeedImageInput() {
 		}
 		setSlides((prev) => [...prev, ...newFiles]);
 		e.target.value = "";
-		console.log(slides);
 	};
 
 	const handleDeleteSlide = (index: number) => {
 		setSlides((prev) => prev.filter((_, i) => i !== index));
-		console.log(slides);
 	};
 
 	const handleDragOver = (e: React.DragEvent) => {
