@@ -1,0 +1,11 @@
+.swiper-slide-thumb-active .slide {
+	@apply ring-2 ring-mainblue rounded-lg;
+}
+
+.main-swiper-wrapper {
+	@apply box-border;
+}
+
+.thumbs-swiper-wrapper .swiper-slide {
+	@apply w-fit;
+}
