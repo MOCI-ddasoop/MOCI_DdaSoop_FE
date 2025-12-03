@@ -61,7 +61,7 @@ function CardImage({
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-0 w-full flex gap-2 bg-black/50 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
+      <div className="absolute bottom-4 left-0 w-full flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
         <div className="flex items-center justify-between gap-2">
           <BsChatRight size={24} className="text-white" />
           <p className="text-white">10</p>
