@@ -132,7 +132,7 @@ function FeedCreatorModal({
 					category={togetherInfo.together.category}
 					isOnline={togetherInfo.together.isOnline}
 					href={togetherInfo.together.href}
-					className="w-full"
+					widthClass="w-full"
 				/>
 			) : (
 				""
