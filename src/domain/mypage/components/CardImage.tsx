@@ -8,14 +8,41 @@ import { BsChatRight, BsHeart } from "react-icons/bs";
 interface CardImageProps {
   src: string;
   alt: string;
+  width: number;
+  imageWidth: number;
+  imageHeight: number;
+  x?: number;
+  y?: number;
   className?: string;
   onClick?: () => void;
 }
 
-function CardImage({ src, alt, className, onClick }: CardImageProps) {
+function CardImage({
+  src,
+  alt,
+  width,
+  imageWidth,
+  imageHeight,
+  x = 0,
+  y = 0,
+  className,
+  onClick,
+}: CardImageProps) {
+
+  const aspectRatio = imageWidth / imageHeight;
+  const height = width / aspectRatio;
+  
   return (
     <div
       onClick={onClick}
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: width,
+        height: height,
+        transform: `translate(${x}px, ${y}px)`,
+      }}
       className={tw(
         "bg-gray-100 rounded-md relative cursor-pointer group",
         className
@@ -34,7 +61,7 @@ function CardImage({ src, alt, className, onClick }: CardImageProps) {
         </div>
       </div>
 
-      <div className="absolute bottom-4 left-0 w-full flex gap-2 bg-black/50 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
+      <div className="absolute bottom-4 left-0 w-full flex gap-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
         <div className="flex items-center justify-between gap-2">
           <BsChatRight size={24} className="text-white" />
           <p className="text-white">10</p>
