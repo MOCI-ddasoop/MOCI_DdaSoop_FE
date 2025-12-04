@@ -16,9 +16,10 @@ function DonationList({ donations }: { donations: DonationListItemProps[] }) {
         </Link>
       </div>
       {donations.map(
-        ({ name, userName, amount, donationImage, href }, index) => (
+        ({ id, name, userName, amount, donationImage, href }, index) => (
           <DonationListItem
-            key={index}
+            key={id}
+            id={id}
             name={name}
             userName={userName}
             amount={amount}

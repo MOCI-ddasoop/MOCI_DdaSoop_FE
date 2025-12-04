@@ -19,9 +19,10 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {togetherList.map(({ image, name, category, isOnline, href }, index) => (
-        <TogetherListItem
-          key={index}
+      {togetherList.map(({ id, image, name, category, isOnline, href }) => (
+        <TogetherListItem 
+          key={id}
+          id={id}
           image={image}
           name={name}
           category={category}
