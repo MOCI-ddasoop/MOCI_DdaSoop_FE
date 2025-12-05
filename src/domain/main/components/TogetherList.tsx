@@ -4,9 +4,9 @@ import TogetherListItem, {
 import Link from "next/link";
 
 function TogetherList({
-  togetherList,
+  items,
 }: {
-  togetherList: TogetherListItemProps[];
+  items: TogetherListItemProps[];
 }) {
   return (
     <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
@@ -19,7 +19,7 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {togetherList.map(({ id, image, name, category, isOnline, href }) => (
+      {items.map(({ id, image, name, category, isOnline, href }) => (
         <TogetherListItem 
           key={id}
           id={id}

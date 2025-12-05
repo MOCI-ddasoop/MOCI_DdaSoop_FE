@@ -17,7 +17,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko-KR" className={pretendard.variable}>
+    <html lang="ko" className={pretendard.variable}>
       <body>
         <GTMInit />
         <Header />
