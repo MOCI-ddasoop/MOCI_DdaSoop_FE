@@ -15,7 +15,7 @@ export default async function Home({
   return (
     <div className="flex gap-8 py-4">
       <CardContainer queryParams={query} />
-      <div className="sticky top-20 min-w-60 h-fit flex flex-col gap-3 items-center">
+      <div className="sticky top-20 min-w-60 h-fit flex flex-col gap-2 items-center">
         <SearchInput />
         <TogetherList togetherList={TOGETHER_LIST} />
         <DonationList donations={DONATION_LIST} />

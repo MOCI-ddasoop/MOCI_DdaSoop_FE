@@ -10,7 +10,7 @@ export const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
 }));
 
 export const TOGETHER_LIST: TogetherListItemProps[] = Array.from({
-  length: 3,
+  length: 2,
 }).map((_, index) => ({
   id: `together-${index}`,
   image:
@@ -22,7 +22,7 @@ export const TOGETHER_LIST: TogetherListItemProps[] = Array.from({
 }));
 
 export const DONATION_LIST: DonationListItemProps[] = Array.from({
-  length: 3,
+  length: 2,
 }).map((_, index) => ({
   id: `donation-${index}`,
   donationImage:

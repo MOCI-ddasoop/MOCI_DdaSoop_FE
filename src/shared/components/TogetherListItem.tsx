@@ -28,7 +28,7 @@ function TogetherListItem({
       <div className="shrink-0 relative w-12 h-12 rounded-full overflow-hidden border border-gray-300">
         <Image src={image} alt={name} fill />
       </div>
-      <div className="w-38 flex-1 flex gap-2 flex-col">
+      <div className="w-38 flex-1 flex gap-0.5 flex-col">
         <p className="font-medium truncate">{name}</p>
         <div className="flex flex-wrap justify-baseline align-center gap-2">
           <Capsule
