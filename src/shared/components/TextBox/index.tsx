@@ -4,20 +4,28 @@ import { getCurrentBlock } from "./utils/getCurrentBlock";
 import { processUrlWrap } from "./utils/processUrlWrap";
 import tw from "@/shared/utils/tw";
 import { useCallback, useRef, useState } from "react";
+import DOMPurify from "dompurify";
+
+type TextBoxType = React.HTMLAttributes<HTMLDivElement> & {
+	isAble?: boolean;
+	className?: string;
+	placeholder?: string | Element;
+	setValue?: (value: string) => void;
+};
 
 function TextBox({
+	isAble = true,
 	className,
 	placeholder,
 	setValue,
-}: {
-	className?: string;
-	placeholder?: string;
-	setValue?: (value: string) => void;
-}) {
+	hidden,
+}: TextBoxType) {
 	const textBoxRef = useRef<HTMLDivElement>(null);
 	const [isComposing, setIsComposing] = useState(false);
-	//중복 입력 방지
-	const pendingRef = useRef(false);
+
+	const makeCleanHTML = (html: string) => {
+		return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+	};
 
 	const processWrapCallback = useCallback(() => {
 		const root = textBoxRef.current;
@@ -41,13 +49,13 @@ function TextBox({
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
 					getCurrentBlock(root, selection);
-					if (setValue) setValue(root.innerHTML);
+					if (setValue) setValue(makeCleanHTML(root.innerHTML));
 				});
 			});
 			return;
 		}
 		if (isComposing) {
-			if (setValue) setValue(root.innerHTML);
+			if (setValue) setValue(makeCleanHTML(root.innerHTML));
 			return;
 		}
 		if (inputType === "deleteContentBackward") {
@@ -66,7 +74,7 @@ function TextBox({
 						if (root.innerText.trim() === "") {
 							root.innerHTML = "";
 						}
-						if (setValue) setValue(root.innerHTML);
+						if (setValue) setValue(makeCleanHTML(root.innerHTML));
 					});
 				});
 			}
@@ -74,18 +82,16 @@ function TextBox({
 		}
 		// 영어 입력 지연처리
 		if (inputType === "insertText") {
-			if (!pendingRef.current) {
-				pendingRef.current = true;
+			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
-					pendingRef.current = false;
 					processWrapCallback();
+					if (setValue) setValue(makeCleanHTML(root.innerHTML));
 				});
-				if (setValue) setValue(root.innerHTML);
-			}
+			});
 		} else {
 			// 기타 inputType 처리
 			processWrapCallback();
-			if (setValue) setValue(root.innerHTML);
+			if (setValue) setValue(makeCleanHTML(root.innerHTML));
 		}
 	};
 
@@ -97,9 +103,10 @@ function TextBox({
 				"placeholder-style",
 				className,
 			])}
+			hidden={hidden}
 			data-placeholder={placeholder}
 			onInput={handleInput}
-			contentEditable="true"
+			contentEditable={isAble && "plaintext-only"}
 			onCompositionStart={() => setIsComposing(true)}
 			onCompositionEnd={() => {
 				setIsComposing(false);
