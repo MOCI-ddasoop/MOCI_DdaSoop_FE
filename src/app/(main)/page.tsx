@@ -3,6 +3,7 @@ import TogetherList from "@/domain/main/components/TogetherList";
 import DonationList from "@/domain/main/components/DonationList";
 import { TOGETHER_LIST, DONATION_LIST } from "@/shared/mock/mockup";
 import SearchInput from "@/shared/components/SearchInput";
+import SearchQueryNotation from "@/domain/main/components/SearchQueryNotation";
 
 export default async function Home({
   searchParams,
@@ -20,6 +21,7 @@ export default async function Home({
         <TogetherList items={TOGETHER_LIST} />
         <DonationList items={DONATION_LIST} />
       </div>
+      <SearchQueryNotation searchParams={searchParams} />
     </div>
   );
 }
