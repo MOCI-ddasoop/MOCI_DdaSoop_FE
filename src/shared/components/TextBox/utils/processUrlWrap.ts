@@ -74,7 +74,8 @@ export function processUrlWrap(root: HTMLDivElement) {
 			a.href = url;
 			a.textContent = url;
 			a.classList.add("text-blue-600");
-			a.style.pointerEvents = "none";
+			a.target = "_blank";
+			a.rel = "noopener noreferrer";
 			fragments.push(a);
 
 			lastIndex = index + url.length;
