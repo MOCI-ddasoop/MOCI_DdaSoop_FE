@@ -110,7 +110,7 @@ function ImageSwiper({
 				{slideList.length !== 0 ? (
 					slideList.map(({ url }, idx) => (
 						<SwiperSlide key={idx}>
-							<div className={`w-full h-full flex-center`}>
+							<div className={`w-full h-full flex-center bg-black`}>
 								{/* <Image/> 삽입 예정 */}
 								<Image
 									src={
@@ -118,8 +118,8 @@ function ImageSwiper({
 										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
 									}
 									alt=""
-									width={500}
-									height={500}
+									fill
+									className="object-contain"
 								/>
 							</div>
 						</SwiperSlide>
@@ -173,8 +173,8 @@ function ImageSwiper({
 										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
 									}
 									alt=""
-									height={500}
-									width={500}
+									fill
+									className="object-contain"
 								/>
 							</div>
 						</div>
