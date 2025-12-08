@@ -21,15 +21,6 @@ const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
 }));
 
-const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
-  id: index,
-  profileImage:
-    "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
-  author: "John Doe",
-  date: "2025년 1월 1일",
-  content: "Hello, world!",
-}));
-
 function FeedModal({
   feedId,
   onClose,
@@ -114,7 +105,6 @@ function FeedModal({
 
             {/* comment 영역 */}
             <CommentContainer
-              commentList={COMMENT_LIST}
               onCommentTargetClick={handleCommentTargetClick}
             />
 
