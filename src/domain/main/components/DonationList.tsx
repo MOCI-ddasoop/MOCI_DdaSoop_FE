@@ -3,6 +3,8 @@ import DonationListItem, {
 } from "@/shared/components/DonationListItem";
 import Link from "next/link";
 
+
+
 function DonationList({ items }: { items: DonationListItemProps[] }) {
   return (
     <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
@@ -15,19 +17,17 @@ function DonationList({ items }: { items: DonationListItemProps[] }) {
           더보기
         </Link>
       </div>
-      {items.map(
-        ({ id, name, userName, amount, donationImage, href }) => (
-          <DonationListItem
-            key={id}
-            id={id}
-            name={name}
-            userName={userName}
-            amount={amount}
-            donationImage={donationImage}
-            href={href}
-          />
-        )
-      )}
+      {items.map(({ id, name, userName, amount, donationImage, href }) => (
+        <DonationListItem
+          key={id}
+          id={id}
+          name={name}
+          userName={userName}
+          amount={amount}
+          donationImage={donationImage}
+          href={href}
+        />
+      ))}
     </div>
   );
 }
