@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
-    "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.90.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -24,6 +23,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
