@@ -50,6 +50,12 @@ function page() {
         </p>
 
       </div>
+      {/*TODO : 최근 로그인 방법 알려주기 */}
+      <div className="bg-pastelblue rounded-lg w-full mt-5 p-2 ">
+        <span className="text-sm text-mainblue font-semibold">
+          최근 <strong>카카오 계정</strong>으로 로그인했습니다.
+        </span>
+      </div>
     </div>
     
   );
