@@ -30,10 +30,6 @@ function TagInput({
 
   const [editingIndex, setEditingIndex] = useState<number | null>(null); // 수정중인태그index
 
-  // 인풋 width 조절하기위해서 span 잡는거
-  // const mirrorRef = useRef<HTMLSpanElement>(null);
-  // const newMirrorRef = useRef<HTMLSpanElement>(null);
-
   // 인풋 focus하려고 잡는거
   const newInputRef = useRef<HTMLInputElement>(null);
 
@@ -240,8 +236,7 @@ function TagInput({
                     onKeyDown={handleKeyDown}
                     onCompositionStart={handleCompositionStart}
                     onCompositionEnd={handleCompositionEnd}
-                    onBlur={handleSubmit}
-                    // style={{ width: input ? inputWidth : undefined }}
+                    onBlur={handleSubmit} // focus해제되면 입력하던거 태그로 만들기
                   />
                 </label>
               </form>
