@@ -52,7 +52,7 @@ function TagInput({
   const startEdit = (index: number, e: React.MouseEvent<HTMLLIElement>) => {
     if (editingIndex !== null && editingIndex !== index) {
       applyEdit(); // 현재 편집 내용 저장
-    } else if (input.trim() !== "") handleSubmit(e);
+    }
     setEditingIndex(index);
     setInput(tags[index]); // 기존 태그 -> input에 넣기
   };
@@ -100,16 +100,17 @@ function TagInput({
     e:
       | React.FormEvent<HTMLFormElement>
       | React.KeyboardEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLLIElement>
+      | React.FocusEvent<HTMLInputElement>
   ) => {
     e.preventDefault();
+    const newTag = input.trim();
+    if (!newTag) return;
+
     if (tags.length === maxTags) {
       setWarning(TAG_WARNING.MAX_TAG);
       setInput("");
       return;
     }
-    const newTag = input.trim();
-    if (!newTag) return;
 
     if (tags.includes(newTag)) {
       setWarning(TAG_WARNING.DUPLICATE);
@@ -181,7 +182,7 @@ function TagInput({
 
   return (
     <>
-      <div className="w-full p-2 border-y border-pastelblue focus:outline-none placeholder-style">
+      <div className="w-full p-2 border-t border-pastelblue focus:outline-none placeholder-style">
         <ul className="w-full flex gap-0.5 flex-wrap">
           {tags.map((tag, i) =>
             // 해당태그를 수정중인경우 해당태그가 value로 있는 input 보여주기
@@ -229,7 +230,7 @@ function TagInput({
                     ref={newInputRef}
                     className={`${
                       input ? "field-sizing-content" : "w-full"
-                    } focus:outline-none min-w-10 placeholder:text-gray-400`}
+                    } focus:outline-none min-w-1 placeholder:text-gray-400`}
                     type="text"
                     name="tag"
                     id="tag"
@@ -239,6 +240,7 @@ function TagInput({
                     onKeyDown={handleKeyDown}
                     onCompositionStart={handleCompositionStart}
                     onCompositionEnd={handleCompositionEnd}
+                    onBlur={handleSubmit}
                     // style={{ width: input ? inputWidth : undefined }}
                   />
                 </label>
