@@ -1,6 +1,6 @@
 "use client";
 import FeedImageInput, { FeedImage } from "./FeedImageInput";
-import { Activity, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TogetherListItem from "./TogetherListItem";
 import TextBox from "./TextBox";
 import Button from "./Button";
@@ -188,8 +188,9 @@ function FeedCreatorModal({
 	}, [selectedPostVisibility, togetherInfo, feedImageList, textBoxValue]);
 
 	if (typeof window === "undefined") return null;
+
 	return (
-		<Activity mode={isOpen ? "visible" : "hidden"}>
+		isOpen && (
 			<div
 				className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
 				onClick={onClose}
@@ -294,7 +295,7 @@ function FeedCreatorModal({
 					</div>
 				</div>
 			</div>
-		</Activity>
+		)
 	);
 }
 export default FeedCreatorModal;
