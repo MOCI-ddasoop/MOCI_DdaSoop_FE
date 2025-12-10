@@ -12,7 +12,7 @@ export const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
 export const TOGETHER_LIST: TogetherListItemProps[] = Array.from({
   length: 2,
 }).map((_, index) => ({
-  id: `together-${index}`,
+  id: index,
   image:
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
   name: "Together 1",
@@ -24,7 +24,7 @@ export const TOGETHER_LIST: TogetherListItemProps[] = Array.from({
 export const DONATION_LIST: DonationListItemProps[] = Array.from({
   length: 2,
 }).map((_, index) => ({
-  id: `donation-${index}`,
+  id: index,
   donationImage:
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
   name: "Donation 1",

@@ -5,21 +5,23 @@ import tw from "../utils/tw";
 
 // 카테고리, 온/오프라인, 모집중/모집완료 ->  타입지정해도 좋을듯
 export interface TogetherListItemProps {
-	image: string;
-	name: string;
-	category: string;
-	isOnline: string;
-	href: string;
-	widthClass?: string;
+  id: number;
+  image: string;
+  name: string;
+  category: string;
+  isOnline: string;
+  href: string;
+  widthClass?: string;
 }
 
 function TogetherListItem({
-	image,
-	name,
-	category,
-	isOnline,
-	href,
-	widthClass,
+  id,
+  image,
+  name,
+  category,
+  isOnline,
+  href,
+  widthClass,
 }: TogetherListItemProps) {
   return (
     <Link

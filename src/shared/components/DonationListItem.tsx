@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatMoney } from "../utils/formatMoney";
 
 export interface DonationListItemProps {
-  id: string;
+  id: number;
   donationImage: string;
   name: string;
   amount: number;
