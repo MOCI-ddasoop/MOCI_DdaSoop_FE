@@ -1,5 +1,5 @@
 "use client";
-import { Activity, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import FeedDetailCard from "./FeedDetailCard";
@@ -39,7 +39,6 @@ function FeedModal({
     contentRef.current?.scrollTo({ top: 0 });
   };
 
-
   const handleCommentTargetClick = (nickname: string | null) => {
     setTargetNickname(nickname ?? null);
   };
@@ -65,7 +64,7 @@ function FeedModal({
   if (typeof window === "undefined") return null;
 
   return createPortal(
-    <Activity mode={isOpen ? "visible" : "hidden"}>
+    isOpen && (
       <div
         className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
         onClick={handleClose}
@@ -104,9 +103,7 @@ function FeedModal({
             />
 
             {/* comment 영역 */}
-            <CommentContainer
-              onCommentTargetClick={handleCommentTargetClick}
-            />
+            <CommentContainer onCommentTargetClick={handleCommentTargetClick} />
 
             <div className="p-2 border-t border-gray-200 sticky bottom-0 left-0 w-full bg-white">
               <CommentInput
@@ -117,7 +114,7 @@ function FeedModal({
           </div>
         </div>
       </div>
-    </Activity>,
+    ),
     document.body
   );
 }
