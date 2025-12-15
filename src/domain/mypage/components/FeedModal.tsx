@@ -1,5 +1,5 @@
 "use client";
-import { Activity, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import FeedDetailCard from "./FeedDetailCard";
@@ -21,15 +21,6 @@ const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
 }));
 
-const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
-  id: index,
-  profileImage:
-    "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
-  author: "John Doe",
-  date: "2025년 1월 1일",
-  content: "Hello, world!",
-}));
-
 function FeedModal({
   feedId,
   onClose,
@@ -47,7 +38,6 @@ function FeedModal({
     setTargetNickname(null);
     contentRef.current?.scrollTo({ top: 0 });
   };
-
 
   const handleCommentTargetClick = (nickname: string | null) => {
     setTargetNickname(nickname ?? null);
@@ -74,7 +64,7 @@ function FeedModal({
   if (typeof window === "undefined") return null;
 
   return createPortal(
-    <Activity mode={isOpen ? "visible" : "hidden"}>
+    isOpen && (
       <div
         className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
         onClick={handleClose}
@@ -113,10 +103,7 @@ function FeedModal({
             />
 
             {/* comment 영역 */}
-            <CommentContainer
-              commentList={COMMENT_LIST}
-              onCommentTargetClick={handleCommentTargetClick}
-            />
+            <CommentContainer onCommentTargetClick={handleCommentTargetClick} />
 
             <div className="p-2 border-t border-gray-200 sticky bottom-0 left-0 w-full bg-white">
               <CommentInput
@@ -127,7 +114,7 @@ function FeedModal({
           </div>
         </div>
       </div>
-    </Activity>,
+    ),
     document.body
   );
 }

@@ -3,11 +3,7 @@ import TogetherListItem, {
 } from "@/shared/components/TogetherListItem";
 import Link from "next/link";
 
-function TogetherList({
-  togetherList,
-}: {
-  togetherList: TogetherListItemProps[];
-}) {
+function TogetherList({ items }: { items: TogetherListItemProps[] }) {
   return (
     <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
       <div className="flex justify-between items-center">
@@ -19,9 +15,10 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {togetherList.map(({ image, name, category, isOnline, href }, index) => (
+      {items.map(({ id, image, name, category, isOnline, href }) => (
         <TogetherListItem
-          key={index}
+          key={id}
+          id={id}
           image={image}
           name={name}
           category={category}

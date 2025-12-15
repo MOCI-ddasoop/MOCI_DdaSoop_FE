@@ -1,7 +1,7 @@
 "use client";
 import TextBox from "@/shared/components/TextBox";
 import tw from "@/shared/utils/tw";
-import { Activity, useRef, useState } from "react";
+import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 
 interface CommentInputProps {
@@ -25,7 +25,7 @@ function CommentInput({
 
   return (
     <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-      <Activity mode={targetNickname ? "visible" : "hidden"}>
+      {targetNickname && (
         <div
           className={tw(
             "flex items-center gap-2 justify-between duration-300 translate-y-full opacity-0",
@@ -46,8 +46,7 @@ function CommentInput({
             <IoClose size={16} />
           </button>
         </div>
-      </Activity>
-
+      )}
       <div className="flex justify-center items-stretch gap-2 w-full h-full">
         <div className="flex-1 flex items-center border-gray-300">
           <TextBox placeholder="댓글을 입력해주세요." setValue={setComment} />
