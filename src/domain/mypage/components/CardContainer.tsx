@@ -5,16 +5,15 @@ import CardImage from "./CardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
 import { throttle } from "@/shared/utils/throttle";
+import { CARD_DATA } from "@/shared/mock/mockup";
 
-const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
-  id: index,
-  src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
-  alt: "test",
-  width: Math.floor(Math.random() * 500) + 100,
-  height: Math.floor(Math.random() * 1000) + 100,
-}));
-
-function CardContainer({ className }: { className?: string }) {
+function CardContainer({
+  className,
+  queryParams,
+}: {
+  className?: string;
+  queryParams?: string;
+}) {
   const [feedId, setFeedId] = useState<number | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -86,8 +85,6 @@ function CardContainer({ className }: { className?: string }) {
       };
     });
   }, [containerWidth, columnCount]);
-
-  
 
   // 컨테이너 높이 계산
   const containerHeight = useMemo(() => {
