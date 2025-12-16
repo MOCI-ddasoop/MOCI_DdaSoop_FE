@@ -1,5 +1,5 @@
 import Image from "next/image";
-import treeGroup from "@/assets/tree-group.svg";
+// import treeGroup from "@/assets/tree-group.svg";
 import BackButton from "@/shared/components/BackButton";
 
 // 별들의 고정된 위치 배열 (상단 70%에만 배치)
@@ -54,7 +54,7 @@ function NotFound() {
 
         {/* 나무 SVG */}
         <div className="relative z-10 mb-8">
-          <Image src={treeGroup} alt="나무" width={300} height={300} />
+          <Image src = "/tree-group.svg" alt="나무" width={300} height={300} />
         </div>
         <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 shake-rotate-animation w-48 h-screen overflow-hidden z-1">
           <svg
