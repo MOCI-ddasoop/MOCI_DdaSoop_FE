@@ -25,17 +25,17 @@ function SearchInput({ className }: InputHTMLAttributes<HTMLInputElement>) {
 	return (
 		<div
 			className={tw(
-				"flex-center justify-between border border-mainblue rounded-lg py-1 pl-3 pr-2 w-full",
+				"flex-center justify-between border border-mainblue rounded-lg py-1 px-2 w-full",
 				className
 			)}
 		>
 			<input
 				placeholder="검색어를 입력해보세요."
-				className="flex-1 focus:outline-0"
+				className="w-[calc(100%-24px)] focus:outline-0"
 				onChange={(e) => handleSearch(e.target.value)}
 				defaultValue={searchParams.get("query")?.toString()}
 			/>
-			<IoMdSearch className="text-mainblue w-6 h-6" />
+			<IoMdSearch className="text-mainblue" size={24} />
 		</div>
 	);
 }

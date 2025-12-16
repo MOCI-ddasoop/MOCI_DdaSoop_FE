@@ -127,6 +127,7 @@ function FeedCreatorModal({
 		() =>
 			togetherInfo ? (
 				<TogetherListItem
+					id={togetherInfo.together.id}
 					image={togetherInfo.together.image}
 					name={togetherInfo.together.name}
 					category={togetherInfo.together.category}
@@ -188,7 +189,6 @@ function FeedCreatorModal({
 	}, [selectedPostVisibility, togetherInfo, feedImageList, textBoxValue]);
 
 	if (typeof window === "undefined") return null;
-
 	return (
 		isOpen && (
 			<div
