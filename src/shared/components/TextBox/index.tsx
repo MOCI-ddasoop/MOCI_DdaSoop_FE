@@ -49,13 +49,21 @@ function TextBox({
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
 					getCurrentBlock(root, selection);
+<<<<<<< HEAD
 					if (setValue) setValue(makeCleanHTML(root.innerHTML));
+=======
+					if (setValue) setValue(root.innerHTML);
+>>>>>>> origin
 				});
 			});
 			return;
 		}
 		if (isComposing) {
+<<<<<<< HEAD
 			if (setValue) setValue(makeCleanHTML(root.innerHTML));
+=======
+			if (setValue) setValue(root.innerHTML);
+>>>>>>> origin
 			return;
 		}
 		if (inputType === "deleteContentBackward") {
@@ -74,7 +82,11 @@ function TextBox({
 						if (root.innerText.trim() === "") {
 							root.innerHTML = "";
 						}
+<<<<<<< HEAD
 						if (setValue) setValue(makeCleanHTML(root.innerHTML));
+=======
+						if (setValue) setValue(root.innerHTML);
+>>>>>>> origin
 					});
 				});
 			}
@@ -82,6 +94,7 @@ function TextBox({
 		}
 		// 영어 입력 지연처리
 		if (inputType === "insertText") {
+<<<<<<< HEAD
 			requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
 					processWrapCallback();
@@ -92,6 +105,20 @@ function TextBox({
 			// 기타 inputType 처리
 			processWrapCallback();
 			if (setValue) setValue(makeCleanHTML(root.innerHTML));
+=======
+			if (!pendingRef.current) {
+				pendingRef.current = true;
+				requestAnimationFrame(() => {
+					pendingRef.current = false;
+					processWrapCallback();
+				});
+				if (setValue) setValue(root.innerHTML);
+			}
+		} else {
+			// 기타 inputType 처리
+			processWrapCallback();
+			if (setValue) setValue(root.innerHTML);
+>>>>>>> origin
 		}
 	};
 
@@ -103,10 +130,16 @@ function TextBox({
 				"placeholder-style",
 				className,
 			])}
+<<<<<<< HEAD
 			hidden={hidden}
 			data-placeholder={placeholder}
 			onInput={handleInput}
 			contentEditable={isAble && "plaintext-only"}
+=======
+			data-placeholder={placeholder}
+			onInput={handleInput}
+			contentEditable="true"
+>>>>>>> origin
 			onCompositionStart={() => setIsComposing(true)}
 			onCompositionEnd={() => {
 				setIsComposing(false);
