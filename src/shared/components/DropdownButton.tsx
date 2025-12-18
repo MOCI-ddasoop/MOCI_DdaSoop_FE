@@ -152,12 +152,7 @@ function DropdownButton({
         aria-haspopup="listbox"
       >
         {dropdown ? (
-          <div
-            className={tw(
-              "flex items-center justify-between gap-2 min-w-20",
-              menuSize === "sm" ? "" : menuSize === "lg" ? "px-3" : "px-1"
-            )}
-          >
+          <div className={tw("flex items-center justify-around min-w-20")}>
             <p className="whitespace-pre">{selected}</p>
             {isOpen ? (
               <TbTriangleFilled size="12" color="#237db1" />
