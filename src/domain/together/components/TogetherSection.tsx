@@ -27,7 +27,6 @@ function TogetherSection({
   const [selectedCategory, setSelectedCategory] =
     useState<string[]>(initialCategory);
   const [isOnline, setIsOnline] = useState<string[]>(initialIsOnline);
-  const [page, setPage] = useState<number>(initialPage);
 
   const handleFilter = (item: string, type: "category" | "isOnline") => {
     if (type === "category") {
@@ -36,7 +35,6 @@ function TogetherSection({
         : [...selectedCategory, item];
 
       setSelectedCategory(newCategory);
-      setPage(1);
       syncUrl(newCategory, isOnline, currentSort, 1);
     } else {
       const newIsOnline = isOnline.includes(item)
@@ -44,7 +42,6 @@ function TogetherSection({
         : [...isOnline, item];
 
       setIsOnline(newIsOnline);
-      setPage(1);
       syncUrl(selectedCategory, newIsOnline, currentSort, 1);
     }
   };
@@ -69,7 +66,6 @@ function TogetherSection({
 
   const handleSortChange = (nextSort: string) => {
     setCurrentSort(nextSort);
-    setPage(1);
     syncUrl(selectedCategory, isOnline, nextSort, 1);
   };
 
@@ -82,7 +78,7 @@ function TogetherSection({
         isOnline={isOnline}
         onFilterClicked={handleFilter}
       />
-      <ItemContainer type="together" items={items} currentPage={page} />
+      <ItemContainer type="together" items={items} currentPage={initialPage} />
       <Pagination totalPages={10} />
     </>
   );

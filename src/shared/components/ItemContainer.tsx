@@ -20,6 +20,7 @@ function ItemContainer({
   currentPage,
   items,
 }: TogetherContainerProps | DonateContainerProps) {
+  console.log(currentPage);
   return (
     <div className="w-full grid xl:grid-cols-4 gap-6 lg:grid-cols-3 sm:grid-cols-2">
       {currentPage === 1 && <AddNewCard type={type} />}

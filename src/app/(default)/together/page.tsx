@@ -6,18 +6,17 @@ interface TogetherPageProps {
     category?: string;
     isOnline?: string;
     page?: string;
+    sort?: string;
   }>;
-  params: Promise<{ sort: string }>;
 }
 
-async function Together({ searchParams, params }: TogetherPageProps) {
+async function Together({ searchParams }: TogetherPageProps) {
   const searchParam = await searchParams;
-  const param = await params;
 
   const category = searchParam.category?.split(",") ?? [];
   const isOnline = searchParam.isOnline?.split(",") ?? [];
   const page = Number(searchParam.page ?? 1);
-  const sort = param.sort ?? sortOptions[0];
+  const sort = searchParam.sort ?? sortOptions[0];
 
   // 위에있는거 가지고 api 통신해서 가져오기
   const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
