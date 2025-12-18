@@ -154,8 +154,8 @@ function DropdownButton({
         {dropdown ? (
           <div
             className={tw(
-              "flex items-center gap-3",
-              menuSize === "sm" ? "px-1" : menuSize === "lg" ? "px-4" : "px-2"
+              "flex items-center justify-between gap-2 min-w-20",
+              menuSize === "sm" ? "" : menuSize === "lg" ? "px-3" : "px-1"
             )}
           >
             <p className="whitespace-pre">{selected}</p>
