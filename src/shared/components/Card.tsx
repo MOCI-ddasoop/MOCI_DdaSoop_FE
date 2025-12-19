@@ -31,7 +31,7 @@ export interface DonateCardProps extends BaseCardProps {
 /**
  *
  * @param type : "together" | "donate"
- * @param props  href : string
+ * @param  href : string
  * @param image : string
  * @param title : string
  * @param category : string
@@ -55,7 +55,7 @@ function Card(props: TogetherCardProps | DonateCardProps) {
   return (
     <Link
       href={href}
-      className="relative flex flex-col justify-between w-[230px] h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg"
+      className="relative flex flex-col justify-between min-w-[230px] w-full xl:max-w-[230px] h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg"
     >
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
         <Image fill alt={title} src={image} className="object-cover" />

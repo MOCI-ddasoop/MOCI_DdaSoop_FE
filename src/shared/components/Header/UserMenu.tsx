@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import notification from "@/assets/icons/notification.svg";
-import mypage from "@/assets/icons/mypage.svg";
+import NotificationIcon from "@/assets/icons/notification.svg";
+import MypageIcon from "@/assets/icons/mypage.svg";
 import Link from "next/link";
 import Notification from "./Notification";
 import {
@@ -16,6 +16,8 @@ import {
   useDismiss,
 } from "@floating-ui/react";
 import { useState } from "react";
+import { FaCircleUser } from "react-icons/fa6";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 export interface NotificationProps {
   read: boolean;
@@ -65,28 +67,16 @@ function UserMenu() {
   return (
     <ul className="h-full flex items-center justify-center gap-6 lg:gap-8">
       <li ref={setReference} {...getReferenceProps()}>
-        <Image
-          src={notification}
-          width={0}
-          height={0}
-          alt="알림 아이콘"
-          style={{ width: "auto", height: "24px" }}
-          loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
-          className="cursor-pointer"
-        ></Image>
+        <button type="button" className="flex-center cursor-pointer">
+          <IoNotificationsOutline size={28} />
+        </button>
       </li>
       <li>
         <Link
           href="/mypage"
           className="h-hover:bg-gray-100 flex justify-center items-center"
         >
-          <Image
-            src={mypage}
-            width={28}
-            height={28}
-            alt="마이페이지 아이콘"
-            loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
-          ></Image>
+          <FaCircleUser size={28} />
         </Link>
       </li>
       {isOpen && (
