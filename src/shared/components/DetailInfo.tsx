@@ -3,6 +3,7 @@ import UserAction from "@/domain/together/components/UserAction";
 import TreeProgress from "./TreeProgress";
 import Capsule from "@/shared/components/Capsule";
 import ProgressBar from "@/shared/components/ProgressBar";
+import DonateButton from "@/domain/donate/components/DonateButton";
 
 export interface DetailInfoProps {
   type: "together" | "donate";
@@ -59,7 +60,7 @@ function DetailInfo({
       )}
       <TreeProgress progress={progress} />
       <ProgressBar type={type} progress={progress} goal={goal} cardUI={false} />
-      <UserAction />
+      {type === "together" ? <UserAction /> : <DonateButton />}
     </div>
   );
 }

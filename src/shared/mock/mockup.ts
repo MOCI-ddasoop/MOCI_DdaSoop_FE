@@ -30,5 +30,5 @@ export const DONATION_LIST: DonationListItemProps[] = Array.from({
   name: "Donation 1",
   amount: 10000,
   userName: "user 1",
-  href: "/donation/1",
+  href: "/donate/1",
 }));

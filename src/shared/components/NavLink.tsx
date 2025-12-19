@@ -17,7 +17,7 @@ function NavLink({
   type?: "donate" | "together" | "mypage";
 }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = pathname === href || pathname.startsWith(`${href}/`);
   return (
     <li
       className={`${

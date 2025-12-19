@@ -1,17 +1,17 @@
 import DetailInfo, { DetailInfoProps } from "@/shared/components/DetailInfo";
 import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
-import { togetherTabContents } from "@/shared/utils/navigation";
+import { donateTabContents } from "@/shared/utils/navigation";
 
 const DETAIL_INFO_DUMMY: DetailInfoProps = {
-  type: "together",
-  title: "함께하기",
+  type: "donate",
+  title: "후원하기",
   category: "카테고리1",
+  dDay: 12,
   participant: 7, // 참여자수(제한인원 있는 경우만 표시)
   status: "모집중", // 모집중 모집완료
   startDate: "2024-06-01",
   endDate: "2024-06-30",
-  isOnline: "온라인",
   goal: 100,
   progress: 40,
 };
@@ -30,7 +30,7 @@ async function page({
         <div className="w-full aspect-10/7">
           <ImageSwiper slideList={dummyImageList} />
         </div>
-        <TabBar type="together" tabContents={togetherTabContents(id)} />
+        <TabBar type="donate" tabContents={donateTabContents(id)} />
         <main className="py-4">{children}</main>
       </div>
       <DetailInfo props={DETAIL_INFO_DUMMY} />
