@@ -10,7 +10,13 @@ function DonateButton() {
       <Button color="red" className="w-60" onClick={() => setIsOpen(true)}>
         후원하기
       </Button>
-      {isOpen && <DonateModal onClose={() => setIsOpen(false)} />}
+      {isOpen && (
+        <DonateModal
+          title="후원1"
+          organization="후원단체"
+          onClose={() => setIsOpen(false)}
+        />
+      )}
     </>
   );
 }

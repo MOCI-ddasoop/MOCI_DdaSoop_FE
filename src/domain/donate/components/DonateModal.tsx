@@ -4,7 +4,15 @@ import Image from "next/image";
 import Button from "@/shared/components/Button";
 import { formatMoney } from "@/shared/utils/formatMoney";
 
-function DonateModal({ onClose }: { onClose: () => void }) {
+function DonateModal({
+  onClose,
+  title,
+  organization,
+}: {
+  onClose: () => void;
+  title: string;
+  organization: string;
+}) {
   const moneyList = [
     "5천원",
     "1만원",
@@ -101,8 +109,8 @@ function DonateModal({ onClose }: { onClose: () => void }) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <h2 className="text-lg font-semibold">후원하기제목</h2>
-            <p className="text-sm text-gray-500">서구제일종합사회복지관</p>
+            <h2 className="text-lg font-semibold">{title}</h2>
+            <p className="text-sm text-gray-500">{organization}</p>
           </div>
         </div>
         <form
