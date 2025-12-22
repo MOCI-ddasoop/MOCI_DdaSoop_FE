@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import CardImage from "./CardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
 import { throttle } from "@/shared/utils/throttle";
 import { CARD_DATA } from "@/shared/mock/mockup";
+import FeedCardImage from "./FeedCardImage";
 
-function CardContainer({
+function FeedCardContainer({
   className,
   queryParams,
 }: {
@@ -100,7 +100,7 @@ function CardContainer({
         style={{ height: containerHeight || "auto" }}
       >
         {positionedItems.map((item) => (
-          <CardImage
+          <FeedCardImage
             key={item.id}
             src={item.src}
             alt={item.alt}
@@ -123,4 +123,4 @@ function CardContainer({
   );
 }
 
-export default CardContainer;
+export default FeedCardContainer;

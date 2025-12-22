@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import FeedDetailCard from "./FeedDetailCard";
-import CommentContainer from "./CommentContainer";
-import CommentInput from "./CommentInput";
+import CommentContainer from "@/domain/comment/components/CommentContainer";
+import CommentInput from "@/domain/comment/components/CommentInput";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: 1,
