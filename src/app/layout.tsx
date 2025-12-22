@@ -21,6 +21,7 @@ export default async function RootLayout({
       <body>
         <Header />
         <TanstackProvider>{children}</TanstackProvider>
+        
       </body>
     </html>
   );
