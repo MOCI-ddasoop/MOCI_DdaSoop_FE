@@ -3,6 +3,7 @@ import TanstackProvider from "../shared/providers/TanstackProvider";
 import Header from "@/shared/components/Header";
 import "@/shared/styles/globals.css";
 import "@/shared/utils/clarityInit";
+import ReportModal from "@/domain/report/ReportModal";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -17,11 +18,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko-kr" className={pretendard.variable}>
+    <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
       <body>
         <Header />
+        <ReportModal />
         <TanstackProvider>{children}</TanstackProvider>
-        
       </body>
     </html>
   );
