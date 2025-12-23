@@ -8,6 +8,7 @@ import { useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
 import tw from "../utils/tw";
+import { TbTriangleFilled, TbTriangleInvertedFilled } from "react-icons/tb";
 
 const dropdownButton = cva(
   "relative cursor-pointer rounded-md p-2 transition-all duration-200",
@@ -76,6 +77,7 @@ const dropdownItem = cva(
 );
 
 interface DropdownButtonProps extends VariantProps<typeof dropdownButton> {
+  dropdown?: boolean;
   options: string[];
   selected: string;
   setSelected: (selected: string) => void;
@@ -93,6 +95,7 @@ interface DropdownButtonProps extends VariantProps<typeof dropdownButton> {
 }
 
 function DropdownButton({
+  dropdown,
   options,
   selected,
   setSelected,
@@ -148,7 +151,16 @@ function DropdownButton({
         aria-expanded={isOpen}
         aria-haspopup="listbox"
       >
-        {buttonStyle === "vertical" ? (
+        {dropdown ? (
+          <div className={tw("flex items-center justify-around min-w-20")}>
+            <p className="whitespace-pre">{selected}</p>
+            {isOpen ? (
+              <TbTriangleFilled size="12" color="#237db1" />
+            ) : (
+              <TbTriangleInvertedFilled size="12" color="#237db1" />
+            )}
+          </div>
+        ) : buttonStyle === "vertical" ? (
           <BsThreeDotsVertical
             size={size === "sm" ? 16 : size === "lg" ? 28 : 24}
             className="transition-transform duration-200"

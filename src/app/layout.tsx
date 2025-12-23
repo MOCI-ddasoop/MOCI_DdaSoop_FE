@@ -21,9 +21,7 @@ export default async function RootLayout({
       <body>
         <GTMInit />
         <Header />
-        <TanstackProvider>
-          {children}
-        </TanstackProvider>
+        <TanstackProvider>{children}</TanstackProvider>
       </body>
     </html>
   );
