@@ -1,6 +1,6 @@
 "use client";
 import FeedImageInput, { FeedImage } from "./FeedImageInput";
-import { Activity, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TogetherListItem from "./TogetherListItem";
 import TextBox from "./TextBox";
 import Button from "./Button";
@@ -40,11 +40,6 @@ function FeedCreatorModal({
   const [selectedPostVisibility, setSelectedPostVisibility] = useState<
     string | null
   >("public");
-  const [tags, setTags] = useState<string[]>([]);
-
-  const onTagChanged = (tags: string[]) => {
-    setTags(tags);
-  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -133,6 +128,7 @@ function FeedCreatorModal({
     () =>
       togetherInfo ? (
         <TogetherListItem
+          id={togetherInfo.together.id}
           image={togetherInfo.together.image}
           name={togetherInfo.together.name}
           category={togetherInfo.together.category}
@@ -195,7 +191,7 @@ function FeedCreatorModal({
 
   if (typeof window === "undefined") return null;
   return (
-    <Activity mode={isOpen ? "visible" : "hidden"}>
+    isOpen && (
       <div
         className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
         onClick={onClose}
@@ -261,19 +257,18 @@ function FeedCreatorModal({
                 ""
               )}
               {/* 태그 입력 */}
-              <TagInput onTagChanged={onTagChanged} />
-              {/* <div className="mt-3">
-								{["#태그", "#태그입력", "#수진님이 해주신데요"].map(
-									(i, index) => (
-										<span key={index} className="text-mainblue">
-											{i}
-										</span>
-									)
-								)}
-							</div> */}
+              <div className="mt-3">
+                {["#태그", "#태그입력", "#수진님이 해주신데요"].map(
+                  (i, index) => (
+                    <span key={index} className="text-mainblue">
+                      {i}
+                    </span>
+                  )
+                )}
+              </div>
             </div>
             {/* 공개/비공개 선택 */}
-            <fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2">
+            <fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2 mt-3">
               {postVisibilityOptions.map(({ value, label }, index) => (
                 <div key={index}>
                   <input
@@ -301,7 +296,7 @@ function FeedCreatorModal({
           </div>
         </div>
       </div>
-    </Activity>
+    )
   );
 }
 export default FeedCreatorModal;

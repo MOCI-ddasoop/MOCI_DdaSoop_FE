@@ -3,7 +3,9 @@ import DonationListItem, {
 } from "@/shared/components/DonationListItem";
 import Link from "next/link";
 
-function DonationList({ donations }: { donations: DonationListItemProps[] }) {
+
+
+function DonationList({ items }: { items: DonationListItemProps[] }) {
   return (
     <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
       <div className="flex justify-between items-center">
@@ -15,18 +17,17 @@ function DonationList({ donations }: { donations: DonationListItemProps[] }) {
           더보기
         </Link>
       </div>
-      {donations.map(
-        ({ name, userName, amount, donationImage, href }, index) => (
-          <DonationListItem
-            key={index}
-            name={name}
-            userName={userName}
-            amount={amount}
-            donationImage={donationImage}
-            href={href}
-          />
-        )
-      )}
+      {items.map(({ id, name, userName, amount, donationImage, href }) => (
+        <DonationListItem
+          key={id}
+          id={id}
+          name={name}
+          userName={userName}
+          amount={amount}
+          donationImage={donationImage}
+          href={href}
+        />
+      ))}
     </div>
   );
 }
