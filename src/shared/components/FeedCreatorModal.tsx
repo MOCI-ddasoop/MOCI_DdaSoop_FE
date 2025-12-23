@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import TogetherListItem from "./TogetherListItem";
 import TextBox from "./TextBox";
 import Button from "./Button";
+import TagInput from "./TagInput";
 
 //---------------추후 삭제 필요--------------
 export interface FeedOptionData {
