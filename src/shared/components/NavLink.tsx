@@ -9,22 +9,32 @@ function NavLink({
   tabBar = false,
   children,
   type,
+  tabCount,
 }: {
   href: string;
   name: string;
   tabBar?: boolean;
   children?: React.ReactNode;
   type?: "donate" | "together" | "mypage";
+  tabCount?: number;
 }) {
   const pathname = usePathname();
   const isActive = pathname === href || pathname.startsWith(`${href}/`);
+  const tabWidth: { [key: number]: string } = {
+    2: "w-1/2",
+    3: "w-1/3",
+    4: "w-1/4",
+    5: "w-1/5",
+    6: "w-1/6",
+  };
+  console.log(tabWidth[tabCount ?? 1]);
   return (
     <li
       className={`${
         tabBar
-          ? type === "mypage" && isActive && children
-            ? "w-1/5 h-30"
-            : "w-1/5 h-15"
+          ? `${tabWidth[tabCount ?? 1]} ${
+              type === "mypage" && isActive && children ? "h-30" : "h-15"
+            }`
           : ""
       }
       flex flex-col items-center relative`}
