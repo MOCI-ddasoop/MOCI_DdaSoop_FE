@@ -2,7 +2,7 @@ import localFont from "next/font/local";
 import TanstackProvider from "../shared/providers/TanstackProvider";
 import Header from "@/shared/components/Header";
 import "@/shared/styles/globals.css";
-import "@/shared/utils/clarityInit";
+import ClarityInit from "@/shared/utils/clarityInit";
 import ReportModal from "@/domain/report/ReportModal";
 
 const pretendard = localFont({
@@ -22,6 +22,7 @@ export default async function RootLayout({
       <body>
         <Header />
         <ReportModal />
+        <ClarityInit />
         <TanstackProvider>{children}</TanstackProvider>
       </body>
     </html>

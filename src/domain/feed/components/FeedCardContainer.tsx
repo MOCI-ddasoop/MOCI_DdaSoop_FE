@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
-import { throttle } from "@/shared/utils/throttle";
 import { CardDataType, fetchMockFeeds } from "@/shared/mock/mockup";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from "@/shared/hooks/useIntersection";
+import { throttle } from "@/shared/utils/throttle";
 
 type PositionedItems = Partial<Feed> & {
 	src: string;
@@ -42,12 +42,14 @@ function FeedCardContainer({
 		fetchNextPage();
 	}, hasNextPage);
 
-	const debouncedSetWidthRef = useRef(
-		throttle((width: unknown) => {
-			if (typeof width !== "number") return;
+	const throttledSetWidth = useMemo(
+		() =>
+			throttle((width: unknown) => {
+				if (typeof width !== "number") return;
 
-			setContainerWidth(width);
-		}, 200)
+				setContainerWidth(width);
+			}, 100), // 100ms throttle for smoother updates
+		[]
 	);
 
 	// 컨테이너 너비 측정
@@ -58,7 +60,10 @@ function FeedCardContainer({
 		setContainerWidth(containerRef.current.clientWidth);
 
 		const resizeObserver = new ResizeObserver((entries) => {
-			debouncedSetWidthRef.current(entries[0].contentRect.width);
+			const width = entries[0]?.contentRect?.width;
+			if (width) {
+				throttledSetWidth(width);
+			}
 		});
 
 		resizeObserver.observe(containerRef.current);
@@ -125,9 +130,6 @@ function FeedCardContainer({
 	// 커스텀 버츄얼 스크롤
 	const [visibleItems, setVisibleItems] = useState<PositionedItems[]>([]);
 	const positionsItemsRef = useRef(positionedItems);
-	useEffect(() => {
-		positionsItemsRef.current = positionedItems;
-	}, [positionedItems]);
 
 	const onScroll = useCallback(() => {
 		const viewportTop = window.scrollY;
@@ -140,6 +142,11 @@ function FeedCardContainer({
 		);
 		setVisibleItems(filteredItems);
 	}, [positionsItemsRef]);
+
+	useEffect(() => {
+		positionsItemsRef.current = positionedItems;
+		onScroll();
+	}, [positionedItems, onScroll]);
 
 	useEffect(() => {
 		window.addEventListener("scroll", onScroll);
@@ -173,7 +180,7 @@ function FeedCardContainer({
 				})}
 			</div>
 			<FeedModal
-				feedId={feedId?.toString() || "0"}
+				feedId={feedId?.toString() || ""}
 				onClose={() => setFeedId(null)}
 				isOpen={feedId !== null}
 			/>
