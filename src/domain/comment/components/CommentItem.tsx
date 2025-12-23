@@ -37,7 +37,6 @@ function CommentItem({
         break;
       case "신고":
         setReportModalOpen(true);
-        console.log("신고");
         break;
     }
   };
