@@ -25,5 +25,13 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async rewrites() {
+    return [
+      {
+        source: "/proxy-api/:path*",
+        destination: "http://localhost:8080/:path*",
+      },
+    ];
+  },
 };
-export default nextConfig;  
+export default nextConfig;
