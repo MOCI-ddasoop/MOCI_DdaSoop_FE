@@ -1,4 +1,4 @@
-import UserInfo from "@/domain/mypage/components/UserInfo";
+import UserInfo from "@/domain/user/components/UserInfo";
 import TabBar from "@/shared/components/TabBar";
 import { mypageTabContents } from "@/shared/utils/navigation";
 
