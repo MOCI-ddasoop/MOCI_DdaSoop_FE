@@ -1,6 +1,6 @@
 import UserInfo from "@/domain/mypage/components/UserInfo";
 import TabBar from "@/shared/components/TabBar";
-import { mypageTabContents } from "@/utils/navigation";
+import { mypageTabContents } from "@/shared/utils/navigation";
 
 function MyPageLayout({ children }: { children: React.ReactNode }) {
   return (

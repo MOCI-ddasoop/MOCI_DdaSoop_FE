@@ -1,5 +1,5 @@
 import CardContainer from "@/domain/mypage/components/CardContainer";
-import { mypageTabContents } from "@/utils/navigation";
+import { mypageTabContents } from "@/shared/utils/navigation";
 import UserInfo from "@/domain/mypage/components/UserInfo";
 import TabBar from "@/shared/components/TabBar";
 

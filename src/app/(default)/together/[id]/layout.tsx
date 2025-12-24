@@ -3,7 +3,7 @@ import DetailInfo, {
 } from "@/domain/together/components/DetailInfo";
 import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
-import { togetherTabContents } from "@/utils/navigation";
+import { togetherTabContents } from "@/shared/utils/navigation";
 
 const DETAIL_INFO_DUMMY: DetailInfoProps = {
   type: "together",
