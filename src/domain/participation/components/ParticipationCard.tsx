@@ -1,32 +1,8 @@
 import Image from "next/image";
-import Capsule from "./Capsule";
 import Link from "next/link";
 import ProgressBar from "./ProgressBar";
-
-// 타입변경될 수 있음 유니온타입으로 바꿀 수 있는거 바꾸기
-interface BaseCardProps {
-  type: "together" | "donate";
-  href: string;
-  image: string;
-  title: string;
-  category: string;
-  dDay: number; // 남은날짜
-}
-
-export interface TogetherCardProps extends BaseCardProps {
-  type: "together";
-  participant?: number; // 참여자수(제한인원 있는 경우만 표시)
-  capacity?: number; // 제한인원(있는경우)
-  status?: string; // 모집중 모집완료
-  startDate: string;
-  endDate: string;
-  isOnline: string;
-}
-
-export interface DonateCardProps extends BaseCardProps {
-  type: "donate";
-  progress: number; // 진행률
-}
+import Capsule from "@/shared/components/Capsule";
+import { DonateCardProps, TogetherCardProps } from "../types";
 
 /**
  *
@@ -49,7 +25,7 @@ export interface DonateCardProps extends BaseCardProps {
  * @param progress : number
  * @returns
  */
-function Card(props: TogetherCardProps | DonateCardProps) {
+function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
   const { type, href, image, title, category, dDay } = props;
 
   return (
@@ -98,4 +74,4 @@ function Card(props: TogetherCardProps | DonateCardProps) {
   );
 }
 
-export default Card;
+export default ParticipationCard;

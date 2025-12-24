@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { HiPlusCircle } from "react-icons/hi";
 
-function AddNewCard({ type }: { type: "together" | "donate" }) {
+function AddParticipationCard({ type }: { type: "together" | "donate" }) {
   return (
     <Link
       href={type === "donate" ? "/donate/new" : "together/new"} // TODO : 경로 바꾸기
@@ -18,4 +18,4 @@ function AddNewCard({ type }: { type: "together" | "donate" }) {
   );
 }
 
-export default AddNewCard;
+export default AddParticipationCard;

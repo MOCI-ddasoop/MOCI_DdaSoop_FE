@@ -1,12 +1,12 @@
 "use client";
 
-import { TogetherCardProps } from "@/shared/components/Card";
 import Pagination from "@/shared/components/Pagination";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ItemContainer from "@/shared/components/ItemContainer";
 import ItemFilter from "@/shared/components/ItemFilter";
 import { syncUrl } from "@/shared/utils/syncUrl";
+import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
+import { TogetherCardProps } from "@/domain/participation/types";
 
 interface TogetherSectionProps {
   initialCategory: string[];
@@ -69,7 +69,11 @@ function TogetherSection({
         isOnline={isOnline}
         onFilterClicked={handleFilter}
       />
-      <ItemContainer type="together" items={items} currentPage={initialPage} />
+      <ParticipationContainer
+        type="together"
+        items={items}
+        currentPage={initialPage}
+      />
       <Pagination totalPages={10} />
     </>
   );

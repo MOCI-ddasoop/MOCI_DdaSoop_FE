@@ -1,15 +1,7 @@
+import { formatMoney } from "@/shared/utils/formatMoney";
 import Image from "next/image";
 import Link from "next/link";
-import { formatMoney } from "../utils/formatMoney";
-
-export interface DonationListItemProps {
-  id: number;
-  donationImage: string;
-  name: string;
-  amount: number;
-  userName: string;
-  href?: string;
-}
+import { DonationListItemProps } from "../types";
 
 function DonationListItem({
   id,

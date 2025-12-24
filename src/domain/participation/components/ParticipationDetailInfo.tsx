@@ -1,25 +1,12 @@
 import UserAction from "@/domain/together/components/UserAction";
 
-import TreeProgress from "./TreeProgress";
 import Capsule from "@/shared/components/Capsule";
-import ProgressBar from "@/shared/components/ProgressBar";
 import DonateButton from "@/domain/donate/components/DonateButton";
+import TreeProgress from "./TreeProgress";
+import ProgressBar from "./ProgressBar";
+import { DetailInfoProps } from "../types";
 
-export interface DetailInfoProps {
-  type: "together" | "donate";
-  title: string;
-  category: string;
-  dDay?: number; // 후원만
-  participant?: number; // 참여자수(제한인원 있는 경우만 표시)
-  status?: string; // 모집중 모집완료(제한인원 있는 경우만 표시)
-  startDate: string;
-  endDate: string;
-  isOnline?: string; // 함께하기만
-  goal: number;
-  progress: number;
-}
-
-function DetailInfo({
+function ParticipationDetailInfo({
   props: {
     type,
     title,
@@ -65,4 +52,4 @@ function DetailInfo({
   );
 }
 
-export default DetailInfo;
+export default ParticipationDetailInfo;

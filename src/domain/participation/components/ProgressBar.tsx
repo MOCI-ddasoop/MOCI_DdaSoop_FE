@@ -1,4 +1,4 @@
-import { formatMoney } from "../utils/formatMoney";
+import { formatMoney } from "@/shared/utils/formatMoney";
 
 interface ProgressBarProps {
   type: "donate" | "together";

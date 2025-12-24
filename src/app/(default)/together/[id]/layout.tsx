@@ -1,4 +1,5 @@
-import DetailInfo, { DetailInfoProps } from "@/shared/components/DetailInfo";
+import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
+import { DetailInfoProps } from "@/domain/participation/types";
 import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
 import { togetherTabContents } from "@/shared/utils/navigation";
@@ -33,7 +34,7 @@ async function page({
         <TabBar type="together" tabContents={togetherTabContents(id)} />
         <main className="py-4">{children}</main>
       </div>
-      <DetailInfo props={DETAIL_INFO_DUMMY} />
+      <ParticipationDetailInfo props={DETAIL_INFO_DUMMY} />
     </div>
   );
 }
