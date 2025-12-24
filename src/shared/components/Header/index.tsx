@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { navItems } from "@/utils/navigation";
+import { navItems } from "@/shared/utils/navigation";
 
 import NavLink from "../NavLink";
 import UserMenu from "./UserMenu";
