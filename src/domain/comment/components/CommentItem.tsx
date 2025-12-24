@@ -1,5 +1,6 @@
 "use client";
 
+import reportModalStore from "@/domain/report/stores/reportModalStore";
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
@@ -23,6 +24,7 @@ function CommentItem({
   className,
 }: CommentItemProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
@@ -34,7 +36,7 @@ function CommentItem({
         console.log("삭제");
         break;
       case "신고":
-        console.log("신고");
+        setReportModalOpen(true);
         break;
     }
   };

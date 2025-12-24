@@ -5,7 +5,7 @@ import tw from "@/shared/utils/tw";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
 
-interface CardImageProps {
+interface FeedCardImageProps {
 	id: number;
 	src: string;
 	alt: string;
@@ -18,7 +18,7 @@ interface CardImageProps {
 	onClick?: () => void;
 }
 
-function CardImage({
+function FeedCardImage({
 	id,
 	src,
 	alt,
@@ -29,7 +29,7 @@ function CardImage({
 	y = 0,
 	className,
 	onClick,
-}: CardImageProps) {
+}: FeedCardImageProps) {
 	const aspectRatio = imageWidth / imageHeight;
 	const height = width / aspectRatio;
 
@@ -79,4 +79,4 @@ function CardImage({
 	);
 }
 
-export default CardImage;
+export default FeedCardImage;

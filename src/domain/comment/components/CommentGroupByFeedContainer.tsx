@@ -2,8 +2,8 @@
 
 import { groupById } from "@/shared/utils/groupById";
 import CommentItem from "./CommentItem";
-import FeedSummary from "./FeedSummary";
 import { useState } from "react";
+import FeedSummary from "@/domain/feed/components/FeedSummary";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: index,
@@ -30,7 +30,7 @@ const COMMENT_LIST = Array.from({ length: 10 }).map((_, index) => ({
   content: "Hello, world!",
 }));
 
-function MyCommentContiner() {
+function FeedGroupCommentContiner() {
   const [commentList, setCommentList] = useState(() =>
     groupById([...COMMENT_LIST, ...COMMENT_LIST], "feedId")
   );
@@ -71,4 +71,4 @@ function MyCommentContiner() {
     </ul>
   );
 }
-export default MyCommentContiner;
+export default FeedGroupCommentContiner;

@@ -1,8 +1,6 @@
-import MyCommentContiner from "@/domain/mypage/components/MyCommentContiner"
+import CommentGroupByFeedContainer from "@/domain/comment/components/CommentGroupByFeedContainer";
 
 function page() {
-  return (
-    <MyCommentContiner />
-  )
+  return <CommentGroupByFeedContainer />;
 }
-export default page
+export default page;

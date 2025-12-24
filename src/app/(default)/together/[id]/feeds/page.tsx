@@ -1,7 +1,7 @@
-import CardContainer from "@/domain/mypage/components/CardContainer";
+import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
 
 function page() {
-  return <CardContainer />;
+  return <FeedCardContainer />;
 }
 
 export default page;

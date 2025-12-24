@@ -1,5 +1,5 @@
-import CommentItem from "./CommentItem";
 import tw from "@/shared/utils/tw";
+import CommentItem from "./CommentItem";
 
 interface CommentItemProps {
   id: number;
@@ -26,7 +26,6 @@ function CommentContainer({
   className?: string;
   onCommentTargetClick?: (nickname: string | null) => void;
 }) {
-  
   return (
     <ul className={tw("w-full flex flex-col gap-2", className)}>
       {COMMENT_LIST.map((comment) => (
