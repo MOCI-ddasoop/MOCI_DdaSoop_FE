@@ -18,6 +18,7 @@ const DONATION_CATEGORIES = [ //TODO: 카테고리 데이터 API 연동
 ];
 
 function DonationSuggestForm() {
+  const router = useRouter();
   const [donationname, setDonationname] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [targetAmount, setTargetAmount] = useState<number | "">("");
@@ -26,19 +27,23 @@ function DonationSuggestForm() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [donationInfo, setDonationInfo] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
-  const router = useRouter();
   const isFormFilled = donationname.trim() !== "" && categoryId !== null && typeof targetAmount === "number" &&
   targetAmount > 0 && startDate !== null && endDate !== null && endDate >= startDate;
-
   const today = new Date();
 
-  const maxEndDate =
-    startDate
-      ? new Date(
-          new Date(startDate).setFullYear(startDate.getFullYear() + 1)
-        )
-      : undefined;
-// TODO: API 연동
+  const maxEndDate = startDate
+    ? new Date(new Date(startDate).setFullYear(startDate.getFullYear() + 1))
+    : undefined;
+
+   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); 
+    if(value === ""){
+      setTargetAmount("");
+    } else {
+      setTargetAmount(Number(value));
+    }
+  } 
+    // TODO: API 연동
    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -46,14 +51,7 @@ function DonationSuggestForm() {
     router.push("/donate");
   }   
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); 
-    if(value === ""){
-      setTargetAmount("");
-    } else {
-      setTargetAmount(Number(value));
-    }
-  }
+  
   return (
     <form onSubmit={handleSubmit} className="max-w-[1000px] flex flex-col p-4">
       {/*후원 이름 입력 */}
@@ -139,14 +137,14 @@ function DonationSuggestForm() {
               />
             </div>
           </div>
-          <div className="pl-[44px] flex flex-col gap-2"> 
+          {(periodId || startDate) && (
+            <div className="pl-[44px] flex flex-col gap-2"> 
             <div className="flex items-center gap-2">
               <DatePicker
                 selected={startDate}
                 onChange={(date) => {
                   setStartDate(date);
                   setEndDate(null);
-                  setPeriodId(CUSTOM_PERIOD_ID);
                 }}
                 selectsStart
                 startDate={startDate}
@@ -155,6 +153,7 @@ function DonationSuggestForm() {
                 maxDate={maxEndDate}
                 locale={ko}
                 dateFormat="yyyy년 MM월 dd일"
+                disabled={periodId !== CUSTOM_PERIOD_ID}
                 className="border border-gray-300 rounded-md p-2 h-10 w-44 outline-none focus:ring-2 focus:ring-mainblue"
               />
               <span className="text-gray-500">-</span>
@@ -168,13 +167,17 @@ function DonationSuggestForm() {
                 maxDate={maxEndDate}
                 locale={ko}
                 dateFormat="yyyy년 MM월 dd일"
+                disabled={periodId !== CUSTOM_PERIOD_ID}
                 className="border border-gray-300 rounded-lg p-2 h-10 w-44 outline-none focus:ring-2 focus:ring-mainblue"
               />
-              <p className="text-sm text-mainblue ml-2">
-                * 기간은 최대 1년까지 설정할 수 있습니다
-              </p>
+              {periodId === CUSTOM_PERIOD_ID && (
+                <p className="text-sm text-mainblue ml-2">
+                  * 기간은 최대 1년까지 설정할 수 있습니다
+                </p>
+              )}
             </div>
           </div>
+          )}
         </div>
       </div>
       {/*후원 소개글 영역*/}
