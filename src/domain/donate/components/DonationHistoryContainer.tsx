@@ -1,5 +1,5 @@
-import DonationListItem from "@/shared/components/DonationListItem";
 import { DONATION_LIST } from "@/shared/mock/mockup";
+import DonationListItem from "./DonationListItem";
 
 function DonationHistoryContainer() {
   return (

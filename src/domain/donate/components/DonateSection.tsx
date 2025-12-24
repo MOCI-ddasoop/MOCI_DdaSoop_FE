@@ -1,9 +1,9 @@
 "use client";
-import { DonateCardProps } from "@/shared/components/Card";
-import ItemContainer from "@/shared/components/ItemContainer";
+import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
+import { DonateCardProps } from "@/domain/participation/types";
+import { syncUrl } from "@/domain/participation/utils/syncUrl";
 import ItemFilter from "@/shared/components/ItemFilter";
 import Pagination from "@/shared/components/Pagination";
-import { syncUrl } from "@/shared/utils/syncUrl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -47,7 +47,11 @@ function DonateSection({
         selectedCategory={selectedCategory}
         onFilterClicked={handleFilter}
       />
-      <ItemContainer type="donate" items={items} currentPage={initialPage} />
+      <ParticipationContainer
+        type="donate"
+        items={items}
+        currentPage={initialPage}
+      />
       <Pagination totalPages={10} />
     </>
   );

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import Button from "@/shared/components/Button";
-import { formatMoney } from "@/shared/utils/formatMoney";
+import { formatMoney } from "../utils/formatMoney";
 
 function DonateModal({
   onClose,

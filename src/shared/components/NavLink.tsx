@@ -27,7 +27,6 @@ function NavLink({
     5: "w-1/5",
     6: "w-1/6",
   };
-  console.log(tabWidth[tabCount ?? 1]);
   return (
     <li
       className={`${

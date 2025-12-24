@@ -4,9 +4,9 @@ import Pagination from "@/shared/components/Pagination";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ItemFilter from "@/shared/components/ItemFilter";
-import { syncUrl } from "@/shared/utils/syncUrl";
 import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
 import { TogetherCardProps } from "@/domain/participation/types";
+import { syncUrl } from "@/domain/participation/utils/syncUrl";
 
 interface TogetherSectionProps {
   initialCategory: string[];
