@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { navItems } from "@/utils/navigation";
 
 import NavLink from "../NavLink";
 import UserMenu from "./UserMenu";
+import { navItems } from "@/shared/utils/navigation";
 
 function Header() {
   return (
