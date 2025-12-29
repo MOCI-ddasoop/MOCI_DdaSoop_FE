@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface CommentItemProps {
+  id: number;
   profileImage: string;
   author: string;
   date: string;
@@ -16,6 +17,7 @@ interface CommentItemProps {
 }
 
 function CommentItem({
+  id,
   profileImage,
   author,
   date,

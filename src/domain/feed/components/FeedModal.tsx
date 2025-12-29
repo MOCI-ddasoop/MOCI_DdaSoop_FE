@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
@@ -33,8 +34,7 @@ function FeedModal({
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [targetNickname, setTargetNickname] = useState<string | null>(null);
-  const { data } = useGetFeedById(feedId);
-  console.log(data);
+  const { data: feedDetailData } = useGetFeedById(feedId);
 
   const handleClose = () => {
     onClose();
@@ -92,17 +92,17 @@ function FeedModal({
             className="relative w-2/5 h-full overflow-y-auto overflow-x-hidden"
           >
             <FeedDetailCard
-              id={FEED_DATA[Number(feedId)].id}
-              title={FEED_DATA[Number(feedId)].title}
+              id={feedDetailData?.id || 0}
+              content={feedDetailData?.content || ""}
+              category={feedDetailData?.feedType || ""}
+              date={feedDetailData?.createdAt || ""}
+              likeCount={feedDetailData?.reactionCount || 0}
+              commentCount={feedDetailData?.commentCount || 0}
+              bookMarkedByMe={feedDetailData?.isBookmarked || false}
+              tags={feedDetailData?.tags || []}
+              visiblity={feedDetailData?.visibility || "PUBLIC"}
+              images={[FEED_DATA[Number(feedId)].image]}
               author={FEED_DATA[Number(feedId)].author}
-              content={FEED_DATA[Number(feedId)].content}
-              category={FEED_DATA[Number(feedId)].category}
-              date={FEED_DATA[Number(feedId)].date}
-              likeCount={FEED_DATA[Number(feedId)].likeCount}
-              commentCount={FEED_DATA[Number(feedId)].commentCount}
-              image={FEED_DATA[Number(feedId)].image}
-              likedByMe={FEED_DATA[Number(feedId)].likedByMe}
-              tags={FEED_DATA[Number(feedId)].tags}
             />
 
             {/* comment 영역 */}
