@@ -20,7 +20,14 @@ function TabBar({
   return (
     <ul className="w-full h-fit flex justify-start items-baseline">
       {tabContents.map(({ href, name, children }) => (
-        <NavLink key={href} href={href} name={name} tabBar type={type}>
+        <NavLink
+          key={href}
+          href={href}
+          name={name}
+          tabBar
+          type={type}
+          tabCount={tabContents.length}
+        >
           {children && (
             <ul className="flex top-15 left-1/2 -translate-x-1/2 absolute">
               {children.map(({ href, name }) => (

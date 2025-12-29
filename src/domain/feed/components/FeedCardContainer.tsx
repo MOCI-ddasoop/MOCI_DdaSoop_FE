@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Suspense,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
@@ -15,7 +8,6 @@ import { CardDataType, fetchMockFeeds } from "@/shared/mock/mockup";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type PositionedItems = Partial<Feed> & {
   src: string;
@@ -33,12 +25,7 @@ function FeedCardContainer({
   className?: string;
   queryParams?: string;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const feedIdParam = searchParams.get("feedId");
-
+  const [feedId, setFeedId] = useState<number | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -186,27 +173,17 @@ function FeedCardContainer({
                 imageHeight={item.height}
                 x={item.x}
                 y={item.y}
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set("feedId", (item.id ?? "").toString());
-                  router.push(`${pathname}?${params.toString()}`, {
-                    scroll: false,
-                  });
-                }}
+                onClick={() => setFeedId(item.id ?? null)}
                 className="duration-300 ease-in-out absolute"
               />
             );
         })}
       </div>
-      <Suspense fallback={<div>피드 상세보기가 준비되지 않았습니다.</div>}>
+      <Suspense fallback={<div>Loading...</div>}>
         <FeedModal
-          feedId={feedIdParam || ""}
-          onClose={() => {
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete("feedId");
-            router.push(`${pathname}?${params.toString()}`, { scroll: false });
-          }}
-          isOpen={feedIdParam !== null}
+          feedId={feedId?.toString() || ""}
+          onClose={() => setFeedId(null)}
+          isOpen={feedId !== null}
         />
       </Suspense>
 

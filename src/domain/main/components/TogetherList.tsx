@@ -1,6 +1,5 @@
-import TogetherListItem, {
-  TogetherListItemProps,
-} from "@/shared/components/TogetherListItem";
+import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { TogetherListItemProps } from "@/domain/together/types";
 import Link from "next/link";
 
 function TogetherList({ items }: { items: TogetherListItemProps[] }) {
