@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
@@ -191,15 +198,17 @@ function FeedCardContainer({
             );
         })}
       </div>
-      <FeedModal
-        feedId={feedIdParam || ""}
-        onClose={() => {
-          const params = new URLSearchParams(searchParams.toString());
-          params.delete("feedId");
-          router.push(`${pathname}?${params.toString()}`, { scroll: false });
-        }}
-        isOpen={feedIdParam !== null}
-      />
+      <Suspense fallback={<div>피드 상세보기가 준비되지 않았습니다.</div>}>
+        <FeedModal
+          feedId={feedIdParam || ""}
+          onClose={() => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("feedId");
+            router.push(`${pathname}?${params.toString()}`, { scroll: false });
+          }}
+          isOpen={feedIdParam !== null}
+        />
+      </Suspense>
 
       <div ref={bottomRef} className="h-20 bg-cyan-400" />
       {isFetchingNextPage && <div>불러오는 중...</div>}
