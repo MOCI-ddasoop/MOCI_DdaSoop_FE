@@ -1,15 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { DonationListItemProps } from "../types";
 import { formatMoney } from "../utils/formatMoney";
-
-export interface DonationListItemProps {
-  id: number;
-  donationImage: string;
-  name: string;
-  amount: number;
-  userName: string;
-  href?: string;
-}
 
 function DonationListItem({
   id,
@@ -38,7 +30,7 @@ function DonationListItem({
     return (
       <Link
         href={href}
-        className="w-56 h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg hover:bg-gray-100 hover:shadow transition-all"
+        className="min-w-56 xl:max-w-56 w-full h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg hover:bg-gray-100 hover:shadow transition-all"
       >
         {content}
       </Link>
@@ -46,7 +38,7 @@ function DonationListItem({
   }
 
   return (
-    <div className="w-56 h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg">
+    <div className="min-w-56 xl:max-w-56 w-full  h-16 p-2 flex gap-2 bg-white ring ring-pastelblue rounded-lg">
       {content}
     </div>
   );

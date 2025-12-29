@@ -1,18 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import Capsule from "./Capsule";
-import tw from "../utils/tw";
-
-// 카테고리, 온/오프라인, 모집중/모집완료 ->  타입지정해도 좋을듯
-export interface TogetherListItemProps {
-  id: number;
-  image: string;
-  name: string;
-  category: string;
-  isOnline: string;
-  href: string;
-  widthClass?: string;
-}
+import Capsule from "@/shared/components/Capsule";
+import { TogetherListItemProps } from "../types";
 
 function TogetherListItem({
   id,

@@ -1,11 +1,12 @@
 "use client";
 
-import { TogetherCardProps } from "@/shared/components/Card";
 import Pagination from "@/shared/components/Pagination";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import ItemContainer from "@/shared/components/ItemContainer";
 import ItemFilter from "@/shared/components/ItemFilter";
+import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
+import { TogetherCardProps } from "@/domain/participation/types";
+import { syncUrl } from "@/domain/participation/utils/syncUrl";
 
 interface TogetherSectionProps {
   initialCategory: string[];
@@ -35,50 +36,44 @@ function TogetherSection({
         : [...selectedCategory, item];
 
       setSelectedCategory(newCategory);
-      syncUrl(newCategory, isOnline, currentSort, 1);
+      syncUrl("together", newCategory, isOnline, currentSort, 1, router);
     } else {
       const newIsOnline = isOnline.includes(item)
         ? isOnline.filter((o) => o !== item)
         : [...isOnline, item];
 
       setIsOnline(newIsOnline);
-      syncUrl(selectedCategory, newIsOnline, currentSort, 1);
+      syncUrl(
+        "together",
+        selectedCategory,
+        newIsOnline,
+        currentSort,
+        1,
+        router
+      );
     }
-  };
-
-  const syncUrl = (
-    category: string[],
-    isOnline: string[],
-    sort: string,
-    page: number
-  ) => {
-    const params = new URLSearchParams();
-    if (category.length > 0) {
-      params.set("category", category.join(","));
-    }
-    if (isOnline.length > 0) {
-      params.set("isOnline", isOnline.join(","));
-    }
-    params.set("page", page.toString());
-    params.set("sort", sort);
-    router.replace(`/together?${params.toString()}`);
   };
 
   const handleSortChange = (nextSort: string) => {
     setCurrentSort(nextSort);
-    syncUrl(selectedCategory, isOnline, nextSort, 1);
+    syncUrl("together", selectedCategory, isOnline, nextSort, 1, router);
   };
 
   return (
     <>
       <ItemFilter
+        type="together"
         currentSort={currentSort}
         setCurrentSort={handleSortChange}
         selectedCategory={selectedCategory}
         isOnline={isOnline}
         onFilterClicked={handleFilter}
       />
-      <ItemContainer type="together" items={items} currentPage={initialPage} />
+      <ParticipationContainer
+        type="together"
+        items={items}
+        currentPage={initialPage}
+      />
       <Pagination totalPages={10} />
     </>
   );

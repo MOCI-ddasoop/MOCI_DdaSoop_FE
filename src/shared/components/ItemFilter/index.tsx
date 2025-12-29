@@ -9,14 +9,16 @@ import Filter from "./Filter";
 import DropdownButton from "../DropdownButton";
 
 interface ItemFilterProps {
+  type: "together" | "donate";
   currentSort: string;
   setCurrentSort: (value: string) => void;
   selectedCategory: string[];
-  isOnline: string[];
+  isOnline?: string[];
   onFilterClicked: (item: string, type: "category" | "isOnline") => void;
 }
 
 function ItemFilter({
+  type,
   currentSort,
   setCurrentSort,
   selectedCategory,
@@ -32,12 +34,14 @@ function ItemFilter({
           type="category"
           onSelected={handleFilter}
         />
-        <Filter
-          items={onlineOptions}
-          selectedItems={isOnline}
-          type="isOnline"
-          onSelected={handleFilter}
-        />
+        {type === "together" && (
+          <Filter
+            items={onlineOptions}
+            selectedItems={isOnline!}
+            type="isOnline"
+            onSelected={handleFilter}
+          />
+        )}
       </div>
       <DropdownButton
         options={sortOptions}
