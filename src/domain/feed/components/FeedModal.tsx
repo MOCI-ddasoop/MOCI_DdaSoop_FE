@@ -7,6 +7,7 @@ import FeedDetailCard from "./FeedDetailCard";
 import CommentContainer from "@/domain/comment/components/CommentContainer";
 import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
+import ImageSwiper from "@/shared/components/ImageSwiper";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: 1,
@@ -73,42 +74,41 @@ function FeedModal({
         onClick={handleClose}
       >
         <div
-          className="flex w-full h-[90vh] max-w-4xl max-h-4xl bg-white rounded-md"
+          className="flex w-full h-[90vh] max-w-4xl bg-white rounded-md"
           onClick={(e) => e.stopPropagation()}
         >
           {/* image 영역 */}
           <div className="relative h-full w-3/5">
-            <Image
-              src={FEED_DATA[Number(feedId)].image}
-              alt={FEED_DATA[Number(feedId)].title}
-              fill
-              className="object-cover"
-            />
+            <ImageSwiper slideList={feedDetailData?.images || []} />
           </div>
 
           {/* content 영역 */}
-          <div
-            ref={contentRef}
-            className="relative w-2/5 h-full overflow-y-auto overflow-x-hidden"
-          >
-            <FeedDetailCard
-              id={feedDetailData?.id || 0}
-              content={feedDetailData?.content || ""}
-              category={feedDetailData?.feedType || ""}
-              date={feedDetailData?.createdAt || ""}
-              likeCount={feedDetailData?.reactionCount || 0}
-              commentCount={feedDetailData?.commentCount || 0}
-              bookMarkedByMe={feedDetailData?.isBookmarked || false}
-              tags={feedDetailData?.tags || []}
-              visiblity={feedDetailData?.visibility || "PUBLIC"}
-              images={[FEED_DATA[Number(feedId)].image]}
-              author={FEED_DATA[Number(feedId)].author}
-            />
+          <div className="flex flex-col w-2/5 h-full bg-white">
+            <div
+              ref={contentRef}
+              className="flex-1 overflow-y-auto overflow-x-hidden"
+            >
+              <FeedDetailCard
+                id={feedDetailData?.id || 0}
+                content={feedDetailData?.content || ""}
+                category={feedDetailData?.feedType || ""}
+                date={feedDetailData?.createdAt || ""}
+                likeCount={feedDetailData?.reactionCount || 0}
+                commentCount={feedDetailData?.commentCount || 0}
+                bookMarkedByMe={feedDetailData?.isBookmarked || false}
+                tags={feedDetailData?.tags || []}
+                visiblity={feedDetailData?.visibility || "PUBLIC"}
+                images={[FEED_DATA[Number(feedId)].image]}
+                author={FEED_DATA[Number(feedId)].author}
+              />
 
-            {/* comment 영역 */}
-            <CommentContainer onCommentTargetClick={handleCommentTargetClick} />
+              {/* comment 영역 */}
+              <CommentContainer
+                onCommentTargetClick={handleCommentTargetClick}
+              />
+            </div>
 
-            <div className="p-2 border-t border-gray-200 sticky bottom-0 left-0 w-full bg-white">
+            <div className="p-2 border-t border-gray-200 bg-white">
               <CommentInput
                 targetNickname={targetNickname}
                 onCommentTargetClick={handleCommentTargetClick}
