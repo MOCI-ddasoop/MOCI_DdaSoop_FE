@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
@@ -38,7 +38,7 @@ function FeedCardContainer({
 			initialPageParam: 1,
 		});
 	//무한스크롤 target ref
-	const bottomRef = useIntersection(() => {
+	const triggerRef = useIntersection(() => {
 		fetchNextPage();
 	}, hasNextPage);
 
@@ -193,7 +193,7 @@ function FeedCardContainer({
 			/>
 
 			<div
-				ref={bottomRef}
+				ref={triggerRef}
 				className="h-20 absolute"
 				style={{ marginTop: `${containerHeight - shortestColumnHeight}px` }}
 			/>

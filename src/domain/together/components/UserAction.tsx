@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/shared/components/Button";
 import FeedCreateButton from "@/domain/feed/components/FeedCreateButton";
+import Button from "@/shared/components/Button";
 
 function UserAction() {
 	const isMember = false;

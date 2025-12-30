@@ -3,7 +3,7 @@ import { useState } from "react";
 import FeedCreatorModal from "./FeedCreatorModal";
 import Button from "../../../shared/components/Button";
 import { RiQuillPenLine } from "react-icons/ri";
-import tw from "../../../shared/utils/tw";
+import tw from "@/shared/utils/tw";
 
 function FeedCreateButton({ className }: { className?: string }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
