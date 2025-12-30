@@ -15,7 +15,6 @@ import forwardCircle from "@/assets/icons/forwardCircle.png";
 import { IoClose } from "react-icons/io5";
 
 export type Slide = Partial<File> & { url?: string };
-export type Slide = Partial<File> & { url?: string };
 
 interface ImageSwiperProps {
 	slideList: Slide[];
