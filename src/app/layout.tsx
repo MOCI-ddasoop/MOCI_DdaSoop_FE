@@ -1,8 +1,9 @@
 import localFont from "next/font/local";
 import TanstackProvider from "../shared/providers/TanstackProvider";
-import GTMInit from "@/shared/config/GTMInit";
 import Header from "@/shared/components/Header";
 import "@/shared/styles/globals.css";
+import ClarityInit from "@/shared/utils/clarityInit";
+import ReportModal from "@/domain/report/ReportModal";
 
 const pretendard = localFont({
   src: "../../public/fonts/PretendardVariable.woff2",
@@ -17,13 +18,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={pretendard.variable}>
+    <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
       <body>
-        <GTMInit />
         <Header />
-        <TanstackProvider>
-          {children}
-        </TanstackProvider>
+        <ReportModal />
+        <ClarityInit />
+        <TanstackProvider>{children}</TanstackProvider>
       </body>
     </html>
   );

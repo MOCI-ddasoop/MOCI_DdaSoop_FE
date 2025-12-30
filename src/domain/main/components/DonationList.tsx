@@ -1,9 +1,6 @@
-import DonationListItem, {
-  DonationListItemProps,
-} from "@/shared/components/DonationListItem";
+import DonationListItem from "@/domain/donate/components/DonationListItem";
+import { DonationListItemProps } from "@/domain/donate/types";
 import Link from "next/link";
-
-
 
 function DonationList({ items }: { items: DonationListItemProps[] }) {
   return (

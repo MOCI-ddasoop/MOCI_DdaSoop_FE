@@ -1,9 +1,9 @@
-import CardContainer from "@/domain/mypage/components/CardContainer";
 import TogetherList from "@/domain/main/components/TogetherList";
 import DonationList from "@/domain/main/components/DonationList";
 import { TOGETHER_LIST, DONATION_LIST } from "@/shared/mock/mockup";
 import SearchInput from "@/shared/components/SearchInput";
-import SearchQueryNotation from "@/domain/main/components/SearchQueryNotation";
+import SearchQueryNotation from "@/domain/search/SearchQueryNotation";
+import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
 
 export default async function Home({
   searchParams,
@@ -15,7 +15,7 @@ export default async function Home({
 
   return (
     <div className="flex gap-8 py-4">
-      <CardContainer queryParams={query} />
+      <FeedCardContainer queryParams={query} />
       <div className="sticky top-20 h-fit flex flex-col gap-2 items-center">
         <SearchInput />
         <TogetherList items={TOGETHER_LIST} />
