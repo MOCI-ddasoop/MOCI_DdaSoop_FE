@@ -10,11 +10,11 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
 
-import backCircle from "@/assets/icons/backCircle.svg";
-import forwardCircle from "@/assets/icons/forwardCircle.svg";
+import backwardCircle from "@/assets/icons/backwardCircle.png";
+import forwardCircle from "@/assets/icons/forwardCircle.png";
 import { IoClose } from "react-icons/io5";
 
-type Slide = Partial<File> & { url?: string };
+export type Slide = Partial<File> & { url?: string };
 
 interface ImageSwiperProps {
 	slideList: Slide[];
@@ -129,18 +129,26 @@ function ImageSwiper({
 				) : (
 					""
 				)}
-				<div className="position-center w-full flex-center justify-between z-10">
+				<div className="position-center w-full flex-center justify-between z-10 p-2">
 					<button
 						ref={prevButtonRef}
 						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0"
 					>
-						<Image src={backCircle} alt="왼쪽으로 이동" />
+						<Image
+							src={backwardCircle}
+							alt="왼쪽으로 이동"
+							className="w-6 select-none pointer-events-none"
+						/>
 					</button>
 					<button
 						ref={nextButtonRef}
 						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0"
 					>
-						<Image src={forwardCircle} alt="오른쪽으로 이동" />
+						<Image
+							src={forwardCircle}
+							alt="오른쪽으로 이동"
+							className="w-6 select-none pointer-events-none"
+						/>
 					</button>
 				</div>
 			</Swiper>
