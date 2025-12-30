@@ -1,16 +1,17 @@
 "use client";
 import { useState } from "react";
 import FeedCreatorModal from "./FeedCreatorModal";
-import Button from "./Button";
+import Button from "../../../shared/components/Button";
 import { RiQuillPenLine } from "react-icons/ri";
+import tw from "../../../shared/utils/tw";
 
-function FeedCreateButton() {
+function FeedCreateButton({ className }: { className?: string }) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	return (
 		<>
 			<Button
-				className="w-xs flex-center gap-3"
+				className={tw("w-xs flex-center gap-3", className)}
 				onClick={() => setIsOpen(true)}
 			>
 				<RiQuillPenLine size={"1.5rem"} />

@@ -1,9 +1,10 @@
 "use client";
 import FeedImageInput, { FeedImage } from "./FeedImageInput";
 import { useEffect, useMemo, useState } from "react";
-import TogetherListItem from "./TogetherListItem";
-import TextBox from "./TextBox";
-import Button from "./Button";
+import TextBox from "../../../shared/components/TextBox";
+import Button from "../../../shared/components/Button";
+import TagInput from "../../../shared/components/TagInput";
+import TogetherListItem from "@/domain/together/components/TogetherListItem";
 
 //---------------추후 삭제 필요--------------
 export interface FeedOptionData {
