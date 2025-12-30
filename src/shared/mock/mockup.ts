@@ -1,5 +1,5 @@
-import { DonationListItemProps } from "../components/DonationListItem";
-import { TogetherListItemProps } from "../components/TogetherListItem";
+import { DonationListItemProps } from "@/domain/donate/types";
+import { TogetherListItemProps } from "@/domain/together/types";
 
 export type CardDataType = {
 	id: number;
@@ -9,7 +9,7 @@ export type CardDataType = {
 	height: number;
 };
 
-export const CARD_DATA = Array.from({ length: 20 }).map((_, index) => ({
+export const CARD_DATA = Array.from({ length: 200 }).map((_, index) => ({
 	id: index,
 	src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
 	alt: "test",

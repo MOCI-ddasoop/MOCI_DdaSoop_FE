@@ -127,34 +127,41 @@ function FeedCardContainer({
 		return Math.max(...positionedItems.map((item) => item.y + item.height));
 	}, [positionedItems]);
 
+	// 가장 짧은 컬럼 높이 계산
+	const shortestColumnHeight = useMemo(() => {
+		if (positionedItems.length === 0) return 0;
+		return Math.min(...positionedItems.map((item) => item.y + item.height));
+	}, [positionedItems]);
+
 	// 커스텀 버츄얼 스크롤
 	const [visibleItems, setVisibleItems] = useState<PositionedItems[]>([]);
 	const positionsItemsRef = useRef(positionedItems);
 
-	const onScroll = useCallback(() => {
+	const onScrollRef = useRef(() => {
 		const viewportTop = window.scrollY;
 		const viewportBottom = viewportTop + window.innerHeight;
-		const OVERSCAN = 200;
+		const OVERSCAN = 100;
 		const filteredItems = positionsItemsRef.current.filter(
 			(item) =>
 				item.y + item.height >= viewportTop - OVERSCAN &&
 				item.y <= viewportBottom + OVERSCAN
 		);
 		setVisibleItems(filteredItems);
-	}, [positionsItemsRef]);
+	});
 
 	useEffect(() => {
 		positionsItemsRef.current = positionedItems;
-		onScroll();
-	}, [positionedItems, onScroll]);
+		onScrollRef.current();
+	}, [positionedItems, onScrollRef]);
 
 	useEffect(() => {
-		window.addEventListener("scroll", onScroll);
-		return () => window.removeEventListener("scroll", onScroll);
-	}, [onScroll]);
+		const scrollHandler = onScrollRef.current;
+		window.addEventListener("scroll", scrollHandler);
+		return () => window.removeEventListener("scroll", scrollHandler);
+	}, [onScrollRef]);
 
 	return (
-		<>
+		<div className="flex flex-col w-full">
 			<div
 				ref={containerRef}
 				className={tw("relative w-full", className)}
@@ -185,12 +192,16 @@ function FeedCardContainer({
 				isOpen={feedId !== null}
 			/>
 
-			<div ref={bottomRef} className="h-20 bg-cyan-400" />
+			<div
+				ref={bottomRef}
+				className="h-20 absolute"
+				style={{ marginTop: `${containerHeight - shortestColumnHeight}px` }}
+			/>
 			{isFetchingNextPage && <div>불러오는 중...</div>}
 			{!hasNextPage && (
 				<div className="text-gray-400">모든 데이터를 불러왔습니다</div>
 			)}
-		</>
+		</div>
 	);
 }
 
