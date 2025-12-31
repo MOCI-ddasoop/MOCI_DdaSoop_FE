@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
@@ -186,11 +186,13 @@ function FeedCardContainer({
 						);
 				})}
 			</div>
-			<FeedModal
-				feedId={feedId?.toString() || ""}
-				onClose={() => setFeedId(null)}
-				isOpen={feedId !== null}
-			/>
+			<Suspense fallback={<div>Loading...</div>}>
+				<FeedModal
+					feedId={feedId?.toString() || ""}
+					onClose={() => setFeedId(null)}
+					isOpen={feedId !== null}
+				/>
+			</Suspense>
 
 			<div
 				ref={triggerRef}

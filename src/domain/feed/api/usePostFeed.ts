@@ -5,7 +5,7 @@ import { FeedData } from "../types";
 export const usePostFeed = () => {
 	return useMutation({
 		mutationFn: async (feedData: FeedData) => {
-			const { data } = await api.post("/feed", feedData);
+			const { data } = await api.post("api/feeds", feedData);
 			return data;
 		},
 	});

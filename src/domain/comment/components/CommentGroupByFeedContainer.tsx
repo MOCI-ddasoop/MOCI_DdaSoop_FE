@@ -57,6 +57,7 @@ function FeedGroupCommentContiner() {
 							{commentList[comment.feedId].slice(0, 2).map((comment) => (
 								<CommentItem
 									key={comment.id}
+									id={comment.id}
 									profileImage={comment.profileImage}
 									author={comment.author}
 									date={comment.date}
