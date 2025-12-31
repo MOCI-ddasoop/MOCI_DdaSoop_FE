@@ -7,16 +7,17 @@ import { MdIosShare } from "react-icons/md";
 
 interface FeedDetailCardProps {
   id: number;
-  title: string;
+  title?: string;
   author: string;
   content: string;
   category: string;
   date: string;
   likeCount: number;
   commentCount: number;
-  image: string;
-  likedByMe: boolean;
+  images: string[];
+  bookMarkedByMe: boolean;
   tags: string[];
+  visiblity: string;
   className?: string;
 }
 
@@ -29,13 +30,15 @@ function FeedDetailCard({
   date,
   likeCount,
   commentCount,
-  image,
-  likedByMe,
+  images,
+  bookMarkedByMe,
   tags,
   className,
 }: FeedDetailCardProps) {
-  const [isLiked, setIsLiked] = useState<boolean>(likedByMe || false);
-  const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState<boolean>(bookMarkedByMe || false);
+  const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
+    null
+  );
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -48,22 +51,21 @@ function FeedDetailCard({
     }
   };
 
-    // 옵션은 switch문으로 처리
-    const handleOwnerOptionClick = (option: string) => {
-      setSelectedOwnerOption(option);
-      switch (option) {
-        case "수정":
-          console.log("수정");
-          break;
-        case "삭제":
-          console.log("삭제");
-          break;
-        case "신고":
-          console.log("신고");
-          break;
-      }
-    };
-  
+  // 옵션은 switch문으로 처리
+  const handleOwnerOptionClick = (option: string) => {
+    setSelectedOwnerOption(option);
+    switch (option) {
+      case "수정":
+        console.log("수정");
+        break;
+      case "삭제":
+        console.log("삭제");
+        break;
+      case "신고":
+        console.log("신고");
+        break;
+    }
+  };
 
   return (
     <div className={tw("bg-white h-fit", className)}>
@@ -72,7 +74,7 @@ function FeedDetailCard({
         <div className="flex items-center gap-2">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
             <Image
-              src={image}
+              src={images[0]}
               alt={author}
               width={100}
               height={100}
@@ -89,7 +91,7 @@ function FeedDetailCard({
           menuSize="md"
           placement="bottom-end"
           hilightingLastOption={true}
-          />
+        />
       </div>
 
       {/* 컨텐츠 영역 */}
@@ -104,7 +106,7 @@ function FeedDetailCard({
         <div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
             <Image
-              src={image}
+              src={images[0]}
               alt={author}
               width={100}
               height={100}

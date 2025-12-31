@@ -15,3 +15,21 @@ export type FeedData = {
   visibility: "PUBLIC" | "PRIVATE";
   togetherId: number;
 };
+
+export interface FeedDetail {
+  id: number;
+  feedType: string;
+  content: string;
+  images: never[];
+  tags: string[];
+  visibility: string;
+  reactionCount: number;
+  commentCount: number;
+  bookmarkCount: number;
+  togetherId: null | string | number;
+  isReacted: boolean;
+  isBookmarked: boolean;
+  createdAt: null | string;
+  updatedAt: null | string;
+}
+

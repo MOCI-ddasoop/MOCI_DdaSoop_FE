@@ -45,6 +45,7 @@ function ReportModal() {
           <div>
             <div className="font-semibold text-slate-700">신고할 게시물</div>
             <CommentItem
+              id={1}
               profileImage="https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006"
               author="맹구"
               date="2024-06-12"
