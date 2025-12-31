@@ -12,7 +12,7 @@ interface CommentItemProps {
   author: string;
   date: string;
   content: string;
-  onCommentTargetClick?: (nickname: string | null) => void;
+  onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
   className?: string;
 }
 
@@ -75,7 +75,7 @@ function CommentItem({
             className="cursor-pointer text-sm text-gray-500"
             onClick={() => {
               console.log("author", author);
-              onCommentTargetClick?.(author ?? null);
+              onCommentTargetClick?.(author ?? null, id ?? null);
             }}
           >
             답글

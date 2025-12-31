@@ -8,6 +8,7 @@ import CommentContainer from "@/domain/comment/components/CommentContainer";
 import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
 import ImageSwiper from "@/shared/components/ImageSwiper";
+import { useSetComment } from "@/domain/comment/api/useSetComment";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: 1,
@@ -35,7 +36,9 @@ function FeedModal({
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [targetNickname, setTargetNickname] = useState<string | null>(null);
+  const [targetId, setTargetId] = useState<number | null>(null);
   const { data: feedDetailData } = useGetFeedById(feedId);
+  const { mutate: setComment } = useSetComment();
 
   const handleClose = () => {
     onClose();
@@ -43,11 +46,24 @@ function FeedModal({
     contentRef.current?.scrollTo({ top: 0 });
   };
 
-  const handleCommentTargetClick = (nickname: string | null) => {
+  const handleCommentTargetClick = (
+    nickname: string | null,
+    id: number | null
+  ) => {
     setTargetNickname(nickname ?? null);
+    setTargetId(id ?? null);
   };
 
-  // TODO: query를 여기서 조회하고 모달에 출력
+  const handleCommentSubmit = (comment: string) => {
+    setComment({
+      commentType: "FEED",
+      content: comment,
+      targetId: Number(feedId),
+      parentId: targetId,
+    });
+    setTargetNickname(null);
+    setTargetId(null);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -111,6 +127,7 @@ function FeedModal({
             <div className="p-2 border-t border-gray-200 bg-white">
               <CommentInput
                 targetNickname={targetNickname}
+                onSubmit={handleCommentSubmit}
                 onCommentTargetClick={handleCommentTargetClick}
               />
             </div>

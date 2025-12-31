@@ -64,3 +64,10 @@ export interface CommentPage {
   };
   empty: boolean;
 }
+
+export interface commentParams {
+  commentType: "FEED" | "DONATION" | "TOGETHER";
+  content: string;
+  targetId: number;
+  parentId?: number | null;
+}
