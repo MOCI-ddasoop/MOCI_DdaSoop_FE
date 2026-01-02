@@ -8,7 +8,7 @@ export interface CommentType {
   authorProfileImage: string;
   targetId: number;
   parentId: null | number;
-  replies: Replies[];
+  replies: CommentType[];
   replyCount: number;
   reactionCount: number;
   isReacted: boolean;

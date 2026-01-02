@@ -73,13 +73,7 @@ function FeedDetailCard({
       <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
         <div className="flex items-center gap-2">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-            <Image
-              src={images[0]}
-              alt={author}
-              width={100}
-              height={100}
-              className="object-cover"
-            />
+            <Image src={images[0]} alt={author} fill />
           </div>
           <div className="text-sm text-nowrap">{author}</div>
         </div>
@@ -97,7 +91,7 @@ function FeedDetailCard({
       {/* 컨텐츠 영역 */}
       <div className="border-b border-gray-200 p-2">
         {/* 내용 영역 */}
-        <div className="p-2 min-h-[200px]">
+        <div className="p-2 min-h-[100px]">
           {title && <h1 className="text-lg font-bold">{title}</h1>}
           <p className="text-sm text-gray-500">{content}</p>
         </div>
@@ -105,13 +99,7 @@ function FeedDetailCard({
         {/* 모임 정보 영역 */}
         <div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-            <Image
-              src={images[0]}
-              alt={author}
-              width={100}
-              height={100}
-              className="object-cover"
-            />
+            <Image src={images[0]} alt={author} fill />
           </div>
           <div className="flex flex-col">
             <div className="font-bold">모임이름을입력하세요</div>

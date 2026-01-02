@@ -1,27 +1,37 @@
 "use client";
-import TextBox from "@/shared/components/TextBox";
 import tw from "@/shared/utils/tw";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
+
+import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
 
 interface CommentInputProps {
-  onSubmit?: (comment: string) => void;
   onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
   targetNickname?: string | null;
+  targetId?: number | null;
 }
 
 function CommentInput({
   targetNickname,
-  onSubmit,
+  targetId,
   onCommentTargetClick,
 }: CommentInputProps) {
   const [comment, setComment] = useState("");
-  const { mutate } = useSetComment();
+  const feedId = useSearchParams().get("feedId");
+  const { mutate: setCommentMutation } = useSetComment();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.(comment);
+    if (!comment.trim()) return;
+
+    setCommentMutation({
+      commentType: "FEED",
+      content: comment,
+      targetId: Number(feedId),
+      parentId: targetId ?? null,
+    });
+
     setComment("");
     onCommentTargetClick?.(null, null);
   };
@@ -55,7 +65,7 @@ function CommentInput({
           <input
             type="text"
             placeholder="댓글을 입력해주세요."
-            className="focus:outline-0"
+            className="focus:outline-0 flex-1"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />

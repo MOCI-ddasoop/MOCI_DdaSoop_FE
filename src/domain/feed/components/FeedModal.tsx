@@ -8,7 +8,6 @@ import CommentContainer from "@/domain/comment/components/CommentContainer";
 import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
 import ImageSwiper from "@/shared/components/ImageSwiper";
-import { useSetComment } from "@/domain/comment/api/useSetComment";
 
 const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: 1,
@@ -38,7 +37,6 @@ function FeedModal({
   const [targetNickname, setTargetNickname] = useState<string | null>(null);
   const [targetId, setTargetId] = useState<number | null>(null);
   const { data: feedDetailData } = useGetFeedById(feedId);
-  const { mutate: setComment } = useSetComment();
 
   const handleClose = () => {
     onClose();
@@ -52,17 +50,6 @@ function FeedModal({
   ) => {
     setTargetNickname(nickname ?? null);
     setTargetId(id ?? null);
-  };
-
-  const handleCommentSubmit = (comment: string) => {
-    setComment({
-      commentType: "FEED",
-      content: comment,
-      targetId: Number(feedId),
-      parentId: targetId,
-    });
-    setTargetNickname(null);
-    setTargetId(null);
   };
 
   useEffect(() => {
@@ -95,7 +82,12 @@ function FeedModal({
         >
           {/* image 영역 */}
           <div className="relative h-full w-3/5">
-            <ImageSwiper slideList={feedDetailData?.images || []} />
+            <ImageSwiper
+              slideList={
+                feedDetailData?.images.map((img) => ({ url: img.imageUrl })) ||
+                []
+              }
+            />
           </div>
 
           {/* content 영역 */}
@@ -114,8 +106,14 @@ function FeedModal({
                 bookMarkedByMe={feedDetailData?.isBookmarked || false}
                 tags={feedDetailData?.tags || []}
                 visiblity={feedDetailData?.visibility || "PUBLIC"}
-                images={[FEED_DATA[Number(feedId)].image]}
-                author={FEED_DATA[Number(feedId)].author}
+                images={
+                  feedDetailData?.images.map((img) => img.imageUrl) || [
+                    FEED_DATA[Number(feedId)].image,
+                  ]
+                }
+                author={
+                  feedDetailData?.authorName || FEED_DATA[Number(feedId)].author
+                }
               />
 
               {/* comment 영역 */}
@@ -127,7 +125,7 @@ function FeedModal({
             <div className="p-2 border-t border-gray-200 bg-white">
               <CommentInput
                 targetNickname={targetNickname}
-                onSubmit={handleCommentSubmit}
+                targetId={targetId}
                 onCommentTargetClick={handleCommentTargetClick}
               />
             </div>
