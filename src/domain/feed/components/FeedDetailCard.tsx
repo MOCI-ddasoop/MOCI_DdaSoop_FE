@@ -1,9 +1,11 @@
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
-import { useState } from "react";
-import { BsChatRight, BsHeart, BsThreeDots } from "react-icons/bs";
+import { useState, useEffect } from "react";
+import { BsChatRight } from "react-icons/bs";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { MdIosShare } from "react-icons/md";
+import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 
 interface FeedDetailCardProps {
   id: number;
@@ -13,6 +15,7 @@ interface FeedDetailCardProps {
   category: string;
   date: string;
   likeCount: number;
+  bookmarkCount: number;
   commentCount: number;
   images: string[];
   bookMarkedByMe: boolean;
@@ -26,29 +29,43 @@ function FeedDetailCard({
   title,
   author,
   content,
-  category,
   date,
-  likeCount,
+  bookmarkCount,
   commentCount,
   images,
   bookMarkedByMe,
   tags,
   className,
 }: FeedDetailCardProps) {
-  const [isLiked, setIsLiked] = useState<boolean>(bookMarkedByMe || false);
+  const [bookmarkInfo, setBookmarkInfo] = useState<{
+    bookmarkCount: number;
+    bookMarkedByMe: boolean;
+  }>({
+    bookmarkCount: bookmarkCount,
+    bookMarkedByMe: bookMarkedByMe,
+  });
+
+  useEffect(() => {
+    setBookmarkInfo({
+      bookmarkCount,
+      bookMarkedByMe,
+    });
+  }, [bookmarkCount, bookMarkedByMe]);
+
   const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
     null
   );
+  const { mutate: toggleBookmarkMutate } = useToggleFeedBookmark();
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
+    setBookmarkInfo((prev) => ({
+      bookmarkCount: prev.bookMarkedByMe
+        ? prev.bookmarkCount - 1
+        : prev.bookmarkCount + 1,
+      bookMarkedByMe: !prev.bookMarkedByMe,
+    }));
 
-    // 서버 통신 추가 로직 작성
-    if (isLiked) {
-      // 좋아요 취소 로직
-    } else {
-      // 좋아요 추가 로직
-    }
+    toggleBookmarkMutate(id.toString());
   };
 
   // 옵션은 switch문으로 처리
@@ -137,24 +154,42 @@ function FeedDetailCard({
             type="button"
             className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
           >
-            <BsChatRight size={24} className="group-hover:text-amber-400" />
-            <p className="group-hover:text-amber-400">{commentCount}</p>
+            <BsChatRight size={24} className="group-hover:text-amber-700" />
+            <p className="group-hover:text-amber-700">{commentCount}</p>
           </button>
 
           {/* 좋아요 영역 */}
           <button
             type="button"
             className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+            onClick={handleLike}
           >
-            <BsHeart size={24} className="group-hover:text-amber-400" />
-            <p className="group-hover:text-amber-400">{likeCount}</p>
+            <div className="relative w-6 h-6">
+              <FaBookmark
+                size={24}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0"
+                )}
+              />
+              <FaRegBookmark
+                size={24}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100"
+                )}
+              />
+            </div>
+            <p className="group-hover:text-amber-700">
+              {bookmarkInfo.bookmarkCount}
+            </p>
           </button>
         </div>
 
         <button type="button" className="cursor-pointer duration-100 group">
           <MdIosShare
             size={24}
-            className="text-gray-500 group-hover:text-amber-400"
+            className="text-gray-500 group-hover:text-amber-700"
           />
         </button>
       </div>

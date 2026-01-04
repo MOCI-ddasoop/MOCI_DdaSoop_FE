@@ -102,6 +102,7 @@ function FeedModal({
                 category={feedDetailData?.feedType || ""}
                 date={feedDetailData?.createdAt || ""}
                 likeCount={feedDetailData?.reactionCount || 0}
+                bookmarkCount={feedDetailData?.bookmarkCount || 0}
                 commentCount={feedDetailData?.commentCount || 0}
                 bookMarkedByMe={feedDetailData?.isBookmarked || false}
                 tags={feedDetailData?.tags || []}

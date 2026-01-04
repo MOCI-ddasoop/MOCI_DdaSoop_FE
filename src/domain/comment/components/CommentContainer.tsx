@@ -4,7 +4,6 @@ import tw from "@/shared/utils/tw";
 import CommentItem from "./CommentItem";
 import { useCommnetListByFeedId } from "../api/useGetCommnetListByFeedId";
 import { useSearchParams } from "next/navigation";
-import { useToggleReact } from "../api/useToggleReact";
 
 function CommentContainer({
   className,
