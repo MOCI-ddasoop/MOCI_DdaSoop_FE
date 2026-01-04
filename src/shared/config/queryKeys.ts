@@ -17,5 +17,7 @@ export const queryKeys = {
     list: (feedId: string) => ["commnets", feedId],
     react: () => ["comments", "react"],
     listByUser: (userId: string) => ["comments", "listByUser", userId],
+    del: () => ["comments", "delete"],
+    upt: () => ["comments", "update"],
   },
 };

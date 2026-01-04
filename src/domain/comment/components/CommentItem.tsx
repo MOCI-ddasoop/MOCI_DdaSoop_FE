@@ -9,6 +9,10 @@ import { useToggleReact } from "../api/useToggleReact";
 import { CommentType } from "../types";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
+import TextBox from "@/shared/components/TextBox";
+import Button from "@/shared/components/Button";
+import { useUdtCommentById } from "../api/useUdtCommentById";
+import { useDelCommentById } from "../api/useDelCommentById";
 
 interface CommentItemProps {
   item: CommentType;
@@ -44,6 +48,8 @@ function CommentItem({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
   const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [editedContent, setEditedContent] = useState<string>(content);
 
   const { mutate: toggleReactMutation, isPending } = useToggleReact({
     onSuccess: () => {
@@ -61,14 +67,18 @@ function CommentItem({
     },
   });
 
+  const { mutate: updateCommentMutation } = useUdtCommentById(feedId);
+  const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
+
+  // 이곳에서 드롭다운 메뉴 이벤트가 처리됩니다.
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
     switch (option) {
       case "수정":
-        console.log("수정");
+        setIsEditMode(true);
         break;
       case "삭제":
-        console.log("삭제");
+        deleteCommentMutation({ id });
         break;
       case "신고":
         setReportModalOpen(true);
@@ -77,7 +87,7 @@ function CommentItem({
   };
 
   return (
-    <li className="flex gap-1">
+    <li className="flex gap-1 w-full">
       {isRelies && <div className="w-1 h-full bg-gray-300"></div>}
       <div
         className={tw(
@@ -85,7 +95,7 @@ function CommentItem({
           className
         )}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
             <Image
               src={authorProfileImage}
@@ -96,16 +106,34 @@ function CommentItem({
           </div>
 
           {/* 유저이름, 컨텐츠 */}
-          <div>
-            <span className="inline font-semibold text-gray-900">
-              {authorName}{" "}
-            </span>
-            <span className="inline">{content}</span>
+          <div className="flex-1">
+            {isEditMode ? (
+              <form className="flex gap-2">
+                <TextBox
+                  className="flex-1"
+                  initialValue={content}
+                  setValue={(val) => {
+                    setEditedContent(val);
+                  }}
+                />
+                <Button color="skyblue" type="submit">
+                  수정
+                </Button>
+              </form>
+            ) : (
+              <>
+                <span className="inline font-semibold text-gray-900">
+                  {authorName}{" "}
+                </span>
+                <span className="inline">{content}</span>
+              </>
+            )}
           </div>
         </div>
 
         <div className="w-full flex items-center gap-2 justify-between">
           <div className="flex items-center gap-2">
+            {/* TODO: createAt 임시 비활성화. 날짜 로그가 추가되면 다시 추가(옵션이 다른건지... 렌더링이 안됨.) */}
             {/* <div className="text-sm text-gray-500">{createdAt}</div> */}
             <button
               type="button"
