@@ -32,3 +32,24 @@ export interface FeedDetail {
 	createdAt: null | string;
 	updatedAt: null | string;
 }
+
+export interface FeedContent {
+	id: number;
+	feedType: string;
+	content: string;
+	thumbnailUrl: string | null;
+	thumbnailWidth: number | null;
+	thumbnailHeight: number | null;
+	imageCount: number;
+	tags: string[];
+	reactionCount: number;
+	commentCount: number;
+	bookmarkCount: number;
+	authorId: number;
+	authorName: string;
+	authorNickname: string;
+	authorProfileImage: string;
+	togetherId: number | null;
+	togetherTitle: string | null;
+	createdAt: Date | null;
+}

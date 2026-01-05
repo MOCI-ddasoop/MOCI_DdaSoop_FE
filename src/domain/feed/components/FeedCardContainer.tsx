@@ -4,14 +4,13 @@ import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
-import { CardDataType, fetchMockFeeds } from "@/shared/mock/mockup";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
+import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
+import { FeedContent } from "../types";
+import defaultFeedImage from "@/assets/defaultFeedImage.png";
 
-type PositionedItems = Partial<Feed> & {
-	src: string;
-	alt: string;
+type PositionedItem = FeedContent & {
 	width: number;
 	height: number;
 	x: number;
@@ -29,14 +28,8 @@ function FeedCardContainer({
 	const [containerWidth, setContainerWidth] = useState(0);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	//무한스크롤
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useInfiniteQuery({
-			queryKey: ["feeds"],
-			queryFn: ({ pageParam }) => fetchMockFeeds(pageParam, 15),
-			getNextPageParam: (lastPage) => lastPage.nextCursor,
-			initialPageParam: 1,
-		});
+		useGetInfiniteFeedList({ page: "member", memberId: 1 });
 	//무한스크롤 target ref
 	const triggerRef = useIntersection(() => {
 		fetchNextPage();
@@ -80,8 +73,8 @@ function FeedCardContainer({
 		return 2;
 	}, [containerWidth]);
 
-	const items: CardDataType[] = useMemo(
-		() => data?.pages.flatMap((p) => p.items) ?? [],
+	const items: FeedContent[] = useMemo(
+		() => data?.pages.flatMap((p) => p.content) ?? [],
 		[data]
 	);
 
@@ -96,7 +89,12 @@ function FeedCardContainer({
 		const currentColumnHeights = new Array(columnCount).fill(0);
 
 		return items.map((item) => {
-			const aspectRatio = item.width / item.height;
+			if (!item.thumbnailUrl || !item.thumbnailWidth || !item.thumbnailHeight) {
+				item.thumbnailUrl = defaultFeedImage.src;
+				item.thumbnailHeight = defaultFeedImage.height;
+				item.thumbnailWidth = defaultFeedImage.width;
+			}
+			const aspectRatio = item.thumbnailWidth / item.thumbnailHeight;
 			const itemHeight = Math.min(itemWidth / aspectRatio, 500);
 
 			// 가장 짧은 컬럼 찾기
@@ -134,7 +132,7 @@ function FeedCardContainer({
 	}, [positionedItems]);
 
 	// 커스텀 버츄얼 스크롤
-	const [visibleItems, setVisibleItems] = useState<PositionedItems[]>([]);
+	const [visibleItems, setVisibleItems] = useState<PositionedItem[]>([]);
 	const positionsItemsRef = useRef(positionedItems);
 
 	const onScrollRef = useRef(() => {
@@ -173,13 +171,16 @@ function FeedCardContainer({
 							<FeedCardImage
 								id={item.id}
 								key={item.id}
-								src={item.src}
-								alt={item.alt}
+								src={item.thumbnailUrl ?? defaultFeedImage.src}
+								alt={item.thumbnailUrl ?? "따숲"}
 								width={item.width}
 								imageWidth={item.width}
 								imageHeight={item.height}
 								x={item.x}
 								y={item.y}
+								content={item.content}
+								commentCount={item.commentCount}
+								bookmarkCount={item.bookmarkCount}
 								onClick={() => setFeedId(item.id ?? null)}
 								className="duration-300 ease-in-out absolute"
 							/>
