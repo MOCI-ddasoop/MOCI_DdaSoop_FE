@@ -41,8 +41,8 @@ function TogetherCreateForm() {
     e.preventDefault();
 
     alert("함께하기 생성이 완료되었습니다!");
-    router.push("/donate");
-  }   
+    router.push("/together");
+  };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-[1000px] flex flex-col p-4">
@@ -116,7 +116,7 @@ function TogetherCreateForm() {
         </div>
       </div>
       {/* 함께하기 목표 / 기간 */}
-      <div className="mb-4">
+      <div className="mb-5">
         <div className="flex items-center p-2 gap-3">
           <label className="text-xl font-bold">함께하기 목표 / 기간</label>
           <span className="text-mainred text-sm ml-3"> *필수 입력 항목입니다</span>
@@ -210,8 +210,8 @@ function TogetherCreateForm() {
         </div>
       </div>
       {/* 모임 소개글 영역 */}
-      <div className="mb-8">
-        <div className="flex items-center p-2 gap-3">
+      <div className="mb-4">
+        <div className="flex items-center p-2 gap-3 mb-3">
           <label className="text-xl font-bold">모임 소개글</label>
           <span className="text-mainblue text-sm ml-3">* 사진은 최대 5장까지 추가할 수 있습니다</span>
         </div>
