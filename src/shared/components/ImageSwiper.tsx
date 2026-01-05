@@ -14,7 +14,7 @@ import backwardCircle from "@/assets/icons/backwardCircle.png";
 import forwardCircle from "@/assets/icons/forwardCircle.png";
 import { IoClose } from "react-icons/io5";
 
-export type Slide = Partial<File> & { url?: string };
+export type Slide = Partial<File> & { imageUrl?: string };
 
 interface ImageSwiperProps {
 	slideList: Slide[];
@@ -23,18 +23,6 @@ interface ImageSwiperProps {
 	thumbsSlideInput?: React.ReactElement;
 	deleteSlide?: (index: number) => void;
 }
-
-export const dummyImageList = [
-	{
-		url: "https://i.namu.wiki/i/qwuEdVbMFB8VPtfK38ltdrbnNGmu__9oOdcVNPec3agexDRCaGPXtAeVoacZQr_Kurwn1wl2LfYCk8yJB3LTnQwmRq-uvygSvvqM5WOg2ysW6zaB46XPQOGToMB4uuq460tB0f27iGrLOQGr074UEA.webp",
-	},
-	{
-		url: "https://www.nintendo.com/kr/character/pikmin/assets/img/book/blue_pikmin/3/1.png",
-	},
-	{
-		url: "https://cdn.gamemeca.com/data_center/299/560/20250121121637.jpg",
-	},
-];
 
 function ImageSwiper({
 	slideList,
@@ -108,15 +96,12 @@ function ImageSwiper({
 				className="w-full h-4/5 box-border"
 			>
 				{slideList.length !== 0 ? (
-					slideList.map(({ url }, idx) => (
+					slideList.map(({ imageUrl }, idx) => (
 						<SwiperSlide key={idx}>
 							<div className={`w-full h-full flex-center bg-black`}>
 								{/* <Image/> 삽입 예정 */}
 								<Image
-									src={
-										url ??
-										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
-									}
+									src={imageUrl ?? "/defaultFeedImage.png"}
 									alt=""
 									fill
 									className="object-contain"
@@ -127,7 +112,16 @@ function ImageSwiper({
 				) : mode === "input" ? (
 					<SwiperSlide>{mainSlideInput}</SwiperSlide>
 				) : (
-					""
+					<SwiperSlide>
+						<div className={`w-full h-full flex-center bg-white`}>
+							<Image
+								src={"/defaultFeedImage.png"}
+								alt=""
+								fill
+								className="object-contain"
+							/>
+						</div>
+					</SwiperSlide>
 				)}
 				<div className="position-center w-full flex-center justify-between z-10 p-2">
 					<button
@@ -165,7 +159,7 @@ function ImageSwiper({
 				modules={[FreeMode, Navigation, Thumbs]}
 				className="w-full flex-center justify-start h-1/5"
 			>
-				{slideList.map(({ url }, index) => (
+				{slideList.map(({ imageUrl }, index) => (
 					<SwiperSlide key={index}>
 						<div className="p-1 h-full">
 							<div
@@ -176,10 +170,7 @@ function ImageSwiper({
 								{deleteButton(index)}
 								{/* 이미지 삽입 */}
 								<Image
-									src={
-										url ??
-										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
-									}
+									src={imageUrl ?? "/defaultFeedImage.png"}
 									alt=""
 									fill
 									className="object-contain"

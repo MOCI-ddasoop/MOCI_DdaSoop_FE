@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { createPortal } from "react-dom";
 import FeedDetailCard from "./FeedDetailCard";
 import CommentContainer from "@/domain/comment/components/CommentContainer";
@@ -9,7 +8,7 @@ import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
 import ImageSwiper from "@/shared/components/ImageSwiper";
 
-const FEED_DATA = Array.from({ length: 20 }).map((_, index) => ({
+const FEED_DATA = Array.from({ length: 40 }).map((_, index) => ({
 	id: 1,
 	title: "Feed 1",
 	author: "author 1",

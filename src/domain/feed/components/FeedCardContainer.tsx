@@ -8,7 +8,6 @@ import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
 import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
 import { FeedContent } from "../types";
-import defaultFeedImage from "@/assets/defaultFeedImage.png";
 
 type PositionedItem = FeedContent & {
 	width: number;
@@ -29,7 +28,7 @@ function FeedCardContainer({
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useGetInfiniteFeedList({ page: "member", memberId: 1 });
+		useGetInfiniteFeedList();
 	//무한스크롤 target ref
 	const triggerRef = useIntersection(() => {
 		fetchNextPage();
@@ -90,9 +89,9 @@ function FeedCardContainer({
 
 		return items.map((item) => {
 			if (!item.thumbnailUrl || !item.thumbnailWidth || !item.thumbnailHeight) {
-				item.thumbnailUrl = defaultFeedImage.src;
-				item.thumbnailHeight = defaultFeedImage.height;
-				item.thumbnailWidth = defaultFeedImage.width;
+				item.thumbnailUrl = "/defaultFeedImage.png";
+				item.thumbnailHeight = 500;
+				item.thumbnailWidth = 500;
 			}
 			const aspectRatio = item.thumbnailWidth / item.thumbnailHeight;
 			const itemHeight = Math.min(itemWidth / aspectRatio, 500);
@@ -171,7 +170,7 @@ function FeedCardContainer({
 							<FeedCardImage
 								id={item.id}
 								key={item.id}
-								src={item.thumbnailUrl ?? defaultFeedImage.src}
+								src={item.thumbnailUrl ?? "/defaultFeedImage.png"}
 								alt={item.thumbnailUrl ?? "따숲"}
 								width={item.width}
 								imageWidth={item.width}
@@ -181,6 +180,8 @@ function FeedCardContainer({
 								content={item.content}
 								commentCount={item.commentCount}
 								bookmarkCount={item.bookmarkCount}
+								authorName={item.authorName}
+								authorProfileImage={item.authorProfileImage}
 								onClick={() => setFeedId(item.id ?? null)}
 								className="duration-300 ease-in-out absolute"
 							/>

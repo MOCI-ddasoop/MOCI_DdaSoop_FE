@@ -17,6 +17,8 @@ type FeedCardImageProps = {
 	content: string;
 	commentCount: number;
 	bookmarkCount: number;
+	authorName: string;
+	authorProfileImage: string;
 	className?: string;
 	onClick?: () => void;
 };
@@ -33,6 +35,8 @@ function FeedCardImage({
 	content,
 	commentCount,
 	bookmarkCount,
+	authorName,
+	authorProfileImage,
 	className,
 	onClick,
 }: FeedCardImageProps) {
@@ -62,8 +66,20 @@ function FeedCardImage({
 			/>
 
 			<div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
+				<div className="absolute flex items-center gap-2 top-2 left-0 px-4">
+					<div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-300">
+						<Image
+							src={authorProfileImage}
+							alt={authorName}
+							width={50}
+							height={50}
+							className="object-cover"
+						/>
+					</div>
+					<div className="text-sm text-white text-nowrap">{authorName}</div>
+				</div>
 				<div className="w-full h-full flex items-center justify-center">
-					<p className="text-white text-sm line-clamp-3">{content}</p>
+					<p className="text-white text-sm line-clamp-2">{content}</p>
 				</div>
 			</div>
 
