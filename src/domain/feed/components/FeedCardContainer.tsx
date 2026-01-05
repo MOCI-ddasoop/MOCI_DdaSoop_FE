@@ -27,7 +27,7 @@ function FeedCardContainer({
 	const [containerWidth, setContainerWidth] = useState(0);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
 		useGetInfiniteFeedList();
 	//무한스크롤 target ref
 	const triggerRef = useIntersection(() => {
@@ -201,9 +201,20 @@ function FeedCardContainer({
 				className="h-20 absolute"
 				style={{ marginTop: `${containerHeight - shortestColumnHeight}px` }}
 			/>
-			{isFetchingNextPage && <div>불러오는 중...</div>}
-			{!hasNextPage && (
-				<div className="text-gray-400">모든 데이터를 불러왔습니다</div>
+			{isPending && (
+				<div className="h-28 flex-center">
+					<div className="loader"></div>
+				</div>
+			)}
+			{isFetchingNextPage && (
+				<div className="h-8 flex-center">
+					<div className="loader"></div>
+				</div>
+			)}
+			{!isPending && !hasNextPage && (
+				<div className="text-gray-400 flex-center">
+					모든 데이터를 불러왔습니다
+				</div>
 			)}
 		</div>
 	);
