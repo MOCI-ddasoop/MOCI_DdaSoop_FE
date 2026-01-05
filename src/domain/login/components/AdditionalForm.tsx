@@ -2,20 +2,30 @@
 import Button from "@/shared/components/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-//TODO : 첫 로그인 시에만 리다이렉트 하도록 설정
+import { completeRegistration } from "../api/completeRegistration";
+
 function AdditionalForm() {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const isFormFilled = nickname.trim() !== "" && email.trim() !== "";
 
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //TODO: 추가 정보 제출 로직 
-    console.log("추가 정보 제출 완료", { nickname, email });
-    
-    router.push("/");
+    if (!isFormFilled || isLoading) return;
+
+    setIsLoading(true);
+    try{
+      await completeRegistration({nickname, email});
+          router.push("/");
+    } catch (error) {
+      console.error("추가 정보 제출 중 오류:", error);
+    } finally {
+      setIsLoading(false);
+    }    
   }
 
   return (
@@ -53,7 +63,7 @@ function AdditionalForm() {
           type="submit"
           fullWidth 
           className="font-medium"
-          disabled={!isFormFilled}  
+          disabled={!isFormFilled || isLoading}  
         >
           작성완료
         </Button>
