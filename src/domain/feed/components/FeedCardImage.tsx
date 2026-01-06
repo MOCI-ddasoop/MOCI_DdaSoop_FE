@@ -94,7 +94,13 @@ function FeedCardImage({
 				</div>
 			</div>
 
-			<Image src={src} alt={alt} fill className="object-cover z-0" />
+			<Image
+				src={src}
+				alt={alt}
+				fill
+				className="object-cover z-0"
+				placeholder="empty"
+			/>
 		</div>
 	);
 }

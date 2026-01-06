@@ -8,6 +8,7 @@ import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
 import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
 import { FeedContent } from "../types";
+import { preloadAndDecode } from "../utils/imageDecodeCache";
 
 type PositionedItem = FeedContent & {
 	width: number;
@@ -137,13 +138,27 @@ function FeedCardContainer({
 	const onScrollRef = useRef(() => {
 		const viewportTop = window.scrollY;
 		const viewportBottom = viewportTop + window.innerHeight;
-		const OVERSCAN = 100;
+		const OVERSCAN = 300;
 		const filteredItems = positionsItemsRef.current.filter(
 			(item) =>
 				item.y + item.height >= viewportTop - OVERSCAN &&
 				item.y <= viewportBottom + OVERSCAN
 		);
 		setVisibleItems(filteredItems);
+
+		// decode
+		const DECODE_OFFSET = 600;
+		const decodeItems = positionsItemsRef.current.filter(
+			(item) =>
+				item.y + item.height >= viewportTop - DECODE_OFFSET &&
+				item.y <= viewportBottom + DECODE_OFFSET
+		);
+
+		decodeItems.forEach((i) => {
+			if (i.thumbnailUrl) {
+				preloadAndDecode(i.thumbnailUrl);
+			}
+		});
 	});
 
 	useEffect(() => {
