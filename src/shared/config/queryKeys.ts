@@ -13,4 +13,14 @@ export const queryKeys = {
     all: () => ["commnets"],
     list: (feedId: string) => ["commnets", feedId],
   },
+  donate: {
+    all: () => ["donate"],
+    id: (id: string) => ["donate", id],
+    list: () => ["donate", "list"],
+  },
+  together: {
+    all: () => ["together"],
+    id: (id: string) => ["together", id],
+    list: () => ["together", "list"],
+  },
 };

@@ -1,3 +1,4 @@
+import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
 import TogetherSection from "@/domain/together/components/TogetherSection";
 import { sortOptions } from "@/shared/constants/filter";
 
@@ -19,22 +20,25 @@ async function Together({ searchParams }: TogetherPageProps) {
   const sort = searchParam.sort ?? sortOptions[0];
 
   // 위에있는거 가지고 api 통신해서 가져오기
-  const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
-    id: index,
-    href: `/together/${index + 1}`,
-    image:
-      "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
-    title: `함께하기${index + 1}`,
-    category: "카테고리",
-    dDay: 10,
-    participant: 18,
-    capacity: 20,
-    status: "모집중",
-    startDate: "2024-06-01",
-    endDate: "2024-06-30",
-    isOnline: "온라인",
-    progress: 75,
-  }));
+  // const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
+  //   id: index,
+  //   href: `/together/${index + 1}`,
+  //   image:
+  //     "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
+  //   title: `함께하기${index + 1}`,
+  //   category: "카테고리",
+  //   dDay: 10,
+  //   participant: 18,
+  //   capacity: 20,
+  //   status: "모집중",
+  //   startDate: "2024-06-01",
+  //   endDate: "2024-06-30",
+  //   isOnline: "온라인",
+  //   progress: 75,
+  // }));
+
+  const { data: ITEM_LIST } = await getInitTogetherList();
+
   return (
     <>
       <TogetherSection
