@@ -3,6 +3,7 @@ import Link from "next/link";
 import ProgressBar from "./ProgressBar";
 import Capsule from "@/shared/components/Capsule";
 import { DonateCardProps, TogetherCardProps } from "../types";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
 
 /**
  *
@@ -26,15 +27,23 @@ import { DonateCardProps, TogetherCardProps } from "../types";
  * @returns
  */
 function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
-  const { type, href, image, title, category, dDay } = props;
+  const { type, id, thumbnailImage, title, category, dDay } = props;
 
   return (
     <Link
-      href={href}
+      href={`/${type}/${id}`}
       className="relative flex flex-col justify-between min-w-[230px] w-full xl:max-w-[230px] h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg"
     >
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
-        <Image fill alt={title} src={image} className="object-cover" />
+        <Image
+          fill
+          alt={title}
+          src={
+            thumbnailImage ??
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU"
+          }
+          className="object-cover"
+        />
       </div>
       <div className="px-5 py-3 flex-1 flex flex-col gap-1.5">
         <div className="flex justify-between items-center">
@@ -52,19 +61,23 @@ function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
         </h1>
         <div className={`w-full overflow-x-clip`}>
           <div className="flex gap-1.5 items-center w-max hover:overflow-scroll-animation">
-            <Capsule text={category} readOnly />
+            <Capsule text={categoryType[category] ?? "기타"} readOnly />
             {type === "together" && (
-              <Capsule type="isOnline" text={props.isOnline} readOnly />
+              <Capsule
+                type="isOnline"
+                text={isOnlineType[props.mode]}
+                readOnly
+              />
             )}
           </div>
         </div>
-        {type === "together" && props.status && (
+        {type === "together" && props.capacity && (
           <Capsule
             type="participant"
             text={
-              props.status === "모집중"
-                ? `${props.status} ${props.participant}/${props.capacity}`
-                : props.status
+              (props.participants ?? 0) < props.capacity
+                ? `모집중 ${props.participants ?? 0}/${props.capacity}`
+                : "모집완료"
             }
             className="absolute top-3 right-3"
           />

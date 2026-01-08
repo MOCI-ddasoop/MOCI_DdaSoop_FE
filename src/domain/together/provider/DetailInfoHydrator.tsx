@@ -13,7 +13,7 @@ function DetailInfoHydrator({
   children: React.ReactNode;
 }) {
   useQuery({
-    queryKey: queryKeys.together.id(initialData.id),
+    queryKey: queryKeys.together.id(String(initialData.id)),
     queryFn: async () => {
       const { data } = await api.get(`api/v1/together/list/${initialData.id}`);
       return data;

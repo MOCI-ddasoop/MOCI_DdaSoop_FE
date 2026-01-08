@@ -10,7 +10,7 @@ function AddParticipationCard({
 }) {
   return (
     <Link
-      href={type === "donate" ? "/donate/new" : "together/new"} // TODO : 경로 바꾸기
+      href={type === "donate" ? "/donate/create" : "together/create"} // TODO : 경로 바꾸기
       className={`relative flex-center flex-col gap-2 min-w-[230px] w-full ${
         fullWidth ? "" : "xl:max-w-[230px]"
       } h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg hover:bg-gray-100`}

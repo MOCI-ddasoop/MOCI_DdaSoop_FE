@@ -1,8 +1,4 @@
-import { DetailInfoProps } from "@/domain/participation/types";
-
-export const getInitTogetherDetail = async (
-  id: string
-): Promise<DetailInfoProps> => {
+export const getInitTogetherDetail = async (id: string) => {
   const res = await fetch(`http://localhost:8080/api/v1/together/list/${id}`, {
     cache: "no-store",
   });

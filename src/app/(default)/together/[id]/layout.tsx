@@ -1,5 +1,4 @@
 import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
-import { DetailInfoProps } from "@/domain/participation/types";
 import { getInitTogetherDetail } from "@/domain/together/api/getInitTogetherDetail";
 import DetailInfoHydrator from "@/domain/together/provider/DetailInfoHydrator";
 import ImageSwiper from "@/shared/components/ImageSwiper";
@@ -28,7 +27,7 @@ async function page({
   children: React.ReactNode;
 }) {
   const { id } = await params;
-  const detailInfo: DetailInfoProps = await getInitTogetherDetail(id);
+  const { data: detailInfo } = await getInitTogetherDetail(id);
 
   return (
     <DetailInfoHydrator initialData={detailInfo}>
@@ -36,12 +35,12 @@ async function page({
         <div className="w-[calc(100%-280px)]">
           <div className="w-full aspect-10/7">
             {/* slideList -> detailInfo에 들어있는 이미지전달 */}
-            <ImageSwiper slideList={[]} />
+            <ImageSwiper slideList={detailInfo.thumbnailImage ?? []} />
           </div>
           <TabBar type="together" tabContents={togetherTabContents(id)} />
           <main className="py-4">{children}</main>
         </div>
-        <ParticipationDetailInfo props={detailInfo} />
+        <ParticipationDetailInfo type="together" props={detailInfo} />
       </div>
     </DetailInfoHydrator>
   );

@@ -7,10 +7,11 @@ import TabBar from "@/shared/components/TabBar";
 import { donateTabContents } from "@/shared/utils/navigation";
 
 const DETAIL_INFO_DUMMY: DetailInfoProps = {
-  id: "",
+  id: 0,
+  thumbnailImage: "",
   type: "donate",
   title: "후원하기",
-  category: "카테고리1",
+  category: "",
   dDay: 12,
   participant: 7, // 참여자수(제한인원 있는 경우만 표시)
   status: "모집중", // 모집중 모집완료
@@ -34,12 +35,12 @@ async function page({
       <div className="flex justify-between pt-4">
         <div className="w-[calc(100%-280px)]">
           <div className="w-full aspect-10/7">
-            <ImageSwiper slideList={dummyImageList} />
+            <ImageSwiper slideList={[]} />
           </div>
           <TabBar type="donate" tabContents={donateTabContents(id)} />
           <main className="py-4">{children}</main>
         </div>
-        <ParticipationDetailInfo props={DETAIL_INFO_DUMMY} />
+        <ParticipationDetailInfo type="donate" props={DETAIL_INFO_DUMMY} />
       </div>
     </DetailInfoHydrator>
   );
