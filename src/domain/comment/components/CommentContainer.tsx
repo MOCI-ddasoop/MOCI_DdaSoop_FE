@@ -2,7 +2,7 @@
 
 import tw from "@/shared/utils/tw";
 import CommentItem from "./CommentItem";
-import { useCommnetListByFeedId } from "../api/useCommnetListByFeedId";
+import { useCommnetListByFeedId } from "../api/useGetCommnetListByFeedId";
 import { useSearchParams } from "next/navigation";
 
 interface CommentItemProps {
@@ -19,11 +19,10 @@ function CommentContainer({
 	onCommentTargetClick,
 }: {
 	className?: string;
-	onCommentTargetClick?: (nickname: string | null) => void;
+	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 }) {
 	const feedId = useSearchParams().get("feedId");
 	const { data: feedCommentData } = useCommnetListByFeedId(feedId);
-	console.log(feedCommentData);
 
 	if (!feedCommentData) return null;
 

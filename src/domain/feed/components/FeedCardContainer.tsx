@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
@@ -24,7 +25,11 @@ function FeedCardContainer({
 	className?: string;
 	queryParams?: string;
 }) {
-	const [feedId, setFeedId] = useState<number | null>(null);
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const currentFeedId = searchParams.get("feedId");
+
 	const [containerWidth, setContainerWidth] = useState(0);
 	const containerRef = useRef<HTMLDivElement>(null);
 
@@ -197,7 +202,13 @@ function FeedCardContainer({
 								bookmarkCount={item.bookmarkCount}
 								authorName={item.authorName}
 								authorProfileImage={item.authorProfileImage}
-								onClick={() => setFeedId(item.id ?? null)}
+								onClick={() => {
+									const params = new URLSearchParams(searchParams.toString());
+									params.set("feedId", (item.id ?? "").toString());
+									router.push(`${pathname}?${params.toString()}`, {
+										scroll: false,
+									});
+								}}
 								className="duration-300 ease-in-out absolute"
 							/>
 						);
@@ -205,9 +216,13 @@ function FeedCardContainer({
 			</div>
 			<Suspense fallback={<div>Loading...</div>}>
 				<FeedModal
-					feedId={feedId?.toString() || ""}
-					onClose={() => setFeedId(null)}
-					isOpen={feedId !== null}
+					feedId={currentFeedId || ""}
+					onClose={() => {
+						const params = new URLSearchParams(searchParams.toString());
+						params.delete("feedId");
+						router.push(`${pathname}?${params.toString()}`, { scroll: false });
+					}}
+					isOpen={!!currentFeedId}
 				/>
 			</Suspense>
 

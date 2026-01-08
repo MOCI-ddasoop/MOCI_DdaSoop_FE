@@ -7,7 +7,7 @@ export const navItems = [
 
 export const mypageTabContents = [
   { href: "/mypage/feeds", name: "내 피드" },
-  { href: "/mypage/likes", name: "좋아요" },
+  { href: "/mypage/bookmarks", name: "북마크" },
   { href: "/mypage/replies", name: "댓글" },
   {
     href: "/mypage/together/join",

@@ -1,9 +1,11 @@
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
-import { useState } from "react";
-import { BsChatRight, BsHeart, BsThreeDots } from "react-icons/bs";
+import { useState, useEffect } from "react";
+import { BsChatRight } from "react-icons/bs";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { MdIosShare } from "react-icons/md";
+import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 
 interface FeedDetailCardProps {
 	id: number;
@@ -13,6 +15,7 @@ interface FeedDetailCardProps {
 	category: string;
 	date: string;
 	likeCount: number;
+	bookmarkCount: number;
 	commentCount: number;
 	images: string[];
 	bookMarkedByMe: boolean;
@@ -26,29 +29,43 @@ function FeedDetailCard({
 	title,
 	author,
 	content,
-	category,
 	date,
-	likeCount,
+	bookmarkCount,
 	commentCount,
 	images,
 	bookMarkedByMe,
 	tags,
 	className,
 }: FeedDetailCardProps) {
-	const [isLiked, setIsLiked] = useState<boolean>(bookMarkedByMe || false);
+	const [bookmarkInfo, setBookmarkInfo] = useState<{
+		bookmarkCount: number;
+		bookMarkedByMe: boolean;
+	}>({
+		bookmarkCount: bookmarkCount,
+		bookMarkedByMe: bookMarkedByMe,
+	});
+
+	useEffect(() => {
+		setBookmarkInfo({
+			bookmarkCount,
+			bookMarkedByMe,
+		});
+	}, [bookmarkCount, bookMarkedByMe]);
+
 	const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
 		null
 	);
+	const { mutate: toggleBookmarkMutate } = useToggleFeedBookmark();
 
 	const handleLike = () => {
-		setIsLiked(!isLiked);
+		setBookmarkInfo((prev) => ({
+			bookmarkCount: prev.bookMarkedByMe
+				? prev.bookmarkCount - 1
+				: prev.bookmarkCount + 1,
+			bookMarkedByMe: !prev.bookMarkedByMe,
+		}));
 
-		// 서버 통신 추가 로직 작성
-		if (isLiked) {
-			// 좋아요 취소 로직
-		} else {
-			// 좋아요 추가 로직
-		}
+		toggleBookmarkMutate(id.toString());
 	};
 
 	// 옵션은 switch문으로 처리
@@ -73,13 +90,7 @@ function FeedDetailCard({
 			<div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
 				<div className="flex items-center gap-2">
 					<div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-						<Image
-							src={images[0]}
-							alt={author}
-							width={100}
-							height={100}
-							className="object-cover"
-						/>
+						<Image src={images[0]} alt={author} fill />
 					</div>
 					<div className="text-sm text-nowrap">{author}</div>
 				</div>
@@ -97,7 +108,7 @@ function FeedDetailCard({
 			{/* 컨텐츠 영역 */}
 			<div className="border-b border-gray-200 p-2">
 				{/* 내용 영역 */}
-				<div className="p-2 min-h-[200px]">
+				<div className="p-2 min-h-[100px]">
 					{title && <h1 className="text-lg font-bold">{title}</h1>}
 					<p className="text-sm text-gray-500">{content}</p>
 				</div>
@@ -105,13 +116,7 @@ function FeedDetailCard({
 				{/* 모임 정보 영역 */}
 				<div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md">
 					<div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-						<Image
-							src={images[0]}
-							alt={author}
-							width={100}
-							height={100}
-							className="object-cover"
-						/>
+						<Image src={images[0]} alt={author} fill />
 					</div>
 					<div className="flex flex-col">
 						<div className="font-bold">모임이름을입력하세요</div>
@@ -149,24 +154,42 @@ function FeedDetailCard({
 						type="button"
 						className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
 					>
-						<BsChatRight size={24} className="group-hover:text-amber-400" />
-						<p className="group-hover:text-amber-400">{commentCount}</p>
+						<BsChatRight size={24} className="group-hover:text-amber-700" />
+						<p className="group-hover:text-amber-700">{commentCount}</p>
 					</button>
 
 					{/* 좋아요 영역 */}
 					<button
 						type="button"
 						className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+						onClick={handleLike}
 					>
-						<BsHeart size={24} className="group-hover:text-amber-400" />
-						<p className="group-hover:text-amber-400">{likeCount}</p>
+						<div className="relative w-6 h-6">
+							<FaBookmark
+								size={24}
+								className={tw(
+									"group-hover:text-amber-700 transition absolute",
+									bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0"
+								)}
+							/>
+							<FaRegBookmark
+								size={24}
+								className={tw(
+									"group-hover:text-amber-700 transition absolute",
+									bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100"
+								)}
+							/>
+						</div>
+						<p className="group-hover:text-amber-700">
+							{bookmarkInfo.bookmarkCount}
+						</p>
 					</button>
 				</div>
 
 				<button type="button" className="cursor-pointer duration-100 group">
 					<MdIosShare
 						size={24}
-						className="text-gray-500 group-hover:text-amber-400"
+						className="text-gray-500 group-hover:text-amber-700"
 					/>
 				</button>
 			</div>
