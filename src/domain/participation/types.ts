@@ -1,4 +1,5 @@
 export type DetailInfoProps = {
+  id: string;
   type: "together" | "donate";
   title: string;
   category: string;

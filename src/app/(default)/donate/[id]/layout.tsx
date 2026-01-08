@@ -1,3 +1,5 @@
+import { getInitDonationDetail } from "@/domain/donate/api/getInitDonationDetail";
+import DetailInfoHydrator from "@/domain/donate/provider/DetailInfoHydrator";
 import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
 import { DetailInfoProps } from "@/domain/participation/types";
 import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
@@ -5,6 +7,7 @@ import TabBar from "@/shared/components/TabBar";
 import { donateTabContents } from "@/shared/utils/navigation";
 
 const DETAIL_INFO_DUMMY: DetailInfoProps = {
+  id: "",
   type: "donate",
   title: "후원하기",
   category: "카테고리1",
@@ -25,17 +28,20 @@ async function page({
   children: React.ReactNode;
 }) {
   const { id } = await params;
+  const detailInfo = await getInitDonationDetail(id);
   return (
-    <div className="flex justify-between pt-4">
-      <div className="w-[calc(100%-280px)]">
-        <div className="w-full aspect-10/7">
-          <ImageSwiper slideList={dummyImageList} />
+    <DetailInfoHydrator initialData={detailInfo}>
+      <div className="flex justify-between pt-4">
+        <div className="w-[calc(100%-280px)]">
+          <div className="w-full aspect-10/7">
+            <ImageSwiper slideList={dummyImageList} />
+          </div>
+          <TabBar type="donate" tabContents={donateTabContents(id)} />
+          <main className="py-4">{children}</main>
         </div>
-        <TabBar type="donate" tabContents={donateTabContents(id)} />
-        <main className="py-4">{children}</main>
+        <ParticipationDetailInfo props={DETAIL_INFO_DUMMY} />
       </div>
-      <ParticipationDetailInfo props={DETAIL_INFO_DUMMY} />
-    </div>
+    </DetailInfoHydrator>
   );
 }
 
