@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { FeedDetail } from "../types";
 
 export const useGetFeedById = (id: string | number) => {
-  return useQuery<FeedDetail>({
-    queryKey: queryKeys.feeds.id(id),
-    queryFn: async () => {
-      const { data } = await api.get(`api/feeds/${id}`);
-      return data;
-    },
-    enabled: !!id,
-    staleTime: 0,
-    gcTime: 0,
-  });
+	return useQuery<FeedDetail>({
+		queryKey: queryKeys.feeds.id(id),
+		queryFn: async () => {
+			const { data } = await api.get(`api/feeds/${id}`);
+			return data;
+		},
+		enabled: !!id,
+		staleTime: 0,
+		gcTime: 0,
+	});
 };

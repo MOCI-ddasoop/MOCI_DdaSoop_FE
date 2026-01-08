@@ -8,8 +8,8 @@ import "swiper/css/thumbs";
 
 import { FaPlus } from "react-icons/fa";
 import { FaRegImages } from "react-icons/fa6";
-import tw from "../utils/tw";
-import ImageSwiper from "./ImageSwiper";
+import tw from "../../../shared/utils/tw";
+import ImageSwiper from "../../../shared/components/ImageSwiper";
 
 export type FeedImage = Partial<File> & {
 	url?: string;
