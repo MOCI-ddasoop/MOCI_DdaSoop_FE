@@ -8,10 +8,10 @@ import tw from "@/shared/utils/tw";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
 import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
-import { FeedContent } from "../types";
+import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
 
-type PositionedItem = FeedContent & {
+export type PositionedItem = FeedInfinite & {
 	width: number;
 	height: number;
 	x: number;
@@ -78,7 +78,7 @@ function FeedCardContainer({
 		return 2;
 	}, [containerWidth]);
 
-	const items: FeedContent[] = useMemo(
+	const items: FeedInfinite[] = useMemo(
 		() => data?.pages.flatMap((p) => p.content) ?? [],
 		[data]
 	);
@@ -190,11 +190,12 @@ function FeedCardContainer({
 							<FeedCardImage
 								id={item.id}
 								key={item.id}
-								src={item.thumbnailUrl ?? "/defaultFeedImage.png"}
+								thumbnailUrl={item.thumbnailUrl ?? "/defaultFeedImage.png"}
 								alt={item.thumbnailUrl ?? "따숲"}
 								width={item.width}
-								imageWidth={item.width}
-								imageHeight={item.height}
+								height={item.height}
+								thumbnailWidth={item.width}
+								thumbnailHeight={item.height}
 								x={item.x}
 								y={item.y}
 								content={item.content}

@@ -1,10 +1,10 @@
 import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery } from "@tanstack/react-query";
-import { FeedDetail } from "../types";
+import { FeedResponse } from "../types";
 
 export const useGetFeedById = (id: string | number) => {
-	return useQuery<FeedDetail>({
+	return useQuery<FeedResponse>({
 		queryKey: queryKeys.feeds.id(id),
 		queryFn: async () => {
 			const { data } = await api.get(`api/feeds/${id}`);

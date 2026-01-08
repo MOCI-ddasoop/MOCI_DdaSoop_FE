@@ -83,7 +83,7 @@ function FeedModal({
 					<div className="relative h-full w-3/5">
 						<ImageSwiper
 							slideList={
-								feedDetailData?.images.map((img) => ({ url: img.imageUrl })) ||
+								feedDetailData?.images?.map((img) => ({ url: img.imageUrl })) ||
 								[]
 							}
 						/>
@@ -98,20 +98,13 @@ function FeedModal({
 							<FeedDetailCard
 								id={feedDetailData?.id || 0}
 								content={feedDetailData?.content || ""}
-								category={feedDetailData?.feedType || ""}
-								date={feedDetailData?.createdAt || ""}
-								likeCount={feedDetailData?.reactionCount || 0}
-								bookmarkCount={feedDetailData?.bookmarkCount || 0}
+								createdAt={feedDetailData?.createdAt || ""}
+								bookmarkCount={feedDetailData?.reactionCount || 0}
 								commentCount={feedDetailData?.commentCount || 0}
-								bookMarkedByMe={feedDetailData?.isBookmarked || false}
+								isBookmarked={feedDetailData?.isBookmarked || false}
 								tags={feedDetailData?.tags || []}
 								visibility={feedDetailData?.visibility || "PUBLIC"}
-								images={
-									feedDetailData?.images.map((img) => img.imageUrl) || [
-										FEED_DATA[Number(feedId)].image,
-									]
-								}
-								author={
+								authorName={
 									feedDetailData?.authorName || FEED_DATA[Number(feedId)].author
 								}
 							/>

@@ -6,34 +6,23 @@ import { BsChatRight } from "react-icons/bs";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { MdIosShare } from "react-icons/md";
 import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
+import { FeedResponse } from "../types";
 
-interface FeedDetailCardProps {
-	id: number;
-	title?: string;
-	author: string;
-	content: string;
-	category: string;
-	date: string;
-	likeCount: number;
-	bookmarkCount: number;
-	commentCount: number;
-	images: string[];
-	bookMarkedByMe: boolean;
-	tags: string[];
-	visibility: string;
+type FeedDetailCardProps = FeedResponse & {
 	className?: string;
-}
+};
 
 function FeedDetailCard({
 	id,
-	title,
-	author,
+	authorName: author,
+	authorProfileImage = "/defaultFeedImage.png",
 	content,
-	date,
-	bookmarkCount,
-	commentCount,
-	images,
-	bookMarkedByMe,
+	createdAt: date,
+	bookmarkCount = 0,
+	commentCount = 0,
+	isBookmarked: bookMarkedByMe = false,
+	togetherTitle,
+	togetherId,
 	tags,
 	className,
 }: FeedDetailCardProps) {
@@ -58,6 +47,7 @@ function FeedDetailCard({
 	const { mutate: toggleBookmarkMutate } = useToggleFeedBookmark();
 
 	const handleLike = () => {
+		if (!id) return;
 		setBookmarkInfo((prev) => ({
 			bookmarkCount: prev.bookMarkedByMe
 				? prev.bookmarkCount - 1
@@ -90,7 +80,7 @@ function FeedDetailCard({
 			<div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
 				<div className="flex items-center gap-2">
 					<div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-						<Image src={images[0]} alt={author} fill />
+						<Image src={authorProfileImage} alt={author ?? "기본이미지"} fill />
 					</div>
 					<div className="text-sm text-nowrap">{author}</div>
 				</div>
@@ -109,14 +99,14 @@ function FeedDetailCard({
 			<div className="border-b border-gray-200 p-2">
 				{/* 내용 영역 */}
 				<div className="p-2 min-h-[100px]">
-					{title && <h1 className="text-lg font-bold">{title}</h1>}
 					<p className="text-sm text-gray-500">{content}</p>
 				</div>
 
 				{/* 모임 정보 영역 */}
 				<div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md">
 					<div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-						<Image src={images[0]} alt={author} fill />
+						{/* 모임사진 입력필요 */}
+						<Image src={""} alt={author ?? "기본이미지"} fill />
 					</div>
 					<div className="flex flex-col">
 						<div className="font-bold">모임이름을입력하세요</div>
@@ -133,7 +123,7 @@ function FeedDetailCard({
 
 				{/* 태그 영역 */}
 				<div className="flex items-center gap-2 flex-wrap p-1">
-					{tags.map((tag) => (
+					{tags?.map((tag) => (
 						<span
 							key={tag}
 							className="text-mainblue cursor-pointer hover:underline"
