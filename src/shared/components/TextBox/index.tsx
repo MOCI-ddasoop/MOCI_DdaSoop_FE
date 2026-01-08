@@ -3,116 +3,128 @@
 import { getCurrentBlock } from "./utils/getCurrentBlock";
 import { processUrlWrap } from "./utils/processUrlWrap";
 import tw from "@/shared/utils/tw";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
 
 type TextBoxType = React.HTMLAttributes<HTMLDivElement> & {
-	isAble?: boolean;
-	className?: string;
-	placeholder?: string | Element;
-	setValue?: (value: string) => void;
+  isAble?: boolean;
+  className?: string;
+  placeholder?: string | Element;
+  initialValue?: string;
+  setValue?: (value: string) => void;
 };
 
 function TextBox({
-	isAble = true,
-	className,
-	placeholder,
-	setValue,
-	hidden,
+  isAble = true,
+  className,
+  placeholder,
+  initialValue,
+  setValue,
+  hidden,
 }: TextBoxType) {
-	const textBoxRef = useRef<HTMLDivElement>(null);
-	const [isComposing, setIsComposing] = useState(false);
+  const textBoxRef = useRef<HTMLDivElement>(null);
+  const [isComposing, setIsComposing] = useState(false);
 
-	const makeCleanHTML = (html: string) => {
-		return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-	};
+  useEffect(() => {
+    if (
+      textBoxRef.current &&
+      initialValue &&
+      textBoxRef.current.innerHTML !== initialValue
+    ) {
+      textBoxRef.current.innerHTML = initialValue;
+    }
+  }, [initialValue]);
 
-	const processWrapCallback = useCallback(() => {
-		const root = textBoxRef.current;
-		//text박스 안의 HTML
-		if (!root) return;
-		//root가 없다면 스톱
-		processUrlWrap(root);
-	}, []);
+  const makeCleanHTML = (html: string) => {
+    return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+  };
 
-	const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-		const root = textBoxRef.current;
-		if (!root) return;
+  const processWrapCallback = useCallback(() => {
+    const root = textBoxRef.current;
+    //text박스 안의 HTML
+    if (!root) return;
+    //root가 없다면 스톱
+    processUrlWrap(root);
+  }, []);
 
-		const selection = window.getSelection();
-		if (!selection || selection.rangeCount === 0) return;
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const root = textBoxRef.current;
+    if (!root) return;
 
-		const inputType = (e.nativeEvent as InputEvent).inputType;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
 
-		if (inputType === "insertParagraph") {
-			if (isComposing) return;
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					getCurrentBlock(root, selection);
-					if (setValue) setValue(makeCleanHTML(root.innerHTML));
-				});
-			});
-			return;
-		}
-		if (isComposing) {
-			if (setValue) setValue(makeCleanHTML(root.innerHTML));
-			return;
-		}
-		if (inputType === "deleteContentBackward") {
-			if (root.innerText.trim() === "") {
-				requestAnimationFrame(() => {
-					requestAnimationFrame(() => {
-						// 1) 빈 block(div)을 제거
-						Array.from(root.children).forEach((child) => {
-							const el = child as HTMLElement;
-							if (el.tagName === "DIV" && el.innerText.trim() === "") {
-								child.remove();
-							}
-						});
+    const inputType = (e.nativeEvent as InputEvent).inputType;
 
-						// 2) 루트가 실제로 비었으면 완전히 초기화
-						if (root.innerText.trim() === "") {
-							root.innerHTML = "";
-						}
-						if (setValue) setValue(makeCleanHTML(root.innerHTML));
-					});
-				});
-			}
-			return;
-		}
-		// 영어 입력 지연처리
-		if (inputType === "insertText") {
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					processWrapCallback();
-					if (setValue) setValue(makeCleanHTML(root.innerHTML));
-				});
-			});
-		} else {
-			// 기타 inputType 처리
-			processWrapCallback();
-			if (setValue) setValue(makeCleanHTML(root.innerHTML));
-		}
-	};
+    if (inputType === "insertParagraph") {
+      if (isComposing) return;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          getCurrentBlock(root, selection);
+          if (setValue) setValue(makeCleanHTML(root.innerHTML));
+        });
+      });
+      return;
+    }
+    if (isComposing) {
+      if (setValue) setValue(makeCleanHTML(root.innerHTML));
+      return;
+    }
+    if (inputType === "deleteContentBackward") {
+      if (root.innerText.trim() === "") {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // 1) 빈 block(div)을 제거
+            Array.from(root.children).forEach((child) => {
+              const el = child as HTMLElement;
+              if (el.tagName === "DIV" && el.innerText.trim() === "") {
+                child.remove();
+              }
+            });
 
-	return (
-		<div
-			ref={textBoxRef}
-			className={tw([
-				"w-full min-h-6 overflow-auto focus:outline-none",
-				"placeholder-style",
-				className,
-			])}
-			hidden={hidden}
-			data-placeholder={placeholder}
-			onInput={handleInput}
-			contentEditable={isAble && "plaintext-only"}
-			onCompositionStart={() => setIsComposing(true)}
-			onCompositionEnd={() => {
-				setIsComposing(false);
-				processWrapCallback();
-			}}
-		/>
-	);
+            // 2) 루트가 실제로 비었으면 완전히 초기화
+            if (root.innerText.trim() === "") {
+              root.innerHTML = "";
+            }
+            if (setValue) setValue(makeCleanHTML(root.innerHTML));
+          });
+        });
+      }
+      return;
+    }
+    // 영어 입력 지연처리
+    if (inputType === "insertText") {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          processWrapCallback();
+          if (setValue) setValue(makeCleanHTML(root.innerHTML));
+        });
+      });
+    } else {
+      // 기타 inputType 처리
+      processWrapCallback();
+      if (setValue) setValue(makeCleanHTML(root.innerHTML));
+    }
+  };
+
+  return (
+    <div
+      ref={textBoxRef}
+      className={tw([
+        "w-full min-h-6 overflow-auto focus:outline-none",
+        "placeholder-style",
+        className,
+      ])}
+      hidden={hidden}
+      data-placeholder={placeholder}
+      onInput={handleInput}
+      contentEditable={isAble && "plaintext-only"}
+      onCompositionStart={() => setIsComposing(true)}
+      onCompositionEnd={() => {
+        setIsComposing(false);
+        processWrapCallback();
+      }}
+    />
+  );
 }
 export default TextBox;

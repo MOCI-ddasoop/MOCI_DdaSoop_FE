@@ -1,4 +1,5 @@
 import {
+  flip,
   useClick,
   useDismiss,
   useFloating,
@@ -115,6 +116,7 @@ function DropdownButton({
     placement,
     open: isOpen,
     onOpenChange: setIsOpen,
+    middleware: [flip()],
   });
 
   const click = useClick(context);

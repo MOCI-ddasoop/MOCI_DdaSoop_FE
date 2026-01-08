@@ -1,26 +1,39 @@
 "use client";
-import TextBox from "@/shared/components/TextBox";
 import tw from "@/shared/utils/tw";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 
+import { useSearchParams } from "next/navigation";
+import { useSetComment } from "../api/useSetComment";
+
 interface CommentInputProps {
-  onSubmit?: (comment: string) => void;
-  onCommentTargetClick?: (nickname: string | null) => void;
+  onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
   targetNickname?: string | null;
+  targetId?: number | null;
 }
 
 function CommentInput({
   targetNickname,
-  onSubmit,
+  targetId,
   onCommentTargetClick,
 }: CommentInputProps) {
   const [comment, setComment] = useState("");
+  const feedId = useSearchParams().get("feedId");
+  const { mutate: setCommentMutation } = useSetComment();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.(comment);
-    onCommentTargetClick?.(null);
+    if (!comment.trim()) return;
+
+    setCommentMutation({
+      commentType: "FEED",
+      content: comment,
+      targetId: Number(feedId),
+      parentId: targetId ?? null,
+    });
+
+    setComment("");
+    onCommentTargetClick?.(null, null);
   };
 
   return (
@@ -41,7 +54,7 @@ function CommentInput({
           <button
             type="button"
             className="text-sm text-gray-500 cursor-pointer"
-            onClick={() => onCommentTargetClick?.(null)}
+            onClick={() => onCommentTargetClick?.(null, null)}
           >
             <IoClose size={16} />
           </button>
@@ -49,7 +62,13 @@ function CommentInput({
       )}
       <div className="flex justify-center items-stretch gap-2 w-full h-full">
         <div className="flex-1 flex items-center border-gray-300">
-          <TextBox placeholder="댓글을 입력해주세요." setValue={setComment} />
+          <input
+            type="text"
+            placeholder="댓글을 입력해주세요."
+            className="focus:outline-0 flex-1"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
 
         <div className="self-stretch py-2">
@@ -57,7 +76,7 @@ function CommentInput({
             type="submit"
             className={tw(
               "h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150",
-              comment.length > 0 ? "bg-mainblue" : "bg-gray-300"
+              comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300"
             )}
           >
             게시
