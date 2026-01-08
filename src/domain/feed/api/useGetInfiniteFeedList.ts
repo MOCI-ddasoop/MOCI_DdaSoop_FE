@@ -14,7 +14,11 @@ export const useGetInfiniteFeedList = ({
 	memberId,
 }: InfiniteFeedParams = {}) => {
 	return useInfiniteQuery({
-		queryKey: queryKeys.feeds.infinite(page),
+		queryKey: queryKeys.feeds.infinite({
+			page,
+			togetherId,
+			memberId,
+		}),
 		queryFn: async ({ pageParam }) => {
 			let baseUrl;
 
