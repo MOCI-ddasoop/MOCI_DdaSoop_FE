@@ -185,7 +185,7 @@ function CommentItem({
 						</button>
 						<button
 							type="button"
-							className="cursor-pointer text-sm text-gray-500 active:scale-95 trasnsisiton-transform"
+							className="cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform"
 							onClick={() => {
 								toggleReactMutation(id ?? 0);
 							}}
@@ -204,7 +204,7 @@ function CommentItem({
 						size="sm"
 						menuSize="sm"
 						placement="bottom-end"
-						hilightingLastOption={true}
+						highlightingLastOption={true}
 					/>
 				</div>
 

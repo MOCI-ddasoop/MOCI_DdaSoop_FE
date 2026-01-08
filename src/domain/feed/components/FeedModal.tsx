@@ -105,7 +105,7 @@ function FeedModal({
 								commentCount={feedDetailData?.commentCount || 0}
 								bookMarkedByMe={feedDetailData?.isBookmarked || false}
 								tags={feedDetailData?.tags || []}
-								visiblity={feedDetailData?.visibility || "PUBLIC"}
+								visibility={feedDetailData?.visibility || "PUBLIC"}
 								images={
 									feedDetailData?.images.map((img) => img.imageUrl) || [
 										FEED_DATA[Number(feedId)].image,

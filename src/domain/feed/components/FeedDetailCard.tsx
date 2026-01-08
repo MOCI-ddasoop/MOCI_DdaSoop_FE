@@ -20,7 +20,7 @@ interface FeedDetailCardProps {
 	images: string[];
 	bookMarkedByMe: boolean;
 	tags: string[];
-	visiblity: string;
+	visibility: string;
 	className?: string;
 }
 
@@ -101,7 +101,7 @@ function FeedDetailCard({
 					size="md"
 					menuSize="md"
 					placement="bottom-end"
-					hilightingLastOption={true}
+					highlightingLastOption={true}
 				/>
 			</div>
 

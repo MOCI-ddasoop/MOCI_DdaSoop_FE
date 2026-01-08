@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import FeedSummary from "@/domain/feed/components/FeedSummary";
 import { useGetCommentListByUser } from "../api/useGetCommentListByUser";
 
-function FeedGroupCommentContiner() {
+function FeedGroupCommentContainer() {
 	const { data } = useGetCommentListByUser("1");
 
 	const commentList = useMemo(() => {
@@ -40,4 +40,4 @@ function FeedGroupCommentContiner() {
 		</ul>
 	);
 }
-export default FeedGroupCommentContiner;
+export default FeedGroupCommentContainer;

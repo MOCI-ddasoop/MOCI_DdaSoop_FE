@@ -14,7 +14,7 @@ import backwardCircle from "@/assets/icons/backwardCircle.png";
 import forwardCircle from "@/assets/icons/forwardCircle.png";
 import { IoClose } from "react-icons/io5";
 
-export type Slide = Partial<File> & { imageUrl?: string };
+export type Slide = Partial<File> & { url?: string };
 
 interface ImageSwiperProps {
 	slideList: Slide[];
@@ -96,12 +96,12 @@ function ImageSwiper({
 				className="w-full h-4/5 box-border"
 			>
 				{slideList.length !== 0 ? (
-					slideList.map(({ imageUrl }, idx) => (
+					slideList.map(({ url }, idx) => (
 						<SwiperSlide key={idx}>
 							<div className={`w-full h-full flex-center bg-black`}>
 								{/* <Image/> 삽입 예정 */}
 								<Image
-									src={imageUrl ?? "/defaultFeedImage.png"}
+									src={url ?? "/defaultFeedImage.png"}
 									alt=""
 									fill
 									className="object-contain"
@@ -159,7 +159,7 @@ function ImageSwiper({
 				modules={[FreeMode, Navigation, Thumbs]}
 				className="w-full flex-center justify-start h-1/5"
 			>
-				{slideList.map(({ imageUrl }, index) => (
+				{slideList.map(({ url }, index) => (
 					<SwiperSlide key={index}>
 						<div className="p-1 h-full">
 							<div
@@ -170,7 +170,7 @@ function ImageSwiper({
 								{deleteButton(index)}
 								{/* 이미지 삽입 */}
 								<Image
-									src={imageUrl ?? "/defaultFeedImage.png"}
+									src={url ?? "/defaultFeedImage.png"}
 									alt=""
 									fill
 									className="object-contain"
