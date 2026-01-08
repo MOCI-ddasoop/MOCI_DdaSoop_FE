@@ -3,7 +3,7 @@ import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { FeedDetail } from "../types";
 
-export const useGetFeedById = (id: string) => {
+export const useGetFeedById = (id: string | number) => {
   return useQuery<FeedDetail>({
     queryKey: queryKeys.feeds.id(id),
     queryFn: async () => {

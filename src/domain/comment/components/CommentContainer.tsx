@@ -2,28 +2,18 @@
 
 import tw from "@/shared/utils/tw";
 import CommentItem from "./CommentItem";
-import { useCommnetListByFeedId } from "../api/useCommnetListByFeedId";
+import { useCommnetListByFeedId } from "../api/useGetCommnetListByFeedId";
 import { useSearchParams } from "next/navigation";
-
-interface CommentItemProps {
-  id: number;
-  profileImage: string;
-  author: string;
-  date: string;
-  content: string;
-  className?: string;
-}
 
 function CommentContainer({
   className,
   onCommentTargetClick,
 }: {
   className?: string;
-  onCommentTargetClick?: (nickname: string | null) => void;
+  onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 }) {
   const feedId = useSearchParams().get("feedId");
   const { data: feedCommentData } = useCommnetListByFeedId(feedId);
-  console.log(feedCommentData);
 
   if (!feedCommentData) return null;
 
@@ -32,11 +22,8 @@ function CommentContainer({
       {feedCommentData.content.map((item) => (
         <CommentItem
           key={item.id}
-          id={item.id}
-          profileImage={item.authorProfileImage}
-          author={item.authorNickname}
-          date={item.createdAt || ""}
-          content={item.content}
+          item={item}
+          feedId={feedId}
           onCommentTargetClick={onCommentTargetClick}
         />
       ))}

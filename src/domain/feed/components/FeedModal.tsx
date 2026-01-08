@@ -35,6 +35,7 @@ function FeedModal({
 }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [targetNickname, setTargetNickname] = useState<string | null>(null);
+  const [targetId, setTargetId] = useState<number | null>(null);
   const { data: feedDetailData } = useGetFeedById(feedId);
 
   const handleClose = () => {
@@ -43,11 +44,13 @@ function FeedModal({
     contentRef.current?.scrollTo({ top: 0 });
   };
 
-  const handleCommentTargetClick = (nickname: string | null) => {
+  const handleCommentTargetClick = (
+    nickname: string | null,
+    id: number | null
+  ) => {
     setTargetNickname(nickname ?? null);
+    setTargetId(id ?? null);
   };
-
-  // TODO: query를 여기서 조회하고 모달에 출력
 
   useEffect(() => {
     if (!isOpen) return;
@@ -79,7 +82,12 @@ function FeedModal({
         >
           {/* image 영역 */}
           <div className="relative h-full w-3/5">
-            <ImageSwiper slideList={feedDetailData?.images || []} />
+            <ImageSwiper
+              slideList={
+                feedDetailData?.images.map((img) => ({ url: img.imageUrl })) ||
+                []
+              }
+            />
           </div>
 
           {/* content 영역 */}
@@ -94,12 +102,19 @@ function FeedModal({
                 category={feedDetailData?.feedType || ""}
                 date={feedDetailData?.createdAt || ""}
                 likeCount={feedDetailData?.reactionCount || 0}
+                bookmarkCount={feedDetailData?.bookmarkCount || 0}
                 commentCount={feedDetailData?.commentCount || 0}
                 bookMarkedByMe={feedDetailData?.isBookmarked || false}
                 tags={feedDetailData?.tags || []}
                 visiblity={feedDetailData?.visibility || "PUBLIC"}
-                images={[FEED_DATA[Number(feedId)].image]}
-                author={FEED_DATA[Number(feedId)].author}
+                images={
+                  feedDetailData?.images.map((img) => img.imageUrl) || [
+                    FEED_DATA[Number(feedId)].image,
+                  ]
+                }
+                author={
+                  feedDetailData?.authorName || FEED_DATA[Number(feedId)].author
+                }
               />
 
               {/* comment 영역 */}
@@ -111,6 +126,7 @@ function FeedModal({
             <div className="p-2 border-t border-gray-200 bg-white">
               <CommentInput
                 targetNickname={targetNickname}
+                targetId={targetId}
                 onCommentTargetClick={handleCommentTargetClick}
               />
             </div>
