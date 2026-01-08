@@ -11,10 +11,33 @@ export const queryKeys = {
       pageNum,
       params,
     ],
+    infinite: (params?: {
+      page?: "together" | "member";
+      togetherId?: number;
+      memberId?: number;
+    }) => {
+      if (!params?.page) {
+        return ["feeds", "infinite"];
+      }
+
+      if (params.page === "together") {
+        return [
+          "feeds",
+          "infinite",
+          { page: "together", togetherId: params.togetherId },
+        ];
+      }
+
+      return [
+        "feeds",
+        "infinite",
+        { page: "member", memberId: params.memberId },
+      ];
+    },
   },
   comments: {
-    all: () => ["commnets"],
-    list: (feedId: string) => ["commnets", feedId],
+    all: () => ["comments"],
+    list: (feedId: string) => ["comments", feedId],
     react: () => ["comments", "react"],
     listByUser: (userId: string) => ["comments", "listByUser", userId],
     del: () => ["comments", "delete"],

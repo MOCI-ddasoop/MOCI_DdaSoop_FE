@@ -2,7 +2,7 @@ import ParticipationDetailInfo from "@/domain/participation/components/Participa
 import { DetailInfoProps } from "@/domain/participation/types";
 import { getInitTogetherDetail } from "@/domain/together/api/getInitTogetherDetail";
 import DetailInfoHydrator from "@/domain/together/provider/DetailInfoHydrator";
-import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
+import ImageSwiper from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
 import { togetherTabContents } from "@/shared/utils/navigation";
 
@@ -36,7 +36,7 @@ async function page({
         <div className="w-[calc(100%-280px)]">
           <div className="w-full aspect-10/7">
             {/* slideList -> detailInfo에 들어있는 이미지전달 */}
-            <ImageSwiper slideList={dummyImageList} />
+            <ImageSwiper slideList={[]} />
           </div>
           <TabBar type="together" tabContents={togetherTabContents(id)} />
           <main className="py-4">{children}</main>

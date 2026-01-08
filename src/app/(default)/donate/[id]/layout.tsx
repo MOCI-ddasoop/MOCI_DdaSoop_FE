@@ -2,7 +2,7 @@ import { getInitDonationDetail } from "@/domain/donate/api/getInitDonationDetail
 import DetailInfoHydrator from "@/domain/donate/provider/DetailInfoHydrator";
 import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
 import { DetailInfoProps } from "@/domain/participation/types";
-import ImageSwiper, { dummyImageList } from "@/shared/components/ImageSwiper";
+import ImageSwiper from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
 import { donateTabContents } from "@/shared/utils/navigation";
 
