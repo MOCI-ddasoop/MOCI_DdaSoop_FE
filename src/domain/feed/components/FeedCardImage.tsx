@@ -4,39 +4,28 @@ import Image from "next/image";
 import tw from "@/shared/utils/tw";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
+import { PositionedItem } from "./FeedCardContainer";
 
-type FeedCardImageProps = {
-	id: number;
-	src: string;
+type FeedCardImageProps = PositionedItem & {
 	alt: string;
-	width: number;
-	imageWidth: number;
-	imageHeight: number;
-	x?: number;
-	y?: number;
-	content: string;
-	commentCount: number;
-	bookmarkCount: number;
-	authorName: string;
-	authorProfileImage: string;
 	className?: string;
 	onClick?: () => void;
 };
 
 function FeedCardImage({
 	id,
-	src,
+	thumbnailUrl: src = "/defaultFeedImage.png",
 	alt,
 	width,
-	imageWidth,
-	imageHeight,
+	thumbnailWidth: imageWidth = 500,
+	thumbnailHeight: imageHeight = 500,
 	x = 0,
 	y = 0,
 	content,
 	commentCount,
 	bookmarkCount,
-	authorName,
-	authorProfileImage,
+	authorName = "사용자를 찾을 수 없음",
+	authorProfileImage = "/defaultFeedImage.png",
 	className,
 	onClick,
 }: FeedCardImageProps) {
