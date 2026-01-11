@@ -46,11 +46,17 @@ export const queryKeys = {
   donate: {
     all: () => ["donate"],
     id: (id: string) => ["donate", id],
-    list: () => ["donate", "list"],
+    list: (memberId?: number) => {
+      if (memberId) return ["donate", "list", memberId];
+      else return ["donate", "list"];
+    },
   },
   together: {
     all: () => ["together"],
     id: (id: string) => ["together", id],
-    list: () => ["together", "list"],
+    list: (memeberId?: number) => {
+      if (memeberId) return ["together", "list", memeberId];
+      else return ["together", "list"];
+    },
   },
 };

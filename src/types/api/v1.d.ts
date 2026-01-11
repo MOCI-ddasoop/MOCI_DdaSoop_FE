@@ -478,6 +478,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ID별 함께하기 조회 */
+        get: operations["getTogetherByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/list": {
         parameters: {
             query?: never;
@@ -1375,9 +1392,9 @@ export interface components {
             lastLoginProvider?: "GOOGLE" | "KAKAO" | "NAVER";
             /** Format: date-time */
             deletedAt?: string;
-            additionalInfoRequired?: boolean;
-            admin?: boolean;
             deleted?: boolean;
+            admin?: boolean;
+            additionalInfoRequired?: boolean;
         };
         MemberSocialAccount: {
             /** Format: int64 */
@@ -1400,7 +1417,7 @@ export interface components {
             category: "PLOGGING" | "CLEANUP" | "RECYCLING";
             /** @enum {string} */
             mode: "ONLINE" | "OFFLINE";
-            /** Format: int32 */
+            /** Format: int64 */
             capacity: number;
             /** Format: date */
             startDate: string;
@@ -1480,8 +1497,7 @@ export interface components {
             lastLoginProvider?: string;
         };
         AdditionalInfoRequest: {
-            /** Format: int64 */
-            memberId: number;
+            temporaryToken: string;
             nickname: string;
             /** Format: email */
             email: string;
@@ -1498,7 +1514,7 @@ export interface components {
             category?: "PLOGGING" | "CLEANUP" | "RECYCLING";
             /** @enum {string} */
             mode?: "ONLINE" | "OFFLINE";
-            /** Format: int32 */
+            /** Format: int64 */
             capacity?: number;
             /** @enum {string} */
             status?: "RECRUITING" | "CLOSED";
@@ -1517,18 +1533,18 @@ export interface components {
             status?: string;
         };
         PageReportSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
@@ -1538,12 +1554,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            unpaged?: boolean;
-            paged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            paged?: boolean;
+            unpaged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1565,8 +1581,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -1585,18 +1601,18 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
@@ -1654,23 +1670,23 @@ export interface components {
             sortBy?: string;
             sortByOrDefault?: string;
             /** Format: int32 */
-            pageOrDefault?: number;
-            /** Format: int32 */
             sizeOrDefault?: number;
+            /** Format: int32 */
+            pageOrDefault?: number;
         };
         Page: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
@@ -2742,6 +2758,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": number;
+                };
+            };
+        };
+    };
+    getTogetherByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description ID별 함께하기 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherResponse"];
                 };
             };
         };

@@ -1,15 +1,7 @@
 import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
 import TogetherSection from "@/domain/together/components/TogetherSection";
+import { TogetherPageProps } from "@/domain/together/types";
 import { sortOptions } from "@/shared/constants/filter";
-
-interface TogetherPageProps {
-  searchParams: Promise<{
-    category?: string;
-    isOnline?: string;
-    page?: string;
-    sort?: string;
-  }>;
-}
 
 async function Together({ searchParams }: TogetherPageProps) {
   const searchParam = await searchParams;
@@ -37,7 +29,7 @@ async function Together({ searchParams }: TogetherPageProps) {
   //   progress: 75,
   // }));
 
-  const { data: ITEM_LIST } = await getInitTogetherList();
+  const ITEM_LIST = await getInitTogetherList();
 
   return (
     <>
