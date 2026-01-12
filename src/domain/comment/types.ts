@@ -8,7 +8,7 @@ export interface CommentType {
   authorProfileImage: string;
   targetId: number;
   parentId: null | number;
-  replies: Replies[];
+  replies: CommentType[];
   replyCount: number;
   reactionCount: number;
   isReacted: boolean;
@@ -63,4 +63,11 @@ export interface CommentPage {
     unsorted: boolean;
   };
   empty: boolean;
+}
+
+export interface commentParams {
+  commentType: "FEED" | "DONATION" | "TOGETHER";
+  content: string;
+  targetId: number;
+  parentId?: number | null;
 }

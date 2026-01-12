@@ -1,35 +1,16 @@
-export type FeedData = {
-  feedType: "GENERAL";
-  content: string;
-  images: [
-    {
-      imageUrl: string;
-      width: number;
-      height: number;
-      displayOrder: number;
-      fileSize: number;
-      originalFileName: string;
-    }
-  ];
-  tags: string[];
-  visibility: "PUBLIC" | "PRIVATE";
-  togetherId: number;
+import type { components } from "@/types/api/v1";
+
+// 피드
+export type FeedUpdateRequest = components["schemas"]["FeedUpdateRequest"];
+export type FeedCreateRequest = components["schemas"]["FeedCreateRequest"];
+export type FeedResponse = components["schemas"]["FeedResponse"];
+
+//무한스크롤 피드 리스트
+export type FeedInfinite = Omit<
+	FeedResponse,
+	"visibility" | "isPinned" | "isReacted" | "isBookmarked" | "updatedAt"
+> & {
+	thumbnailUrl?: string;
+	thumbnailWidth?: number;
+	thumbnailHeight?: number;
 };
-
-export interface FeedDetail {
-  id: number;
-  feedType: string;
-  content: string;
-  images: never[];
-  tags: string[];
-  visibility: string;
-  reactionCount: number;
-  commentCount: number;
-  bookmarkCount: number;
-  togetherId: null | string | number;
-  isReacted: boolean;
-  isBookmarked: boolean;
-  createdAt: null | string;
-  updatedAt: null | string;
-}
-

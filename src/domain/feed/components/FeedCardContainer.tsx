@@ -1,199 +1,254 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import FeedCardImage from "./FeedCardImage";
 import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
-import { CardDataType, fetchMockFeeds } from "@/shared/mock/mockup";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
+import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
+import { FeedInfinite } from "../types";
+import { preloadAndDecode } from "../utils/imageDecodeCache";
 
-type PositionedItems = Partial<Feed> & {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
+export type PositionedItem = FeedInfinite & {
+	width: number;
+	height: number;
+	x: number;
+	y: number;
 };
 
 function FeedCardContainer({
-  className,
-  queryParams,
+	className,
+	queryParams,
 }: {
-  className?: string;
-  queryParams?: string;
+	className?: string;
+	queryParams?: string;
 }) {
-  const [feedId, setFeedId] = useState<number | null>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const currentFeedId = searchParams.get("feedId");
 
-  //무한스크롤
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["feeds"],
-      queryFn: ({ pageParam }) => fetchMockFeeds(pageParam, 15),
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-      initialPageParam: 1,
-    });
-  //무한스크롤 target ref
-  const bottomRef = useIntersection(() => {
-    fetchNextPage();
-  }, hasNextPage);
+	const [containerWidth, setContainerWidth] = useState(0);
+	const containerRef = useRef<HTMLDivElement>(null);
 
-  const throttledSetWidth = useMemo(
-    () =>
-      throttle((width: unknown) => {
-        if (typeof width !== "number") return;
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
+		useGetInfiniteFeedList();
+	//무한스크롤 target ref
+	const triggerRef = useIntersection(() => {
+		fetchNextPage();
+	}, hasNextPage);
 
-        setContainerWidth(width);
-      }, 100), // 100ms throttle for smoother updates
-    []
-  );
+	const throttledSetWidth = useMemo(
+		() =>
+			throttle((width: unknown) => {
+				if (typeof width !== "number") return;
 
-  // 컨테이너 너비 측정
-  useEffect(() => {
-    if (!containerRef.current) return;
+				setContainerWidth(width);
+			}, 100), // 100ms throttle for smoother updates
+		[]
+	);
 
-    // 초기 너비 설정
-    setContainerWidth(containerRef.current.clientWidth);
+	// 컨테이너 너비 측정
+	useEffect(() => {
+		if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect?.width;
-      if (width) {
-        throttledSetWidth(width);
-      }
-    });
+		// 초기 너비 설정
+		setContainerWidth(containerRef.current.clientWidth);
 
-    resizeObserver.observe(containerRef.current);
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
+		const resizeObserver = new ResizeObserver((entries) => {
+			const width = entries[0]?.contentRect?.width;
+			if (width) {
+				throttledSetWidth(width);
+			}
+		});
 
-  // 반응형 컬럼 개수
-  const columnCount = useMemo(() => {
-    if (containerWidth >= 1024) return 5;
-    if (containerWidth >= 768) return 4;
-    if (containerWidth >= 640) return 3;
-    return 2;
-  }, [containerWidth]);
+		resizeObserver.observe(containerRef.current);
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, []);
 
-  const items: CardDataType[] = useMemo(
-    () => data?.pages.flatMap((p) => p.items) ?? [],
-    [data]
-  );
+	// 반응형 컬럼 개수
+	const columnCount = useMemo(() => {
+		if (containerWidth >= 1024) return 5;
+		if (containerWidth >= 768) return 4;
+		if (containerWidth >= 640) return 3;
+		return 2;
+	}, [containerWidth]);
 
-  const positionedItems = useMemo(() => {
-    if (containerWidth === 0) return [];
+	const items: FeedInfinite[] = useMemo(
+		() => data?.pages.flatMap((p) => p.content) ?? [],
+		[data]
+	);
 
-    // 간격 계산
-    const gap = 16;
-    // 아이템 너비 계산
-    const itemWidth = (containerWidth - gap * (columnCount - 1)) / columnCount;
-    // 컬럼 높이 초기화
-    const currentColumnHeights = new Array(columnCount).fill(0);
+	const positionedItems = useMemo(() => {
+		if (containerWidth === 0) return [];
 
-    return items.map((item) => {
-      const aspectRatio = item.width / item.height;
-      const itemHeight = Math.min(itemWidth / aspectRatio, 500);
+		// 간격 계산
+		const gap = 16;
+		// 아이템 너비 계산
+		const itemWidth = (containerWidth - gap * (columnCount - 1)) / columnCount;
+		// 컬럼 높이 초기화
+		const currentColumnHeights = new Array(columnCount).fill(0);
 
-      // 가장 짧은 컬럼 찾기
-      const shortestColumnIndex = currentColumnHeights.indexOf(
-        Math.min(...currentColumnHeights)
-      );
+		return items.map((item) => {
+			if (!item.thumbnailUrl || !item.thumbnailWidth || !item.thumbnailHeight) {
+				item.thumbnailUrl = "/defaultFeedImage.png";
+				item.thumbnailHeight = 500;
+				item.thumbnailWidth = 500;
+			}
+			const aspectRatio = item.thumbnailWidth / item.thumbnailHeight;
+			const itemHeight = Math.min(itemWidth / aspectRatio, 500);
 
-      // 위치 계산
-      const x = shortestColumnIndex * (itemWidth + gap);
-      const y = currentColumnHeights[shortestColumnIndex];
+			// 가장 짧은 컬럼 찾기
+			const shortestColumnIndex = currentColumnHeights.indexOf(
+				Math.min(...currentColumnHeights)
+			);
 
-      // 컬럼 높이 업데이트
-      currentColumnHeights[shortestColumnIndex] += itemHeight + gap;
+			// 위치 계산
+			const x = shortestColumnIndex * (itemWidth + gap);
+			const y = currentColumnHeights[shortestColumnIndex];
 
-      return {
-        ...item,
-        width: itemWidth,
-        height: itemHeight,
-        x,
-        y,
-      };
-    });
-  }, [containerWidth, columnCount, items]);
+			// 컬럼 높이 업데이트
+			currentColumnHeights[shortestColumnIndex] += itemHeight + gap;
 
-  // 컨테이너 높이 계산
-  const containerHeight = useMemo(() => {
-    if (positionedItems.length === 0) return 0;
-    return Math.max(...positionedItems.map((item) => item.y + item.height));
-  }, [positionedItems]);
+			return {
+				...item,
+				width: itemWidth,
+				height: itemHeight,
+				x,
+				y,
+			};
+		});
+	}, [containerWidth, columnCount, items]);
 
-  // 커스텀 버츄얼 스크롤
-  const [visibleItems, setVisibleItems] = useState<PositionedItems[]>([]);
-  const positionsItemsRef = useRef(positionedItems);
+	// 컨테이너 높이 계산
+	const containerHeight = useMemo(() => {
+		if (positionedItems.length === 0) return 0;
+		return Math.max(...positionedItems.map((item) => item.y + item.height));
+	}, [positionedItems]);
 
-  const onScroll = useCallback(() => {
-    const viewportTop = window.scrollY;
-    const viewportBottom = viewportTop + window.innerHeight;
-    const OVERSCAN = 200;
-    const filteredItems = positionsItemsRef.current.filter(
-      (item) =>
-        item.y + item.height >= viewportTop - OVERSCAN &&
-        item.y <= viewportBottom + OVERSCAN
-    );
-    setVisibleItems(filteredItems);
-  }, [positionsItemsRef]);
+	// 가장 짧은 컬럼 높이 계산
+	const shortestColumnHeight = useMemo(() => {
+		if (positionedItems.length === 0) return 0;
+		return Math.min(...positionedItems.map((item) => item.y + item.height));
+	}, [positionedItems]);
 
-  useEffect(() => {
-    positionsItemsRef.current = positionedItems;
-    onScroll();
-  }, [positionedItems, onScroll]);
+	// 커스텀 버츄얼 스크롤
+	const [visibleItems, setVisibleItems] = useState<PositionedItem[]>([]);
+	const positionsItemsRef = useRef(positionedItems);
 
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [onScroll]);
+	const onScrollRef = useRef(() => {
+		const viewportTop = window.scrollY;
+		const viewportBottom = viewportTop + window.innerHeight;
+		const OVERSCAN = 300;
+		const filteredItems = positionsItemsRef.current.filter(
+			(item) =>
+				item.y + item.height >= viewportTop - OVERSCAN &&
+				item.y <= viewportBottom + OVERSCAN
+		);
+		setVisibleItems(filteredItems);
 
-  return (
-    <>
-      <div
-        ref={containerRef}
-        className={tw("relative w-full", className)}
-        style={{ height: containerHeight || "auto" }}
-      >
-        {visibleItems.map((item) => {
-          if (item.id)
-            return (
-              <FeedCardImage
-                id={item.id}
-                key={item.id}
-                src={item.src}
-                alt={item.alt}
-                width={item.width}
-                imageWidth={item.width}
-                imageHeight={item.height}
-                x={item.x}
-                y={item.y}
-                onClick={() => setFeedId(item.id ?? null)}
-                className="duration-300 ease-in-out absolute"
-              />
-            );
-        })}
-      </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <FeedModal
-          feedId={feedId?.toString() || ""}
-          onClose={() => setFeedId(null)}
-          isOpen={feedId !== null}
-        />
-      </Suspense>
+		// decode
+		const DECODE_OFFSET = 600;
+		const decodeItems = positionsItemsRef.current.filter(
+			(item) =>
+				item.y + item.height >= viewportTop - DECODE_OFFSET &&
+				item.y <= viewportBottom + DECODE_OFFSET
+		);
 
-      <div ref={bottomRef} className="h-20 bg-cyan-400" />
-      {isFetchingNextPage && <div>불러오는 중...</div>}
-      {!hasNextPage && (
-        <div className="text-gray-400">모든 데이터를 불러왔습니다</div>
-      )}
-    </>
-  );
+		decodeItems.forEach((i) => {
+			if (i.thumbnailUrl) {
+				preloadAndDecode(i.thumbnailUrl);
+			}
+		});
+	});
+
+	useEffect(() => {
+		positionsItemsRef.current = positionedItems;
+		onScrollRef.current();
+	}, [positionedItems, onScrollRef]);
+
+	useEffect(() => {
+		const scrollHandler = onScrollRef.current;
+		window.addEventListener("scroll", scrollHandler);
+		return () => window.removeEventListener("scroll", scrollHandler);
+	}, [onScrollRef]);
+
+	return (
+		<div className="flex flex-col w-full">
+			<div
+				ref={containerRef}
+				className={tw("relative w-full", className)}
+				style={{ height: containerHeight || "auto" }}
+			>
+				{visibleItems.map((item) => {
+					if (item.id)
+						return (
+							<FeedCardImage
+								id={item.id}
+								key={item.id}
+								thumbnailUrl={item.thumbnailUrl ?? "/defaultFeedImage.png"}
+								alt={item.thumbnailUrl ?? "따숲"}
+								width={item.width}
+								height={item.height}
+								thumbnailWidth={item.width}
+								thumbnailHeight={item.height}
+								x={item.x}
+								y={item.y}
+								content={item.content}
+								commentCount={item.commentCount}
+								bookmarkCount={item.bookmarkCount}
+								authorName={item.authorName}
+								authorProfileImage={item.authorProfileImage}
+								onClick={() => {
+									const params = new URLSearchParams(searchParams.toString());
+									params.set("feedId", (item.id ?? "").toString());
+									router.push(`${pathname}?${params.toString()}`, {
+										scroll: false,
+									});
+								}}
+								className="duration-300 ease-in-out absolute"
+							/>
+						);
+				})}
+			</div>
+			<Suspense fallback={<div>Loading...</div>}>
+				<FeedModal
+					feedId={currentFeedId || ""}
+					onClose={() => {
+						const params = new URLSearchParams(searchParams.toString());
+						params.delete("feedId");
+						router.push(`${pathname}?${params.toString()}`, { scroll: false });
+					}}
+					isOpen={!!currentFeedId}
+				/>
+			</Suspense>
+
+			<div
+				ref={triggerRef}
+				className="h-20 absolute"
+				style={{ marginTop: `${containerHeight - shortestColumnHeight}px` }}
+			/>
+			{isPending && (
+				<div className="h-28 flex-center">
+					<div className="loader"></div>
+				</div>
+			)}
+			{isFetchingNextPage && (
+				<div className="h-8 flex-center">
+					<div className="loader"></div>
+				</div>
+			)}
+			{!isPending && !hasNextPage && (
+				<div className="text-gray-400 flex-center">
+					모든 데이터를 불러왔습니다
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default FeedCardContainer;
