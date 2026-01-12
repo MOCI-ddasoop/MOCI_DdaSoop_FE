@@ -1,12 +1,14 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import Button from "@/shared/components/Button";
 import tw from "@/shared/utils/tw";
+import { useAuthStore } from "@/store/authStore";
 
 const USER_PROFILE = {
-  profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
-  nickname: "John Doe",
-  email: "john.doe@example.com",
+  // profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
+  // nickname: "John Doe",
+  // email: "john.doe@example.com",
   likedCount: 100,
   commentedCount: 130,
   feedCount: 100,
@@ -14,19 +16,36 @@ const USER_PROFILE = {
 };
 
 function UserInfo({ className }: { className?: string }) {
+  const me = useAuthStore((s) => s.me);
+  const logout = useAuthStore((s) => s.logout);
+
+  const handleLogout = () => {
+    const confirmed = window.confirm("정말 로그아웃 하시겠습니까?");
+    if(!confirmed) return;
+    logout();
+  }
+   // 로그인 안 된 상태(수정)
+  if (!me) {
+    return (
+      <div className={tw("w-full py-10 text-center text-gray-500", className)}>
+        로그인 정보가 없습니다.
+      </div>
+    );
+  }
+
   return (
     <div className={tw("w-full h-full flex gap-10 items-center justify-center", className)}>
       <div className="w-40 h-40 relative rounded-full bg-gray-100">
         <Image
-          src={USER_PROFILE.profileImage}
+          src={me.profileImageUrl}
           alt="profile image"
           fill
           className="w-full h-full object-cover rounded-full"
         />
       </div>
       <div className="w-full h-full flex flex-col flex-1 gap-2">
-        <p className="text-2xl font-bold">{USER_PROFILE.nickname}</p>
-        <p className="text-sm text-gray-500">{USER_PROFILE.email}</p>
+        <p className="text-2xl font-bold">{me.nickname}</p>
+        <p className="text-sm text-gray-500">{me.email}</p>
         <ul className="flex gap-2">
           <li className="pr-2 border-r border-gray-300">
             좋아요{" "}
@@ -48,7 +67,7 @@ function UserInfo({ className }: { className?: string }) {
           </li>
         </ul>
         <div className="flex justify-between items-center">
-          <Button color="skyblue" size="sm">로그아웃</Button>
+          <Button color="skyblue" size="sm" onClick={handleLogout}>로그아웃</Button>
           <div className="text-gray-500 hover:text-mainblue cursor-pointer underline">
             회원탈퇴
           </div>
