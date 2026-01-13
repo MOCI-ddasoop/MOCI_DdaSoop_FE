@@ -19,12 +19,14 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
-      <body>
-        <Header />
-        <ReportModal />
-        <ClarityInit />
-        <TanstackProvider>{children}</TanstackProvider>
-      </body>
+      <TanstackProvider>
+        <body>
+          <Header />
+          <ReportModal />
+          <ClarityInit />
+          {children}
+        </body>
+      </TanstackProvider>
     </html>
   );
 }
