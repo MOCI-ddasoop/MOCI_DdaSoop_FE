@@ -4,13 +4,22 @@ import Link from "next/link";
 import KakaoLogin from "@/assets/socialLogin/kakao_Login.svg";
 import NaverLogin from "@/assets/socialLogin/naver_Login.svg";
 import GoogleLogin from "@/assets/socialLogin/google_Login.svg";
+import { getLastLoginProvider } from "@/domain/login/api/getLastLogin";
 
 export const metadata: Metadata = {
   title: "로그인",
   description: "로그인 페이지",
 };
 
-function page() {
+async function page() {
+ const lastLoginProvider = await getLastLoginProvider();
+
+ const providerMap: Record<string, string> = {
+  KAKAO: "카카오",
+  NAVER: "네이버",
+  GOOGLE: "구글",
+ };
+
   return (
     <div className="w-[400px] h-[480px] rounded-xl shadow-lg bg-white flex flex-col px-10 py-10">
       <div className="mb-6">
@@ -21,7 +30,7 @@ function page() {
 
       <div className="flex flex-col gap-5">
         <Link
-          href='#'//TODO : 카카오로그인 링크 연결
+          href={'http://localhost:8080/oauth2/authorization/kakao'}
           className="w-full h-12 rounded-lg bg-[#FEE500] flex items-center justify-center gap-3 px-4 hover:bg-[#FEE500]/70"
           aria-label="카카오 소셜 로그인"
         >
@@ -29,15 +38,15 @@ function page() {
           <span className="font-medium">카카오로 로그인하기</span>
         </Link>
         <Link
-          href='#'//TODO : 네이버로그인 링크 연결
+          href={'http://localhost:8080/oauth2/authorization/naver'}
           className="w-full h-12 rounded-lg bg-[#03C75A] flex items-center justify-center gap-3 px-4 text-white hover:bg-[#03C75A]/80"
           aria-label="네이버 소셜 로그인"
         >
           <NaverLogin className="w-5 h-5"/>
           <span className="font-medium">네이버로 로그인하기</span>
         </Link>
-         <Link
-          href='#'//TODO : 구글로그인 링크 연결
+        <Link
+          href={'http://localhost:8080/oauth2/authorization/google'}
           className="w-full h-12 rounded-lg bg-white border border-[#DADCE0] flex items-center justify-center gap-3 px-4 hover:bg-[#F7F7F7]"
           aria-label="구글 소셜 로그인"
         >
@@ -50,12 +59,14 @@ function page() {
         </p>
 
       </div>
-      {/*TODO : 최근 로그인 방법 알려주기 */}
-      <div className="bg-pastelblue rounded-lg w-full mt-5 p-2 ">
+      
+      {lastLoginProvider && (
+        <div className="bg-pastelblue rounded-lg w-full mt-5 p-2 ">
         <span className="text-sm text-mainblue font-semibold">
-          최근 <strong>카카오 계정</strong>으로 로그인했습니다.
+          최근 <strong>{providerMap[lastLoginProvider] || lastLoginProvider}</strong> 계정으로 로그인하였습니다.
         </span>
       </div>
+      )}
     </div>
     
   );
