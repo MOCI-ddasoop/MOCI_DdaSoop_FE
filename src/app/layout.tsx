@@ -6,6 +6,7 @@ import ClarityInit from "@/shared/utils/clarityInit";
 import ReportModal from "@/domain/report/ReportModal";
 import AuthInit from "@/shared/providers/AuthInit";
 import FeedModalRoot from "@/domain/feed/components/ModalRoot";
+import { Suspense } from "react";
 
 const pretendard = localFont({
 	src: "../../public/fonts/PretendardVariable.woff2",
@@ -28,7 +29,9 @@ export default async function RootLayout({
 				<ClarityInit />
 				<TanstackProvider>
 					{children}
-					<FeedModalRoot />
+					<Suspense fallback={<div className="loader"></div>}>
+						<FeedModalRoot />
+					</Suspense>
 				</TanstackProvider>
 			</body>
 		</html>
