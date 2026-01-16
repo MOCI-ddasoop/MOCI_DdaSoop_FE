@@ -4,6 +4,7 @@ import Header from "@/shared/components/Header";
 import "@/shared/styles/globals.css";
 import ClarityInit from "@/shared/utils/clarityInit";
 import ReportModal from "@/domain/report/ReportModal";
+import AuthInit from "@/shared/providers/AuthInit";
 import FeedModalRoot from "@/domain/feed/components/ModalRoot";
 
 const pretendard = localFont({
@@ -21,6 +22,7 @@ export default async function RootLayout({
 	return (
 		<html lang="ko" className={pretendard.variable} suppressHydrationWarning>
 			<body>
+				<AuthInit />
 				<Header />
 				<ReportModal />
 				<ClarityInit />
