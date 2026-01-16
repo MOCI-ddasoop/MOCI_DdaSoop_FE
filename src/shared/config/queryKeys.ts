@@ -43,4 +43,8 @@ export const queryKeys = {
 		del: () => ["comments", "delete"],
 		upt: () => ["comments", "update"],
 	},
+	members:{
+		me: () => ["members", "me"],
+		counts: () => ["members", "counts"],
+	}
 };
