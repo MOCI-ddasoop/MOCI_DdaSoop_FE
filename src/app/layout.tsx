@@ -4,27 +4,31 @@ import Header from "@/shared/components/Header";
 import "@/shared/styles/globals.css";
 import ClarityInit from "@/shared/utils/clarityInit";
 import ReportModal from "@/domain/report/ReportModal";
+import FeedModalRoot from "@/domain/feed/components/ModalRoot";
 
 const pretendard = localFont({
-  src: "../../public/fonts/PretendardVariable.woff2",
-  display: "swap", // 폰트로드방식(시스템폰트로 표시 후 폰트 로드 시 교체)
-  weight: "45 920",
-  variable: "--font-pretendard",
+	src: "../../public/fonts/PretendardVariable.woff2",
+	display: "swap", // 폰트로드방식(시스템폰트로 표시 후 폰트 로드 시 교체)
+	weight: "45 920",
+	variable: "--font-pretendard",
 });
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
-      <body>
-        <Header />
-        <ReportModal />
-        <ClarityInit />
-        <TanstackProvider>{children}</TanstackProvider>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="ko" className={pretendard.variable} suppressHydrationWarning>
+			<body>
+				<Header />
+				<ReportModal />
+				<ClarityInit />
+				<TanstackProvider>
+					{children}
+					<FeedModalRoot />
+				</TanstackProvider>
+			</body>
+		</html>
+	);
 }
