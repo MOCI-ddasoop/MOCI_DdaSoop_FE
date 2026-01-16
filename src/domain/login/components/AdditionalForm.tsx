@@ -1,21 +1,69 @@
 "use client"
 import Button from "@/shared/components/Button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-//TODO : 첫 로그인 시에만 리다이렉트 하도록 설정
-function AdditionalForm() {
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { completeRegistration } from "../api/completeRegistration";
+import { checkNickname } from "../api/checkNickname";
+import { checkEmail } from "../api/checkEmail";
+
+export default function AdditionalForm() {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+  const searchParams = useSearchParams();
+  const temporaryToken = searchParams.get("token") || "";
 
-  const isFormFilled = nickname.trim() !== "" && email.trim() !== "";
+  useEffect(()=>{setIsNicknameChecked(false);},[nickname]);
+  useEffect(()=>{setIsEmailChecked(false);},[email]);
 
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const handleNicknameCheck = async () => {
+    if(!nickname.trim()) return alert("닉네임을 입력해주세요.");
+    try{
+      const isAvailable = await checkNickname(nickname);
+      if(isAvailable){
+        setIsNicknameChecked(true);
+        alert("사용 가능한 닉네임입니다.");
+      }
+      else{
+        alert("이미 사용 중인 닉네임입니다.");
+      }
+    }catch(error){
+      alert("닉네임 중복 체크 중 오류가 발생했습니다.");
+    }
+  }
+  const handleEmailCheck = async () => {
+    if(!email.trim()) return alert("이메일을 입력해주세요.");
+    try{
+      const isAvailable = await checkEmail(email);
+      if(isAvailable){
+        setIsEmailChecked(true);
+        alert("사용 가능한 이메일입니다.");
+      }
+      else{
+        alert("이미 사용 중인 이메일입니다.");
+      }
+    }catch(error){
+      alert("이메일 중복 체크 중 오류가 발생했습니다.");
+    } 
+  }
+  const isFormFilled = nickname.trim() !== "" && email.trim() !== "" && isNicknameChecked && isEmailChecked;
+
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //TODO: 추가 정보 제출 로직 
-    console.log("추가 정보 제출 완료", { nickname, email });
-    
-    router.push("/");
+    if (!isFormFilled || isLoading) return;
+
+    setIsLoading(true);
+    try{
+      await completeRegistration({temporaryToken, nickname, email});
+          router.replace("/");
+    } catch (error) {
+      console.error("추가 정보 제출 중 오류:", error);
+    } finally {
+      setIsLoading(false);
+    }    
   }
 
   return (
@@ -27,11 +75,22 @@ function AdditionalForm() {
         </div>
         <input
           type="text"
-          className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue"
+          className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue mr-4"
           placeholder="닉네임을 입력해주세요"
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
+        {!isNicknameChecked ? (
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleNicknameCheck}
+          >
+            중복 확인
+          </Button>
+        ) : (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        )}
       </div>
 
       <div className="mb-10">
@@ -41,11 +100,22 @@ function AdditionalForm() {
         </div>
         <input
           type="email"
-          className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue"
+          className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue mr-4"
           placeholder="이메일을 입력해주세요"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        {!isEmailChecked ? (
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleEmailCheck}
+          >
+            중복 확인
+          </Button>
+        ) : (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        )}
       </div>
 
       <div>
@@ -53,12 +123,12 @@ function AdditionalForm() {
           type="submit"
           fullWidth 
           className="font-medium"
-          disabled={!isFormFilled}  
+          disabled={!isFormFilled || isLoading}  
         >
           작성완료
         </Button>
       </div>
     </form>
   )
-}
-export default AdditionalForm
+
+  }
