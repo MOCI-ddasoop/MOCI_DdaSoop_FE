@@ -4,20 +4,22 @@ import Image from "next/image";
 import Button from "@/shared/components/Button";
 import tw from "@/shared/utils/tw";
 import { useAuthStore } from "@/store/authStore";
+import { useGetMyCounts } from "../api/useGetMyCounts";
 
-const USER_PROFILE = {
-  // profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
-  // nickname: "John Doe",
-  // email: "john.doe@example.com",
-  likedCount: 100,
-  commentedCount: 130,
-  feedCount: 100,
-  point: 742,
-};
+// const USER_PROFILE = {
+//   // profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
+//   // nickname: "John Doe",
+//   // email: "john.doe@example.com",
+//   likedCount: 100,
+//   commentedCount: 130,
+//   feedCount: 100,
+//   point: 742,
+// };
 
 function UserInfo({ className }: { className?: string }) {
   const me = useAuthStore((s) => s.me);
   const logout = useAuthStore((s) => s.logout);
+  const {data:counts} = useGetMyCounts();
 
   const handleLogout = () => {
     const confirmed = window.confirm("정말 로그아웃 하시겠습니까?");
@@ -50,19 +52,19 @@ function UserInfo({ className }: { className?: string }) {
           <li className="pr-2 border-r border-gray-300">
             좋아요{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.likedCount}
+              {counts?.likedCount}
             </span>
           </li>
           <li className="px-2 border-r border-gray-300">
             댓글{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.commentedCount}
+              {counts?.commentedCount}
             </span>
           </li>
           <li>
             피드{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.feedCount}
+              {counts?.feedCount}
             </span>
           </li>
         </ul>
