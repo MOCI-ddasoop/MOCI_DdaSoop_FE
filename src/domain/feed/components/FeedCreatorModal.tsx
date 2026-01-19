@@ -1,12 +1,15 @@
 "use client";
-import FeedImageInput, { FeedImage } from "./FeedImageInput";
-import { useEffect, useMemo, useState } from "react";
+import FeedImageInput from "./FeedImageInput";
+import { RefObject, useImperativeHandle, useMemo, useState } from "react";
 import TextBox from "../../../shared/components/TextBox";
 import Button from "../../../shared/components/Button";
 import TagInput from "../../../shared/components/TagInput";
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { FeedCreateRequest } from "../types";
+import { ImageUploadResponse } from "@/shared/types/types";
+import Swal, { SweetAlertResult } from "sweetalert2";
+import { usePostFeed } from "../api/usePostFeed";
 
-//---------------추후 삭제 필요--------------
 export interface FeedOptionData {
 	together: Together;
 	user: {
@@ -15,60 +18,82 @@ export interface FeedOptionData {
 	};
 }
 
-type FeedForm = Omit<
-	Feed,
-	"id" | "date" | "likeCount" | "commentCount" | "likedByMe"
->;
+export interface CreateFeedModalRef {
+	canClose: () => Promise<boolean | SweetAlertResult<boolean>>;
+}
 
 function FeedCreatorModal({
+	ref,
 	initialTogetherInfo,
 	onClose,
-	isOpen,
 	userTogetherList,
 }: {
+	ref: RefObject<CreateFeedModalRef | null>;
 	initialTogetherInfo?: FeedOptionData;
 	onClose: () => void;
-	isOpen: boolean;
 	userTogetherList?: FeedOptionData[];
 }) {
-	const [feedImageList, setFeedImageList] = useState<FeedImage[]>([]);
+	const [feedImages, setFeedImages] = useState<ImageUploadResponse[]>([]);
 	const [selectedTogether, setSelectedTogether] = useState<string>("main");
 	const [textBoxValue, setTextBoxValue] = useState<string>();
+	const [tagsValue, setTagsValue] = useState<string[]>();
 	const [togetherInfo, setTogetherInfo] = useState<FeedOptionData | undefined>(
 		initialTogetherInfo
 	);
 	const [selectedPostVisibility, setSelectedPostVisibility] = useState<
-		string | null
-	>("public");
+		FeedCreateRequest["visibility"] | null
+	>("PUBLIC");
 
-	useEffect(() => {
-		if (!isOpen) return;
+	const { mutate: postFeed } = usePostFeed();
 
-		// ESC 키로 닫기
-		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === "Escape") onClose();
+	useImperativeHandle(ref, () => {
+		return {
+			canClose: async () => {
+				if (
+					feedImages.length === 0 &&
+					(!textBoxValue || textBoxValue.trim() === "")
+				) {
+					return true;
+				} else {
+					const result = await Swal.fire({
+						icon: "error",
+						titleText: "게시물을 삭제하시겠습니까?",
+						text: "지금 나가면 수정 내용이 저장되지 않습니다.",
+						showCancelButton: true,
+						showConfirmButton: true,
+						confirmButtonText: "삭제",
+						cancelButtonText: "취소",
+					});
+					return result.isConfirmed;
+				}
+			},
 		};
-		document.addEventListener("keydown", handleEscape);
-		document.body.style.overflow = "hidden";
-
-		return () => {
-			document.removeEventListener("keydown", handleEscape);
-			document.body.style.overflow = "unset";
-		};
-	}, [isOpen]);
+	});
 
 	const handleFeedFormSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!selectedPostVisibility) return;
-		const feedFormData: FeedForm = {
-			author: "애착침대",
-			content: textBoxValue ?? "",
-			tags: [],
-			image: feedImageList,
-			togetherId: togetherInfo?.together.id,
-			postVisibility: selectedPostVisibility,
+		const feedFormData: FeedCreateRequest = {
+			feedType: "GENERAL",
+			content: textBoxValue || "",
+			images: feedImages.map((img, index) => {
+				if (!img.imageUrl || img.width == undefined || img.height == undefined)
+					throw new Error("이미지 메타데이터가 완성되지 않았습니다.");
+				return {
+					imageUrl: img.imageUrl,
+					width: img.width,
+					height: img.height,
+					displayOrder: index,
+					fileSize: img.fileSize,
+					originalFileName: img.originalFileName,
+				};
+			}),
+			visibility: selectedPostVisibility,
+			tags: tagsValue || [],
+			togetherId:
+				selectedTogether === "main" ? undefined : parseInt(selectedTogether),
 		};
-		console.log(feedFormData);
+		postFeed(feedFormData);
 		onClose();
 	};
 
@@ -117,7 +142,7 @@ function FeedCreatorModal({
 
 	// TextBox 입력 가능 여부
 	const isTextBoxEditable = useMemo(() => {
-		if (togetherInfo?.user.IsCheckedIn && selectedPostVisibility !== "notice") {
+		if (togetherInfo?.user.IsCheckedIn && selectedPostVisibility !== "NOTICE") {
 			return false;
 		}
 		return true;
@@ -145,23 +170,23 @@ function FeedCreatorModal({
 	// 공개여부
 	const postVisibilityOptions = useMemo(() => {
 		const options = [
-			{ value: "public", label: "공개" },
-			{ value: "private", label: "비공개" },
-			{ value: "memberOnly", label: "멤버에게만 공개" },
-			{ value: "notice", label: "공지" },
+			{ value: "PUBLIC", label: "공개" },
+			{ value: "PRIVATE", label: "비공개" },
+			{ value: "MEMBERS", label: "멤버에게만 공개" },
+			{ value: "NOTICE", label: "공지" },
 		];
 		if (!togetherInfo) {
 			return options.filter(
-				({ value }) => value === "public" || value === "private"
+				({ value }) => value === "PUBLIC" || value === "PRIVATE"
 			);
 		} else if (togetherInfo && togetherInfo.user.role === "member") {
 			return options.filter(
-				({ value }) => value === "public" || value === "memberOnly"
+				({ value }) => value === "PUBLIC" || value === "MEMBERS"
 			);
 		} else {
 			return options.filter(
 				({ value }) =>
-					value === "public" || value === "memberOnly" || value === "notice"
+					value === "PUBLIC" || value === "MEMBERS" || value === "NOTICE"
 			);
 		}
 	}, [togetherInfo]);
@@ -171,7 +196,7 @@ function FeedCreatorModal({
 		// 1) 이미 인증한 함께하기일 경우
 		if (togetherInfo?.user.IsCheckedIn) {
 			const isLeader = togetherInfo.user.role === "leader";
-			const isNotice = selectedPostVisibility === "notice";
+			const isNotice = selectedPostVisibility === "NOTICE";
 			// 리더이면서 notice만 가능
 			if (isLeader && isNotice) return false;
 
@@ -182,121 +207,106 @@ function FeedCreatorModal({
 		if (!selectedPostVisibility) return true;
 
 		// 3) 이미지 또는 텍스트 중 하나라도 있으면 가능
-		const hasContent = feedImageList.length > 0 || !!textBoxValue;
+		const hasContent = feedImages.length > 0 || !!textBoxValue;
 		if (!hasContent) return true;
 
 		// 4) 그 외는 가능
 		return false;
-	}, [selectedPostVisibility, togetherInfo, feedImageList, textBoxValue]);
+	}, [selectedPostVisibility, togetherInfo, feedImages, textBoxValue]);
 
-	if (typeof window === "undefined") return null;
 	return (
-		isOpen && (
-			<div
-				className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
-				onClick={onClose}
-			>
-				<div
-					className="flex w-full h-[90vh] max-w-4xl max-h-4xl bg-white rounded-md box-border"
-					onClick={(e) => e.stopPropagation()}
-				>
-					{/* ---------이미지영역 */}
-					<div className="w-3/5 h-full flex flex-col bg-black/30">
-						<FeedImageInput
-							slideList={feedImageList}
-							setSlideList={setFeedImageList}
-						/>
-					</div>
-					{/* --------콘텐츠영역 */}
-					<div className="flex flex-col w-2/5 h-full px-3">
-						{/* 함께하기 선택 */}
-						<div className="py-4 flex justify-start items-end  border-b border-b-pastelblue gap-2">
-							<select
-								name="together"
-								id="together"
-								value={selectedTogether}
-								onChange={handleTogetherSelectionChange}
-								className="outline-none"
-							>
-								{selectTogetherOption}
-							</select>
-							{initialTogetherInfo ? (
-								""
-							) : (
-								<label htmlFor="together" className={`text-sm	text-gray-400`}>
-									*인증 할 함께하기를 선택해주세요.
-								</label>
-							)}
-						</div>
-						{/* 스크롤zone */}
-						<div className="flex flex-col flex-1 overflow-y-auto">
-							{/* 텍스트박스 */}
-
-							<TextBox
-								isAble={isTextBoxEditable}
-								hidden={!isTextBoxEditable}
-								className={`flex-1 min-h-fit px-2 mt-3 overflow-visible`}
-								placeholder={
-									selectedPostVisibility === "notice"
-										? "공지글을 입력해주세요."
-										: "글을 입력해주세요."
-								}
-								setValue={setTextBoxValue}
-							/>
-							{!isTextBoxEditable && (
-								<div className="flex-1 px-2 mt-3 text-mainred">
-									이미 인증을 완료한 함께하기 입니다.
-								</div>
-							)}
-							{/* 함께하기 바로가기 */}
-							{togetherInfo ? (
-								<div className="p-2" onClick={handleTogetherItemClick}>
-									{togetherItem}
-								</div>
-							) : (
-								""
-							)}
-							{/* 태그 입력 */}
-							<div className="mt-3">
-								{["#태그", "#태그입력", "#수진님이 해주신데요"].map(
-									(i, index) => (
-										<span key={index} className="text-mainblue">
-											{i}
-										</span>
-									)
-								)}
-							</div>
-						</div>
-						{/* 공개/비공개 선택 */}
-						<fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2 mt-3">
-							{postVisibilityOptions.map(({ value, label }, index) => (
-								<div key={index}>
-									<input
-										type="radio"
-										id={value}
-										name="postVisibility"
-										value={value}
-										onChange={(e) => setSelectedPostVisibility(e.target.value)}
-										checked={selectedPostVisibility === value}
-									/>
-									<label htmlFor={value} className="p-1">
-										{label}
-									</label>
-								</div>
-							))}
-						</fieldset>
-
-						<Button
-							className="w-full my-3"
-							disabled={disableSubmitButton}
-							onClick={handleFeedFormSubmit}
-						>
-							게시하기
-						</Button>
-					</div>
-				</div>
+		<div
+			className="flex w-full h-[90vh] max-w-4xl max-h-4xl bg-white box-border"
+			onClick={(e) => e.stopPropagation()}
+		>
+			{/* ---------이미지영역 */}
+			<div className="w-3/5 h-full flex flex-col bg-black/30">
+				<FeedImageInput value={feedImages} setValue={setFeedImages} />
 			</div>
-		)
+			{/* --------콘텐츠영역 */}
+			<div className="flex flex-col w-2/5 h-full px-3">
+				{/* 함께하기 선택 */}
+				<div className="py-4 flex justify-start items-end  border-b border-b-pastelblue gap-2">
+					<select
+						name="together"
+						id="together"
+						value={selectedTogether}
+						onChange={handleTogetherSelectionChange}
+						className="outline-none"
+					>
+						{selectTogetherOption}
+					</select>
+					{initialTogetherInfo ? (
+						""
+					) : (
+						<label htmlFor="together" className={`text-sm	text-gray-400`}>
+							*인증 할 함께하기를 선택해주세요.
+						</label>
+					)}
+				</div>
+				{/* 스크롤zone */}
+				<div className="flex flex-col flex-1 overflow-y-auto">
+					{/* 텍스트박스 */}
+
+					<TextBox
+						isAble={isTextBoxEditable}
+						hidden={!isTextBoxEditable}
+						className={`flex-1 min-h-fit px-2 mt-3 overflow-visible`}
+						placeholder={
+							selectedPostVisibility === "NOTICE"
+								? "공지글을 입력해주세요."
+								: "글을 입력해주세요."
+						}
+						setValue={setTextBoxValue}
+					/>
+					{!isTextBoxEditable && (
+						<div className="flex-1 px-2 mt-3 text-mainred">
+							이미 인증을 완료한 함께하기 입니다.
+						</div>
+					)}
+					{/* 함께하기 바로가기 */}
+					{togetherInfo ? (
+						<div className="p-2" onClick={handleTogetherItemClick}>
+							{togetherItem}
+						</div>
+					) : (
+						""
+					)}
+					{/* 태그 입력 */}
+					<TagInput onTagChanged={setTagsValue} />
+				</div>
+				{/* 공개/비공개 선택 */}
+				<fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2">
+					{postVisibilityOptions.map(({ value, label }, index) => (
+						<div key={index}>
+							<input
+								type="radio"
+								id={value}
+								name="postVisibility"
+								value={value}
+								onChange={(e) =>
+									setSelectedPostVisibility(
+										e.target.value as FeedCreateRequest["visibility"]
+									)
+								}
+								checked={selectedPostVisibility === value}
+							/>
+							<label htmlFor={value} className="p-1">
+								{label}
+							</label>
+						</div>
+					))}
+				</fieldset>
+
+				<Button
+					className="w-full my-3"
+					disabled={disableSubmitButton}
+					onClick={handleFeedFormSubmit}
+				>
+					게시하기
+				</Button>
+			</div>
+		</div>
 	);
 }
 export default FeedCreatorModal;

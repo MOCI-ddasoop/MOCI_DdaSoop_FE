@@ -262,6 +262,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/images/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 이미지 업로드
+         * @description 이미지를 업로드하고 URL을 반환합니다. 프론트엔드에서 미리보기 및 피드 생성에 사용할 수 있습니다.
+         */
+        post: operations["uploadImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/images/upload-multiple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 다중 이미지 업로드
+         * @description 여러 이미지를 한번에 업로드하고 URL 목록을 반환합니다. 최대 10개까지 가능합니다.
+         */
+        post: operations["uploadMultipleImages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/feeds": {
         parameters: {
             query?: never;
@@ -478,6 +518,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ID별 함께하기 조회 */
+        get: operations["getTogetherByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/list": {
         parameters: {
             query?: never;
@@ -504,6 +561,23 @@ export interface paths {
         };
         /** 함께하기 상세 조회 */
         get: operations["getTogether"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/together/list/{id}/description": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 리스트 설명 조회 */
+        get: operations["getTogetherDescription"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1355,59 +1429,23 @@ export interface components {
             status: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
             adminComment: string;
         };
-        Member: {
-            /** Format: int64 */
-            id?: number;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            name?: string;
-            nickname?: string;
-            /** Format: email */
-            email?: string;
-            memberCode: string;
-            profileImageUrl?: string;
-            /** @enum {string} */
-            role?: "USER" | "ADMIN";
-            socialAccounts?: components["schemas"]["MemberSocialAccount"][];
-            /** @enum {string} */
-            lastLoginProvider?: "GOOGLE" | "KAKAO" | "NAVER";
-            /** Format: date-time */
-            deletedAt?: string;
-            additionalInfoRequired?: boolean;
-            admin?: boolean;
-            deleted?: boolean;
-        };
-        MemberSocialAccount: {
-            /** Format: int64 */
-            id?: number;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            member?: components["schemas"]["Member"];
-            /** @enum {string} */
-            provider?: "GOOGLE" | "KAKAO" | "NAVER";
-            providerId?: string;
-            /** Format: date-time */
-            lastLoginAt?: string;
-        };
-        TogetherRequest: {
+        CreateRequest: {
             title: string;
             description: string;
             /** @enum {string} */
             category: "PLOGGING" | "CLEANUP" | "RECYCLING";
             /** @enum {string} */
             mode: "ONLINE" | "OFFLINE";
-            /** Format: int32 */
+            /** Format: int64 */
             capacity: number;
             /** Format: date */
             startDate: string;
             /** Format: date */
             endDate: string;
-            member?: components["schemas"]["Member"];
+            /** Format: int64 */
+            memberId?: number;
         };
+        TogetherDto: unknown;
         DonationTossRequest: {
             paymentKey: string;
             orderId: string;
@@ -1450,6 +1488,17 @@ export interface components {
             available?: boolean;
             message?: string;
         };
+        ImageUploadResponse: {
+            imageUrl?: string;
+            /** Format: int32 */
+            width?: number;
+            /** Format: int32 */
+            height?: number;
+            /** Format: int64 */
+            fileSize?: number;
+            originalFileName?: string;
+            savedFileName?: string;
+        };
         FeedCreateRequest: {
             /** @enum {string} */
             feedType: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
@@ -1480,30 +1529,13 @@ export interface components {
             lastLoginProvider?: string;
         };
         AdditionalInfoRequest: {
-            /** Format: int64 */
-            memberId: number;
+            temporaryToken: string;
             nickname: string;
             /** Format: email */
             email: string;
         };
         SystemNotificationCreateRequest: {
             message: string;
-        };
-        TogetherResponse: {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            description?: string;
-            /** @enum {string} */
-            category?: "PLOGGING" | "CLEANUP" | "RECYCLING";
-            /** @enum {string} */
-            mode?: "ONLINE" | "OFFLINE";
-            /** Format: int32 */
-            capacity?: number;
-            /** @enum {string} */
-            status?: "RECRUITING" | "CLOSED";
-            /** Format: int64 */
-            organizerId?: number;
         };
         DonationResponse: {
             title?: string;
@@ -1517,10 +1549,10 @@ export interface components {
             status?: string;
         };
         PageReportSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1529,21 +1561,21 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            unpaged?: boolean;
             paged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            unpaged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1585,10 +1617,10 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1597,9 +1629,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
@@ -1659,10 +1691,10 @@ export interface components {
             sizeOrDefault?: number;
         };
         Page: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1671,9 +1703,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         FeedImageResponse: {
@@ -2273,7 +2305,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["TogetherRequest"];
+                "application/json": components["schemas"]["CreateRequest"];
             };
         };
         responses: {
@@ -2283,7 +2315,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherRequest"];
+                    "*/*": components["schemas"]["TogetherDto"];
                 };
             };
         };
@@ -2382,6 +2414,95 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["EmailCheckResponse"];
+                };
+            };
+        };
+    };
+    uploadImage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": {
+                    /**
+                     * Format: binary
+                     * @description 업로드할 이미지 파일
+                     */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 업로드 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ImageUploadResponse"];
+                };
+            };
+            /** @description 잘못된 요청 (파일이 없거나 이미지가 아님) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ImageUploadResponse"];
+                };
+            };
+            /** @description 업로드 실패 */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ImageUploadResponse"];
+                };
+            };
+        };
+    };
+    uploadMultipleImages: {
+        parameters: {
+            query: {
+                /** @description 업로드할 이미지 파일들 (최대 10개) */
+                files: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 업로드 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+            /** @description 잘못된 요청 (파일 개수 초과 등) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ImageUploadResponse"][];
+                };
+            };
+            /** @description 업로드 실패 */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ImageUploadResponse"][];
                 };
             };
         };
@@ -2746,9 +2867,38 @@ export interface operations {
             };
         };
     };
-    getAllTogether: {
+    getTogetherByMemberId: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description ID별 함께하기 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
+                };
+            };
+        };
+    };
+    getAllTogether: {
+        parameters: {
+            query?: {
+                category?: "PLOGGING" | "CLEANUP" | "RECYCLING";
+                mode?: "ONLINE" | "OFFLINE";
+                status?: "RECRUITING" | "CLOSED";
+                sortType?: "LATEST" | "CATEGORY" | "MODE" | "STATUS";
+                page?: number;
+                size?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2761,7 +2911,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherResponse"];
+                    "*/*": components["schemas"]["TogetherDto"];
                 };
             };
         };
@@ -2783,7 +2933,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherResponse"];
+                    "*/*": components["schemas"]["TogetherDto"];
+                };
+            };
+        };
+    };
+    getTogetherDescription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 리스트 별 설명 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
                 };
             };
         };
