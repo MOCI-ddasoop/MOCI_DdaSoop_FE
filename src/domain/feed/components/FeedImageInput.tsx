@@ -10,43 +10,62 @@ import { FaPlus } from "react-icons/fa";
 import { FaRegImages } from "react-icons/fa6";
 import tw from "../../../shared/utils/tw";
 import ImageSwiper from "../../../shared/components/ImageSwiper";
-
-export type FeedImage = Partial<File> & {
-	url?: string;
-	name: string;
-	width?: string;
-	height?: string;
-};
+import { ImageUploadResponse } from "@/shared/types/types";
+import { usePostImage } from "@/shared/api/usePostImage";
+import Swal from "sweetalert2";
 
 function FeedImageInput({
-	slideList,
-	setSlideList,
+	value,
+	setValue,
 }: {
-	slideList: FeedImage[];
-	setSlideList: Dispatch<SetStateAction<FeedImage[]>>;
+	value: ImageUploadResponse[];
+	setValue: Dispatch<SetStateAction<ImageUploadResponse[]>>;
 }) {
 	const [isDragging, setIsDragging] = useState(false);
+	const { mutate: uploadImageFn } = usePostImage();
 
-	const MAX_TOTAL = 5;
+	const MAX_TOTAL = 10;
 
+	// TODO: image upload api 호출중에 loader 표시
+	const addSlide = (files: File[]) => {
+		uploadImageFn(files, {
+			onSuccess: (data) => {
+				setValue((prev) => [...prev, ...data]);
+			},
+			onError: (error) => {
+				const message = error.response?.data.message;
+				Swal.fire({
+					icon: "error",
+					title: "이미지 업로드 실패",
+					text: `${message}`,
+					showConfirmButton: false,
+					timer: 1500,
+				});
+			},
+		});
+	};
 	const handleAddSlide = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const selected = e.target.files;
 		if (!selected) return;
 
 		const newFiles = Array.from(selected);
 
-		if (slideList.length + newFiles.length > MAX_TOTAL) {
-			alert(`총 ${MAX_TOTAL}개까지만 업로드할 수 있어요.`);
-			const slicedFiles = newFiles.slice(0, MAX_TOTAL - slideList.length);
-			setSlideList((prev) => [...prev, ...slicedFiles]);
+		if (value.length + newFiles.length > MAX_TOTAL) {
+			Swal.fire({
+				icon: "warning",
+				title: "이미지 업로드 실패",
+				text: `총 ${MAX_TOTAL}개까지만 업로드할 수 있어요.`,
+				showConfirmButton: false,
+				timer: 1500,
+			});
 			return;
 		}
-		setSlideList((prev) => [...prev, ...newFiles]);
+		addSlide(newFiles);
 		e.target.value = "";
 	};
 
 	const handleDeleteSlide = (index: number) => {
-		setSlideList((prev) => prev.filter((_, i) => i !== index));
+		setValue((prev) => prev.filter((_, i) => i !== index));
 	};
 
 	const handleDragOver = (e: React.DragEvent) => {
@@ -69,14 +88,26 @@ function FeedImageInput({
 		);
 
 		if (imageFiles.length !== newFiles.length) {
-			alert("이미지 파일만 업로드할 수 있어요.");
+			Swal.fire({
+				icon: "warning",
+				title: "이미지 업로드 실패",
+				text: "이미지 파일만 업로드할 수 있어요.",
+				showConfirmButton: false,
+				timer: 1500,
+			});
 		}
 
-		if (slideList.length + imageFiles.length > MAX_TOTAL) {
-			alert(`총 ${MAX_TOTAL}개까지만 업로드할 수 있어요.`);
+		if (value.length + imageFiles.length > MAX_TOTAL) {
+			Swal.fire({
+				icon: "warning",
+				title: "이미지 업로드 실패",
+				text: `총 ${MAX_TOTAL}개까지만 업로드할 수 있어요.`,
+				showConfirmButton: false,
+				timer: 1500,
+			});
 			return;
 		}
-		setSlideList((prev) => [...prev, ...imageFiles]);
+		addSlide(imageFiles);
 	};
 
 	const dragAndDropZone = (
@@ -105,17 +136,17 @@ function FeedImageInput({
 			htmlFor="file"
 			className={tw(
 				"flex-center flex-col w-12 h-full",
-				slideList.length >= 5 ? "cursor-no-drop" : ""
+				value.length >= MAX_TOTAL ? "cursor-no-drop" : ""
 			)}
 		>
 			<FaPlus size={"1rem"} />
 			<span
 				className={tw(
 					"text-sm",
-					slideList.length === 5 ? "text-mainblue" : "text-black"
+					value.length === MAX_TOTAL ? "text-mainblue" : "text-black"
 				)}
 			>
-				{slideList.length}/5
+				{value.length}/{MAX_TOTAL}
 			</span>
 		</label>
 	);
@@ -123,7 +154,10 @@ function FeedImageInput({
 	return (
 		<>
 			<ImageSwiper
-				slideList={slideList}
+				slideList={value.map((slide) => ({
+					imageUrl: slide.imageUrl,
+					imageFileName: slide.originalFileName,
+				}))}
 				mode={"input"}
 				mainSlideInput={dragAndDropZone}
 				thumbsSlideInput={thumbsInput}
