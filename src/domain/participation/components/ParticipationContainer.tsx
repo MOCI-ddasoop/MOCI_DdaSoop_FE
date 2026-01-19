@@ -1,18 +1,21 @@
-import { DonateCardProps, TogetherCardProps } from "../types";
+import { TogetherInfo, TogetherResponseData } from "@/domain/together/types";
 import AddParticipationCard from "./AddParticipationCard";
 import ParticipationCard from "./ParticipationCard";
+import tw from "@/shared/utils/tw";
 
 interface TogetherContainerProps {
   type: "together";
   currentPage?: number;
-  items: Omit<TogetherCardProps, "type">[];
+  items: TogetherInfo[];
   mypage?: boolean;
+  className?: string;
 }
 interface DonateContainerProps {
   type: "donate";
   currentPage?: number;
-  items: Omit<DonateCardProps, "type">[];
+  items: TogetherInfo[];
   mypage?: boolean;
+  className?: string;
 }
 
 function ParticipationContainer({
@@ -20,6 +23,7 @@ function ParticipationContainer({
   currentPage,
   items,
   mypage,
+  className,
 }: TogetherContainerProps | DonateContainerProps) {
   return items.length === 0 ? (
     !mypage ? (
@@ -28,7 +32,12 @@ function ParticipationContainer({
       <p className="text-gray-500">내역이 존재하지 않습니다</p>
     )
   ) : (
-    <div className="w-full grid xl:grid-cols-4 gap-6 lg:grid-cols-3 sm:grid-cols-2">
+    <div
+      className={tw(
+        `w-full grid xl:grid-cols-4 gap-6 lg:grid-cols-3 sm:grid-cols-2 `,
+        className
+      )}
+    >
       {currentPage === 1 && !mypage && <AddParticipationCard type={type} />}
       {type === "together"
         ? items.map((item) => (

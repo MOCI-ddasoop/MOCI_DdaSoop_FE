@@ -1,15 +1,15 @@
 "use client";
 
-import { DetailInfoProps } from "@/domain/participation/types";
 import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery } from "@tanstack/react-query";
+import { TogetherDetailInfo } from "../types";
 
 function DetailInfoHydrator({
   initialData,
   children,
 }: {
-  initialData: DetailInfoProps;
+  initialData: TogetherDetailInfo;
   children: React.ReactNode;
 }) {
   useQuery({

@@ -18,6 +18,7 @@ import {
 import { useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useAuthStore } from "@/store/authStore";
 
 export interface NotificationProps {
   read: boolean;
@@ -27,7 +28,7 @@ export interface NotificationProps {
 }
 
 function UserMenu() {
-  const isLogin = true;
+  const isLogin = useAuthStore((state) => state.me);
   const [isOpen, setIsOpen] = useState(false);
   // 로그인되었는지 여부 가져오는거 추가하기
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);

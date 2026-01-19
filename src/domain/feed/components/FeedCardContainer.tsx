@@ -1,9 +1,8 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import FeedCardImage from "./FeedCardImage";
-import FeedModal from "./FeedModal";
 import tw from "@/shared/utils/tw";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
@@ -30,21 +29,18 @@ function FeedCardContainer({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentFeedId = searchParams.get("feedId");
 
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
-    useGetInfiniteFeedList({
-      page: pageName,
-      memberId: pageName === "member" ? Number(queryParams) : undefined,
-      togetherId: pageName === "together" ? Number(queryParams) : undefined,
-    });
+    useGetInfiniteFeedList();
   //무한스크롤 target ref
   const triggerRef = useIntersection(() => {
     fetchNextPage();
   }, hasNextPage);
+
+  const MIN_ITEM_HEIGHT = 150;
 
   const throttledSetWidth = useMemo(
     () =>
@@ -102,11 +98,11 @@ function FeedCardContainer({
     return items.map((item) => {
       if (!item.thumbnailUrl || !item.thumbnailWidth || !item.thumbnailHeight) {
         item.thumbnailUrl = "/defaultFeedImage.png";
-        item.thumbnailHeight = 500;
-        item.thumbnailWidth = 500;
+        item.thumbnailHeight = MIN_ITEM_HEIGHT;
+        item.thumbnailWidth = MIN_ITEM_HEIGHT;
       }
       const aspectRatio = item.thumbnailWidth / item.thumbnailHeight;
-      const itemHeight = Math.min(itemWidth / aspectRatio, 500);
+      const itemHeight = Math.max(itemWidth / aspectRatio, MIN_ITEM_HEIGHT);
 
       // 가장 짧은 컬럼 찾기
       const shortestColumnIndex = currentColumnHeights.indexOf(
@@ -221,17 +217,6 @@ function FeedCardContainer({
             );
         })}
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <FeedModal
-          feedId={currentFeedId || ""}
-          onClose={() => {
-            const params = new URLSearchParams(searchParams.toString());
-            params.delete("feedId");
-            router.push(`${pathname}?${params.toString()}`, { scroll: false });
-          }}
-          isOpen={!!currentFeedId}
-        />
-      </Suspense>
 
       <div
         ref={triggerRef}

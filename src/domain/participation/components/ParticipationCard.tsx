@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import ProgressBar from "./ProgressBar";
 import Capsule from "@/shared/components/Capsule";
-import { DonateCardProps, TogetherCardProps } from "../types";
+import { DonateCardProps } from "../types";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
+import { TogetherInfo } from "@/domain/together/types";
 
 /**
  *
@@ -26,7 +27,9 @@ import { categoryType, isOnlineType } from "@/shared/constants/filter";
  * @param progress : number
  * @returns
  */
-function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
+function ParticipationCard(
+  props: (TogetherInfo & { type: "donate" | "together" }) | DonateCardProps
+) {
   const { type, id, thumbnailImage, title, category, dDay } = props;
 
   return (
@@ -53,7 +56,7 @@ function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
               {props.startDate} - {props.endDate}
             </p>
           ) : (
-            <ProgressBar type={type} cardUI progress={props.progress} />
+            <ProgressBar type={type} cardUI progress={props.progress ?? 0} />
           )}
         </div>
         <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>
@@ -65,7 +68,7 @@ function ParticipationCard(props: TogetherCardProps | DonateCardProps) {
             {type === "together" && (
               <Capsule
                 type="isOnline"
-                text={isOnlineType[props.mode]}
+                text={`${isOnlineType[props.mode]}`}
                 readOnly
               />
             )}

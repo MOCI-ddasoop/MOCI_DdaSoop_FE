@@ -1,4 +1,8 @@
-export const getInitTogetherDetail = async (id: string) => {
+import { TogetherDetailResponse } from "../types";
+
+export const getInitTogetherDetail = async (
+  id: string
+): Promise<TogetherDetailResponse> => {
   const res = await fetch(`http://localhost:8080/api/v1/together/list/${id}`, {
     cache: "no-store",
   });

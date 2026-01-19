@@ -54,9 +54,32 @@ export const queryKeys = {
   together: {
     all: () => ["together"],
     id: (id: string) => ["together", id],
-    list: (memeberId?: number) => {
-      if (memeberId) return ["together", "list", memeberId];
-      else return ["together", "list"];
-    },
+    list: ({
+      category,
+      mode,
+      status,
+      sortType,
+      page,
+      size,
+      userId,
+    }: {
+      category?: string;
+      mode?: string;
+      status?: string;
+      sortType?: string;
+      page?: number;
+      size?: number;
+      userId?: number;
+    }) => [
+      "together",
+      "list",
+      category,
+      mode,
+      status,
+      sortType,
+      page,
+      size,
+      userId,
+    ],
   },
 };

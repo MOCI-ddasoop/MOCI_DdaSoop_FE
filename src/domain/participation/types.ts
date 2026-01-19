@@ -3,7 +3,7 @@ export type DetailInfoProps = {
   type: "together" | "donate";
   title: string;
   thumbnailImage: string;
-  category: "PLOGGING" | "CLEANUP" | "RECYCLING" | "";
+  category: "PLOGGING" | "CLEANUP" | "RECYCLING";
   dDay?: number; // 후원만
   participant?: number; // 참여자수(제한인원 있는 경우만 표시)
   capacity?: number; // 제한인원

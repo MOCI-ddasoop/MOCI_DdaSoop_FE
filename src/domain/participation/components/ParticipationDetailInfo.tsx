@@ -4,17 +4,15 @@ import Capsule from "@/shared/components/Capsule";
 import DonateButton from "@/domain/donate/components/DonateButton";
 import TreeProgress from "./TreeProgress";
 import ProgressBar from "./ProgressBar";
-import { DetailInfoProps } from "../types";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
+import { TogetherDetailInfo } from "@/domain/together/types";
 
 function ParticipationDetailInfo({
   type,
   props: {
-    // id, memberId
     title,
     category,
-    dDay,
-    participant,
+    participants,
     capacity,
     startDate,
     endDate,
@@ -24,7 +22,7 @@ function ParticipationDetailInfo({
   },
 }: {
   type: "together" | "donate";
-  props: DetailInfoProps;
+  props: TogetherDetailInfo;
 }) {
   return (
     <div className="sticky top-20 w-62 h-fit flex flex-col gap-1.5">
@@ -36,7 +34,7 @@ function ParticipationDetailInfo({
         )}
         {type === "together" && capacity && (
           <Capsule
-            text={(participant ?? 0) < capacity ? "모집중" : "모집완료"}
+            text={(participants ?? 0) < capacity ? "모집중" : "모집완료"}
             type="status"
             readOnly
           />
@@ -47,10 +45,10 @@ function ParticipationDetailInfo({
       </p>
       {type === "together" ? (
         <p className="font-semibold whitespace-pre">
-          {participant ?? 0}명이 함께하고 있어요 !
+          {participants ?? 0}명이 함께하고 있어요 !
         </p>
       ) : (
-        <p className="text-lg">D-{dDay}</p>
+        <p className="text-lg">D-{0}</p> //후원하기 타입 가져와서 바꾸기
       )}
       <TreeProgress progress={progress ?? 0} />
       <ProgressBar
