@@ -87,7 +87,7 @@ function FeedCardImage({
 				src={src}
 				alt={alt}
 				fill
-				className="object-cover z-0"
+				className="object-contain z-0"
 				placeholder="empty"
 			/>
 		</div>

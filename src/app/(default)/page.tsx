@@ -5,6 +5,7 @@ import SearchInput from "@/shared/components/SearchInput";
 import SearchQueryNotation from "@/domain/search/SearchQueryNotation";
 import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
 import { Suspense } from "react";
+import FeedCreateButton from "@/domain/feed/components/FeedCreateButton";
 
 export default async function Home({
 	searchParams,
@@ -19,10 +20,13 @@ export default async function Home({
 			<Suspense fallback={<div>Loading...</div>}>
 				<FeedCardContainer queryParams={query} />
 			</Suspense>
-			<div className="sticky top-20 h-fit flex flex-col gap-2 items-center">
-				<SearchInput />
-				<TogetherList items={TOGETHER_LIST} />
-				<DonationList items={DONATION_LIST} />
+			<div className="sticky top-20 h-[calc(100vh-6rem)] flex flex-col justify-between">
+				<div className="h-fit flex flex-col gap-2 items-center">
+					<SearchInput />
+					<TogetherList items={TOGETHER_LIST} />
+					<DonationList items={DONATION_LIST} />
+				</div>
+				<FeedCreateButton className="w-full" />
 			</div>
 			<SearchQueryNotation searchParams={searchParams} />
 		</div>

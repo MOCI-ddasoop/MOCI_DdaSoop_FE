@@ -99,7 +99,11 @@ function FeedDetailCard({
 			<div className="border-b border-gray-200 p-2">
 				{/* 내용 영역 */}
 				<div className="p-2 min-h-[100px]">
-					<p className="text-sm text-gray-500">{content}</p>
+					{/* todo: InnerHtml넣기전에 안전한 html인지 검사하기 */}
+					<p
+						className="text-sm text-gray-500"
+						dangerouslySetInnerHTML={{ __html: content ?? "" }}
+					></p>
 				</div>
 
 				{/* 모임 정보 영역 */}
