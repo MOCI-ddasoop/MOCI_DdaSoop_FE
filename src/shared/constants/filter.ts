@@ -1,4 +1,4 @@
-export const sortOptions = ["최신순", "카테고리순", "온오프라인순", "상태순"];
+export const sortOptions = ["최신순", "인기순", "마감순"];
 export const categoryOptions = ["플로깅", "봉사활동", "친환경습관"];
 export const onlineOptions = ["온라인", "오프라인"];
 
@@ -15,7 +15,6 @@ export const isOnlineType = {
 
 export const sortType = {
   LATEST: "최신순",
-  CATEGORY: "카테고리순",
-  MODE: "온오프라인순",
-  STATUS: "상태순",
+  POPULAR: "인기순",
+  DEADLINE: "마감순",
 };

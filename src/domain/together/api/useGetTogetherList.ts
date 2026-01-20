@@ -13,7 +13,7 @@ export const useGetTogetherList = (
     size,
     userId,
   }: {
-    category?: string;
+    category?: string[];
     mode?: string;
     status?: string;
     sortType?: string;
@@ -34,19 +34,37 @@ export const useGetTogetherList = (
       userId,
     }),
     queryFn: async () => {
-      const baseUrl = userId
-        ? `api/v1/together/member/${userId}`
-        : `api/v1/together/list`;
+      if (userId) {
+        const { data } = await api.get(`api/v1/together/member/${userId}`);
+        return data;
+      }
 
-      const { data } = await api.get(baseUrl, {
-        params: userId
-          ? null
-          : { category, mode, status, sortType, page, size },
+      const params = new URLSearchParams(
+        Object.entries({ mode, status, sortType, page, size })
+          .filter(([, v]) => v !== undefined)
+          .map(([k, v]) => [k, String(v)])
+      );
+
+      category?.forEach((c) => {
+        params.append("categories", c);
       });
-      return data;
+
+      const { data } = await api.get(
+        `api/v1/together/list?${params.toString()}`
+      );
+      console.log(data);
+      return page === 0
+        ? {
+            ...data,
+            data: {
+              ...data.data,
+              content: data.data.content.slice(1),
+            },
+          }
+        : data;
     },
-    staleTime: 500,
-    gcTime: 1000,
+    staleTime: 0,
+    gcTime: 0,
     ...options,
   });
 };

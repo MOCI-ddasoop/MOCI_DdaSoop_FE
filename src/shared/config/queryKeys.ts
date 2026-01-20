@@ -63,7 +63,7 @@ export const queryKeys = {
       size,
       userId,
     }: {
-      category?: string;
+      category?: string[];
       mode?: string;
       status?: string;
       sortType?: string;

@@ -78,7 +78,7 @@ function ParticipationCard(
           <Capsule
             type="participant"
             text={
-              (props.participants ?? 0) < props.capacity
+              (props.participants ?? 0) < props.capacity || dDay >= 0
                 ? `모집중 ${props.participants ?? 0}/${props.capacity}`
                 : "모집완료"
             }

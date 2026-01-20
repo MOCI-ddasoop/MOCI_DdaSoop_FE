@@ -2,7 +2,7 @@ import { TogetherResponse } from "../types";
 
 export const getInitTogetherList = async () => {
   const res = await fetch(
-    `http://localhost:8080/api/v1/together/list?page=0&size=11`
+    `http://localhost:8080/api/v1/together/list?page=0&size=12`
   );
 
   if (!res.ok) {
@@ -12,5 +12,11 @@ export const getInitTogetherList = async () => {
   }
 
   const data: TogetherResponse = await res.json();
-  return data;
+  return {
+    ...data,
+    data: {
+      ...data.data,
+      content: data.data.content.slice(1),
+    },
+  };
 };

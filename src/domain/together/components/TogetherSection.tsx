@@ -49,12 +49,11 @@ function TogetherSection({
     isError,
   } = useGetTogetherList(
     {
-      // 배열도 받을 수 있도록 수정하기
-      category: selectedCategory[0],
+      category: selectedCategory,
       mode: isOnline[0],
       sortType: getKeyByValue(sortType, currentSort),
       page: page - 1,
-      size: page === 1 ? 11 : 12,
+      size: 12,
       userId: mypage ? userId : undefined,
     },
     { initialData: isInitialQuery ? initialData : undefined }
@@ -69,9 +68,7 @@ function TogetherSection({
       setSelectedCategory(newCategory);
       syncUrl("together", newCategory, isOnline, currentSort, 1, router);
     } else {
-      const newIsOnline = isOnline.includes(item)
-        ? isOnline.filter((o) => o !== item)
-        : [...isOnline, item];
+      const newIsOnline = isOnline[0] === item ? [] : [item];
 
       setIsOnline(newIsOnline);
       syncUrl(
@@ -115,7 +112,7 @@ function TogetherSection({
         <ParticipationContainer
           type="together"
           items={items.data.content ?? []}
-          currentPage={initialPage}
+          currentPage={page}
           mypage={mypage}
           className={items?.data.totalPages <= 1 ? "mb-10" : ""}
         />
