@@ -3,6 +3,12 @@ import Link from "next/link";
 import { NotificationResponse, NotificationSummaryResponse } from "../types";
 import { AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
 import Image from "next/image";
+import { useReadNotification } from "../api/useReadNotification";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/shared/config/queryKeys";
+import { useEffect, useState } from "react";
+import { useDeleteNotification } from "../api/useDeleteNotification";
+import Swal from "sweetalert2";
 
 function Notification({
   summary = false,
@@ -16,27 +22,87 @@ function Notification({
     senderProfileImage,
     senderNickname,
   },
+  type,
   onClick,
 }: {
   summary?: boolean;
   notification: NotificationResponse | NotificationSummaryResponse;
-  onClick: () => void;
+  type?: string;
+  onClick?: () => void;
 }) {
+  const qc = useQueryClient();
+  const [isRead, setIsRead] = useState(read);
+  useEffect(() => {
+    setIsRead(read);
+  }, [read]);
+  const { mutate: readNotification } = useReadNotification({
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: queryKeys.notifications.read(),
+      });
+      if (type)
+        qc.invalidateQueries({
+          queryKey: queryKeys.notifications.list(type),
+        });
+      qc.invalidateQueries({
+        queryKey: queryKeys.notifications.recent,
+      });
+    },
+    onMutate: () => {
+      setIsRead(true);
+    },
+    onError: () => {
+      setIsRead(false);
+    },
+  });
+  const { mutate: deleteNotification } = useDeleteNotification({
+    onSuccess: () => {
+      qc.invalidateQueries({
+        queryKey: queryKeys.notifications.delete(),
+      });
+      if (type)
+        qc.invalidateQueries({
+          queryKey: queryKeys.notifications.list(type),
+        });
+      qc.invalidateQueries({
+        queryKey: queryKeys.notifications.recent,
+      });
+    },
+  });
   const handleRead = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    readNotification(id!);
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    Swal.fire({
+      title: "알림",
+      text: "알림을 삭제하시겠습니까?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteNotification(id!);
+      }
+    });
   };
 
   return (
     <li
       className={`${
-        read
+        isRead
           ? "bg-gray-100 hover:shadow-2xs text-gray-500"
           : "bg-pastelblue hover:shadow"
       } w-full ${
         summary ? "px-2 py-1" : "px-3 py-3"
       } rounded-lg flex gap-2 justify-between items-center`}
     >
-      <div className="flex gap-3 ">
+      <div className="flex gap-3 w-full">
         {!summary && (
           <div className="relative w-12 h-12 rounded-full shrink-0">
             <Image
@@ -50,30 +116,40 @@ function Notification({
             />
           </div>
         )}
-        <Link href={`${targetType}/${targetId}`} onClick={onClick}>
+        <Link
+          href={`${targetType}/${targetId}`}
+          onClick={onClick}
+          className="w-full"
+        >
           <span className="text-sm">{notificationType}</span>
           <p className={`${summary ? `w-45 truncate` : "w-full"}`}>{message}</p>
         </Link>
       </div>
       <div className="flex gap-3 shrink-0">
-        {!read && !summary && (
+        {!summary && (
           <button
             type="button"
-            className="flex-center flex-col gap-1 shrink-0 cursor-pointer group"
-            onClick={handleRead}
+            className={`flex-center flex-col gap-1 shrink-0 ${
+              isRead ? "" : "cursor-pointer"
+            } group`}
+            onClick={isRead ? undefined : handleRead}
           >
             <AiOutlineCheckCircle
               size={20}
-              className="w-full group-hover:text-mainblue"
+              className={`w-full ${isRead ? "" : "group-hover:text-mainblue"}`}
             />
-            <p className="text-xs group-hover:text-mainblue">읽음처리</p>
+            <p
+              className={`text-xs ${isRead ? "" : "group-hover:text-mainblue"}`}
+            >
+              읽음처리
+            </p>
           </button>
         )}
         {!summary && (
           <button
             type="button"
             className="flex-center flex-col gap-1 shrink-0 cursor-pointer group"
-            onClick={handleRead}
+            onClick={handleDelete}
           >
             <AiOutlineDelete size={20} className="group-hover:text-mainred" />
             <p className="text-xs group-hover:text-mainred">삭제</p>

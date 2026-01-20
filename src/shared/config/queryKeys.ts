@@ -44,7 +44,10 @@ export const queryKeys = {
     upt: () => ["comments", "update"],
   },
   notifications: {
-    list: (type: string) => ["notifications", type],
+    list: (type?: string) =>
+      type ? ["notifications", type] : ["notifications"],
     recent: ["notifications", "recent"],
+    read: () => ["notifications", "read"],
+    delete: () => ["notifications", "delete"],
   },
 };

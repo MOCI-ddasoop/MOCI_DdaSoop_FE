@@ -47,17 +47,11 @@ function NotificationContainer({
         ) : (
           notification.content &&
           notification.content.map((n, i) => (
-            <Notification
-              key={i}
-              notification={n}
-              onClick={() => {
-                console.log("hi");
-              }}
-            />
+            <Notification key={i} notification={n} type={type} />
           ))
         )}
       </ul>
-      <Pagination totalPages={10} />
+      <Pagination totalPages={notification?.totalPages ?? 0} />
     </>
   );
 }

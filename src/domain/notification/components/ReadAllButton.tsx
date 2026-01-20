@@ -1,13 +1,14 @@
 "use client";
-import { readAllNotification } from "../api/readAllNotification";
 import { AiOutlineCheckCircle } from "react-icons/ai";
+import { useReadAllNotification } from "../api/useReadAllNotification";
 
 function ReadAllButton() {
+  const { mutate: readAllNotification } = useReadAllNotification();
   return (
     <button
       type="button"
       className="flex-center flex-col gap-1 shrink-0 cursor-pointer group"
-      onClick={readAllNotification}
+      onClick={() => readAllNotification()}
     >
       <AiOutlineCheckCircle
         size={24}
