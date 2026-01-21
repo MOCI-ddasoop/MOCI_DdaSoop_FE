@@ -61,7 +61,6 @@ export const queryKeys = {
       sortType,
       page,
       size,
-      userId,
     }: {
       category?: string[];
       mode?: string;
@@ -69,17 +68,7 @@ export const queryKeys = {
       sortType?: string;
       page?: number;
       size?: number;
-      userId?: number;
-    }) => [
-      "together",
-      "list",
-      category,
-      mode,
-      status,
-      sortType,
-      page,
-      size,
-      userId,
-    ],
+    }) => ["together", "list", category, mode, status, sortType, page, size],
+    member: (userId: number) => ["together", "member", userId],
   },
 };

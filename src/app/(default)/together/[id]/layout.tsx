@@ -1,7 +1,6 @@
+import Loading from "@/domain/participation/components/DetailLoadingSkeleton";
 import TogetherDetailLayout from "@/domain/participation/components/TogetherDetailLayout";
 import { Suspense } from "react";
-import loading from "./loading";
-import Loading from "./loading";
 
 // const DETAIL_INFO_DUMMY: DetailInfoProps = {
 //   id: "",

@@ -24,15 +24,16 @@ export const useGetTogetherList = (
   options?: Omit<UseQueryOptions<TogetherResponse>, "queryKey" | "queryFn">
 ) => {
   return useQuery<TogetherResponse>({
-    queryKey: queryKeys.together.list({
-      category,
-      mode,
-      status,
-      sortType,
-      page,
-      size,
-      userId,
-    }),
+    queryKey: userId
+      ? queryKeys.together.member(userId)
+      : queryKeys.together.list({
+          category,
+          mode,
+          status,
+          sortType,
+          page,
+          size,
+        }),
     queryFn: async () => {
       if (userId) {
         const { data } = await api.get(`api/v1/together/member/${userId}`);
@@ -53,15 +54,7 @@ export const useGetTogetherList = (
         `api/v1/together/list?${params.toString()}`
       );
       console.log(data);
-      return page === 0
-        ? {
-            ...data,
-            data: {
-              ...data.data,
-              content: data.data.content.slice(1),
-            },
-          }
-        : data;
+      return data;
     },
     staleTime: 0,
     gcTime: 0,

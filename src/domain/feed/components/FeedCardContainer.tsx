@@ -9,6 +9,7 @@ import { throttle } from "@/shared/utils/throttle";
 import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
 import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
+import { useAuthStore } from "@/store/authStore";
 
 export type PositionedItem = FeedInfinite & {
   width: number;
@@ -32,9 +33,14 @@ function FeedCardContainer({
 
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const memberId = useAuthStore((state) => state.me?.memberId);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
-    useGetInfiniteFeedList();
+    useGetInfiniteFeedList({
+      page: pageName,
+      memberId: pageName === "member" ? memberId : undefined,
+      togetherId: pageName === "together" ? Number(queryParams) : undefined,
+    });
   //무한스크롤 target ref
   const triggerRef = useIntersection(() => {
     fetchNextPage();

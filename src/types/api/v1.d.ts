@@ -189,6 +189,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/{togetherId}/participate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 함께하기 참여 */
+        post: operations["participate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/donation/toss/{donationId}/pay": {
         parameters: {
             query?: never;
@@ -1353,6 +1370,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/{togetherId}/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** 함께하기 탈퇴 */
+        delete: operations["leave"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/together/{togetherId}/drop/{targetId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** 함께하기 강퇴 */
+        delete: operations["drop"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/notifications/read": {
         parameters: {
             query?: never;
@@ -1569,32 +1620,32 @@ export interface components {
             status?: string;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
+            paged?: boolean;
             /** Format: int32 */
             pageSize?: number;
             /** Format: int32 */
             pageNumber?: number;
-            paged?: boolean;
             unpaged?: boolean;
         };
         ReportSummaryResponse: {
@@ -1637,21 +1688,21 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
@@ -1712,28 +1763,28 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
-            sortByOrDefault?: string;
             /** Format: int32 */
             sizeOrDefault?: number;
             /** Format: int32 */
             pageOrDefault?: number;
+            sortByOrDefault?: string;
         };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         FeedImageResponse: {
@@ -2348,6 +2399,28 @@ export interface operations {
             };
         };
     };
+    participate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                togetherId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 참여 성공 */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
+                };
+            };
+        };
+    };
     tossPayment: {
         parameters: {
             query?: never;
@@ -2920,10 +2993,10 @@ export interface operations {
     getAllTogether: {
         parameters: {
             query?: {
-                category?: "PLOGGING" | "CLEANUP" | "RECYCLING";
+                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING")[];
                 mode?: "ONLINE" | "OFFLINE";
-                status?: "RECRUITING" | "CLOSED";
-                sortType?: "LATEST" | "CATEGORY" | "MODE" | "STATUS";
+                status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+                sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "STATUS" | "CATEGORY" | "MODE";
                 page?: number;
                 size?: number;
             };
@@ -4116,6 +4189,51 @@ export interface operations {
                 };
                 content: {
                     "*/*": number[];
+                };
+            };
+        };
+    };
+    leave: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                togetherId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 탈퇴 성공 */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
+                };
+            };
+        };
+    };
+    drop: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                togetherId: number;
+                targetId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 강퇴 성공 */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
                 };
             };
         };

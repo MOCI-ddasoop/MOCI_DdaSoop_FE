@@ -17,7 +17,7 @@ interface TogetherSectionProps {
   initialIsOnline: string[];
   initialPage: number;
   sort: string;
-  initialData: TogetherResponse;
+  initialData: TogetherResponse | undefined;
   mypage?: boolean;
 }
 
@@ -56,7 +56,26 @@ function TogetherSection({
       size: 12,
       userId: mypage ? userId : undefined,
     },
-    { initialData: isInitialQuery ? initialData : undefined }
+    {
+      initialData: isInitialQuery && !mypage ? initialData : undefined,
+      select: (data) => {
+        // mypage에서는 가공하지 않음
+        if (mypage) return data;
+
+        // 첫 페이지에서만 가공
+        if (page === 1) {
+          return {
+            ...data,
+            data: {
+              ...data.data,
+              content: data.data.content.slice(1),
+            },
+          };
+        }
+
+        return data;
+      },
+    }
   );
 
   const handleFilter = (item: string, type: "category" | "isOnline") => {
@@ -102,7 +121,7 @@ function TogetherSection({
       />
       {isError ? (
         <div className="w-full h-28 flex-center">
-          <div className="loader"></div>
+          <p className="text-gray-500">오류가 발생했습니다</p>
         </div>
       ) : isPending ? (
         <div className="w-full h-28 flex-center">
