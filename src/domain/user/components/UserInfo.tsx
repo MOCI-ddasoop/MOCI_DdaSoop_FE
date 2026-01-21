@@ -4,33 +4,31 @@ import Image from "next/image";
 import Button from "@/shared/components/Button";
 import tw from "@/shared/utils/tw";
 import { useAuthStore } from "@/store/authStore";
-
-const USER_PROFILE = {
-  // profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU",
-  // nickname: "John Doe",
-  // email: "john.doe@example.com",
-  likedCount: 100,
-  commentedCount: 130,
-  feedCount: 100,
-  point: 742,
-};
+import { useGetMyCounts } from "../api/useGetMyCounts";
+import Swal from "sweetalert2";
 
 function UserInfo({ className }: { className?: string }) {
   const me = useAuthStore((s) => s.me);
   const logout = useAuthStore((s) => s.logout);
+  const {data:counts} = useGetMyCounts();
+  if (!me) return null;
 
-  const handleLogout = () => {
-    const confirmed = window.confirm("정말 로그아웃 하시겠습니까?");
-    if(!confirmed) return;
-    logout();
-  }
-   // 로그인 안 된 상태(수정)
-  if (!me) {
-    return (
-      <div className={tw("w-full py-10 text-center text-gray-500", className)}>
-        로그인 정보가 없습니다.
-      </div>
-    );
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      text:"로그아웃 하시겠습니까?",
+      icon:"question",
+      showCancelButton:true,
+      confirmButtonText:"예",
+      cancelButtonText:"취소",
+    })
+    if (!result.isConfirmed) return;
+
+    try{
+      await logout();
+      Swal.fire("완료","로그아웃 되었습니다.","success");
+    }catch{
+      Swal.fire("실패","로그아웃에 실패했습니다.","error");
+    }
   }
 
   return (
@@ -50,19 +48,19 @@ function UserInfo({ className }: { className?: string }) {
           <li className="pr-2 border-r border-gray-300">
             좋아요{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.likedCount}
+              {counts?.likedCount}
             </span>
           </li>
           <li className="px-2 border-r border-gray-300">
             댓글{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.commentedCount}
+              {counts?.commentedCount}
             </span>
           </li>
           <li>
             피드{" "}
             <span className="text-mainblue font-semibold">
-              {USER_PROFILE.feedCount}
+              {counts?.feedCount}
             </span>
           </li>
         </ul>
