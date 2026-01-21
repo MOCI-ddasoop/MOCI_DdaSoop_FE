@@ -9,6 +9,7 @@ import { queryKeys } from "@/shared/config/queryKeys";
 import { useEffect, useState } from "react";
 import { useDeleteNotification } from "../api/useDeleteNotification";
 import Swal from "sweetalert2";
+import { notificationOptions } from "@/shared/constants/filter";
 
 function Notification({
   summary = false,
@@ -121,7 +122,13 @@ function Notification({
           onClick={onClick}
           className="w-full"
         >
-          <span className="text-sm">{notificationType}</span>
+          <span className="text-sm">
+            {
+              notificationOptions[
+                notificationType as keyof typeof notificationOptions
+              ]
+            }
+          </span>
           <p className={`${summary ? `w-45 truncate` : "w-full"}`}>{message}</p>
         </Link>
       </div>

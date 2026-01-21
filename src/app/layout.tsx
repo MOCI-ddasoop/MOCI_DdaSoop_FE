@@ -22,11 +22,12 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
+      <AuthInit />
+      <ClarityInit />
       <TanstackProvider>
         <body>
           <Header />
           <ReportModal />
-          <ClarityInit />
           {children}
         </body>
       </TanstackProvider>
