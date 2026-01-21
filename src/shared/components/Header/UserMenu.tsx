@@ -11,15 +11,21 @@ import {
   autoUpdate,
   useDismiss,
 } from "@floating-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import Notification from "@/domain/notification/components/Notification";
 import { useGetRecentNotification } from "@/domain/notification/api/useGetRecentNotification";
+import { useAuthStore } from "@/store/authStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 function UserMenu() {
-  const isLogin = true;
+  const queryClient = useQueryClient();
+
+  const isLogin = useAuthStore((state) => state.me);
+
+  console.log(isLogin);
   const [isOpen, setIsOpen] = useState(false);
   // 로그인되었는지 여부 가져오는거 추가하기
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
@@ -43,7 +49,13 @@ function UserMenu() {
     data: notifications = [],
     isPending,
     isError,
-  } = useGetRecentNotification();
+  } = useGetRecentNotification(!!isLogin);
+
+  useEffect(() => {
+    if (!isLogin) {
+      queryClient.removeQueries({ queryKey: ["recentNotification"] });
+    }
+  }, [isLogin]);
 
   if (!isLogin)
     return (

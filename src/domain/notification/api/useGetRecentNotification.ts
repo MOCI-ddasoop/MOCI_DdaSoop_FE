@@ -3,7 +3,7 @@ import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { NotificationSummaryResponse } from "../types";
 
-export const useGetRecentNotification = () => {
+export const useGetRecentNotification = (isLogin: boolean) => {
   return useQuery<NotificationSummaryResponse[]>({
     queryKey: queryKeys.notifications.recent,
     queryFn: async () => {
@@ -12,5 +12,6 @@ export const useGetRecentNotification = () => {
       });
       return data;
     },
+    enabled: !!isLogin,
   });
 };

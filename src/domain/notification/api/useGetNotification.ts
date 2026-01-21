@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PageNotificationSummaryResponse } from "../types";
 
 export const useGetNotification = (
-  type: "all" | "likes" | "comments" | "together" | "system",
+  type: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM",
   pageNum: number | string,
   size?: number
 ) => {
@@ -13,12 +13,12 @@ export const useGetNotification = (
     queryFn: async () => {
       let baseUrl;
       switch (type) {
-        case "all":
+        case "ALL":
           baseUrl = `/api/notifications`;
           break;
 
         default:
-          baseUrl = `/api/notifications/type/FEED_REACTION`;
+          baseUrl = `/api/notifications/category/${type}`;
           break;
       }
       const params: {

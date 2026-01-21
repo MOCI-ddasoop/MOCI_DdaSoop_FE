@@ -14,9 +14,9 @@ const notification = Array.from({ length: 3 }).map((_, i) => ({
   senderNickname: "바보",
 }));
 function NotificationContainer({
-  type = "all",
+  type = "ALL",
 }: {
-  type?: "all" | "likes" | "comments" | "together" | "system";
+  type?: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM";
 }) {
   const params = useParams<{ page: string }>();
   const page = params.page ?? "1";
