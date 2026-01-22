@@ -14,3 +14,9 @@ export const notificationOptions = {
   FOLLOW: "팔로우",
   SYSTEM: "시스템알림",
 };
+
+export const targetOptions: { [key: string]: string } = {
+  FEED: "?feedId=",
+  TOGETHER: "/together/",
+  MEMBER: "/mypage", // 수정필요
+};

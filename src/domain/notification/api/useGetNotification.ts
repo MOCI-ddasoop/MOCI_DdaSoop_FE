@@ -6,7 +6,7 @@ import { PageNotificationSummaryResponse } from "../types";
 export const useGetNotification = (
   type: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM",
   pageNum: number | string,
-  size?: number
+  size?: number,
 ) => {
   return useQuery<PageNotificationSummaryResponse>({
     queryKey: queryKeys.notifications.list(type),

@@ -25,7 +25,7 @@ function NotificationContainer({
     data: notification,
     isPending,
     isError,
-  } = useGetNotification(type, page);
+  } = useGetNotification(type, page, 10);
 
   return isPending && !isError ? (
     <div className="h-28 flex-center">
@@ -33,7 +33,9 @@ function NotificationContainer({
     </div>
   ) : (
     <>
-      <ul className="w-full flex-center flex-col gap-2 pt-2">
+      <ul
+        className={`w-full flex-center flex-col gap-2 pt-2 ${notification && notification.totalPages && notification.totalPages <= 1 ? "mb-5" : ""}`}
+      >
         {notification &&
         notification.content &&
         notification.content.length === 0 ? (

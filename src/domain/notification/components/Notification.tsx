@@ -9,7 +9,8 @@ import { queryKeys } from "@/shared/config/queryKeys";
 import { useEffect, useState } from "react";
 import { useDeleteNotification } from "../api/useDeleteNotification";
 import Swal from "sweetalert2";
-import { notificationOptions } from "@/shared/constants/filter";
+import { notificationOptions, targetOptions } from "@/shared/constants/filter";
+import Capsule from "@/shared/components/Capsule";
 
 function Notification({
   summary = false,
@@ -118,8 +119,14 @@ function Notification({
           </div>
         )}
         <Link
-          href={`${targetType}/${targetId}`}
-          onClick={onClick}
+          href={
+            targetType === "NONE" || !targetType
+              ? "#"
+              : targetType === "COMMENT"
+                ? "/mypage/replies"
+                : `${targetOptions[targetType]}${targetId}`
+          }
+          onClick={onClick ?? (() => readNotification(id!))}
           className="w-full"
         >
           <span className="text-sm">
@@ -129,7 +136,16 @@ function Notification({
               ]
             }
           </span>
-          <p className={`${summary ? `w-45 truncate` : "w-full"}`}>{message}</p>
+          <p className={`${summary ? `w-45 truncate` : "w-full"}`}>
+            {senderNickname && (
+              <Capsule
+                text={senderNickname}
+                type="status"
+                className="bg-gray-50 text-xs mr-1"
+              ></Capsule>
+            )}
+            {message}
+          </p>
         </Link>
       </div>
       <div className="flex gap-3 shrink-0">

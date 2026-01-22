@@ -22,15 +22,18 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" className={pretendard.variable} suppressHydrationWarning>
-      <AuthInit />
-      <ClarityInit />
-      <TanstackProvider>
-        <body>
+      <body>
+        <AuthInit />
+        <TanstackProvider>
           <Header />
           <ReportModal />
+          <ClarityInit />
           {children}
-        </body>
-      </TanstackProvider>
+          <Suspense fallback={<div className="loader"></div>}>
+            <FeedModalRoot />
+          </Suspense>
+        </TanstackProvider>
+      </body>
     </html>
   );
 }
