@@ -22,9 +22,9 @@ export const useGetNotification = (
           break;
       }
       const params: {
-        pageNum: number | string;
+        page: number | string;
         size?: number;
-      } = { pageNum, size };
+      } = { page: Number(pageNum) - 1, size };
 
       const { data } = await api.get(baseUrl, { params });
       return data;

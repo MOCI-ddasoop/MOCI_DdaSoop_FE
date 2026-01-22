@@ -2,7 +2,7 @@
 import Notification from "@/domain/notification/components/Notification";
 import Pagination from "@/shared/components/Pagination";
 import { useGetNotification } from "../api/useGetNotification";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const notification = Array.from({ length: 3 }).map((_, i) => ({
   isRead: false,
@@ -18,8 +18,8 @@ function NotificationContainer({
 }: {
   type?: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM";
 }) {
-  const params = useParams<{ page: string }>();
-  const page = params.page ?? "1";
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ?? "1";
   // 타입에 따라서 api 통신
   const {
     data: notification,

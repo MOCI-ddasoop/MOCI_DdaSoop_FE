@@ -26,7 +26,6 @@ function UserMenu() {
 
   const isLogin = useAuthStore((state) => state.me);
 
-  console.log(isLogin);
   const [isOpen, setIsOpen] = useState(false);
   // 로그인되었는지 여부 가져오는거 추가하기
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
