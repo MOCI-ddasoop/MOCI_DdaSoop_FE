@@ -3,6 +3,23 @@
 import { getAbsoluteOffset } from "./getAbsoluteOffset";
 import { restoreCaretByOffset } from "./restoreCaretByOffset";
 
+function createSpan(text: string) {
+	const span = document.createElement("span");
+	span.textContent = text;
+	return span;
+}
+
+function createAnchor(url: string) {
+	const a = document.createElement("a");
+	a.href = url;
+	a.textContent = url;
+	a.classList.add("text-blue-600");
+	a.target = "_blank";
+	a.rel = "noopener noreferrer";
+
+	return a;
+}
+
 export function processUrlWrap(root: HTMLDivElement) {
 	const selection = window.getSelection();
 	// selection 객체 만들기
@@ -14,25 +31,25 @@ export function processUrlWrap(root: HTMLDivElement) {
 	const absoluteOffset = getAbsoluteOffset(
 		root,
 		range.startContainer,
-		range.startOffset
+		range.startOffset,
 	);
 	//offset 절대위치(텍스트 기반)
 
 	const urlRegex = /https?:\/\/[\S]+/g;
 
-	// 모든 url의 <a> unwrap
-	const anchors = root.querySelectorAll("a");
-	// 모든 a 태그를 찾음
-	anchors.forEach((a) => {
-		const text = document.createTextNode(a.textContent);
+	// 모든 inline element unwrap
+	const inlineElements = root.querySelectorAll("a, span");
+
+	inlineElements.forEach((e) => {
+		const text = document.createTextNode(e.textContent);
 		// a 태그안의 내용 저장
-		a.replaceWith(text);
+		e.replaceWith(text);
 		//현재 쪼개진 textNode로 url 저장되어있음 예: "https://w""ww.naver.com"
 	});
 	root.normalize();
 	// 쪼개진 url text node 같은 range로 합치기
 
-	// a wrap
+	// wrap
 	// walker text node 순회
 	const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
 	const textNodes = [];
@@ -44,53 +61,40 @@ export function processUrlWrap(root: HTMLDivElement) {
 		//모든 노드들 순회하면서 textNodes에 추가
 	}
 
+	// textNode span / a 로 wrap, ZWS 삭제
 	for (const textNode of textNodes) {
 		const text = textNode.nodeValue;
 		//노드의 텍스트 확인
 		if (!text) continue;
-		// console.log(text);
-
-		const match = text.match(urlRegex);
-		//노드 텍스트에 url 형식이 있는지 확인
-		if (!match) continue;
-		// console.log(match);
 
 		const parent = textNode.parentNode;
 		if (!parent) continue;
-		if (parent instanceof HTMLAnchorElement) continue;
-		//url 있는 노드가 부모가 있는지, a 태그인지 확인
+
+		const matches = [...text.matchAll(urlRegex)];
 
 		let lastIndex = 0;
-		const fragments = [];
+		const fragment = document.createDocumentFragment();
 
-		for (const url of match) {
-			const index = text.indexOf(url, lastIndex);
-			if (index === -1) continue;
+		for (const match of matches) {
+			const url = match[0];
+			const index = match.index ?? 0;
 
+			//url 이전 텍스트 span
 			const before = text.slice(lastIndex, index);
-			if (before) fragments.push(before);
+			if (before) {
+				fragment.appendChild(createSpan(before));
+			}
 
-			const a = document.createElement("a");
-			a.href = url;
-			a.textContent = url;
-			a.classList.add("text-blue-600");
-			a.target = "_blank";
-			a.rel = "noopener noreferrer";
-			fragments.push(a);
+			// url -> a
+			fragment.appendChild(createAnchor(url));
 
 			lastIndex = index + url.length;
 		}
 
 		const after = text.slice(lastIndex);
-		if (after) fragments.push(after);
+		if (after) fragment.appendChild(createSpan(after));
 
-		for (const frag of fragments) {
-			if (typeof frag === "string") {
-				parent.insertBefore(document.createTextNode(frag), textNode);
-			} else {
-				parent.insertBefore(frag, textNode);
-			}
-		}
+		parent.insertBefore(fragment, textNode);
 		parent.removeChild(textNode);
 	}
 
