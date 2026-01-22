@@ -1,7 +1,12 @@
 import NotificationContainer from "@/domain/notification/components/NotificationContainer";
+import { Suspense } from "react";
 
 function page() {
-  return <NotificationContainer type="LIKES" />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NotificationContainer type="LIKES" />
+    </Suspense>
+  );
 }
 
 export default page;
