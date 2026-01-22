@@ -34,9 +34,11 @@ function Notification({
 }) {
   const qc = useQueryClient();
   const [isRead, setIsRead] = useState(read);
+
   useEffect(() => {
     setIsRead(read);
   }, [read]);
+
   const { mutate: readNotification } = useReadNotification({
     onSuccess: () => {
       qc.invalidateQueries({
@@ -45,6 +47,10 @@ function Notification({
       if (type)
         qc.invalidateQueries({
           queryKey: queryKeys.notifications.list(type),
+        });
+      else
+        qc.invalidateQueries({
+          queryKey: queryKeys.notifications.list("ALL"),
         });
       qc.invalidateQueries({
         queryKey: queryKeys.notifications.recent,
@@ -57,20 +63,23 @@ function Notification({
       setIsRead(false);
     },
   });
+
   const { mutate: deleteNotification } = useDeleteNotification({
     onSuccess: () => {
-      qc.invalidateQueries({
-        queryKey: queryKeys.notifications.delete(),
-      });
       if (type)
         qc.invalidateQueries({
           queryKey: queryKeys.notifications.list(type),
+        });
+      else
+        qc.invalidateQueries({
+          queryKey: queryKeys.notifications.list("ALL"),
         });
       qc.invalidateQueries({
         queryKey: queryKeys.notifications.recent,
       });
     },
   });
+
   const handleRead = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     readNotification(id!);
@@ -92,6 +101,11 @@ function Notification({
         deleteNotification(id!);
       }
     });
+  };
+
+  const handleNotificationClick = () => {
+    if (onClick) onClick();
+    if (!isRead) readNotification(id!);
   };
 
   return (
@@ -126,7 +140,7 @@ function Notification({
                 ? "/mypage/replies"
                 : `${targetOptions[targetType]}${targetId}`
           }
-          onClick={onClick ?? (() => readNotification(id!))}
+          onClick={handleNotificationClick}
           className="w-full"
         >
           <span className="text-sm">

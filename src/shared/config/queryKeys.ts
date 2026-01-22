@@ -49,7 +49,15 @@ export const queryKeys = {
   },
   notifications: {
     list: (type?: string) =>
-      type ? ["notifications", type] : ["notifications"],
+      type ? ["notifications", "list", type] : ["notifications", "list"],
+
+    page: (type: string, pageNum: number | string, size?: number) => [
+      "notifications",
+      "list",
+      type,
+      pageNum,
+      size,
+    ],
     recent: ["notifications", "recent"],
     read: () => ["notifications", "read"],
     delete: () => ["notifications", "delete"],

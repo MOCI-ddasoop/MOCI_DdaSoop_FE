@@ -9,7 +9,7 @@ export const useGetNotification = (
   size?: number,
 ) => {
   return useQuery<PageNotificationSummaryResponse>({
-    queryKey: queryKeys.notifications.list(type),
+    queryKey: queryKeys.notifications.page(type, Number(pageNum), size),
     queryFn: async () => {
       let baseUrl;
       switch (type) {

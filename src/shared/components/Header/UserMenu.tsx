@@ -19,6 +19,7 @@ import Notification from "@/domain/notification/components/Notification";
 import { useGetRecentNotification } from "@/domain/notification/api/useGetRecentNotification";
 import { useAuthStore } from "@/store/authStore";
 import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/shared/config/queryKeys";
 
 function UserMenu() {
   const queryClient = useQueryClient();
@@ -53,9 +54,9 @@ function UserMenu() {
 
   useEffect(() => {
     if (!isLogin) {
-      queryClient.removeQueries({ queryKey: ["recentNotification"] });
+      queryClient.removeQueries({ queryKey: queryKeys.notifications.recent });
     }
-  }, [isLogin]);
+  }, [isLogin, queryClient]);
 
   if (!isLogin)
     return (
