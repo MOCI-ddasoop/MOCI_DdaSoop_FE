@@ -302,6 +302,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/images/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 이미지 업로드
+         * @description 이미지를 업로드하고 URL을 반환합니다. 프론트엔드에서 미리보기 및 피드 생성에 사용할 수 있습니다.
+         */
+        post: operations["uploadImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/images/upload-multiple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 다중 이미지 업로드
+         * @description 여러 이미지를 한번에 업로드하고 URL 목록을 반환합니다. 최대 10개까지 가능합니다.
+         */
+        post: operations["uploadMultipleImages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/feeds": {
         parameters: {
             query?: never;
@@ -535,6 +575,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ID별 함께하기 조회 */
+        get: operations["getTogetherByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/list": {
         parameters: {
             query?: never;
@@ -561,6 +618,23 @@ export interface paths {
         };
         /** 함께하기 상세 조회 */
         get: operations["getTogether"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/together/list/{id}/description": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 리스트 설명 조회 */
+        get: operations["getTogetherDescription"];
         put?: never;
         post?: never;
         delete?: never;
@@ -757,6 +831,26 @@ export interface paths {
             cookie?: never;
         };
         get: operations["getRecentNotifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/members/me/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 내 회원 정보 조회 Counts
+         * @description 현재 로그인한 회원의 통계 정보(좋아요, 댓글, 피드 개수)를 조회합니다.
+         */
+        get: operations["getMyCounts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1499,6 +1593,17 @@ export interface components {
             originalFileName?: string;
             savedFileName?: string;
         };
+        ImageUploadResponse: {
+            imageUrl?: string;
+            /** Format: int32 */
+            width?: number;
+            /** Format: int32 */
+            height?: number;
+            /** Format: int64 */
+            fileSize?: number;
+            originalFileName?: string;
+            savedFileName?: string;
+        };
         FeedCreateRequest: {
             /** @enum {string} */
             feedType: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
@@ -1597,8 +1702,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -1667,6 +1772,14 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+        };
+        MemberCountsResponse: {
+            /** Format: int64 */
+            likedCount?: number;
+            /** Format: int64 */
+            commentedCount?: number;
+            /** Format: int64 */
+            feedCount?: number;
         };
         FeedSearchRequest: {
             keyword?: string;
@@ -3220,6 +3333,35 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["NotificationSummaryResponse"][];
+                };
+            };
+        };
+    };
+    getMyCounts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MemberCountsResponse"];
+                };
+            };
+            /** @description 회원을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MemberCountsResponse"];
                 };
             };
         };
