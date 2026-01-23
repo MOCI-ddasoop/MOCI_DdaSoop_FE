@@ -1,4 +1,4 @@
-export function insertLineBreak() {
+export function handleEnterKeydown() {
 	const selection = window.getSelection();
 	if (!selection || !selection.rangeCount) return;
 
@@ -16,6 +16,7 @@ export function insertLineBreak() {
 		const textNode = container as Text;
 
 		const br = document.createElement("br");
+		const zwsSpan = inline.cloneNode(false) as HTMLElement;
 		const nextInline = inline.cloneNode(false) as HTMLElement;
 		// afterText를 먼저 저장
 		const afterText = textNode.textContent!.substring(offset);
@@ -23,8 +24,13 @@ export function insertLineBreak() {
 		// 현재 텍스트는 offset까지만 유지
 		textNode.textContent = textNode.textContent!.substring(0, offset);
 
+		// zwsSpan에 ZWS 추가
 		const emptyText = document.createTextNode("\u200B");
-		nextInline.appendChild(emptyText);
+		zwsSpan.appendChild(emptyText);
+
+		// nextInline에 ZWS 추가
+		const nextEmptyText = document.createTextNode("\u200B");
+		nextInline.appendChild(nextEmptyText);
 
 		if (afterText.length > 0) {
 			const newTextNode = document.createTextNode(afterText);
@@ -32,7 +38,15 @@ export function insertLineBreak() {
 		}
 
 		// DOM에 삽입
-		inline.after(br, nextInline);
+		const prevSiblingElement = inline.previousElementSibling;
+
+		if (prevSiblingElement?.tagName === "BR" && offset === 0) {
+			// caret이 줄 맨 앞에 있고, 바로 앞이 br인 경우
+
+			prevSiblingElement.after(zwsSpan, br, nextInline);
+		} else {
+			inline.after(br, nextInline);
+		}
 
 		// DOM 업데이트 후 caret 이동
 		requestAnimationFrame(() => {

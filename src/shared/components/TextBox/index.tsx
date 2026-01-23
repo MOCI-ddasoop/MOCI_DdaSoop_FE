@@ -1,6 +1,5 @@
 "use client";
 
-import { getCurrentBlock } from "./utils/getCurrentBlock";
 import { processUrlWrap } from "./utils/processUrlWrap";
 import tw from "@/shared/utils/tw";
 import {
@@ -11,8 +10,10 @@ import {
 	useState,
 } from "react";
 import DOMPurify from "dompurify";
-import { insertLineBreak } from "./utils/insertLineBreak";
+import { handleEnterKeydown } from "./utils/handleEnterKeydown";
 import { normalizeZWS } from "./utils/normalizeZWS";
+import { cleanupConsecutiveBr } from "./utils/cleanupConsecutiveBr";
+import { handleBackspaceKeydown } from "./utils/handleBackspaceKeydown";
 
 export type TextBoxHandle = {
 	getHTML: () => string;
@@ -50,8 +51,7 @@ function TextBox({
 	const getHTML = useCallback(() => {
 		if (!textBoxRef.current) return "";
 		const raw = textBoxRef.current.innerHTML;
-		// return makeCleanHTML(raw);
-		return raw;
+		return makeCleanHTML(raw);
 	}, []);
 
 	const clear = useCallback(() => {
@@ -86,6 +86,7 @@ function TextBox({
 		//root가 없다면 스톱
 		processUrlWrap(root);
 		normalizeZWS(root);
+		cleanupConsecutiveBr(root);
 	}, []);
 
 	// 키다운 이벤트 enter 의도 판단
@@ -93,6 +94,15 @@ function TextBox({
 		const root = textBoxRef.current;
 		if (!root) return;
 		if (isComposing) return;
+
+		if (e.key === "Backspace") {
+			handleBackspaceKeydown(e);
+			requestAnimationFrame(() => {
+				processWrapCallback();
+			});
+			return;
+		}
+
 		if (e.key !== "Enter") return;
 
 		const isMac = navigator.platform.toUpperCase().includes("MAC");
@@ -105,7 +115,7 @@ function TextBox({
 			}
 
 			e.preventDefault();
-			insertLineBreak();
+			handleEnterKeydown();
 			requestAnimationFrame(() => {
 				processWrapCallback();
 			});
@@ -113,7 +123,7 @@ function TextBox({
 		}
 
 		e.preventDefault();
-		insertLineBreak();
+		handleEnterKeydown();
 		requestAnimationFrame(() => {
 			processWrapCallback();
 		});
@@ -135,24 +145,6 @@ function TextBox({
 					requestAnimationFrame(() => {
 						if (root.innerText.trim() === "") {
 							root.innerHTML = "";
-						}
-					});
-				});
-			} else {
-				// 3) ZWS만 있는 span과 불필요한 br 태그 정리
-				requestAnimationFrame(() => {
-					Array.from(root.children).forEach((child) => {
-						const el = child as HTMLElement;
-						// ZWS(\u200B)만 있는 span/a 태그 제거
-						if (
-							(el.tagName === "SPAN" || el.tagName === "A") &&
-							el.innerText.trim() === ""
-						) {
-							el.remove();
-						}
-						// 마지막 br 태그 제거 (콘텐츠 뒤의 불필요한 br)
-						if (el.tagName === "BR" && el === root.lastChild) {
-							el.remove();
 						}
 					});
 				});
