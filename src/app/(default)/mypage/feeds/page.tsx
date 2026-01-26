@@ -1,4 +1,3 @@
-"use client";
 import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
 import { Suspense } from "react";
 
