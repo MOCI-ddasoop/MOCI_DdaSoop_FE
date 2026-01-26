@@ -35,6 +35,7 @@ export const queryKeys = {
       ];
     },
     notice: (id: number) => ["feeds", "notice", id],
+
   },
   comments: {
     all: () => ["comments"],
@@ -44,6 +45,7 @@ export const queryKeys = {
     del: () => ["comments", "delete"],
     upt: () => ["comments", "update"],
   },
+
   donate: {
     all: () => ["donate"],
     id: (id: string) => ["donate", id],
@@ -70,9 +72,27 @@ export const queryKeys = {
       page?: number;
       size?: number;
     }) => ["together", "list", category, mode, status, sortType, page, size],
-    member: (userId: number) => ["together", "member", userId],
-    description: (id: string | number) => ["together", "description", id],
+members:{
+		me: () => ["members", "me"],
+		counts: () => ["members", "counts"],
+	}    description: (id: string | number) => ["together", "description", id],
     join: () => ["together", "join"],
     leave: () => ["together", "leave"],
+  },
+
+  notifications: {
+    list: (type?: string) =>
+      type ? ["notifications", "list", type] : ["notifications", "list"],
+
+    page: (type: string, pageNum: number | string, size?: number) => [
+      "notifications",
+      "list",
+      type,
+      pageNum,
+      size,
+    ],
+    recent: ["notifications", "recent"],
+    read: () => ["notifications", "read"],
+    delete: () => ["notifications", "delete"],
   },
 };
