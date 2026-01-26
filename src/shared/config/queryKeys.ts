@@ -35,6 +35,7 @@ export const queryKeys = {
       ];
     },
     notice: (id: number) => ["feeds", "notice", id],
+
   },
   comments: {
     all: () => ["comments"],
@@ -44,6 +45,7 @@ export const queryKeys = {
     del: () => ["comments", "delete"],
     upt: () => ["comments", "update"],
   },
+
   donate: {
     all: () => ["donate"],
     id: (id: string) => ["donate", id],
@@ -78,4 +80,19 @@ members:{
     leave: () => ["together", "leave"],
   },
 
+  notifications: {
+    list: (type?: string) =>
+      type ? ["notifications", "list", type] : ["notifications", "list"],
+
+    page: (type: string, pageNum: number | string, size?: number) => [
+      "notifications",
+      "list",
+      type,
+      pageNum,
+      size,
+    ],
+    recent: ["notifications", "recent"],
+    read: () => ["notifications", "read"],
+    delete: () => ["notifications", "delete"],
+  },
 };
