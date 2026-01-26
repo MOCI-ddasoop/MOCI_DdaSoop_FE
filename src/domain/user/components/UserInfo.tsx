@@ -6,8 +6,11 @@ import tw from "@/shared/utils/tw";
 import { useAuthStore } from "@/store/authStore";
 import { useGetMyCounts } from "../api/useGetMyCounts";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import { FiEdit2 } from "react-icons/fi";
 
 function UserInfo({ className }: { className?: string }) {
+  const router = useRouter();
   const me = useAuthStore((s) => s.me);
   const logout = useAuthStore((s) => s.logout);
   const {data:counts} = useGetMyCounts();
@@ -29,6 +32,7 @@ function UserInfo({ className }: { className?: string }) {
     }catch{
       Swal.fire("실패","로그아웃에 실패했습니다.","error");
     }
+    router.push("/");
   }
 
   return (
@@ -42,7 +46,17 @@ function UserInfo({ className }: { className?: string }) {
         />
       </div>
       <div className="w-full h-full flex flex-col flex-1 gap-2">
-        <p className="text-2xl font-bold">{me.nickname}</p>
+        <div className="flex items-center gap-4 ">
+          <p className="text-2xl font-bold">{me.nickname}</p>
+          <button
+            type="button"
+            onClick={()=>router.push("/mypage/edit")}
+            className="flex items-center gap-1 text-sm text-gray-500 hover:text-mainblue cursor-pointer transition"
+          >
+            <FiEdit2 className="text-sm"/>
+            <span>내 정보 수정</span>
+          </button>
+        </div>
         <p className="text-sm text-gray-500">{me.email}</p>
         <ul className="flex gap-2">
           <li className="pr-2 border-r border-gray-300">
