@@ -17,6 +17,7 @@ export const sortType = {
   LATEST: "최신순",
   POPULAR: "인기순",
   DEADLINE: "마감순",
+};
 
 export const notificationOptions = {
   FEED_REACTION: "피드좋아요",
@@ -35,5 +36,4 @@ export const targetOptions: { [key: string]: string } = {
   FEED: "?feedId=",
   TOGETHER: "/together/",
   MEMBER: "/mypage", // 수정필요
-
 };

@@ -35,7 +35,6 @@ export const queryKeys = {
       ];
     },
     notice: (id: number) => ["feeds", "notice", id],
-
   },
   comments: {
     all: () => ["comments"],
@@ -72,10 +71,8 @@ export const queryKeys = {
       page?: number;
       size?: number;
     }) => ["together", "list", category, mode, status, sortType, page, size],
-members:{
-		me: () => ["members", "me"],
-		counts: () => ["members", "counts"],
-	}    description: (id: string | number) => ["together", "description", id],
+    description: (id: string | number) => ["together", "description", id],
+    member: (memberId: number) => ["together", "member", memberId],
     join: () => ["together", "join"],
     leave: () => ["together", "leave"],
   },
@@ -94,5 +91,10 @@ members:{
     recent: ["notifications", "recent"],
     read: () => ["notifications", "read"],
     delete: () => ["notifications", "delete"],
+  },
+
+  members: {
+    me: () => ["members", "me"],
+    counts: () => ["members", "counts"],
   },
 };
