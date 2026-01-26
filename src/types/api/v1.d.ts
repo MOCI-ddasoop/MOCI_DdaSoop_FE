@@ -319,6 +319,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/images/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 이미지 업로드
+         * @description 이미지를 업로드하고 URL을 반환합니다. 프론트엔드에서 미리보기 및 피드 생성에 사용할 수 있습니다.
+         */
+        post: operations["uploadImage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/images/upload-multiple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 다중 이미지 업로드
+         * @description 여러 이미지를 한번에 업로드하고 URL 목록을 반환합니다. 최대 10개까지 가능합니다.
+         */
+        post: operations["uploadMultipleImages"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/feeds": {
         parameters: {
             query?: never;
@@ -552,6 +592,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ID별 함께하기 조회 */
+        get: operations["getTogetherByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/list": {
         parameters: {
             query?: never;
@@ -578,6 +635,23 @@ export interface paths {
         };
         /** 함께하기 상세 조회 */
         get: operations["getTogether"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/together/list/{id}/description": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 리스트 설명 조회 */
+        get: operations["getTogetherDescription"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1570,6 +1644,17 @@ export interface components {
             originalFileName?: string;
             savedFileName?: string;
         };
+        ImageUploadResponse: {
+            imageUrl?: string;
+            /** Format: int32 */
+            width?: number;
+            /** Format: int32 */
+            height?: number;
+            /** Format: int64 */
+            fileSize?: number;
+            originalFileName?: string;
+            savedFileName?: string;
+        };
         FeedCreateRequest: {
             /** @enum {string} */
             feedType: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
@@ -1668,8 +1753,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
