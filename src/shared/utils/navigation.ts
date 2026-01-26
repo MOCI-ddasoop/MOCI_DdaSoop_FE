@@ -39,3 +39,11 @@ export const donateTabContents = (id: string) => [
   { href: `/donate/${id}/history`, name: "기부 현황" },
   { href: `/donate/${id}/news`, name: "소식" },
 ];
+
+export const notificationTabContents = [
+  { href: "/notification/all", name: "전체" },
+  { href: "/notification/like", name: "좋아요" },
+  { href: "/notification/comment", name: "댓글" },
+  { href: "/notification/together", name: "함께하기" },
+  { href: "/notification/system", name: "시스템" },
+];

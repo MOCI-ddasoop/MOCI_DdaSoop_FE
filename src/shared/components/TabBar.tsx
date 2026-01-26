@@ -14,7 +14,7 @@ function TabBar({
   type,
 }: {
   tabContents: TabContentsType[];
-  type?: "donate" | "mypage" | "together";
+  type?: "donate" | "mypage" | "together" | "notification";
 }) {
   const pathname = usePathname();
   return (
