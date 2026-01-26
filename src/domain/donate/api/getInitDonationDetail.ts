@@ -1,14 +1,14 @@
-import { DetailInfoProps } from "@/domain/participation/types";
+import { DonateDetailInfo } from "../types";
 
 export const getInitDonationDetail = async (
-  id: string
-): Promise<DetailInfoProps> => {
+  id: string,
+): Promise<DonateDetailInfo> => {
   const res = await fetch(`http://localhost:8080/api/v1/donation/list/${id}`, {
     cache: "no-store",
   });
   if (!res.ok) {
     throw new Error(
-      `후원 상세정보조회에 실패했습니다. 오류코드 : ${res.status}`
+      `후원 상세정보조회에 실패했습니다. 오류코드 : ${res.status}`,
     );
   }
 

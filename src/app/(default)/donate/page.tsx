@@ -37,7 +37,7 @@ async function Donate({ searchParams }: DonatePageProps) {
         initialCategory={category}
         initialPage={page}
         sort={sort}
-        items={ITEM_LIST}
+        initialData={ITEM_LIST}
       />
     </>
   );

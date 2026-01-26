@@ -22,10 +22,12 @@ function FeedCardContainer({
   className,
   pageName,
   queryParams,
+  notice = false,
 }: {
   className?: string;
   pageName?: "together" | "member";
   queryParams?: string;
+  notice?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -40,6 +42,7 @@ function FeedCardContainer({
       page: pageName,
       memberId: pageName === "member" ? memberId : undefined,
       togetherId: pageName === "together" ? Number(queryParams) : undefined,
+      notice,
     });
   //무한스크롤 target ref
   const triggerRef = useIntersection(() => {
@@ -55,7 +58,7 @@ function FeedCardContainer({
 
         setContainerWidth(width);
       }, 100), // 100ms throttle for smoother updates
-    []
+    [],
   );
 
   // 컨테이너 너비 측정
@@ -87,8 +90,11 @@ function FeedCardContainer({
   }, [containerWidth]);
 
   const items: FeedInfinite[] = useMemo(
-    () => data?.pages.flatMap((p) => p.content) ?? [],
-    [data]
+    () =>
+      notice
+        ? (data?.pages.flatMap((p) => p) ?? [])
+        : (data?.pages.flatMap((p) => p.content) ?? []),
+    [data, notice],
   );
 
   const positionedItems = useMemo(() => {
@@ -112,7 +118,7 @@ function FeedCardContainer({
 
       // 가장 짧은 컬럼 찾기
       const shortestColumnIndex = currentColumnHeights.indexOf(
-        Math.min(...currentColumnHeights)
+        Math.min(...currentColumnHeights),
       );
 
       // 위치 계산
@@ -155,7 +161,7 @@ function FeedCardContainer({
     const filteredItems = positionsItemsRef.current.filter(
       (item) =>
         item.y + item.height >= viewportTop - OVERSCAN &&
-        item.y <= viewportBottom + OVERSCAN
+        item.y <= viewportBottom + OVERSCAN,
     );
     setVisibleItems(filteredItems);
 
@@ -164,7 +170,7 @@ function FeedCardContainer({
     const decodeItems = positionsItemsRef.current.filter(
       (item) =>
         item.y + item.height >= viewportTop - DECODE_OFFSET &&
-        item.y <= viewportBottom + DECODE_OFFSET
+        item.y <= viewportBottom + DECODE_OFFSET,
     );
 
     decodeItems.forEach((i) => {

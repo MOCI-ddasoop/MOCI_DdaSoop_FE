@@ -1,7 +1,8 @@
-import { TogetherInfo, TogetherResponseData } from "@/domain/together/types";
+import { TogetherInfo } from "@/domain/together/types";
 import AddParticipationCard from "./AddParticipationCard";
 import ParticipationCard from "./ParticipationCard";
 import tw from "@/shared/utils/tw";
+import { DonateInfo } from "@/domain/donate/types";
 
 interface TogetherContainerProps {
   type: "together";
@@ -13,7 +14,7 @@ interface TogetherContainerProps {
 interface DonateContainerProps {
   type: "donate";
   currentPage?: number;
-  items: TogetherInfo[];
+  items: TogetherInfo[] | DonateInfo[];
   mypage?: boolean;
   className?: string;
 }
@@ -35,7 +36,7 @@ function ParticipationContainer({
     <div
       className={tw(
         `w-full grid xl:grid-cols-4 gap-6 lg:grid-cols-3 sm:grid-cols-2 `,
-        className
+        className,
       )}
     >
       {currentPage === 1 && !mypage && <AddParticipationCard type={type} />}

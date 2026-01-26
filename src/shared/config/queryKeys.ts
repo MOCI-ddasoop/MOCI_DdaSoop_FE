@@ -34,6 +34,7 @@ export const queryKeys = {
         { page: "member", memberId: params.memberId },
       ];
     },
+    notice: (id: number) => ["feeds", "notice", id],
   },
   comments: {
     all: () => ["comments"],
@@ -70,5 +71,8 @@ export const queryKeys = {
       size?: number;
     }) => ["together", "list", category, mode, status, sortType, page, size],
     member: (userId: number) => ["together", "member", userId],
+    description: (id: string | number) => ["together", "description", id],
+    join: () => ["together", "join"],
+    leave: () => ["together", "leave"],
   },
 };

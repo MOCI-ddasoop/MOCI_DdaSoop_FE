@@ -1,21 +1,32 @@
 "use client";
 
-import { DetailInfoProps } from "@/domain/participation/types";
+import { TogetherDetailInfo } from "@/domain/together/types";
 import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery } from "@tanstack/react-query";
+import { DonateDetailInfo } from "../types";
+
+type DetailInfoHydratorProps =
+  | {
+      type: "together";
+      initialData: TogetherDetailInfo;
+      children: React.ReactNode;
+    }
+  | {
+      type: "donate";
+      initialData: DonateDetailInfo;
+      children: React.ReactNode;
+    };
 
 function DetailInfoHydrator({
+  type,
   initialData,
   children,
-}: {
-  initialData: DetailInfoProps;
-  children: React.ReactNode;
-}) {
+}: DetailInfoHydratorProps) {
   useQuery({
-    queryKey: queryKeys.donate.id(String(initialData.id)),
+    queryKey: queryKeys[type].id(String(initialData.id)),
     queryFn: async () => {
-      const { data } = await api.get(`api/v1/donation/list/${initialData.id}`);
+      const { data } = await api.get(`api/v1/${type}/list/${initialData.id}`);
       return data;
     },
     initialData,

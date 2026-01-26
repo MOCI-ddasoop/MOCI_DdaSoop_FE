@@ -28,7 +28,7 @@ export type TogetherDetailInfo = {
   memberId: number;
   participants: number | null;
   progress: number | null;
-  thumbnailImage: string[] | null;
+  thumbnailImage: { imageUrl: string }[] | null;
   goal: number | null;
 };
 

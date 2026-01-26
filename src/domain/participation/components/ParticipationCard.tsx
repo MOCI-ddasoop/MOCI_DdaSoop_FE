@@ -2,9 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import ProgressBar from "./ProgressBar";
 import Capsule from "@/shared/components/Capsule";
-import { DonateCardProps } from "../types";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import { TogetherInfo } from "@/domain/together/types";
+import { DonateInfo } from "@/domain/donate/types";
 
 /**
  *
@@ -28,7 +28,9 @@ import { TogetherInfo } from "@/domain/together/types";
  * @returns
  */
 function ParticipationCard(
-  props: (TogetherInfo & { type: "donate" | "together" }) | DonateCardProps
+  props:
+    | ({ type: "together" } & TogetherInfo)
+    | ({ type: "donate" } & DonateInfo),
 ) {
   const { type, id, thumbnailImage, title, category, dDay } = props;
 
@@ -50,10 +52,12 @@ function ParticipationCard(
       </div>
       <div className="px-5 py-3 flex-1 flex flex-col gap-1.5">
         <div className="flex justify-between items-center">
-          <h2 className="font-bold">D-{dDay === 0 ? "day" : dDay}</h2>
+          <h2 className={`${dDay < 0 ? "text-sm text-mainblue" : "font-bold"}`}>
+            {dDay === 0 ? "D-day" : dDay < 0 ? "모집종료" : `D-${dDay}`}
+          </h2>
           {type === "together" ? (
             <p className="text-xs text-gray-500">
-              {props.startDate} - {props.endDate}
+              {props.startDate}~{props.endDate}
             </p>
           ) : (
             <ProgressBar type={type} cardUI progress={props.progress ?? 0} />
@@ -78,9 +82,9 @@ function ParticipationCard(
           <Capsule
             type="participant"
             text={
-              (props.participants ?? 0) < props.capacity || dDay >= 0
-                ? `모집중 ${props.participants ?? 0}/${props.capacity}`
-                : "모집완료"
+              (props.participants ?? 0) >= props.capacity || dDay < 0
+                ? `${dDay < 0 ? "모집종료" : "모집완료"} ${props.participants ?? 0}/${props.capacity}`
+                : `모집중 ${props.participants ?? 0}/${props.capacity}`
             }
             className="absolute top-3 right-3"
           />

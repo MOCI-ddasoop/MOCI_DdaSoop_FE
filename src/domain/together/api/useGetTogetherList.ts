@@ -21,7 +21,7 @@ export const useGetTogetherList = (
     size?: number;
     userId?: number;
   },
-  options?: Omit<UseQueryOptions<TogetherResponse>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<TogetherResponse>, "queryKey" | "queryFn">,
 ) => {
   return useQuery<TogetherResponse>({
     queryKey: userId
@@ -43,7 +43,7 @@ export const useGetTogetherList = (
       const params = new URLSearchParams(
         Object.entries({ mode, status, sortType, page, size })
           .filter(([, v]) => v !== undefined)
-          .map(([k, v]) => [k, String(v)])
+          .map(([k, v]) => [k, String(v)]),
       );
 
       category?.forEach((c) => {
@@ -51,13 +51,12 @@ export const useGetTogetherList = (
       });
 
       const { data } = await api.get(
-        `api/v1/together/list?${params.toString()}`
+        `api/v1/together/list?${params.toString()}`,
       );
-      console.log(data);
       return data;
     },
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 500,
+    gcTime: 1000,
     ...options,
   });
 };

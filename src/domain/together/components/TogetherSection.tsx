@@ -62,7 +62,7 @@ function TogetherSection({
         // mypage에서는 가공하지 않음
         if (mypage) return data;
 
-        // 첫 페이지에서만 가공
+        // 첫 페이지에서만 맨앞자르기
         if (page === 1) {
           return {
             ...data,
@@ -75,7 +75,7 @@ function TogetherSection({
 
         return data;
       },
-    }
+    },
   );
 
   const handleFilter = (item: string, type: "category" | "isOnline") => {
@@ -96,7 +96,7 @@ function TogetherSection({
         newIsOnline,
         currentSort,
         1,
-        router
+        router,
       );
     }
   };

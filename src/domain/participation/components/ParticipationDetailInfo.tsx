@@ -6,35 +6,43 @@ import TreeProgress from "./TreeProgress";
 import ProgressBar from "./ProgressBar";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import { TogetherDetailInfo } from "@/domain/together/types";
+import { DonateDetailInfo } from "@/domain/donate/types";
+
+type ParticipationDetailInfoProps =
+  | {
+      type: "together";
+      props: TogetherDetailInfo;
+    }
+  | {
+      type: "donate";
+      props: DonateDetailInfo;
+    };
 
 function ParticipationDetailInfo({
   type,
-  props: {
+  props,
+}: ParticipationDetailInfoProps) {
+  const {
+    id,
     title,
     category,
     participants,
-    capacity,
     startDate,
     endDate,
-    mode,
     goal,
     progress,
-  },
-}: {
-  type: "together" | "donate";
-  props: TogetherDetailInfo;
-}) {
+  } = props;
   return (
     <div className="sticky top-20 w-62 h-fit flex flex-col gap-1.5">
       <h1 className="text-2xl font-medium">{title}</h1>
       <div className="flex gap-2 flex-wrap">
         <Capsule text={categoryType[category]} type="category" readOnly />
-        {type === "together" && mode && (
-          <Capsule text={isOnlineType[mode]} type="isOnline" readOnly />
+        {type === "together" && (
+          <Capsule text={isOnlineType[props.mode]} type="isOnline" readOnly />
         )}
-        {type === "together" && capacity && (
+        {type === "together" && props.capacity && (
           <Capsule
-            text={(participants ?? 0) < capacity ? "모집중" : "모집완료"}
+            text={(participants ?? 0) < props.capacity ? "모집중" : "모집완료"}
             type="status"
             readOnly
           />
@@ -57,7 +65,7 @@ function ParticipationDetailInfo({
         goal={goal ?? 0}
         cardUI={false}
       />
-      {type === "together" ? <UserAction /> : <DonateButton />}
+      {type === "together" ? <UserAction id={id} /> : <DonateButton />}
     </div>
   );
 }

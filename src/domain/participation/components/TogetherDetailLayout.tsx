@@ -21,7 +21,7 @@ async function TogetherDetailLayout({
         <div className="w-[calc(100%-280px)]">
           <div className="w-full aspect-10/7">
             {/* slideList -> detailInfo에 들어있는 이미지전달 */}
-            <ImageSwiper slideList={[]} />
+            <ImageSwiper slideList={detailInfo.thumbnailImage ?? []} />
           </div>
           <TabBar type="together" tabContents={togetherTabContents(id)} />
           <main className="py-4">{children}</main>
