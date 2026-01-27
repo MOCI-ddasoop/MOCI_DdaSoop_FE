@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { NotificationResponse, NotificationSummaryResponse } from "../types";
-import { AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import Image from "next/image";
 import { useReadNotification } from "../api/useReadNotification";
 import { useQueryClient } from "@tanstack/react-query";
@@ -80,11 +80,6 @@ function Notification({
     },
   });
 
-  const handleRead = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    readNotification(id!);
-  };
-
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     Swal.fire({
@@ -162,34 +157,14 @@ function Notification({
           </p>
         </Link>
       </div>
-      <div className="flex gap-3 shrink-0">
+      <div className="flex shrink-0">
         {!summary && (
           <button
             type="button"
-            className={`flex-center flex-col gap-1 shrink-0 ${
-              isRead ? "" : "cursor-pointer"
-            } group`}
-            onClick={isRead ? undefined : handleRead}
-          >
-            <AiOutlineCheckCircle
-              size={20}
-              className={`w-full ${isRead ? "" : "group-hover:text-mainblue"}`}
-            />
-            <p
-              className={`text-xs ${isRead ? "" : "group-hover:text-mainblue"}`}
-            >
-              읽음처리
-            </p>
-          </button>
-        )}
-        {!summary && (
-          <button
-            type="button"
-            className="flex-center flex-col gap-1 shrink-0 cursor-pointer group"
+            className="cursor-pointer group"
             onClick={handleDelete}
           >
-            <AiOutlineDelete size={20} className="group-hover:text-mainred" />
-            <p className="text-xs group-hover:text-mainred">삭제</p>
+            <AiOutlineClose className="group-hover:text-mainred" />
           </button>
         )}
       </div>
