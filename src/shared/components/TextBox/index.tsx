@@ -9,11 +9,11 @@ import {
 	useRef,
 	useState,
 } from "react";
-import DOMPurify from "dompurify";
 import { handleEnterKeydown } from "./utils/handleEnterKeydown";
 import { normalizeZWS } from "./utils/normalizeZWS";
 import { cleanupConsecutiveBr } from "./utils/cleanupConsecutiveBr";
 import { handleBackspaceKeydown } from "./utils/handleBackspaceKeydown";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 
 export type TextBoxHandle = {
 	getHTML: () => string;
@@ -44,20 +44,18 @@ function TextBox({
 	const textBoxRef = useRef<HTMLDivElement>(null);
 	const [isComposing, setIsComposing] = useState(false);
 
-	const makeCleanHTML = (html: string) => {
-		return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-	};
-
 	const getHTML = useCallback(() => {
 		if (!textBoxRef.current) return "";
 		const raw = textBoxRef.current.innerHTML;
-		return makeCleanHTML(raw);
+		return sanitizeHtml(raw);
 	}, []);
 
 	const clear = useCallback(() => {
-		if (!textBoxRef.current) return;
-		textBoxRef.current.innerHTML = "";
-	}, []);
+		const root = textBoxRef.current;
+		if (!root) return;
+		root.innerHTML = "";
+		if (setValue) setValue(root.innerHTML);
+	}, [setValue]);
 
 	const focus = useCallback(() => {
 		textBoxRef.current?.focus();
@@ -87,7 +85,8 @@ function TextBox({
 		processUrlWrap(root);
 		normalizeZWS(root);
 		cleanupConsecutiveBr(root);
-	}, []);
+		if (setValue) setValue(root.innerHTML);
+	}, [setValue]);
 
 	// 키다운 이벤트 enter 의도 판단
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
