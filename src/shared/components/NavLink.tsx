@@ -15,7 +15,7 @@ function NavLink({
   name: string;
   tabBar?: boolean;
   children?: React.ReactNode;
-  type?: "donate" | "together" | "mypage";
+  type?: "donate" | "together" | "mypage" | "notification";
   tabCount?: number;
 }) {
   const pathname = usePathname();
