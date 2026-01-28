@@ -24,14 +24,11 @@ function ReadAllButton() {
   return (
     <button
       type="button"
-      className="flex-center flex-col gap-1 shrink-0 cursor-pointer group"
+      className="flex-center shrink-0 cursor-pointer group  p-1 gap-1"
       onClick={handleReadAll}
     >
-      <AiOutlineCheckCircle
-        size={24}
-        className="w-full group-hover:text-mainblue"
-      />
       <p className="group-hover:text-mainblue">전체읽음처리</p>
+      <AiOutlineCheckCircle size={24} className="group-hover:text-mainblue" />
     </button>
   );
 }
