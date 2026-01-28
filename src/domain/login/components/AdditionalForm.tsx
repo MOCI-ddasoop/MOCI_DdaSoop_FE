@@ -76,7 +76,8 @@ export default function AdditionalForm() {
         <input
           type="text"
           className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue mr-4"
-          placeholder="닉네임을 입력해주세요"
+          placeholder="닉네임을 입력해주세요 (2~12자)"
+          maxLength={12}
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
@@ -102,6 +103,7 @@ export default function AdditionalForm() {
           type="email"
           className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue mr-4"
           placeholder="이메일을 입력해주세요"
+          maxLength={100}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
