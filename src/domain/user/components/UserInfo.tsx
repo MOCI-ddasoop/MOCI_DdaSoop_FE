@@ -8,6 +8,8 @@ import { useGetMyCounts } from "../api/useGetMyCounts";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { FiEdit2 } from "react-icons/fi";
+import { deleteUser } from "../api/deleteUser";
+import { AxiosError } from "axios";
 
 function UserInfo({ className }: { className?: string }) {
   const router = useRouter();
@@ -20,8 +22,11 @@ function UserInfo({ className }: { className?: string }) {
     const result = await Swal.fire({
       text:"로그아웃 하시겠습니까?",
       icon:"question",
+      iconColor:"var(--color-mainblue)",
       showCancelButton:true,
       confirmButtonText:"예",
+      confirmButtonColor:"var(--color-mainblue)",
+      cancelButtonColor:"var(--color-gray)",
       cancelButtonText:"취소",
     })
     if (!result.isConfirmed) return;
@@ -34,6 +39,33 @@ function UserInfo({ className }: { className?: string }) {
     }
     router.push("/");
   }
+
+  const handleDeleteUser = async () => {
+    const result = await Swal.fire({
+      title:"정말 회원 탈퇴하시겠습니까?",
+      text:"탈퇴하시면 모든 정보가 삭제되며 복구가 불가능합니다",
+      icon:"warning",
+      iconColor:"var(--color-mainred)",
+      confirmButtonColor:"var(--color-mainred)",
+      cancelButtonColor:"var(--color-gray)",
+      confirmButtonText:"탈퇴",
+      cancelButtonText:"취소",
+      showCancelButton:true,
+    })
+    if (!result.isConfirmed) return;
+
+    try{
+      await deleteUser();
+      Swal.fire("완료","회원탈퇴 되었습니다.","success");
+      logout();
+      router.push("/");
+    }catch(error){
+      const err = error as AxiosError<{message:string}>;
+      const message = err.response?.data?.message ?? "회원탈퇴에 실패했습니다.";
+
+      Swal.fire("실패",message,"error");
+    }
+  };
 
   return (
     <div className={tw("w-full h-full flex gap-10 items-center justify-center", className)}>
@@ -80,9 +112,9 @@ function UserInfo({ className }: { className?: string }) {
         </ul>
         <div className="flex justify-between items-center">
           <Button color="skyblue" size="sm" onClick={handleLogout}>로그아웃</Button>
-          <div className="text-gray-500 hover:text-mainblue cursor-pointer underline">
-            회원탈퇴
-          </div>
+          <button className="text-gray-500 hover:text-mainblue cursor-pointer underline" onClick={handleDeleteUser}>
+            <span>회원탈퇴</span>
+          </button>
         </div>
       </div>
     </div>
