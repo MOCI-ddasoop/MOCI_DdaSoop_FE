@@ -1,7 +1,13 @@
 "use client";
 import FeedImageInput from "./FeedImageInput";
-import { RefObject, useImperativeHandle, useMemo, useState } from "react";
-import TextBox from "../../../shared/components/TextBox";
+import {
+	RefObject,
+	useImperativeHandle,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
+import TextBox, { TextBoxHandle } from "../../../shared/components/TextBox";
 import Button from "../../../shared/components/Button";
 import TagInput from "../../../shared/components/TagInput";
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
@@ -38,13 +44,31 @@ function FeedCreatorModal({
 	const [textBoxValue, setTextBoxValue] = useState<string>();
 	const [tagsValue, setTagsValue] = useState<string[]>();
 	const [togetherInfo, setTogetherInfo] = useState<FeedOptionData | undefined>(
-		initialTogetherInfo
+		initialTogetherInfo,
 	);
+	const textBoxRef = useRef<TextBoxHandle>(null);
 	const [selectedPostVisibility, setSelectedPostVisibility] = useState<
 		FeedCreateRequest["visibility"] | null
 	>("PUBLIC");
 
-	const { mutate: postFeed } = usePostFeed();
+	const { mutate: postFeed, isPending } = usePostFeed({
+		onSuccess: () => {
+			Swal.fire({
+				title: "업로드 성공",
+				icon: "success",
+				timer: 1500,
+			});
+			textBoxRef.current?.clear();
+			onClose();
+		},
+		onError: () => {
+			Swal.fire({
+				title: "업로드 실패",
+				icon: "error",
+				timer: 1500,
+			});
+		},
+	});
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -70,12 +94,12 @@ function FeedCreatorModal({
 		};
 	});
 
-	const handleFeedFormSubmit = (e: React.FormEvent) => {
+	const handleFeedFormSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!selectedPostVisibility) return;
 		const feedFormData: FeedCreateRequest = {
 			feedType: "GENERAL",
-			content: textBoxValue || "",
+			content: textBoxRef.current?.getHTML() || "",
 			images: feedImages.map((img, index) => {
 				if (!img.imageUrl || img.width == undefined || img.height == undefined)
 					throw new Error("이미지 메타데이터가 완성되지 않았습니다.");
@@ -94,21 +118,29 @@ function FeedCreatorModal({
 				selectedTogether === "main" ? undefined : parseInt(selectedTogether),
 		};
 		postFeed(feedFormData);
-		onClose();
+		if (isPending) {
+			Swal.fire({
+				title: "업로드 중입니다.",
+				didOpen: () => {
+					Swal.showLoading();
+				},
+				willClose: () => !isPending,
+			});
+		}
 	};
 
 	const handleTogetherSelectionChange = (
-		e: React.ChangeEvent<HTMLSelectElement>
+		e: React.ChangeEvent<HTMLSelectElement>,
 	) => {
 		const value = e.target.value;
 		setSelectedTogether(value);
 		const selected = userTogetherList?.find(
-			(i) => i.together.id.toString() === value
+			(i) => i.together.id.toString() === value,
 		);
 		setTogetherInfo(selected ?? undefined);
 
 		let checkedPostVisibility = document.querySelector(
-			'input[name="postVisibility"]:checked'
+			'input[name="postVisibility"]:checked',
 		);
 		if (!checkedPostVisibility) setSelectedPostVisibility(null);
 		checkedPostVisibility = null;
@@ -164,7 +196,7 @@ function FeedCreatorModal({
 			) : (
 				""
 			),
-		[togetherInfo]
+		[togetherInfo],
 	);
 
 	// 공개여부
@@ -177,16 +209,16 @@ function FeedCreatorModal({
 		];
 		if (!togetherInfo) {
 			return options.filter(
-				({ value }) => value === "PUBLIC" || value === "PRIVATE"
+				({ value }) => value === "PUBLIC" || value === "PRIVATE",
 			);
 		} else if (togetherInfo && togetherInfo.user.role === "member") {
 			return options.filter(
-				({ value }) => value === "PUBLIC" || value === "MEMBERS"
+				({ value }) => value === "PUBLIC" || value === "MEMBERS",
 			);
 		} else {
 			return options.filter(
 				({ value }) =>
-					value === "PUBLIC" || value === "MEMBERS" || value === "NOTICE"
+					value === "PUBLIC" || value === "MEMBERS" || value === "NOTICE",
 			);
 		}
 	}, [togetherInfo]);
@@ -249,6 +281,7 @@ function FeedCreatorModal({
 					{/* 텍스트박스 */}
 
 					<TextBox
+						ref={textBoxRef}
 						isAble={isTextBoxEditable}
 						hidden={!isTextBoxEditable}
 						className={`flex-1 min-h-fit px-2 mt-3 overflow-visible`}
@@ -286,7 +319,7 @@ function FeedCreatorModal({
 								value={value}
 								onChange={(e) =>
 									setSelectedPostVisibility(
-										e.target.value as FeedCreateRequest["visibility"]
+										e.target.value as FeedCreateRequest["visibility"],
 									)
 								}
 								checked={selectedPostVisibility === value}
@@ -300,7 +333,7 @@ function FeedCreatorModal({
 
 				<Button
 					className="w-full my-3"
-					disabled={disableSubmitButton}
+					disabled={disableSubmitButton || isPending}
 					onClick={handleFeedFormSubmit}
 				>
 					게시하기

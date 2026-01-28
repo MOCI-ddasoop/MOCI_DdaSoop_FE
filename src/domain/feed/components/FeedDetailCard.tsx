@@ -7,6 +7,7 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { MdIosShare } from "react-icons/md";
 import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 import { FeedResponse } from "../types";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 
 type FeedDetailCardProps = FeedResponse & {
 	className?: string;
@@ -42,7 +43,7 @@ function FeedDetailCard({
 	}, [bookmarkCount, bookMarkedByMe]);
 
 	const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
-		null
+		null,
 	);
 	const { mutate: toggleBookmarkMutate } = useToggleFeedBookmark();
 
@@ -101,9 +102,8 @@ function FeedDetailCard({
 				<div className="p-2 min-h-[100px]">
 					{/* todo: InnerHtml넣기전에 안전한 html인지 검사하기 */}
 					<p
-						className="text-sm text-gray-500"
-						dangerouslySetInnerHTML={{ __html: content ?? "" }}
-					></p>
+						dangerouslySetInnerHTML={{ __html: sanitizeHtml(content ?? "") }}
+					/>
 				</div>
 
 				{/* 모임 정보 영역 */}
@@ -163,14 +163,14 @@ function FeedDetailCard({
 								size={24}
 								className={tw(
 									"group-hover:text-amber-700 transition absolute",
-									bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0"
+									bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0",
 								)}
 							/>
 							<FaRegBookmark
 								size={24}
 								className={tw(
 									"group-hover:text-amber-700 transition absolute",
-									bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100"
+									bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100",
 								)}
 							/>
 						</div>
