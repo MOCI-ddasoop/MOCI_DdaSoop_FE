@@ -5,15 +5,7 @@ import CommentItem from "./CommentItem";
 import { useCommentListByFeedId } from "../api/useGetCommentListByFeedId";
 import { useSearchParams } from "next/navigation";
 
-interface CommentItemProps {
-	id: number;
-	profileImage: string;
-	author: string;
-	date: string;
-	content: string;
-	className?: string;
-}
-
+// 피드 모달에서만 사용
 function CommentContainer({
 	className,
 	onCommentTargetClick,
@@ -32,7 +24,7 @@ function CommentContainer({
 				<CommentItem
 					key={item.id}
 					item={item}
-					feedId={feedId}
+					feedId={Number(feedId)}
 					onCommentTargetClick={onCommentTargetClick}
 				/>
 			))}

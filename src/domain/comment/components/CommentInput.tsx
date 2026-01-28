@@ -1,10 +1,11 @@
 "use client";
 import tw from "@/shared/utils/tw";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 
 import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 
 interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
@@ -20,35 +21,55 @@ function CommentInput({
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
 	const { mutate: setCommentMutation } = useSetComment();
+	const textBoxRef = useRef<TextBoxHandle>(null);
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
+	const submitComment = () => {
+		if (!textBoxRef.current) return;
+		if (!comment) return;
 		if (!comment.trim()) return;
 
 		setCommentMutation({
 			commentType: "FEED",
-			content: comment,
+			content: textBoxRef.current.getHTML(),
 			targetId: Number(feedId),
-			parentId: targetId ?? null,
+			parentId: targetId ?? undefined,
 		});
 
-		setComment("");
 		onCommentTargetClick?.(null, null);
+		textBoxRef.current?.clear();
+	};
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		submitComment();
+	};
+
+	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+		if (e.key === "Enter") {
+			if (e.metaKey || e.ctrlKey) return;
+
+			e.preventDefault();
+			submitComment();
+		}
 	};
 
 	return (
-		<form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+		<form
+			className="flex flex-col gap-2"
+			onSubmit={handleSubmit}
+			onKeyDown={handleEnterKeyDown}
+		>
 			{targetNickname && (
 				<div
 					className={tw(
 						"flex items-center gap-2 justify-between duration-300 translate-y-full opacity-0",
-						targetNickname ? "translate-y-0 opacity-100" : ""
+						targetNickname ? "translate-y-0 opacity-100" : "",
 					)}
 				>
 					<div className="text-sm text-gray-500">
 						<span className="font-semibold text-mainblue ">
 							@{targetNickname}
-						</span>{" "}
+						</span>
 						님에게 보내는 댓글
 					</div>
 					<button
@@ -62,12 +83,12 @@ function CommentInput({
 			)}
 			<div className="flex justify-center items-stretch gap-2 w-full h-full">
 				<div className="flex-1 flex items-center border-gray-300">
-					<input
-						type="text"
+					<TextBox
 						placeholder="댓글을 입력해주세요."
-						className="focus:outline-0 flex-1"
-						value={comment}
-						onChange={(e) => setComment(e.target.value)}
+						ref={textBoxRef}
+						mode="comment"
+						setValue={setComment}
+						className="max-h-20 overflow-auto"
 					/>
 				</div>
 
@@ -76,7 +97,7 @@ function CommentInput({
 						type="submit"
 						className={tw(
 							"h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150",
-							comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300"
+							comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300",
 						)}
 					>
 						게시
