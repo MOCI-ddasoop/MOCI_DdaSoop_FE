@@ -34,6 +34,7 @@ export const queryKeys = {
         { page: "member", memberId: params.memberId },
       ];
     },
+    notice: (id: number) => ["feeds", "notice", id],
   },
   comments: {
     all: () => ["comments"],
@@ -43,10 +44,39 @@ export const queryKeys = {
     del: () => ["comments", "delete"],
     upt: () => ["comments", "update"],
   },
-  members: {
-    me: () => ["members", "me"],
-    counts: () => ["members", "counts"],
+
+  donate: {
+    all: () => ["donate"],
+    id: (id: string) => ["donate", id],
+    list: (memberId?: number) => {
+      if (memberId) return ["donate", "list", memberId];
+      else return ["donate", "list"];
+    },
   },
+  together: {
+    all: () => ["together"],
+    id: (id: string) => ["together", id],
+    list: ({
+      category,
+      mode,
+      status,
+      sortType,
+      page,
+      size,
+    }: {
+      category?: string[];
+      mode?: string;
+      status?: string;
+      sortType?: string;
+      page?: number;
+      size?: number;
+    }) => ["together", "list", category, mode, status, sortType, page, size],
+    description: (id: string | number) => ["together", "description", id],
+    member: (memberId: number) => ["together", "member", memberId],
+    join: () => ["together", "join"],
+    leave: () => ["together", "leave"],
+  },
+
   notifications: {
     list: (type?: string) =>
       type ? ["notifications", "list", type] : ["notifications", "list"],
@@ -61,5 +91,10 @@ export const queryKeys = {
     recent: ["notifications", "recent"],
     read: () => ["notifications", "read"],
     delete: () => ["notifications", "delete"],
+  },
+
+  members: {
+    me: () => ["members", "me"],
+    counts: () => ["members", "counts"],
   },
 };

@@ -22,7 +22,7 @@ function ModalRoot() {
 
 	const createFeedModalRef = useRef<CreateFeedModalRef>(null);
 
-	const handleClose = async () => {
+	const handleClose = async (reason?: "confirm") => {
 		if (feedId) {
 			const params = new URLSearchParams(searchParams.toString());
 			params.delete("feedId");
@@ -30,8 +30,10 @@ function ModalRoot() {
 			return;
 		}
 		if (modalType === "feedCreate") {
-			const canClose = await createFeedModalRef.current?.canClose();
-			if (!canClose) return;
+			if (reason === "confirm") {
+				const canClose = await createFeedModalRef.current?.canClose();
+				if (!canClose) return;
+			}
 		}
 
 		closeStoreModal();
@@ -48,7 +50,7 @@ function ModalRoot() {
 
 		// ESC 키로 닫기
 		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === "Escape") handleClose();
+			if (e.key === "Escape") handleClose("confirm");
 		};
 		document.addEventListener("keydown", handleEscape);
 		document.body.style.overflow = "hidden";
@@ -66,14 +68,14 @@ function ModalRoot() {
 		// Overlay
 		<div
 			className="fixed top-0 left-0 w-full h-full bg-black/50 z-50 flex items-center justify-center backdrop-blur-sm"
-			onClick={handleClose}
+			onClick={() => handleClose("confirm")}
 		>
 			{feedId && <FeedModal feedId={feedId} />}
 			{modalType === "feedCreate" && (
 				<FeedCreatorModal ref={createFeedModalRef} onClose={handleClose} />
 			)}
 		</div>,
-		document.body
+		document.body,
 	);
 }
 export default ModalRoot;

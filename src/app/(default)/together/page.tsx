@@ -1,14 +1,7 @@
+import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
 import TogetherSection from "@/domain/together/components/TogetherSection";
-import { sortOptions } from "@/shared/constants/filter";
-
-interface TogetherPageProps {
-  searchParams: Promise<{
-    category?: string;
-    isOnline?: string;
-    page?: string;
-    sort?: string;
-  }>;
-}
+import { TogetherPageProps } from "@/domain/together/types";
+import { sortOptions, sortType } from "@/shared/constants/filter";
 
 async function Together({ searchParams }: TogetherPageProps) {
   const searchParam = await searchParams;
@@ -16,25 +9,12 @@ async function Together({ searchParams }: TogetherPageProps) {
   const category = searchParam.category?.split(",") ?? [];
   const isOnline = searchParam.isOnline?.split(",") ?? [];
   const page = Number(searchParam.page ?? 1);
-  const sort = searchParam.sort ?? sortOptions[0];
+  const sort =
+    sortType[(searchParam.sort ?? "LATEST") as keyof typeof sortType] ??
+    sortOptions[0];
 
-  // 위에있는거 가지고 api 통신해서 가져오기
-  const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
-    id: index,
-    href: `/together/${index + 1}`,
-    image:
-      "https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=13002262&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNi8yMS9DTFM2Lzc4MzA1MWJmLWYxZGMtNGFmMS05YTcxLWYzMmFkNTZmYjMyYQ==&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10006",
-    title: `함께하기${index + 1}`,
-    category: "카테고리",
-    dDay: 10,
-    participant: 18,
-    capacity: 20,
-    status: "모집중",
-    startDate: "2024-06-01",
-    endDate: "2024-06-30",
-    isOnline: "온라인",
-    progress: 75,
-  }));
+  const initialData = await getInitTogetherList();
+
   return (
     <>
       <TogetherSection
@@ -42,7 +22,7 @@ async function Together({ searchParams }: TogetherPageProps) {
         initialIsOnline={isOnline}
         initialPage={page}
         sort={sort}
-        items={ITEM_LIST}
+        initialData={initialData}
       />
     </>
   );

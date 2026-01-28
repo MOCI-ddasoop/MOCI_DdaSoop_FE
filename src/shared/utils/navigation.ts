@@ -10,7 +10,7 @@ export const mypageTabContents = [
   { href: "/mypage/bookmarks", name: "북마크" },
   { href: "/mypage/replies", name: "댓글" },
   {
-    href: "/mypage/together/join",
+    href: "/mypage/together",
     name: "나의 함께하기",
     children: [
       { href: "/mypage/together/join", name: "참여한 함께하기" },
@@ -18,7 +18,7 @@ export const mypageTabContents = [
     ],
   },
   {
-    href: "/mypage/donate/join",
+    href: "/mypage/donate",
     name: "나의 후원하기",
     children: [
       { href: "/mypage/donate/join", name: "참여한 후원" },

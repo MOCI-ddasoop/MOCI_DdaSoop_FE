@@ -1,37 +1,64 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
 // TODO : 개발환경에서만 테스트 용도로 사용하고 수정할 것
+// 배포 api 나중에 headers[connect-src]에 추가 팔요
 const nextConfig: NextConfig = {
-  images: {
-    unoptimized: true,
-  },
+	images: {
+		unoptimized: true,
+	},
 
-  //webpack 설정
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      use: ["@svgr/webpack"],
-    });
-    return config;
-  },
+	//webpack 설정
+	webpack(config) {
+		config.module.rules.push({
+			test: /\.svg$/i,
+			issuer: /\.[jt]sx?$/,
+			use: ["@svgr/webpack"],
+		});
+		return config;
+	},
 
-  turbopack: {
-    root: __dirname,
-    rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
-    },
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/proxy-api/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
-    ];
-  },
+	turbopack: {
+		root: __dirname,
+		rules: {
+			"*.svg": {
+				loaders: ["@svgr/webpack"],
+				as: "*.js",
+			},
+		},
+	},
+	async rewrites() {
+		return [
+			{
+				source: "/proxy-api/:path*",
+				destination: "http://localhost:8080/:path*",
+			},
+		];
+	},
+	async headers() {
+		return [
+			{
+				source: "/(.*)",
+				headers: [
+					{
+						key: "Content-Security-Policy",
+						value: `
+              default-src 'self';
+              script-src 'self' ${isDev ? "'unsafe-eval' 'unsafe-inline'" : ""};
+              style-src 'self' ${isDev ? "'unsafe-inline'" : ""};
+              img-src 'self' data: https:;
+              connect-src 'self';
+              font-src 'self';
+              object-src 'none';
+              base-uri 'none';
+              frame-ancestors 'none';
+            `
+							.replace(/\s{2,}/g, " ")
+							.trim(),
+					},
+				],
+			},
+		];
+	},
 };
 export default nextConfig;

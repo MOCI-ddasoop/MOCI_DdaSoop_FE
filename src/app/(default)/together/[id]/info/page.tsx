@@ -1,5 +1,8 @@
-function page() {
-  const info = "모임 소개 글";
+import { getTogetherDescription } from "@/domain/together/api/getTogetherDescription";
+
+async function page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { data: info } = await getTogetherDescription(id);
   return <p>{info}</p>;
 }
 

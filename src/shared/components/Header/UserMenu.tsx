@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { IoNotificationsOutline } from "react-icons/io5";
+
 import { usePathname } from "next/navigation";
 import Notification from "@/domain/notification/components/Notification";
 import { useGetRecentNotification } from "@/domain/notification/api/useGetRecentNotification";
