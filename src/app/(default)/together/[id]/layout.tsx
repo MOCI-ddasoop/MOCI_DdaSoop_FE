@@ -1,42 +1,33 @@
-import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
-import { DetailInfoProps } from "@/domain/participation/types";
-import ImageSwiper from "@/shared/components/ImageSwiper";
-import TabBar from "@/shared/components/TabBar";
-import { togetherTabContents } from "@/shared/utils/navigation";
+import Loading from "@/domain/participation/components/DetailLoadingSkeleton";
+import TogetherDetailLayout from "@/domain/participation/components/TogetherDetailLayout";
+import { Suspense } from "react";
 
-const DETAIL_INFO_DUMMY: DetailInfoProps = {
-	type: "together",
-	title: "함께하기",
-	category: "카테고리1",
-	participant: 7, // 참여자수(제한인원 있는 경우만 표시)
-	status: "모집중", // 모집중 모집완료
-	startDate: "2024-06-01",
-	endDate: "2024-06-30",
-	isOnline: "온라인",
-	goal: 100,
-	progress: 40,
-};
+// const DETAIL_INFO_DUMMY: DetailInfoProps = {
+//   id: "",
+//   type: "together",
+//   title: "함께하기",
+//   category: "카테고리1",
+//   participant: 7, // 참여자수(제한인원 있는 경우만 표시)
+//   status: "모집중", // 모집중 모집완료
+//   startDate: "2024-06-01",
+//   endDate: "2024-06-30",
+//   isOnline: "온라인",
+//   goal: 100,
+//   progress: 40,
+// };
 
 async function page({
-	params,
-	children,
+  params,
+  children,
 }: {
-	params: Promise<{ id: string }>;
-	children: React.ReactNode;
+  params: Promise<{ id: string }>;
+  children: React.ReactNode;
 }) {
-	const { id } = await params;
-	return (
-		<div className="flex justify-between pt-4">
-			<div className="w-[calc(100%-280px)]">
-				<div className="w-full aspect-10/7">
-					<ImageSwiper slideList={[]} />
-				</div>
-				<TabBar type="together" tabContents={togetherTabContents(id)} />
-				<main className="py-4">{children}</main>
-			</div>
-			<ParticipationDetailInfo props={DETAIL_INFO_DUMMY} />
-		</div>
-	);
+  return (
+    <Suspense fallback={<Loading />}>
+      <TogetherDetailLayout params={params}>{children}</TogetherDetailLayout>
+    </Suspense>
+  );
 }
 
 export default page;

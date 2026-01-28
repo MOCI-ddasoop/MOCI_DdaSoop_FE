@@ -1,9 +1,10 @@
 import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
+import { getOwnTogetherList } from "@/domain/together/api/getOwnTogetherList";
 import TogetherSection from "@/domain/together/components/TogetherSection";
 import { TogetherPageProps } from "@/domain/together/types";
 import { sortOptions, sortType } from "@/shared/constants/filter";
 
-async function Together({ searchParams }: TogetherPageProps) {
+async function page({ searchParams }: TogetherPageProps) {
   const searchParam = await searchParams;
 
   const category = searchParam.category?.split(",") ?? [];
@@ -13,8 +14,6 @@ async function Together({ searchParams }: TogetherPageProps) {
     sortType[(searchParam.sort ?? "LATEST") as keyof typeof sortType] ??
     sortOptions[0];
 
-  const initialData = await getInitTogetherList();
-
   return (
     <>
       <TogetherSection
@@ -22,10 +21,11 @@ async function Together({ searchParams }: TogetherPageProps) {
         initialIsOnline={isOnline}
         initialPage={page}
         sort={sort}
-        initialData={initialData}
+        initialData={undefined}
+        mypage
       />
     </>
   );
 }
 
-export default Together;
+export default page;
