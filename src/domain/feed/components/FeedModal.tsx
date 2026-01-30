@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FeedDetailCard from "./FeedDetailCard";
 import CommentContainer from "@/domain/comment/components/CommentContainer";
 import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
 import ImageSwiper from "@/shared/components/ImageSwiper";
+import { scrollToNewComment } from "@/domain/comment/utils/scrollToNewComment";
 
 function FeedModal({ feedId }: { feedId: string }) {
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,13 @@ function FeedModal({ feedId }: { feedId: string }) {
 		setTargetNickname(nickname ?? null);
 		setTargetId(id ?? null);
 	};
+
+	const handleScrollToNewComment = useCallback((target: HTMLElement) => {
+		const container = contentRef.current;
+		if (!container) return;
+
+		scrollToNewComment(container, target);
+	}, []);
 
 	return (
 		<div
@@ -55,7 +63,10 @@ function FeedModal({ feedId }: { feedId: string }) {
 					<FeedDetailCard item={feedDetailData ?? {}} />
 
 					{/* comment 영역 */}
-					<CommentContainer onCommentTargetClick={handleCommentTargetClick} />
+					<CommentContainer
+						onCommentTargetClick={handleCommentTargetClick}
+						onScrollToNewComment={handleScrollToNewComment}
+					/>
 				</div>
 
 				<div className="px-2 py-1 border-t border-gray-200 bg-white">

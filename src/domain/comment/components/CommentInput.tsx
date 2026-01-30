@@ -1,11 +1,11 @@
 "use client";
 import tw from "@/shared/utils/tw";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
-
 import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
+import { useCommentScrollStore } from "../store/useCommentScrollStore";
 
 interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
@@ -22,22 +22,35 @@ function CommentInput({
 	const feedId = useSearchParams().get("feedId");
 	const { mutate: setCommentMutation } = useSetComment();
 	const textBoxRef = useRef<TextBoxHandle>(null);
+	const { setLastCreatedCommentId, setLastCreatedCommentParentId } =
+		useCommentScrollStore();
 
 	const submitComment = () => {
 		if (!textBoxRef.current) return;
 		if (!comment) return;
 		if (!comment.trim()) return;
 
-		setCommentMutation({
-			commentType: "FEED",
-			content: textBoxRef.current.getHTML(),
-			targetId: Number(feedId),
-			parentId: targetId ?? undefined,
-		});
-
-		onCommentTargetClick?.(null, null);
-		textBoxRef.current?.clear();
+		setCommentMutation(
+			{
+				commentType: "FEED",
+				content: textBoxRef.current.getHTML(),
+				targetId: Number(feedId),
+				parentId: targetId ?? undefined,
+			},
+			{
+				onSuccess: (data) => {
+					setLastCreatedCommentId(data);
+					setLastCreatedCommentParentId(targetId ?? null);
+					onCommentTargetClick?.(null, null);
+					textBoxRef.current?.clear();
+				},
+			},
+		);
 	};
+
+	useEffect(() => {
+		if (targetId) textBoxRef.current?.focus();
+	}, [targetId]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -55,7 +68,7 @@ function CommentInput({
 
 	return (
 		<form
-			className="flex flex-col gap-2"
+			className="flex flex-col"
 			onSubmit={handleSubmit}
 			onKeyDown={handleEnterKeyDown}
 		>

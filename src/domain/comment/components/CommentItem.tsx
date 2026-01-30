@@ -4,7 +4,7 @@ import reportModalStore from "@/domain/report/stores/reportModalStore";
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Ref, useEffect, useRef, useState } from "react";
 import { useToggleReact } from "../api/useToggleReact";
 import { CommentResponse } from "../types";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,8 +14,11 @@ import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
 import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import { useCommentScrollStore } from "../store/useCommentScrollStore";
+import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 
 interface CommentItemProps {
+	ref?: Ref<HTMLLIElement>;
 	item: CommentResponse;
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 	feedId?: number;
@@ -24,6 +27,7 @@ interface CommentItemProps {
 }
 
 function CommentItem({
+	ref: outRef,
 	item,
 	onCommentTargetClick,
 	feedId,
@@ -50,9 +54,11 @@ function CommentItem({
 	const [selectedOption, setSelectedOption] = useState<string | null>(null);
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const [editedContent, setEditedContent] = useState<string>(content ?? "");
 	const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
 	const textBoxRef = useRef<TextBoxHandle>(null);
+
+	const { lastCreatedCommentParentId, setOpenedReplyParentId } =
+		useCommentScrollStore();
 
 	const { mutate: toggleReactMutation, isPending } = useToggleReact({
 		onSuccess: () => {
@@ -96,6 +102,13 @@ function CommentItem({
 			}
 		});
 	};
+	useEffect(() => {
+		if (item.id === lastCreatedCommentParentId) {
+			// eslint-disable-next-line react-hooks/set-state-in-effect
+			setIsRepliesOpen(true);
+			setOpenedReplyParentId(item.id!);
+		}
+	}, [item.id, lastCreatedCommentParentId, setOpenedReplyParentId]);
 
 	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
 		if (e.key === "Enter") {
@@ -141,7 +154,7 @@ function CommentItem({
 	};
 
 	return (
-		<li className="flex gap-1 w-full">
+		<li ref={outRef} data-comment-id={item.id} className="flex gap-1 w-full">
 			{isRelies && <div className="w-1 h-full bg-gray-300"></div>}
 			<div
 				className={tw(
@@ -172,9 +185,6 @@ function CommentItem({
 									className="flex-1"
 									mode="comment"
 									initialValue={content}
-									setValue={(val) => {
-										setEditedContent(val);
-									}}
 								/>
 								<div className="flex-center gap-1 text-sm">
 									<span className="text-gray-400">Enter 키로</span>
@@ -183,7 +193,20 @@ function CommentItem({
 							</form>
 						) : (
 							<>
-								<span className="inline font-semibold text-gray-900 cursor-pointer">
+								<span
+									className="inline font-semibold text-gray-900 cursor-pointer"
+									onClick={() => {
+										if (!parentId) {
+											onCommentTargetClick?.(
+												authorNickname ?? null,
+												id ?? null,
+											);
+											textBoxRef.current?.focus();
+										} else {
+											onCommentTargetClick?.(null, null);
+										}
+									}}
+								>
 									{authorName}
 								</span>
 								<span
@@ -200,14 +223,16 @@ function CommentItem({
 				<div className="w-full flex items-center gap-2 justify-between">
 					<div className="flex items-center w-full gap-2 pl-2">
 						{/* TODO: createAt 임시 비활성화. 날짜 로그가 추가되면 다시 추가(옵션이 다른건지... 렌더링이 안됨.) */}
-						<div className="text-sm text-gray-500">{"날짜정보"}</div>
+						<div className="text-sm text-gray-500">
+							{formatRelativeDate(createdAt ?? "")}
+						</div>
 						{!parentId ? (
 							<button
 								type="button"
 								className="cursor-pointer text-sm text-gray-500"
 								onClick={() => {
-									console.log("author", authorNickname);
 									onCommentTargetClick?.(authorNickname ?? null, id ?? null);
+									textBoxRef.current?.focus();
 									setIsRepliesOpen((prev) => {
 										if (!prev === false) {
 											onCommentTargetClick?.(null, null);
@@ -259,6 +284,15 @@ function CommentItem({
 								onCommentTargetClick={onCommentTargetClick}
 							/>
 						))}
+						<button
+							className="text-sm text-slate-500 text-left cursor-pointer"
+							onClick={() => {
+								setIsRepliesOpen(false);
+								onCommentTargetClick?.(null, null);
+							}}
+						>
+							답글 숨기기
+						</button>
 					</ul>
 				)}
 			</div>
