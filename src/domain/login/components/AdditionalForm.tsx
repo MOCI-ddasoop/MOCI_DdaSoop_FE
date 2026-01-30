@@ -7,49 +7,40 @@ import { checkNickname } from "../api/checkNickname";
 import { checkEmail } from "../api/checkEmail";
 
 export default function AdditionalForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const temporaryToken = searchParams.get("token") || "";
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const [isNicknameChecked, setIsNicknameChecked] = useState(false);
-  const [isEmailChecked, setIsEmailChecked] = useState(false);
-  const searchParams = useSearchParams();
-  const temporaryToken = searchParams.get("token") || "";
 
-  useEffect(()=>{setIsNicknameChecked(false);},[nickname]);
-  useEffect(()=>{setIsEmailChecked(false);},[email]);
+  const [nicknameAvailable, setNicknameAvailable] = useState<boolean | null>(null);
+  const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
+
+  useEffect(()=>{setNicknameAvailable(null);},[nickname]);
+  useEffect(()=>{setEmailAvailable(null);},[email]);
 
   const handleNicknameCheck = async () => {
     if(!nickname.trim()) return alert("닉네임을 입력해주세요.");
     try{
-      const isAvailable = await checkNickname(nickname);
-      if(isAvailable){
-        setIsNicknameChecked(true);
-        alert("사용 가능한 닉네임입니다.");
-      }
-      else{
-        alert("이미 사용 중인 닉네임입니다.");
-      }
-    }catch(error){
+      const { available, message} = await checkNickname(nickname.trim());
+      setNicknameAvailable(available ?? false);
+      alert(message);
+    }catch{
       alert("닉네임 중복 체크 중 오류가 발생했습니다.");
     }
   }
   const handleEmailCheck = async () => {
     if(!email.trim()) return alert("이메일을 입력해주세요.");
     try{
-      const isAvailable = await checkEmail(email);
-      if(isAvailable){
-        setIsEmailChecked(true);
-        alert("사용 가능한 이메일입니다.");
-      }
-      else{
-        alert("이미 사용 중인 이메일입니다.");
-      }
-    }catch(error){
+      const { available, message} = await checkEmail(email.trim());
+      setEmailAvailable(available ?? false);
+      alert(message);
+    }catch{
       alert("이메일 중복 체크 중 오류가 발생했습니다.");
-    } 
+    }
   }
-  const isFormFilled = nickname.trim() !== "" && email.trim() !== "" && isNicknameChecked && isEmailChecked;
+  const isFormFilled = nickname.trim() !== "" && email.trim() !== "" && nicknameAvailable === true && emailAvailable === true;
 
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,7 +72,9 @@ export default function AdditionalForm() {
           value={nickname}
           onChange={(e) => setNickname(e.target.value)}
         />
-        {!isNicknameChecked ? (
+        { nicknameAvailable === true ? (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        ) : (
           <Button
             type="button"
             size="sm"
@@ -89,8 +82,6 @@ export default function AdditionalForm() {
           >
             중복 확인
           </Button>
-        ) : (
-          <span className="text-mainblue text-sm font-medium">확인 완료</span>
         )}
       </div>
 
@@ -107,7 +98,9 @@ export default function AdditionalForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        {!isEmailChecked ? (
+        { emailAvailable === true ? (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        ) : (
           <Button
             type="button"
             size="sm"
@@ -115,8 +108,6 @@ export default function AdditionalForm() {
           >
             중복 확인
           </Button>
-        ) : (
-          <span className="text-mainblue text-sm font-medium">확인 완료</span>
         )}
       </div>
 
