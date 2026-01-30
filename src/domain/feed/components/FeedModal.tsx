@@ -30,11 +30,14 @@ function FeedModal({ feedId }: { feedId: string }) {
 		setTargetId(id ?? null);
 	};
 
-	const handleScrollToNewComment = useCallback((target: HTMLElement) => {
+	const handleScrollToComment = useCallback((target?: HTMLElement) => {
 		const container = contentRef.current;
 		if (!container) return;
-
-		scrollToNewComment(container, target);
+		if (target) {
+			scrollToNewComment(container, target);
+		} else {
+			container.scrollTo({ top: 0, behavior: "smooth" });
+		}
 	}, []);
 
 	return (
@@ -65,7 +68,7 @@ function FeedModal({ feedId }: { feedId: string }) {
 					{/* comment 영역 */}
 					<CommentContainer
 						onCommentTargetClick={handleCommentTargetClick}
-						onScrollToNewComment={handleScrollToNewComment}
+						onScrollToComment={handleScrollToComment}
 					/>
 				</div>
 

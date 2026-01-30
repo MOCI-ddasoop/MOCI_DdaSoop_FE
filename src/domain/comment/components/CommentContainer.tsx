@@ -6,19 +6,29 @@ import { useCommentListByFeedId } from "../api/useGetCommentListByFeedId";
 import { useSearchParams } from "next/navigation";
 import { useCommentScrollStore } from "../store/useCommentScrollStore";
 import { useEffect, useRef } from "react";
+import { useIntersection } from "@/shared/hooks/useIntersection";
+import { FaRegArrowAltCircleUp } from "react-icons/fa";
 
 // 피드 모달에서만 사용
 function CommentContainer({
 	className,
 	onCommentTargetClick,
-	onScrollToNewComment,
+	onScrollToComment,
 }: {
 	className?: string;
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
-	onScrollToNewComment: (target: HTMLElement) => void;
+	onScrollToComment: (target?: HTMLElement) => void;
 }) {
 	const feedId = useSearchParams().get("feedId");
-	const { data: feedCommentData } = useCommentListByFeedId(feedId);
+	const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isFetching,
+		isFetchingNextPage,
+		isPending,
+	} = useCommentListByFeedId(feedId);
+	const feedCommentData = data?.pages.flatMap((page) => page.content ?? []);
 	const {
 		lastCreatedCommentId,
 		setLastCreatedCommentId,
@@ -33,11 +43,18 @@ function CommentContainer({
 	);
 	const commentRefs = useRef<Map<number, HTMLElement>>(new Map());
 
+	const triggerRef = useIntersection({
+		onIntersect: () => {
+			fetchNextPage();
+		},
+		hasNextPage,
+		rootMargin: "40px",
+		isFetching,
+	});
+
 	useEffect(() => {
 		console.log(feedCommentData);
 	}, [feedCommentData]);
-
-	const commentCount = feedCommentData?.content.length ?? 0;
 
 	useEffect(() => {
 		if (lastCreatedCommentParentId) {
@@ -45,7 +62,7 @@ function CommentContainer({
 			const target = commentRefs.current.get(lastCreatedCommentParentId);
 			if (!target) return;
 
-			onScrollToNewComment(target);
+			onScrollToComment(target);
 			setLastCreatedCommentId(null);
 			setLastCreatedCommentParentId(null);
 			setOpenedReplyParentId(null);
@@ -53,25 +70,24 @@ function CommentContainer({
 			if (!lastCreatedCommentId) return;
 			const target = commentRefs.current.get(lastCreatedCommentId);
 			if (!target) return;
-			onScrollToNewComment(target);
+			onScrollToComment(target);
 		}
 		setLastCreatedCommentId(null);
 	}, [
 		lastCreatedCommentId,
 		lastCreatedCommentParentId,
-		onScrollToNewComment,
+		onScrollToComment,
 		setLastCreatedCommentId,
-		commentCount,
+		feedCommentData,
 		openedReplyParentId,
 		setLastCreatedCommentParentId,
 		setOpenedReplyParentId,
 	]);
 
 	if (!feedCommentData) return null;
-
 	return (
 		<ul className={tw("w-full flex flex-col gap-2", className)}>
-			{feedCommentData.content.map((item) => (
+			{feedCommentData.map((item) => (
 				<CommentItem
 					key={item.id}
 					item={item}
@@ -87,9 +103,29 @@ function CommentContainer({
 					}}
 				/>
 			))}
-			<button className="py-2 text-sm text-slate-500 text-left cursor-pointer">
-				댓글 불러오기
-			</button>
+			<div ref={triggerRef}>
+				{isPending && (
+					<div className="h-8 flex items-center">
+						<div className="sm-gray-spinner translate-x-7"></div>
+					</div>
+				)}
+				{isFetchingNextPage && (
+					<div className="h-8 flex items-center">
+						<div className="sm-gray-spinner translate-x-7"></div>
+					</div>
+				)}
+				{!isPending && !hasNextPage && (
+					<button
+						className="flex-center gap-1 py-2 text-sm text-gray-500 text-left cursor-pointer translate-x-3"
+						onClick={() => {
+							onScrollToComment();
+						}}
+					>
+						<FaRegArrowAltCircleUp />
+						맨위로 가기
+					</button>
+				)}
+			</div>
 		</ul>
 	);
 }
