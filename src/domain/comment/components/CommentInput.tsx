@@ -58,6 +58,7 @@ function CommentInput({
 	};
 
 	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
 		if (e.key === "Enter") {
 			if (e.metaKey || e.ctrlKey) return;
 
