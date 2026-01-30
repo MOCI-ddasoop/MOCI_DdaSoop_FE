@@ -9,6 +9,7 @@ import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 import { FeedResponse } from "../types";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -133,7 +134,9 @@ function FeedDetailCard({ item, className }: FeedDetailCardProps) {
 				</div>
 
 				{/* 날짜 영역 */}
-				<div className="text-sm text-gray-500 p-1">{createdAt}</div>
+				<div className="text-sm text-gray-500 p-1">
+					{formatRelativeDate(createdAt ?? "")}
+				</div>
 			</div>
 
 			<div className="flex items-center gap-2 py-1 px-2 border-b border-gray-200 justify-between">
