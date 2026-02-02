@@ -5,6 +5,7 @@ import tw from "@/shared/utils/tw";
 import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
 import { PositionedItem } from "./FeedCardContainer";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 
 type FeedCardImageProps = PositionedItem & {
 	alt: string;
@@ -46,7 +47,7 @@ function FeedCardImage({
 			}}
 			className={tw(
 				"bg-gray-100 rounded-md relative cursor-pointer group",
-				className
+				className,
 			)}
 		>
 			<AiOutlineLock
@@ -68,7 +69,10 @@ function FeedCardImage({
 					<div className="text-sm text-white text-nowrap">{authorName}</div>
 				</div>
 				<div className="w-full h-full flex items-center justify-center">
-					<p className="text-white text-sm line-clamp-2">{content}</p>
+					<p
+						className="text-white text-sm line-clamp-2 pointer-events-none"
+						dangerouslySetInnerHTML={{ __html: sanitizeHtml(content ?? "") }}
+					/>
 				</div>
 			</div>
 

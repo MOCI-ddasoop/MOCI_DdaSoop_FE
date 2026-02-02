@@ -1,6 +1,18 @@
 import { useEffect, useRef } from "react";
 
-export function useIntersection(onIntersect: () => void, enabled = true) {
+export function useIntersection({
+	onIntersect,
+	enabled = true,
+	rootMargin = "200px",
+	isFetching,
+	hasNextPage,
+}: {
+	onIntersect: () => void;
+	enabled?: boolean;
+	rootMargin?: string;
+	isFetching: boolean;
+	hasNextPage: boolean;
+}) {
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
@@ -8,19 +20,23 @@ export function useIntersection(onIntersect: () => void, enabled = true) {
 
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				if (entry.isIntersecting) onIntersect();
+				if (!entry.isIntersecting) return;
+				if (isFetching) return;
+				if (!hasNextPage) return;
+
+				onIntersect();
 			},
 			{
 				root: null,
 				threshold: 0,
-				rootMargin: "200px",
-			}
+				rootMargin,
+			},
 		);
 
 		observer.observe(ref.current);
 
 		return () => observer.disconnect();
-	}, [enabled, onIntersect]);
+	}, [enabled, hasNextPage, isFetching, onIntersect, rootMargin]);
 
 	return ref;
 }

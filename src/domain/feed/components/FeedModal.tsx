@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import FeedDetailCard from "./FeedDetailCard";
 import CommentContainer from "@/domain/comment/components/CommentContainer";
 import CommentInput from "@/domain/comment/components/CommentInput";
 import { useGetFeedById } from "../api/useGetFeedById";
 import ImageSwiper from "@/shared/components/ImageSwiper";
+import { scrollToNewComment } from "@/domain/comment/utils/scrollToNewComment";
 
 function FeedModal({ feedId }: { feedId: string }) {
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -23,11 +24,21 @@ function FeedModal({ feedId }: { feedId: string }) {
 
 	const handleCommentTargetClick = (
 		nickname: string | null,
-		id: number | null
+		id: number | null,
 	) => {
 		setTargetNickname(nickname ?? null);
 		setTargetId(id ?? null);
 	};
+
+	const handleScrollToComment = useCallback((target?: HTMLElement) => {
+		const container = contentRef.current;
+		if (!container) return;
+		if (target) {
+			scrollToNewComment(container, target);
+		} else {
+			container.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	}, []);
 
 	return (
 		<div
@@ -52,23 +63,16 @@ function FeedModal({ feedId }: { feedId: string }) {
 					ref={contentRef}
 					className="flex-1 overflow-y-auto overflow-x-hidden"
 				>
-					<FeedDetailCard
-						id={feedDetailData?.id || 0}
-						content={feedDetailData?.content || ""}
-						createdAt={feedDetailData?.createdAt || ""}
-						bookmarkCount={feedDetailData?.reactionCount || 0}
-						commentCount={feedDetailData?.commentCount || 0}
-						isBookmarked={feedDetailData?.isBookmarked || false}
-						tags={feedDetailData?.tags || []}
-						visibility={feedDetailData?.visibility || "PUBLIC"}
-						authorName={feedDetailData?.authorName || "사용자를 찾을수 없음"}
-					/>
+					<FeedDetailCard item={feedDetailData ?? {}} />
 
 					{/* comment 영역 */}
-					<CommentContainer onCommentTargetClick={handleCommentTargetClick} />
+					<CommentContainer
+						onCommentTargetClick={handleCommentTargetClick}
+						onScrollToComment={handleScrollToComment}
+					/>
 				</div>
 
-				<div className="p-2 border-t border-gray-200 bg-white">
+				<div className="px-2 py-1 border-t border-gray-200 bg-white">
 					<CommentInput
 						targetNickname={targetNickname}
 						targetId={targetId}
