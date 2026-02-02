@@ -1,73 +1,12 @@
-export interface CommentType {
-  id: number;
-  commentType: string;
-  content: string;
-  authorId: number;
-  authorName: string;
-  authorNickname: string;
-  authorProfileImage: string;
-  targetId: number;
-  parentId: null | number;
-  replies: CommentType[];
-  replyCount: number;
-  reactionCount: number;
-  isReacted: boolean;
-  createdAt: string | null;
-  updatedAt: string | null;
-  reply: boolean;
-}
+import type { components } from "@/types/api/v1";
 
-interface Replies {
-  id: number;
-  commentType: string;
-  content: string;
-  authorId: number;
-  authorName: string;
-  authorNickname: string;
-  authorProfileImage: string;
-  targetId: number;
-  parentId: number;
-  replies: null | Replies[];
-  replyCount: null | number;
-  reactionCount: number;
-  isReacted: boolean;
-  createdAt: string | null;
-  updatedAt: string | null;
-  reply: boolean;
-}
+export type CommentCreateRequest =
+	components["schemas"]["CommentCreateRequest"];
+export type CommentUpdateRequest =
+	components["schemas"]["CommentUpdateRequest"];
+export type CommentResponse = components["schemas"]["CommentResponse"];
+export type Page = components["schemas"]["Page"];
 
-export interface CommentPage {
-  content: CommentType[];
-  pageable: {
-    pageNumber: number;
-    pageSize: number;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  last: boolean;
-  totalElements: number;
-  totalPages: number;
-  numberOfElements: number;
-  first: boolean;
-  size: number;
-  number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  empty: boolean;
-}
-
-export interface commentParams {
-  commentType: "FEED" | "DONATION" | "TOGETHER";
-  content: string;
-  targetId: number;
-  parentId?: number | null;
-}
+export type CommentPage = Omit<Page, "content"> & {
+	content: CommentResponse[];
+};

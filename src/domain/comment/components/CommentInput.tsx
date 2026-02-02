@@ -1,10 +1,11 @@
 "use client";
 import tw from "@/shared/utils/tw";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
-
 import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
+import { useCommentScrollStore } from "../store/useCommentScrollStore";
 
 interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
@@ -19,36 +20,70 @@ function CommentInput({
 }: CommentInputProps) {
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
-	const { mutate: setCommentMutation } = useSetComment();
+	const { mutate: setCommentMutation, isPending } = useSetComment();
+	const textBoxRef = useRef<TextBoxHandle>(null);
+	const { setLastCreatedCommentId, setLastCreatedCommentParentId } =
+		useCommentScrollStore();
+
+	const submitComment = () => {
+		if (!textBoxRef.current) return;
+		if (!comment) return;
+		if (!comment.trim()) return;
+
+		setCommentMutation(
+			{
+				commentType: "FEED",
+				content: textBoxRef.current.getHTML(),
+				targetId: Number(feedId),
+				parentId: targetId ?? undefined,
+			},
+			{
+				onSuccess: (data) => {
+					setLastCreatedCommentId(data);
+					setLastCreatedCommentParentId(targetId ?? null);
+					onCommentTargetClick?.(null, null);
+					textBoxRef.current?.clear();
+				},
+			},
+		);
+	};
+
+	useEffect(() => {
+		if (targetId) textBoxRef.current?.focus();
+	}, [targetId]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!comment.trim()) return;
+		submitComment();
+	};
 
-		setCommentMutation({
-			commentType: "FEED",
-			content: comment,
-			targetId: Number(feedId),
-			parentId: targetId ?? null,
-		});
+	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
+		if (e.key === "Enter") {
+			if (e.metaKey || e.ctrlKey) return;
 
-		setComment("");
-		onCommentTargetClick?.(null, null);
+			e.preventDefault();
+			submitComment();
+		}
 	};
 
 	return (
-		<form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+		<form
+			className="flex flex-col"
+			onSubmit={handleSubmit}
+			onKeyDown={handleEnterKeyDown}
+		>
 			{targetNickname && (
 				<div
 					className={tw(
 						"flex items-center gap-2 justify-between duration-300 translate-y-full opacity-0",
-						targetNickname ? "translate-y-0 opacity-100" : ""
+						targetNickname ? "translate-y-0 opacity-100" : "",
 					)}
 				>
 					<div className="text-sm text-gray-500">
 						<span className="font-semibold text-mainblue ">
 							@{targetNickname}
-						</span>{" "}
+						</span>
 						님에게 보내는 댓글
 					</div>
 					<button
@@ -61,24 +96,31 @@ function CommentInput({
 				</div>
 			)}
 			<div className="flex justify-center items-stretch gap-2 w-full h-full">
-				<div className="flex-1 flex items-center border-gray-300">
-					<input
-						type="text"
+				<div className="flex-1 flex items-center border-gray-300 leading-relaxed wrap-break-word">
+					<TextBox
 						placeholder="댓글을 입력해주세요."
-						className="focus:outline-0 flex-1"
-						value={comment}
-						onChange={(e) => setComment(e.target.value)}
+						ref={textBoxRef}
+						mode="comment"
+						setValue={setComment}
+						className="max-h-20 overflow-auto"
 					/>
 				</div>
 
-				<div className="self-stretch py-2">
+				<div className="self-stretch py-2 relative">
 					<button
 						type="submit"
 						className={tw(
-							"h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150",
-							comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300"
+							"h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150 select-none",
+							comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300",
+							isPending ? "bg-gray-300 text-transparent" : "",
 						)}
+						disabled={isPending}
 					>
+						{isPending ? (
+							<div className="sm-gray-spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+						) : (
+							""
+						)}
 						게시
 					</button>
 				</div>

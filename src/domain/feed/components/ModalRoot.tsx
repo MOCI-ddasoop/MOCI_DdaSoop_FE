@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useModalStore } from "../store/store";
+import { useModalStore } from "../store/useModalStore";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import FeedModal from "./FeedModal";
