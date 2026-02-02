@@ -14,6 +14,7 @@ export const useToggleFeedBookmark = () => {
     },
     onSuccess(_data, variables) {
       qc.invalidateQueries({ queryKey: queryKeys.feeds.id(variables) });
+      qc.invalidateQueries({ queryKey: queryKeys.feeds.bookmark() });
     },
   });
 };

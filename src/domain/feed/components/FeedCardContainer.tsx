@@ -6,7 +6,10 @@ import FeedCardImage from "./FeedCardImage";
 import tw from "@/shared/utils/tw";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { throttle } from "@/shared/utils/throttle";
-import { useGetInfiniteFeedList } from "../api/useGetInfiniteFeedList";
+import {
+  InfiniteFeedParams,
+  useGetInfiniteFeedList,
+} from "../api/useGetInfiniteFeedList";
 import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
 import { useAuthStore } from "@/store/authStore";
@@ -23,11 +26,13 @@ function FeedCardContainer({
   pageName,
   queryParams,
   notice = false,
+  bookmark = false,
 }: {
   className?: string;
   pageName?: "together" | "member";
   queryParams?: string;
   notice?: boolean;
+  bookmark?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -37,13 +42,27 @@ function FeedCardContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const memberId = useAuthStore((state) => state.me?.memberId);
 
+  const infiniteParams: InfiniteFeedParams = (() => {
+    if (pageName === "together") {
+      return {
+        page: "together",
+        togetherId: Number(queryParams),
+        notice,
+      };
+    }
+
+    if (pageName === "member") {
+      return {
+        page: "member",
+        memberId: memberId!,
+        bookmark,
+      };
+    }
+    return {};
+  })();
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
-    useGetInfiniteFeedList({
-      page: pageName,
-      memberId: pageName === "member" ? memberId : undefined,
-      togetherId: pageName === "together" ? Number(queryParams) : undefined,
-      notice,
-    });
+    useGetInfiniteFeedList(infiniteParams);
   //무한스크롤 target ref
   const triggerRef = useIntersection(() => {
     fetchNextPage();
