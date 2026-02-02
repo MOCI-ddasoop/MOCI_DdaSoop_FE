@@ -41,6 +41,7 @@ function CommentItem({
 		authorProfileImage,
 		content,
 		createdAt,
+		updatedAt,
 		replies,
 		replyCount,
 		parentId,
@@ -111,6 +112,7 @@ function CommentItem({
 	}, [item.id, lastCreatedCommentParentId, setOpenedReplyParentId]);
 
 	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
 		if (e.key === "Enter") {
 			if (e.metaKey || e.ctrlKey) return;
 
@@ -189,12 +191,18 @@ function CommentItem({
 								<div className="flex-center gap-1 text-sm">
 									<span className="text-gray-400">Enter 키로</span>
 									<button className="text-mainblue underline">수정</button>
+									<button
+										className="text-mainblue underline"
+										onClick={() => setIsEditMode(false)}
+									>
+										취소
+									</button>
 								</div>
 							</form>
 						) : (
-							<>
+							<div className="leading-relaxed wrap-break-word">
 								<span
-									className="inline font-semibold text-gray-900 cursor-pointer"
+									className="inline font-semibold text-gray-900 cursor-pointer mr-1.5"
 									onClick={() => {
 										if (!parentId) {
 											onCommentTargetClick?.(
@@ -215,14 +223,18 @@ function CommentItem({
 										__html: sanitizeHtml(content ?? ""),
 									}}
 								></span>
-							</>
+								{updatedAt !== createdAt ? (
+									<span className="text-gray-400 ml-1 text-sm">(수정됨)</span>
+								) : (
+									""
+								)}
+							</div>
 						)}
 					</div>
 				</div>
 
 				<div className="w-full flex items-center gap-2 justify-between">
 					<div className="flex items-center w-full gap-2 pl-2">
-						{/* TODO: createAt 임시 비활성화. 날짜 로그가 추가되면 다시 추가(옵션이 다른건지... 렌더링이 안됨.) */}
 						<div className="text-sm text-gray-500">
 							{formatRelativeDate(createdAt ?? "")}
 						</div>

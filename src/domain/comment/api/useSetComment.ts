@@ -4,6 +4,7 @@ import { api } from "@/shared/config/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CommentCreateRequest } from "../types";
 import { queryKeys } from "@/shared/config/queryKeys";
+import Swal from "sweetalert2";
 
 export const useSetComment = () => {
 	const queryClient = useQueryClient();
@@ -21,6 +22,13 @@ export const useSetComment = () => {
 		onSuccess: (_data, variables) => {
 			queryClient.invalidateQueries({
 				queryKey: queryKeys.comments.list(variables.targetId.toString()),
+			});
+		},
+		onError: () => {
+			Swal.fire({
+				title: "업로드 실패",
+				icon: "error",
+				timer: 1500,
 			});
 		},
 	});

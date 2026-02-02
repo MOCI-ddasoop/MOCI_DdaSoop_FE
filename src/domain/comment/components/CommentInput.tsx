@@ -20,7 +20,7 @@ function CommentInput({
 }: CommentInputProps) {
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
-	const { mutate: setCommentMutation } = useSetComment();
+	const { mutate: setCommentMutation, isPending } = useSetComment();
 	const textBoxRef = useRef<TextBoxHandle>(null);
 	const { setLastCreatedCommentId, setLastCreatedCommentParentId } =
 		useCommentScrollStore();
@@ -96,7 +96,7 @@ function CommentInput({
 				</div>
 			)}
 			<div className="flex justify-center items-stretch gap-2 w-full h-full">
-				<div className="flex-1 flex items-center border-gray-300">
+				<div className="flex-1 flex items-center border-gray-300 leading-relaxed wrap-break-word">
 					<TextBox
 						placeholder="댓글을 입력해주세요."
 						ref={textBoxRef}
@@ -106,14 +106,21 @@ function CommentInput({
 					/>
 				</div>
 
-				<div className="self-stretch py-2">
+				<div className="self-stretch py-2 relative">
 					<button
 						type="submit"
 						className={tw(
-							"h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150",
+							"h-full bg-gray-300 text-white p-2 rounded-md text-nowrap text-sm duration-150 select-none",
 							comment.length > 0 ? "bg-mainblue cursor-pointer" : "bg-gray-300",
+							isPending ? "bg-gray-300 text-transparent" : "",
 						)}
+						disabled={isPending}
 					>
+						{isPending ? (
+							<div className="sm-gray-spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+						) : (
+							""
+						)}
 						게시
 					</button>
 				</div>
