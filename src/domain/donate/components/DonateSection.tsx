@@ -70,6 +70,7 @@ function DonateSection({
         className={
           items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
         }
+        isLogin={!!userId}
       />
       <Pagination totalPages={items?.data.totalPages ?? 0} />
     </>

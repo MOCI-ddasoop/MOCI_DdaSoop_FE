@@ -10,6 +10,7 @@ interface TogetherContainerProps {
   items: TogetherInfo[];
   mypage?: boolean;
   className?: string;
+  isLogin: boolean;
 }
 interface DonateContainerProps {
   type: "donate";
@@ -17,6 +18,7 @@ interface DonateContainerProps {
   items: TogetherInfo[] | DonateInfo[];
   mypage?: boolean;
   className?: string;
+  isLogin: boolean;
 }
 
 function ParticipationContainer({
@@ -25,12 +27,13 @@ function ParticipationContainer({
   items,
   mypage,
   className,
+  isLogin,
 }: TogetherContainerProps | DonateContainerProps) {
   return items.length === 0 ? (
     !mypage ? (
-      <AddParticipationCard type={type} fullWidth />
+      <AddParticipationCard type={type} fullWidth isLogin={isLogin} />
     ) : (
-      <p className="text-gray-500">내역이 존재하지 않습니다</p>
+      <p className="text-gray-400">내역이 존재하지 않습니다</p>
     )
   ) : (
     <div
@@ -39,7 +42,9 @@ function ParticipationContainer({
         className,
       )}
     >
-      {currentPage === 1 && !mypage && <AddParticipationCard type={type} />}
+      {currentPage === 1 && !mypage && (
+        <AddParticipationCard type={type} isLogin={isLogin} />
+      )}
       {type === "together"
         ? items.map((item) => (
             <ParticipationCard type={type} key={item.id} {...item} />

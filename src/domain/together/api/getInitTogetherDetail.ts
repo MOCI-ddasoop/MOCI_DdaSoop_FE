@@ -4,6 +4,7 @@ export const getInitTogetherDetail = async (
   id: string,
 ): Promise<TogetherDetailResponse> => {
   const res = await fetch(`http://localhost:8080/api/v1/together/list/${id}`, {
+    credentials: "include",
     cache: "no-store",
   });
   if (!res.ok) {

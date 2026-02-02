@@ -1,6 +1,7 @@
 import { components } from "@/types/api/v1";
 
 export type TogetherDto = components["schemas"]["TogetherDto"]; // unknown
+export type CreateRequest = components["schemas"]["CreateRequest"];
 
 export interface TogetherInfo {
   id: number;
@@ -69,15 +70,6 @@ export interface TogetherDescriptionResponse {
   resultCode: string;
   msg: string;
   data: string;
-}
-
-export interface TogetherPageProps {
-  searchParams: Promise<{
-    category?: string;
-    isOnline?: string;
-    page?: string;
-    sort?: string;
-  }>;
 }
 
 // 카테고리, 온/오프라인, 모집중/모집완료 ->  타입지정해도 좋을듯
