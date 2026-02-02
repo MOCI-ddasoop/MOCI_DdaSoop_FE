@@ -34,7 +34,8 @@ export const queryKeys = {
         { page: "member", memberId: params.memberId },
       ];
     },
-    notice: (id: number) => ["feeds", "notice", id],
+    togetherNotice: (id: number) => ["feeds", "notice", id],
+    bookmark: () => ["feeds", "bookmark"],
   },
   comments: {
     all: () => ["comments"],

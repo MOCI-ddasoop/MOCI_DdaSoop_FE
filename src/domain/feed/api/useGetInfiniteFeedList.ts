@@ -2,39 +2,56 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 
-interface InfiniteFeedParams {
-  page?: "together" | "member";
-  togetherId?: number;
-  memberId?: number;
-  notice?: boolean;
-}
+export type InfiniteFeedParams =
+  | { page?: undefined }
+  | {
+      page: "together";
+      togetherId: number;
+      notice?: boolean;
+    }
+  | {
+      page: "member";
+      memberId: number;
+      bookmark?: boolean;
+    };
 
-export const useGetInfiniteFeedList = ({
-  page,
-  togetherId,
-  memberId,
-  notice,
-}: InfiniteFeedParams = {}) => {
+export const useGetInfiniteFeedList = (
+  infiniteParams: InfiniteFeedParams = {},
+) => {
   return useInfiniteQuery({
-    queryKey: notice
-      ? queryKeys.feeds.notice(togetherId!)
-      : queryKeys.feeds.infinite({
-          page,
-          togetherId,
-          memberId,
-        }),
+    queryKey: (() => {
+      if (infiniteParams.page === "together") {
+        return infiniteParams.notice
+          ? queryKeys.feeds.togetherNotice(infiniteParams.togetherId)
+          : queryKeys.feeds.infinite({
+              page: "together",
+              togetherId: infiniteParams.togetherId,
+            });
+      }
+      if (infiniteParams.page === "member") {
+        return infiniteParams.bookmark
+          ? queryKeys.feeds.bookmark()
+          : queryKeys.feeds.infinite({
+              page: "member",
+              memberId: infiniteParams.memberId,
+            });
+      }
+      return queryKeys.feeds.infinite({});
+    })(),
     queryFn: async ({ pageParam }) => {
       let baseUrl;
 
-      switch (page) {
+      switch (infiniteParams.page) {
         case "together":
-          baseUrl = notice
-            ? `/api/feeds/together/${togetherId}/notices`
-            : `/api/feeds/together/${togetherId}/scroll`;
+          baseUrl = infiniteParams.notice
+            ? `/api/feeds/together/${infiniteParams.togetherId}/notices`
+            : `/api/feeds/together/${infiniteParams.togetherId}/scroll`;
           break;
 
         case "member":
-          baseUrl = `/api/feeds/members/${memberId}/scroll`;
+          baseUrl = infiniteParams.bookmark
+            ? `/api/feeds/bookmarks/me`
+            : `/api/feeds/members/${infiniteParams.memberId}/scroll`;
           break;
 
         default:
@@ -45,15 +62,16 @@ export const useGetInfiniteFeedList = ({
         lastFeedId?: number;
         togetherId?: number;
         memberId?: number;
-      } = { size: 20, togetherId, memberId };
+      } = { size: 20 };
 
       if (pageParam !== undefined && pageParam !== null) {
         params.lastFeedId = pageParam;
       }
 
-      const res = notice
-        ? await api.get(baseUrl)
-        : await api.get(baseUrl, { params });
+      const res =
+        infiniteParams.page === "together" && infiniteParams.notice
+          ? await api.get(baseUrl)
+          : await api.get(baseUrl, { params });
       return res.data;
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,
