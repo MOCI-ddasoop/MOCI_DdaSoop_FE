@@ -61,12 +61,22 @@ function FeedCardContainer({
     return {};
   })();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
-    useGetInfiniteFeedList(infiniteParams);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isPending,
+  } = useGetInfiniteFeedList(infiniteParams);
   //무한스크롤 target ref
-  const triggerRef = useIntersection(() => {
-    fetchNextPage();
-  }, hasNextPage);
+  const triggerRef = useIntersection({
+    onIntersect: () => {
+      fetchNextPage();
+    },
+    hasNextPage,
+    isFetching,
+  });
 
   const MIN_ITEM_HEIGHT = 150;
 

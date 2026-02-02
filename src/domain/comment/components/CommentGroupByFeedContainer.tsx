@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import FeedSummary from "@/domain/feed/components/FeedSummary";
 import { useGetCommentListByUser } from "../api/useGetCommentListByUser";
 
+//마이페이지에 들어갈 내 댓글보기
 function FeedGroupCommentContainer() {
 	const { data } = useGetCommentListByUser("1");
 

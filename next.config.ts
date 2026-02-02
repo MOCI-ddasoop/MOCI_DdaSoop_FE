@@ -35,30 +35,5 @@ const nextConfig: NextConfig = {
 			},
 		];
 	},
-	async headers() {
-		return [
-			{
-				source: "/(.*)",
-				headers: [
-					{
-						key: "Content-Security-Policy",
-						value: `
-              default-src 'self';
-              script-src 'self' ${isDev ? "'unsafe-eval' 'unsafe-inline'" : ""};
-              style-src 'self' ${isDev ? "'unsafe-inline'" : ""};
-              img-src 'self' data: https:;
-              connect-src 'self';
-              font-src 'self';
-              object-src 'none';
-              base-uri 'none';
-              frame-ancestors 'none';
-            `
-							.replace(/\s{2,}/g, " ")
-							.trim(),
-					},
-				],
-			},
-		];
-	},
 };
 export default nextConfig;
