@@ -1,16 +1,14 @@
 import { api } from "@/shared/config/api";
-import { AxiosError } from "axios";
 
-type DeleteUserError = {
-    code: string;
-    message: string;
+export type DeleteUserRequest = {
+    reason: string;
 }
 
-export const deleteUser = async () => {
-    try{
-        const res = await api.delete("/api/members/me");
-        return res.data;
-    }catch(error){
-        throw error as AxiosError<DeleteUserError>;
-    }
+export type DeleteUserResponse = {
+    message: string;
+};
+
+export const deleteUser = async (data: DeleteUserRequest): Promise<DeleteUserResponse> => {
+    const res = await api.delete("/api/members/me", { data });
+    return res.data;
 };

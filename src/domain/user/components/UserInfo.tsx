@@ -34,29 +34,46 @@ function UserInfo({ className }: { className?: string }) {
     try{
       await logout();
       Swal.fire("완료","로그아웃 되었습니다.","success");
+      router.push("/");
     }catch{
       Swal.fire("실패","로그아웃에 실패했습니다.","error");
     }
-    router.push("/");
   }
 
   const handleDeleteUser = async () => {
     const result = await Swal.fire({
-      title:"정말 회원 탈퇴하시겠습니까?",
-      text:"탈퇴하시면 모든 정보가 삭제되며 복구가 불가능합니다",
+      text:"정말 회원탈퇴 하시겠습니까?",
       icon:"warning",
       iconColor:"var(--color-mainred)",
-      confirmButtonColor:"var(--color-mainred)",
-      cancelButtonColor:"var(--color-gray)",
       confirmButtonText:"탈퇴",
+      confirmButtonColor:"var(--color-mainred)",
       cancelButtonText:"취소",
+      cancelButtonColor:"var(--color-gray)",
       showCancelButton:true,
     })
     if (!result.isConfirmed) return;
 
+    const reason = await Swal.fire({
+      title:"탈퇴 사유를 입력해주세요",
+      input: "textarea",
+      inputPlaceholder: "탈퇴 사유를 입력해주세요",
+      inputAttributes : {maxLength: "200"},
+      showCancelButton: true,
+      confirmButtonText: "탈퇴 완료",
+      confirmButtonColor:"var(--color-mainred)",
+      cancelButtonText: "취소",
+      cancelButtonColor:"var(--color-gray)",
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return "탈퇴 사유는 반드시 입력해야 합니다.";
+        }
+      },
+    })
+    if (!reason.isConfirmed) return;
+
     try{
-      await deleteUser();
-      Swal.fire("완료","회원탈퇴 되었습니다.","success");
+      await deleteUser({reason:reason.value});
+      await Swal.fire("완료","회원탈퇴 되었습니다.","success");
       logout();
       router.push("/");
     }catch(error){
