@@ -8,25 +8,28 @@ import { MdIosShare } from "react-icons/md";
 import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 import { FeedResponse } from "../types";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 
-type FeedDetailCardProps = FeedResponse & {
+type FeedDetailCardProps = {
+	item: FeedResponse;
 	className?: string;
 };
 
-function FeedDetailCard({
-	id,
-	authorName: author,
-	authorProfileImage = "/defaultFeedImage.png",
-	content,
-	createdAt: date,
-	bookmarkCount = 0,
-	commentCount = 0,
-	isBookmarked: bookMarkedByMe = false,
-	togetherTitle,
-	togetherId,
-	tags,
-	className,
-}: FeedDetailCardProps) {
+function FeedDetailCard({ item, className }: FeedDetailCardProps) {
+	const {
+		id,
+		authorName: author,
+		authorProfileImage = "/defaultFeedImage.png",
+		content,
+		createdAt,
+		bookmarkCount = 0,
+		commentCount = 0,
+		isBookmarked: bookMarkedByMe = false,
+		togetherTitle,
+		togetherId,
+		tags,
+	} = item;
 	const [bookmarkInfo, setBookmarkInfo] = useState<{
 		bookmarkCount: number;
 		bookMarkedByMe: boolean;
@@ -107,23 +110,16 @@ function FeedDetailCard({
 				</div>
 
 				{/* 모임 정보 영역 */}
-				<div className="flex items-center gap-2 p-4 border border-gray-300 rounded-md">
-					<div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-						{/* 모임사진 입력필요 */}
-						<Image src={""} alt={author ?? "기본이미지"} fill />
-					</div>
-					<div className="flex flex-col">
-						<div className="font-bold">모임이름을입력하세요</div>
-						<div className="flex items-center gap-2">
-							<div className="text-sm text-gray-500 p-2 bg-gray-100 rounded-md w-fit">
-								text
-							</div>
-							<div className="text-sm text-gray-500 p-2 bg-red-200 rounded-md w-fit">
-								text
-							</div>
-						</div>
-					</div>
-				</div>
+				{togetherId && togetherTitle && (
+					<TogetherListItem
+						id={togetherId}
+						image={""}
+						name={togetherTitle}
+						category={""}
+						isOnline={""}
+						href={"/together"}
+					/>
+				)}
 
 				{/* 태그 영역 */}
 				<div className="flex items-center gap-2 flex-wrap p-1">
@@ -138,7 +134,9 @@ function FeedDetailCard({
 				</div>
 
 				{/* 날짜 영역 */}
-				<div className="text-sm text-gray-500 p-1">{date}</div>
+				<div className="text-sm text-gray-500 p-1">
+					{formatRelativeDate(createdAt ?? "")}
+				</div>
 			</div>
 
 			<div className="flex items-center gap-2 py-1 px-2 border-b border-gray-200 justify-between">

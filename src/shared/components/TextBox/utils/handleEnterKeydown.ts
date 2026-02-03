@@ -48,7 +48,11 @@ export function handleEnterKeydown() {
 			inline.after(br, nextInline);
 		}
 
+		// caret 정보 리턴
+		// return nextInline;
+
 		// DOM 업데이트 후 caret 이동
+
 		requestAnimationFrame(() => {
 			const nextTextNode = nextInline.firstChild as Text;
 			if (!nextTextNode) return; // 안전성 체크
@@ -58,7 +62,14 @@ export function handleEnterKeydown() {
 			newRange.collapse(true);
 			selection.removeAllRanges();
 			selection.addRange(newRange);
+
+			// 컨테이너 포커스 복구
+			const root = nextInline.closest("[contentEditable]") as HTMLElement;
+			if (root) {
+				root.focus();
+			}
 		});
+
 		return;
 	}
 }
