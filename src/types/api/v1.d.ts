@@ -886,10 +886,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 태그 검색 무한 스크롤
-         * @description 특정 태그가 포함된 피드를 무한 스크롤로 조회합니다.
+         * 태그로 피드 검색
+         * @description 특정 태그가 포함된 피드를 검색합니다.
          */
-        get: operations["searchByTagInfiniteScroll"];
+        get: operations["searchByTag"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1006,10 +1006,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 특정 회원이 북마크한 피드 무한 스크롤
-         * @description 특정 회원이 북마크한 피드 목록을 무한 스크롤로 조회합니다.
+         * 특정 회원이 북마크한 피드 목록 조회
+         * @description 특정 회원이 북마크한 피드 목록을 페이징 방식으로 조회합니다. (다른 사람의 북마크 목록)
          */
-        get: operations["getMemberBookmarkedFeedsInfiniteScroll"];
+        get: operations["getMemberBookmarkedFeeds"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1026,10 +1026,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 내가 북마크한 피드 무한 스크롤
-         * @description 내가 북마크한 피드 목록을 무한 스크롤로 조회합니다.
+         * 내가 북마크한 피드 목록 조회
+         * @description 특정 회원이 북마크한 피드 목록을 페이징 방식으로 조회합니다. (내가 저장한 게시물)
          */
-        get: operations["getMyBookmarkedFeedsInfiniteScroll"];
+        get: operations["getMyBookmarkedFeeds"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1518,13 +1518,13 @@ export interface components {
         };
         CreateRequest: {
             title: string;
-            description: string;
+            description?: string;
             /** @enum {string} */
-            category: "PLOGGING" | "CLEANUP" | "RECYCLING";
+            category: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
             /** @enum {string} */
             mode: "ONLINE" | "OFFLINE";
             /** Format: int64 */
-            capacity: number;
+            capacity?: number;
             /** Format: date */
             startDate: string;
             /** Format: date */
@@ -1646,10 +1646,10 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             first?: boolean;
             last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
@@ -1657,12 +1657,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            pageSize?: number;
+            paged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
+            /** Format: int32 */
+            pageSize?: number;
             unpaged?: boolean;
-            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1684,8 +1684,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -1714,10 +1714,10 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             first?: boolean;
             last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
@@ -1796,10 +1796,10 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             first?: boolean;
             last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
@@ -3009,7 +3009,7 @@ export interface operations {
     getAllTogether: {
         parameters: {
             query?: {
-                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING")[];
+                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC")[];
                 mode?: "ONLINE" | "OFFLINE";
                 status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
                 sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "STATUS" | "CATEGORY" | "MODE";
@@ -3484,7 +3484,7 @@ export interface operations {
             };
         };
     };
-    searchByTagInfiniteScroll: {
+    searchByTag: {
         parameters: {
             query: {
                 /**
@@ -3493,12 +3493,12 @@ export interface operations {
                  */
                 tag: string;
                 /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
+                 * @description 페이지 번호 (0부터 시작)
+                 * @example 0
                  */
-                lastFeedId?: number;
+                page?: number;
                 /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
+                 * @description 페이지 크기
                  * @example 20
                  */
                 size?: number;
@@ -3515,7 +3515,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
+                    "*/*": string;
                 };
             };
         };
@@ -3666,16 +3666,16 @@ export interface operations {
             };
         };
     };
-    getMemberBookmarkedFeedsInfiniteScroll: {
+    getMemberBookmarkedFeeds: {
         parameters: {
             query?: {
                 /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
+                 * @description 페이지 번호 (0부터 시작)
+                 * @example 0
                  */
-                lastFeedId?: number;
+                page?: number;
                 /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
+                 * @description 페이지 크기
                  * @example 20
                  */
                 size?: number;
@@ -3698,21 +3698,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
+                    "*/*": components["schemas"]["Page"];
                 };
             };
         };
     };
-    getMyBookmarkedFeedsInfiniteScroll: {
+    getMyBookmarkedFeeds: {
         parameters: {
             query?: {
                 /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
+                 * @description 페이지 번호 (0부터 시작)
+                 * @example 0
                  */
-                lastFeedId?: number;
+                page?: number;
                 /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
+                 * @description 페이지 크기
                  * @example 20
                  */
                 size?: number;
@@ -3729,7 +3729,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
+                    "*/*": components["schemas"]["Page"];
                 };
             };
         };

@@ -9,7 +9,6 @@ export const useCreateTogether = () => {
     mutationFn: (newTogetherInfo: CreateRequest) => {
       console.log(newTogetherInfo);
       const res = api.post(`api/v1/together`, newTogetherInfo);
-      console.log(res);
       return res;
     },
   });
