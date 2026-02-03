@@ -1,10 +1,10 @@
+import { fetchApi } from "@/shared/config/fetchApi";
 import { TogetherDescriptionResponse } from "../types";
 
 export const getTogetherDescription = async (id: string | number) => {
-  const res = await fetch(
-    `http://localhost:8080/api/v1/together/list/${id}/description`,
-    { credentials: "include" },
-  );
+  const res = await fetchApi(`/api/v1/together/list/${id}/description`, {
+    next: { revalidate: 600 },
+  });
 
   if (!res.ok) {
     throw new Error(

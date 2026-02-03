@@ -1,11 +1,11 @@
+import { fetchApi } from "@/shared/config/fetchApi";
 import { TogetherDetailResponse } from "../types";
 
 export const getInitTogetherDetail = async (
   id: string,
 ): Promise<TogetherDetailResponse> => {
-  const res = await fetch(`http://localhost:8080/api/v1/together/list/${id}`, {
-    credentials: "include",
-    cache: "no-store",
+  const res = await fetchApi(`/api/v1/together/list/${id}`, {
+    next: { revalidate: 60 },
   });
   if (!res.ok) {
     throw new Error(

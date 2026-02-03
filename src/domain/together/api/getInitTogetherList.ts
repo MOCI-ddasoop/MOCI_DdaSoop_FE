@@ -1,10 +1,10 @@
+import { fetchApi } from "@/shared/config/fetchApi";
 import { TogetherResponse } from "../types";
 
 export const getInitTogetherList = async () => {
-  const res = await fetch(
-    `http://localhost:8080/api/v1/together/list?page=0&size=12`,
-    { credentials: "include" },
-  );
+  const res = await fetchApi(`/api/v1/together/list?page=0&size=12`, {
+    next: { revalidate: 60 },
+  });
 
   if (!res.ok) {
     throw new Error(

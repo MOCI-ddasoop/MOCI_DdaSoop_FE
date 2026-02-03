@@ -36,6 +36,7 @@
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@types/react-gtm-module": "^2.0.4",
+		"baseline-browser-mapping": "^2.9.19",
 		"eslint": "^9",
 		"eslint-config-next": "16.0.3",
 		"openapi-typescript": "^7.10.1",
