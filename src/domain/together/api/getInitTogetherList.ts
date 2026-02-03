@@ -1,10 +1,8 @@
-import { fetchApi } from "@/shared/config/fetchApi";
 import { TogetherResponse } from "../types";
+import { serverFetchApi } from "@/shared/config/serverFetchApi";
 
 export const getInitTogetherList = async () => {
-  const res = await fetchApi(`/api/v1/together/list?page=0&size=12`, {
-    cache: "no-store",
-  });
+  const res = await serverFetchApi(`/api/v1/together/list?page=0&size=12`);
 
   if (!res.ok) {
     throw new Error(

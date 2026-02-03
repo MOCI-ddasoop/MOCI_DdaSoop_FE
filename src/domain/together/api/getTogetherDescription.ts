@@ -1,10 +1,8 @@
-import { fetchApi } from "@/shared/config/fetchApi";
 import { TogetherDescriptionResponse } from "../types";
+import { serverFetchApi } from "@/shared/config/serverFetchApi";
 
 export const getTogetherDescription = async (id: string | number) => {
-  const res = await fetchApi(`/api/v1/together/list/${id}/description`, {
-    cache: "no-store",
-  });
+  const res = await serverFetchApi(`/api/v1/together/list/${id}/description`);
 
   if (!res.ok) {
     throw new Error(
