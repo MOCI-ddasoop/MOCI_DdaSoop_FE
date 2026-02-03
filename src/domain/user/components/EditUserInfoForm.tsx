@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { usePostImage } from "@/shared/api/usePostImage";
 import { useUpdateMyInfo } from "@/domain/user/api/useUpdateMyInfo";
+import { checkNickname } from "@/domain/login/api/checkNickname";
+import { checkEmail } from "@/domain/login/api/checkEmail";
 
 function EditUserInfoForm() {
   const me = useAuthStore((s) => s.me);
@@ -21,6 +23,9 @@ function EditUserInfoForm() {
 
   const postImage = usePostImage();
   const updateMyInfo = useUpdateMyInfo();
+
+  const [nicknameAvailable, setNicknameAvailable] = useState<boolean | null>(null);
+  const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
 
   if (!me) return null;
 
@@ -39,6 +44,28 @@ function EditUserInfoForm() {
 },
     });
   };
+
+  const handleNicknameCheck = async () => {
+      if(!nickname.trim()) return alert("닉네임을 입력해주세요.");
+      try{
+        const { available, message} = await checkNickname(nickname.trim());
+        setNicknameAvailable(available ?? false);
+        alert(message);
+      }catch{
+        alert("닉네임 중복 체크 중 오류가 발생했습니다.");
+      }
+    }
+  
+  const handleEmailCheck = async () => {
+      if(!email.trim()) return alert("이메일을 입력해주세요.");
+      try{
+        const { available, message} = await checkEmail(email.trim());
+        setEmailAvailable(available ?? false);
+        alert(message);
+      }catch{
+        alert("이메일 중복 체크 중 오류가 발생했습니다.");
+      }
+    }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,18 +124,47 @@ function EditUserInfoForm() {
           type="text"
           value={nickname}
           maxLength={12}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => {
+            setNickname(e.target.value);
+            setNicknameAvailable(null);
+          }}
           className="border border-gray-300 rounded-md px-3 py-1 outline-none focus:ring-2 focus:ring-mainblue"
         />
+        { nicknameAvailable === true ? (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        ) : (
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleNicknameCheck}
+          >
+            중복 확인
+          </Button>
+        )}
+
       </div>
       <div className="flex gap-5 items-center">
         <label>이메일</label>
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setEmailAvailable(null);
+          }}
           className="border border-gray-300 rounded-md px-3 py-1 outline-none focus:ring-2 focus:ring-mainblue"
         />
+        { emailAvailable === true ? (
+          <span className="text-mainblue text-sm font-medium">확인 완료</span>
+        ) : (
+          <Button
+            type="button"
+            size="sm"
+            onClick={handleEmailCheck}
+          >
+            중복 확인
+          </Button>
+        )}
       </div>
       <div className="flex justify-end gap-4 mt-4">
         <button

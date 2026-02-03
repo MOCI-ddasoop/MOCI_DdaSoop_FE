@@ -1,5 +1,6 @@
 import { api } from "@/shared/config/api";
-import { MembersMe, useAuthStore } from "@/store/authStore";import { useMutation } from "@tanstack/react-query";
+import { MembersMe, useAuthStore } from "@/store/authStore";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 type UpdateMyInfoRequest = {
