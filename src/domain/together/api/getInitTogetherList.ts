@@ -3,7 +3,7 @@ import { TogetherResponse } from "../types";
 
 export const getInitTogetherList = async () => {
   const res = await fetchApi(`/api/v1/together/list?page=0&size=12`, {
-    next: { revalidate: 60 },
+    cache: "no-store",
   });
 
   if (!res.ok) {

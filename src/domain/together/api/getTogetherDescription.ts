@@ -3,7 +3,7 @@ import { TogetherDescriptionResponse } from "../types";
 
 export const getTogetherDescription = async (id: string | number) => {
   const res = await fetchApi(`/api/v1/together/list/${id}/description`, {
-    next: { revalidate: 600 },
+    cache: "no-store",
   });
 
   if (!res.ok) {

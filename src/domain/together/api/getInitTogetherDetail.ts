@@ -5,7 +5,7 @@ export const getInitTogetherDetail = async (
   id: string,
 ): Promise<TogetherDetailResponse> => {
   const res = await fetchApi(`/api/v1/together/list/${id}`, {
-    next: { revalidate: 60 },
+    cache : "no-store"
   });
   if (!res.ok) {
     throw new Error(
