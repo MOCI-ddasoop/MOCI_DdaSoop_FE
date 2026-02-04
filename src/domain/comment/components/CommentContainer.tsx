@@ -53,10 +53,6 @@ function CommentContainer({
 	});
 
 	useEffect(() => {
-		console.log(feedCommentData);
-	}, [feedCommentData]);
-
-	useEffect(() => {
 		if (lastCreatedCommentParentId) {
 			if (openedReplyParentId !== lastCreatedCommentParentId) return;
 			const target = commentRefs.current.get(lastCreatedCommentParentId);
