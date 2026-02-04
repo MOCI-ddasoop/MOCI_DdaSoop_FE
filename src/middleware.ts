@@ -18,11 +18,13 @@ export function middleware(req: NextRequest) {
 
 		`style-src 'self' 'unsafe-inline' `,
 
-		"img-src 'self' data: https:",
+		//나중에 배포하면 CDN 도메인으로 교체 필요
+		"img-src 'self' data: https: http://localhost:8000",
 
 		"font-src 'self' data:",
 
-		"connect-src 'self' https:",
+		//나중에 배포하면 CDN 도메인으로 교체 필요
+		"connect-src 'self' https: http://localhost:8000",
 
 		"frame-ancestors 'none'",
 	].join("; ");
