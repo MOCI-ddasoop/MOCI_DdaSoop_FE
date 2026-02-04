@@ -2,36 +2,41 @@
 
 import Image from "next/image";
 import tw from "@/shared/utils/tw";
-import { AiOutlineLock } from "react-icons/ai";
 import { BsChatRight, BsHeart } from "react-icons/bs";
 import { PositionedItem } from "./FeedCardContainer";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 
-type FeedCardImageProps = PositionedItem & {
+type FeedCardImageProps = {
+	item: PositionedItem;
 	alt: string;
 	className?: string;
 	onClick?: () => void;
 };
 
 function FeedCardImage({
-	id,
-	thumbnailUrl: src = "/defaultFeedImage.png",
-	alt,
-	width,
-	thumbnailWidth: imageWidth = 500,
-	thumbnailHeight: imageHeight = 500,
-	x = 0,
-	y = 0,
-	content,
-	commentCount,
-	bookmarkCount,
-	authorName = "사용자를 찾을 수 없음",
-	authorProfileImage = "/defaultFeedImage.png",
+	item,
+	alt = "따숲",
 	className,
 	onClick,
 }: FeedCardImageProps) {
+	const {
+		id,
+		thumbnailUrl: src = "/defaultFeedImage.png",
+		width,
+		thumbnailWidth: imageWidth = 500,
+		thumbnailHeight: imageHeight = 500,
+		x = 0,
+		y = 0,
+		content,
+		commentCount,
+		bookmarkCount,
+		authorName = "사용자를 찾을 수 없음",
+		authorProfileImage = "/defaultFeedImage.png",
+	} = item;
+
 	const aspectRatio = imageWidth / imageHeight;
 	const height = width / aspectRatio;
+	const MIN_ITEM_HEIGHT = 150;
 
 	return (
 		<div
@@ -42,7 +47,7 @@ function FeedCardImage({
 				left: 0,
 				top: 0,
 				width: width,
-				height: height,
+				height: height > MIN_ITEM_HEIGHT ? height : MIN_ITEM_HEIGHT,
 				transform: `translate(${x}px, ${y}px)`,
 			}}
 			className={tw(
@@ -50,11 +55,6 @@ function FeedCardImage({
 				className,
 			)}
 		>
-			<AiOutlineLock
-				size={24}
-				className="absolute top-2 right-2 z-20 text-gray-500/80 group-hover:text-white/80 duration-300"
-			/>
-
 			<div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
 				<div className="absolute flex items-center gap-2 top-2 left-0 px-4">
 					<div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-300">
