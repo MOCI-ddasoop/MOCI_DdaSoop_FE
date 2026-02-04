@@ -2,6 +2,7 @@
 import FeedImageInput from "./FeedImageInput";
 import {
 	RefObject,
+	useEffect,
 	useImperativeHandle,
 	useMemo,
 	useRef,
@@ -15,6 +16,9 @@ import { FeedCreateRequest } from "../types";
 import { ImageUploadResponse } from "@/shared/types/types";
 import Swal, { SweetAlertResult } from "sweetalert2";
 import { usePostFeed } from "../api/usePostFeed";
+import { useGetTogetherList } from "@/domain/together/api/useGetTogetherList";
+import { useAuthStore } from "@/store/authStore";
+import PostVisibilityOptions from "./PostVisibilityOptions";
 
 export interface FeedOptionData {
 	together: Together;
@@ -51,22 +55,44 @@ function FeedCreatorModal({
 		FeedCreateRequest["visibility"] | null
 	>("PUBLIC");
 
+	const { me } = useAuthStore();
+	const userId = me?.memberId;
+	const { data: togetherInfoFromUserId } = useGetTogetherList({ userId });
+
+	useEffect(() => {
+		console.log(me);
+		console.log(togetherInfoFromUserId);
+	}, [togetherInfoFromUserId, me]);
+
 	const { mutate: postFeed, isPending } = usePostFeed({
-		onSuccess: () => {
+		onMutate: () => {
 			Swal.fire({
+				title: "업로드 중입니다.",
+				allowOutsideClick: false,
+				didOpen: () => Swal.showLoading(),
+			});
+		},
+		onSuccess: () => {
+			Swal.hideLoading();
+			Swal.update({
 				title: "업로드 성공",
 				icon: "success",
-				timer: 1500,
 			});
-			textBoxRef.current?.clear();
-			onClose();
+			setTimeout(() => {
+				Swal.close();
+				textBoxRef.current?.clear();
+				onClose();
+			}, 1500);
 		},
 		onError: () => {
-			Swal.fire({
+			Swal.hideLoading();
+			Swal.update({
 				title: "업로드 실패",
 				icon: "error",
-				timer: 1500,
 			});
+			setTimeout(() => {
+				Swal.close();
+			}, 1500);
 		},
 	});
 
@@ -118,15 +144,6 @@ function FeedCreatorModal({
 				selectedTogether === "main" ? undefined : parseInt(selectedTogether),
 		};
 		postFeed(feedFormData);
-		if (isPending) {
-			Swal.fire({
-				title: "업로드 중입니다.",
-				didOpen: () => {
-					Swal.showLoading();
-				},
-				willClose: () => !isPending,
-			});
-		}
 	};
 
 	const handleTogetherSelectionChange = (
@@ -198,30 +215,6 @@ function FeedCreatorModal({
 			),
 		[togetherInfo],
 	);
-
-	// 공개여부
-	const postVisibilityOptions = useMemo(() => {
-		const options = [
-			{ value: "PUBLIC", label: "공개" },
-			{ value: "PRIVATE", label: "비공개" },
-			{ value: "MEMBERS", label: "멤버에게만 공개" },
-			{ value: "NOTICE", label: "공지" },
-		];
-		if (!togetherInfo) {
-			return options.filter(
-				({ value }) => value === "PUBLIC" || value === "PRIVATE",
-			);
-		} else if (togetherInfo && togetherInfo.user.role === "member") {
-			return options.filter(
-				({ value }) => value === "PUBLIC" || value === "MEMBERS",
-			);
-		} else {
-			return options.filter(
-				({ value }) =>
-					value === "PUBLIC" || value === "MEMBERS" || value === "NOTICE",
-			);
-		}
-	}, [togetherInfo]);
 
 	// 게시 버튼 disable 조건
 	const disableSubmitButton = useMemo(() => {
@@ -309,27 +302,11 @@ function FeedCreatorModal({
 					<TagInput onTagChanged={setTagsValue} />
 				</div>
 				{/* 공개/비공개 선택 */}
-				<fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2">
-					{postVisibilityOptions.map(({ value, label }, index) => (
-						<div key={index}>
-							<input
-								type="radio"
-								id={value}
-								name="postVisibility"
-								value={value}
-								onChange={(e) =>
-									setSelectedPostVisibility(
-										e.target.value as FeedCreateRequest["visibility"],
-									)
-								}
-								checked={selectedPostVisibility === value}
-							/>
-							<label htmlFor={value} className="p-1">
-								{label}
-							</label>
-						</div>
-					))}
-				</fieldset>
+				<PostVisibilityOptions
+					togetherInfo={togetherInfo}
+					value={selectedPostVisibility}
+					setValue={setSelectedPostVisibility}
+				/>
 
 				<Button
 					className="w-full my-3"
