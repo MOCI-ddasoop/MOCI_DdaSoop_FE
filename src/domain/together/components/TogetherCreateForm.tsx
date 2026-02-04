@@ -2,11 +2,13 @@
 import FormImageInput from "@/domain/form/FormImageInput";
 import Button from "@/shared/components/Button";
 import Capsule from "@/shared/components/Capsule";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { PERIOD_OPTIONS, CUSTOM_PERIOD_ID } from "@/shared/config/periodOptions";
 import { calcPeriod } from "@/shared/utils/calcPeriod";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { ko } from "date-fns/locale";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -30,16 +32,25 @@ function TogetherCreateForm() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [togetherInfo, setTogetherInfo] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const isFormFilled = togetherName.trim() !== "" && onlineType !== null && categoryId !== null && targetFeed !== "" && startDate !== null && endDate !== null;
+  const textBoxRef = useRef<TextBoxHandle>(null);
+  const isFormFilled = togetherName.trim() !== "" && onlineType !== null && categoryId !== null && targetFeed !== "" && startDate !== null && endDate !== null && sanitizeHtml(togetherInfo).trim() !== "";
   const today = new Date();
   const maxEndDate = startDate
     ? new Date(
         new Date(startDate).setFullYear(startDate.getFullYear() + 1)
       )
     : undefined;
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => { //TODO: 모임 생성 api 연동
     e.preventDefault();
 
+    if(!textBoxRef.current) return;
+    const rawHtml = textBoxRef.current.getHTML();
+    const sanitizedHtml = sanitizeHtml(rawHtml);  // 모임 소개글에만 sanitizeHtml 적용 
+    if(sanitizedHtml.trim() === ""){
+      alert("모임 소개글을 입력해주세요.")
+      return;
+    }
     alert("함께하기 생성이 완료되었습니다!");
     router.push("/together");
   };
@@ -215,11 +226,11 @@ function TogetherCreateForm() {
           <label className="text-xl font-bold">모임 소개글</label>
           <span className="text-mainblue text-sm ml-3">* 사진은 최대 5장까지 추가할 수 있습니다</span>
         </div>
-        <textarea
+        <TextBox
+          ref = {textBoxRef}
           className="border border-gray-300 rounded-lg p-2 w-full h-25 outline-none focus:outline-none focus:ring-2 focus:ring-mainblue resize-none mb-3"
           placeholder="모임 소개글을 입력해주세요"
-          value={togetherInfo}
-          onChange={(e) => setTogetherInfo(e.target.value)}
+          setValue={setTogetherInfo}
         />
         <FormImageInput images={images} onChangeImages={setImages} />
       </div>
