@@ -21,7 +21,7 @@ const DONATION_CATEGORIES = [ //TODO: 카테고리 데이터 API 연동
 
 function DonationSuggestForm() {
   const router = useRouter();
-  const [donationname, setDonationname] = useState("");
+  const [donationName, setDonationName] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [targetAmount, setTargetAmount] = useState<number | "">("");
   const [periodId, setPeriodId] = useState<string | null>(null);
@@ -30,8 +30,14 @@ function DonationSuggestForm() {
   const [donationInfo, setDonationInfo] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const textBoxRef = useRef<TextBoxHandle>(null);
-  const isFormFilled = donationname.trim() !== "" && categoryId !== null && typeof targetAmount === "number" &&
-  targetAmount > 0 && startDate !== null && endDate !== null && endDate >= startDate && sanitizeHtml(donationInfo).trim() !== "";
+  const isFormFilled = 
+    donationName.trim() !== "" &&
+    categoryId !== null &&
+    typeof targetAmount === "number" && targetAmount > 0 &&
+    startDate !== null && 
+    endDate !== null && 
+    endDate >= startDate &&
+    sanitizeHtml(donationInfo).trim() !== "";
   const today = new Date();
 
   const maxEndDate = startDate
@@ -73,8 +79,8 @@ function DonationSuggestForm() {
           type="text"
           className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue"
           placeholder="후원이름을 입력해주세요"
-          value={donationname}
-          onChange={(e) => setDonationname(e.target.value)}
+          value={donationName}
+          onChange={(e) => setDonationName(e.target.value)}
         />
       </div>
       {/*카테고리 선택 */}
@@ -195,12 +201,6 @@ function DonationSuggestForm() {
           <label className="text-xl font-bold">후원 소개글</label>
           <span className="text-mainblue text-sm ml-3">* 사진은 최대 5장까지 추가할 수 있습니다</span>
         </div>
-        {/* <textarea
-          className="border border-gray-300 rounded-lg p-2 w-full h-25 outline-none focus:outline-none focus:ring-2 focus:ring-mainblue resize-none mb-3"
-          placeholder="후원 소개글을 입력해주세요"
-          value={donationInfo}
-          onChange={(e) => setDonationInfo(e.target.value)}
-        /> */}
         <TextBox
           ref={textBoxRef}
           className="border border-gray-300 rounded-lg p-2 w-full h-25 outline-none focus:outline-none focus:ring-2 focus:ring-mainblue resize-none mb-3"

@@ -33,7 +33,15 @@ function TogetherCreateForm() {
   const [togetherInfo, setTogetherInfo] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const textBoxRef = useRef<TextBoxHandle>(null);
-  const isFormFilled = togetherName.trim() !== "" && onlineType !== null && categoryId !== null && targetFeed !== "" && startDate !== null && endDate !== null && sanitizeHtml(togetherInfo).trim() !== "";
+  const isFormFilled = 
+    togetherName.trim() !== "" &&
+    onlineType !== null &&
+    categoryId !== null &&
+    targetFeed !== "" &&
+    startDate !== null &&
+    endDate !== null &&
+    endDate >= startDate &&
+    sanitizeHtml(togetherInfo).trim() !== "";
   const today = new Date();
   const maxEndDate = startDate
     ? new Date(
