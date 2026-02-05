@@ -8,7 +8,7 @@ import ImageSwiper from "@/shared/components/ImageSwiper";
 import FeedImageInput from "./FeedImageInput";
 import { scrollToNewComment } from "@/domain/comment/utils/scrollToNewComment";
 import { FeedResponse } from "../types";
-import { useFeedEditStore } from "../store/useFeedEditStore";
+import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 
 function FeedViewer({
 	feed: feedDetailData,
@@ -21,8 +21,9 @@ function FeedViewer({
 	const [targetId, setTargetId] = useState<number | null>(null);
 
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
-	const editedImages = useFeedEditStore((s) => s.draft.images);
-	const setEditedImages = useFeedEditStore((s) => s.setImages);
+	const draft = useFeedEditStore((s) => s.draft);
+	const actions = useFeedEditStore((s) => s.actions);
+	const { images: editedImages } = draft;
 	const [commentFocusSignal, setCommentFocusSignal] = useState(0);
 
 	useEffect(() => {
@@ -60,7 +61,7 @@ function FeedViewer({
 			{/* image 영역 */}
 			<div className="relative h-full w-3/5">
 				{isFeedEditMode ? (
-					<FeedImageInput value={editedImages} setValue={setEditedImages} />
+					<FeedImageInput value={editedImages} setValue={actions.setImages} />
 				) : (
 					<ImageSwiper
 						mode="feed"

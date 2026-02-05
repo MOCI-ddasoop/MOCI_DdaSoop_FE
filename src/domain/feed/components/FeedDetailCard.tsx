@@ -10,7 +10,6 @@ import { FeedResponse } from "../types";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
 import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
-import { useFeedEditStore } from "../store/useFeedEditStore";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import TagInput from "@/shared/components/TagInput";
 import Swal from "sweetalert2";
@@ -19,6 +18,7 @@ import { useDeleteFeedById } from "../api/useDelFeedById";
 import { useModalStore } from "../store/useModalStore";
 import { useRouter } from "next/navigation";
 import PostVisibilityOptions from "./PostVisibilityOptions";
+import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -56,15 +56,15 @@ function FeedDetailCard({
 	const textBoxRef = useRef<TextBoxHandle>(null);
 
 	const closeStoreModal = useModalStore((store) => store.close);
-	const enterEdit = useFeedEditStore((s) => s.enterEdit);
-	const exitEdit = useFeedEditStore((s) => s.exitEdit);
+
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
-	const editedContent = useFeedEditStore((s) => s.draft.content);
-	const editedImages = useFeedEditStore((s) => s.draft.images);
-	const editedTags = useFeedEditStore((s) => s.draft.tags);
-	const editedVisibility = useFeedEditStore((s) => s.draft.visibility);
-	const setEditedTags = useFeedEditStore((s) => s.setTags);
-	const setEditedVisibility = useFeedEditStore((s) => s.setVisibility);
+	const draft = useFeedEditStore((s) => s.draft);
+	const actions = useFeedEditStore((s) => s.actions);
+	const {
+		content: editedContent,
+		tags: editedTags,
+		visibility: editedVisibility,
+	} = draft;
 
 	useEffect(() => {
 		// eslint-disable-next-line react-hooks/set-state-in-effect
@@ -107,7 +107,7 @@ function FeedDetailCard({
 		setSelectedOwnerOption(option);
 		switch (option) {
 			case "수정":
-				enterEdit();
+				actions.enterEdit();
 				break;
 			case "삭제":
 				Swal.fire({
@@ -144,32 +144,11 @@ function FeedDetailCard({
 		}).then((result) => {
 			if (result.isConfirmed) {
 				if (!id) return;
-				const editedData = {
-					id,
-					content: {
-						content: textBoxRef.current?.getHTML() ?? "",
-						images: editedImages.map((img, index) => {
-							if (
-								!img.imageUrl ||
-								img.width == undefined ||
-								img.height == undefined
-							)
-								throw new Error("이미지 메타데이터가 완성되지 않았습니다.");
-							return {
-								imageUrl: img.imageUrl,
-								width: img.width,
-								height: img.height,
-								displayOrder: index,
-								fileSize: img.fileSize,
-								originalFileName: img.originalFileName,
-							};
-						}),
-						visibility: editedVisibility,
-						tags: editedTags,
-					},
-				};
-				updateFeedMutation(editedData);
-				exitEdit();
+				const payload = actions.toUpdatePayload(
+					textBoxRef.current?.getHTML() ?? "",
+				);
+				updateFeedMutation({ id, content: payload });
+				actions.exitEdit();
 			}
 		});
 	};
@@ -227,7 +206,10 @@ function FeedDetailCard({
 				{/* 태그 영역 */}
 				<div className="flex items-center gap-2 flex-wrap p-1">
 					{isFeedEditMode ? (
-						<TagInput initialValue={editedTags} onTagChanged={setEditedTags} />
+						<TagInput
+							initialValue={editedTags}
+							onTagChanged={actions.setTags}
+						/>
 					) : (
 						<>
 							{tags?.map((tag) => (
@@ -245,7 +227,7 @@ function FeedDetailCard({
 					<PostVisibilityOptions
 						togetherInfo={undefined}
 						value={editedVisibility}
-						setValue={setEditedVisibility}
+						setValue={actions.setVisibility}
 					/>
 				) : (
 					""
@@ -273,7 +255,7 @@ function FeedDetailCard({
 							</button>
 							<button
 								className="text-mainblue underline"
-								onClick={() => exitEdit()}
+								onClick={() => actions.exitEdit()}
 							>
 								취소
 							</button>
