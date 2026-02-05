@@ -23,9 +23,14 @@ import PostVisibilityOptions from "./PostVisibilityOptions";
 type FeedDetailCardProps = {
 	item: FeedResponse;
 	className?: string;
+	onCommentFocus?: () => void;
 };
 
-function FeedDetailCard({ item, className }: FeedDetailCardProps) {
+function FeedDetailCard({
+	item,
+	className,
+	onCommentFocus,
+}: FeedDetailCardProps) {
 	const {
 		id,
 		authorName: author,
@@ -285,6 +290,7 @@ function FeedDetailCard({ item, className }: FeedDetailCardProps) {
 					<button
 						type="button"
 						className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+						onClick={() => onCommentFocus?.()}
 					>
 						<BsChatRight size={24} className="group-hover:text-amber-700" />
 						<p className="group-hover:text-amber-700">{commentCount}</p>

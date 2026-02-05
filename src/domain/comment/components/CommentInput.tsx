@@ -11,12 +11,14 @@ interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 	targetNickname?: string | null;
 	targetId?: number | null;
+	shouldCommentFocus: number;
 }
 
 function CommentInput({
 	targetNickname,
 	targetId,
 	onCommentTargetClick,
+	shouldCommentFocus,
 }: CommentInputProps) {
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
@@ -51,6 +53,10 @@ function CommentInput({
 	useEffect(() => {
 		if (targetId) textBoxRef.current?.focus();
 	}, [targetId]);
+
+	useEffect(() => {
+		if (shouldCommentFocus) textBoxRef.current?.focus();
+	}, [shouldCommentFocus]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();

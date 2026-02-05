@@ -23,6 +23,7 @@ function FeedViewer({
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
 	const editedImages = useFeedEditStore((s) => s.draft.images);
 	const setEditedImages = useFeedEditStore((s) => s.setImages);
+	const [commentFocusSignal, setCommentFocusSignal] = useState(0);
 
 	useEffect(() => {
 		const el = contentRef.current;
@@ -31,6 +32,10 @@ function FeedViewer({
 			el?.scrollTo({ top: 0 });
 		};
 	}, []);
+
+	const handleCommentFocus = () => {
+		setCommentFocusSignal((prev) => prev + 1);
+	};
 
 	const handleCommentTargetClick = (
 		nickname: string | null,
@@ -74,7 +79,10 @@ function FeedViewer({
 					ref={contentRef}
 					className="flex-1 overflow-y-auto overflow-x-hidden"
 				>
-					<FeedDetailCard item={feedDetailData ?? {}} />
+					<FeedDetailCard
+						item={feedDetailData ?? {}}
+						onCommentFocus={handleCommentFocus}
+					/>
 
 					{/* comment 영역 */}
 					<CommentContainer
@@ -88,6 +96,7 @@ function FeedViewer({
 						targetNickname={targetNickname}
 						targetId={targetId}
 						onCommentTargetClick={handleCommentTargetClick}
+						shouldCommentFocus={commentFocusSignal}
 					/>
 				</div>
 			</div>
