@@ -108,7 +108,7 @@ function FeedCardContainer({
 		return () => {
 			resizeObserver.disconnect();
 		};
-	}, []);
+	}, [throttledSetWidth]);
 
 	// 반응형 컬럼 개수
 	const columnCount = useMemo(() => {

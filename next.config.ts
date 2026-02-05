@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
-const isDev = process.env.NODE_ENV === "development";
 // TODO : 개발환경에서만 테스트 용도로 사용하고 수정할 것
-// 배포 api 나중에 headers[connect-src]에 추가 팔요
 const nextConfig: NextConfig = {
 	images: {
 		unoptimized: true,
