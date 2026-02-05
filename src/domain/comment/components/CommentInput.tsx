@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
-import { useCommentScrollStore } from "../store/useCommentScrollStore";
+import { useCommentScrollStore } from "../provider/CommentScrollProvider";
 
 interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
@@ -24,8 +24,7 @@ function CommentInput({
 	const feedId = useSearchParams().get("feedId");
 	const { mutate: setCommentMutation, isPending } = useSetComment();
 	const textBoxRef = useRef<TextBoxHandle>(null);
-	const { setLastCreatedCommentId, setLastCreatedCommentParentId } =
-		useCommentScrollStore();
+	const actions = useCommentScrollStore((s) => s.actions);
 
 	const submitComment = () => {
 		if (!textBoxRef.current) return;
@@ -41,8 +40,8 @@ function CommentInput({
 			},
 			{
 				onSuccess: (data) => {
-					setLastCreatedCommentId(data);
-					setLastCreatedCommentParentId(targetId ?? null);
+					actions.setLastComment(data);
+					actions.setLastReplyParent(targetId ?? null);
 					onCommentTargetClick?.(null, null);
 					textBoxRef.current?.clear();
 				},

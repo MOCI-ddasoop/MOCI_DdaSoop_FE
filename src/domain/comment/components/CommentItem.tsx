@@ -14,8 +14,9 @@ import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
 import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
-import { useCommentScrollStore } from "../store/useCommentScrollStore";
+
 import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
+import { useCommentScrollStore } from "../provider/CommentScrollProvider";
 
 interface CommentItemProps {
 	ref?: Ref<HTMLLIElement>;
@@ -58,8 +59,10 @@ function CommentItem({
 	const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
 	const textBoxRef = useRef<TextBoxHandle>(null);
 
-	const { lastCreatedCommentParentId, setOpenedReplyParentId } =
-		useCommentScrollStore();
+	const lastCreatedCommentParentId = useCommentScrollStore(
+		(s) => s.lastCreatedCommentParentId,
+	);
+	const actions = useCommentScrollStore((s) => s.actions);
 
 	const { mutate: toggleReactMutation, isPending } = useToggleReact({
 		onSuccess: () => {
@@ -107,9 +110,9 @@ function CommentItem({
 		if (item.id === lastCreatedCommentParentId) {
 			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setIsRepliesOpen(true);
-			setOpenedReplyParentId(item.id!);
+			actions.openReply(item.id);
 		}
-	}, [item.id, lastCreatedCommentParentId, setOpenedReplyParentId]);
+	}, [actions, item.id, lastCreatedCommentParentId]);
 
 	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
 		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
