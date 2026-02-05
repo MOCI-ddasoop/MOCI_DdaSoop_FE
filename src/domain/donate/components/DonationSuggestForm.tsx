@@ -37,7 +37,7 @@ function DonationSuggestForm() {
     startDate !== null && 
     endDate !== null && 
     endDate >= startDate &&
-    sanitizeHtml(donationInfo).trim() !== "";
+    donationInfo.trim() !== "";
   const today = new Date();
 
   const maxEndDate = startDate
@@ -52,14 +52,13 @@ function DonationSuggestForm() {
       setTargetAmount(Number(value));
     }
   } 
-    // TODO: API 연동
+    // TODO: 후원 제안 API 연동 후 화면 렌더링 시 sanitizeHtml 적용 필요
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if(!textBoxRef.current) return;
-    const rawHtml = textBoxRef.current.getHTML();
-    const sanitizedHtml = sanitizeHtml(rawHtml);
-    if(sanitizedHtml.trim() === ""){
+    const html = textBoxRef.current.getHTML(); 
+    if(html.trim() === ""){
       alert("후원 소개글을 입력해주세요.")
       return;
     }

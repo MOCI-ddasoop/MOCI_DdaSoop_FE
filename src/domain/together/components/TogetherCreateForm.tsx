@@ -41,7 +41,7 @@ function TogetherCreateForm() {
     startDate !== null &&
     endDate !== null &&
     endDate >= startDate &&
-    sanitizeHtml(togetherInfo).trim() !== "";
+    togetherInfo.trim() !== "";
   const today = new Date();
   const maxEndDate = startDate
     ? new Date(
@@ -49,13 +49,13 @@ function TogetherCreateForm() {
       )
     : undefined;
 
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => { //TODO: 모임 생성 api 연동
+  //TODO: 모임 생성 API 연동 후 화면 렌더링 시 sanitizeHtml 적용 필요
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => { 
     e.preventDefault();
 
     if(!textBoxRef.current) return;
-    const rawHtml = textBoxRef.current.getHTML();
-    const sanitizedHtml = sanitizeHtml(rawHtml);  // 모임 소개글에만 sanitizeHtml 적용 
-    if(sanitizedHtml.trim() === ""){
+    const html = textBoxRef.current.getHTML(); 
+    if(html.trim() === ""){
       alert("모임 소개글을 입력해주세요.")
       return;
     }
