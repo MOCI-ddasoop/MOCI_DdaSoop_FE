@@ -64,7 +64,15 @@ function TogetherCreateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-[1000px] flex flex-col p-4">
+    <form 
+      onSubmit={handleSubmit} 
+      className="max-w-[1000px] flex flex-col p-4"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}  
+    >
       {/* 모임 이름 */}
       <div className="mb-4">
         <div className="flex items-center p-2 gap-3">
