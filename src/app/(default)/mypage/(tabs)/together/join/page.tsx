@@ -1,10 +1,10 @@
-import TogetherSection from "@/domain/together/components/TogetherSection";
+import MyTogetherSection from "@/domain/together/components/MyTogetherSection";
 import { Suspense } from "react";
 
 async function page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <TogetherSection initialData={undefined} mypage />
+      <MyTogetherSection />
     </Suspense>
   );
 }

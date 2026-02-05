@@ -535,6 +535,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/{togetherId}/{memberId}/participation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 함께하기 참여 여부 조회 */
+        get: operations["isParticipating"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/member/{memberId}": {
         parameters: {
             query?: never;
@@ -1636,10 +1653,10 @@ export interface components {
             status?: string;
         };
         PageReportSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
@@ -1657,12 +1674,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
+            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1704,10 +1721,10 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
@@ -1786,10 +1803,10 @@ export interface components {
             sortByOrDefault?: string;
         };
         Page: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
@@ -2980,6 +2997,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": number;
+                };
+            };
+        };
+    };
+    isParticipating: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                togetherId: number;
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 참여 여부 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
                 };
             };
         };

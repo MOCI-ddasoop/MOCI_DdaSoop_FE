@@ -14,10 +14,9 @@ import { useAuthStore } from "@/store/authStore";
 
 interface TogetherSectionProps {
   initialData: TogetherResponse | undefined;
-  mypage?: boolean;
 }
 
-function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
+function TogetherSection({ initialData }: TogetherSectionProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,9 +31,7 @@ function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
     page === 1 &&
     selectedCategory.length === 0 &&
     isOnline.length === 0 &&
-    currentSort === "LATEST" &&
-    !mypage;
-
+    currentSort === "LATEST";
   const userId = useAuthStore((state) => state.me?.memberId);
   const { data, isPending, isError } = useGetTogetherList(
     {
@@ -43,16 +40,14 @@ function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
       sortType: currentSort,
       page: page - 1,
       size: 12,
-      userId: mypage ? userId : undefined,
     },
     {
-      initialData: isInitialQuery && !mypage ? initialData : undefined,
+      initialData: isInitialQuery ? initialData : undefined,
     },
   );
 
   const items = useMemo(() => {
     if (!data) return undefined;
-    if (mypage) return data;
     if (page !== 1) return data;
     return {
       ...data,
@@ -61,7 +56,7 @@ function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
         content: data.data.content.slice(1),
       },
     };
-  }, [data, page, mypage]);
+  }, [data, page]);
 
   const handleFilter = (item: string, type: "category" | "isOnline") => {
     if (type === "category") {
@@ -99,7 +94,6 @@ function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
         selectedCategory={selectedCategory}
         isOnline={isOnline}
         onFilterClicked={handleFilter}
-        mypage={mypage}
       />
       {isError ? (
         <div className="w-full h-28 flex-center">
@@ -115,7 +109,6 @@ function TogetherSection({ initialData, mypage }: TogetherSectionProps) {
             type="together"
             items={items.data.content ?? []}
             currentPage={page}
-            mypage={mypage}
             className={items?.data.totalPages <= 1 ? "mb-10" : ""}
             isLogin={!!userId}
           />

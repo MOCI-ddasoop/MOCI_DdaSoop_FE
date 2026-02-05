@@ -27,9 +27,9 @@ type OnlineType = "ONLINE" | "OFFLINE";
 function TogetherCreateForm() {
   const router = useRouter();
 
-  const { mutate: handleCreateTogether } = useCreateTogether();
+  // const { mutate: handleCreateTogether } = useCreateTogether();
 
-  const userId = useAuthStore((s) => s.me?.memberId);
+  // const userId = useAuthStore((s) => s.me?.memberId);
 
   const [togetherName, setTogetherName] = useState("");
   const [onlineType, setOnlineType] = useState<OnlineType | null>(null);
@@ -58,16 +58,16 @@ function TogetherCreateForm() {
     : undefined;
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleCreateTogether({
-      title: togetherName,
-      description: togetherInfo,
-      category: category! as keyof typeof categoryType,
-      mode: onlineType!,
-      capacity: maxParticipants,
-      startDate: startDate!.toISOString().slice(0, 10),
-      endDate: endDate!.toISOString().slice(0, 10),
-      memberId: userId,
-    });
+    // handleCreateTogether({
+    //   title: togetherName,
+    //   description: togetherInfo,
+    //   category: category! as keyof typeof categoryType,
+    //   mode: onlineType!,
+    //   capacity: maxParticipants,
+    //   startDate: startDate!.toISOString().slice(0, 10),
+    //   endDate: endDate!.toISOString().slice(0, 10),
+    //   memberId: userId,
+    // });
     alert("함께하기 생성이 완료되었습니다!");
     router.push("/together");
   };

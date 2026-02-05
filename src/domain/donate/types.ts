@@ -9,7 +9,7 @@ export interface DonateInfo {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   thumbnailImage: string | null;
   progress: number | null;
   dDay: number;
@@ -22,7 +22,7 @@ export type DonateDetailInfo = {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   progress: number | null;
   thumbnailImage: string[] | null;
   goal: number | null;

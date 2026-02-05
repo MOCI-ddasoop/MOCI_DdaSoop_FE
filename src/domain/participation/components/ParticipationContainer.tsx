@@ -1,4 +1,4 @@
-import { TogetherInfo } from "@/domain/together/types";
+import { MyTogetherInfo, TogetherInfo } from "@/domain/together/types";
 import AddParticipationCard from "./AddParticipationCard";
 import ParticipationCard from "./ParticipationCard";
 import tw from "@/shared/utils/tw";
@@ -8,7 +8,13 @@ interface TogetherContainerProps {
   type: "together";
   currentPage?: number;
   items: TogetherInfo[];
-  mypage?: boolean;
+  className?: string;
+  isLogin: boolean;
+}
+interface MyTogetherContainerProps {
+  type: "myTogether";
+  currentPage?: number;
+  items: MyTogetherInfo[];
   className?: string;
   isLogin: boolean;
 }
@@ -16,7 +22,6 @@ interface DonateContainerProps {
   type: "donate";
   currentPage?: number;
   items: TogetherInfo[] | DonateInfo[];
-  mypage?: boolean;
   className?: string;
   isLogin: boolean;
 }
@@ -25,12 +30,11 @@ function ParticipationContainer({
   type,
   currentPage,
   items,
-  mypage,
   className,
   isLogin,
-}: TogetherContainerProps | DonateContainerProps) {
+}: TogetherContainerProps | MyTogetherContainerProps | DonateContainerProps) {
   return items.length === 0 ? (
-    !mypage ? (
+    type !== "myTogether" ? (
       <AddParticipationCard type={type} fullWidth isLogin={isLogin} />
     ) : (
       <p className="text-gray-400">내역이 존재하지 않습니다</p>
@@ -42,16 +46,20 @@ function ParticipationContainer({
         className,
       )}
     >
-      {currentPage === 1 && !mypage && (
+      {currentPage === 1 && type !== "myTogether" && (
         <AddParticipationCard type={type} isLogin={isLogin} />
       )}
       {type === "together"
         ? items.map((item) => (
             <ParticipationCard type={type} key={item.id} {...item} />
           ))
-        : items.map((item) => (
-            <ParticipationCard type={type} key={item.id} {...item} />
-          ))}
+        : type === "myTogether"
+          ? items.map((item) => (
+              <ParticipationCard type={type} key={item.id} {...item} />
+            ))
+          : items.map((item) => (
+              <ParticipationCard type={type} key={item.id} {...item} />
+            ))}
     </div>
   );
 }

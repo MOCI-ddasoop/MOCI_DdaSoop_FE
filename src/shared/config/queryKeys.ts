@@ -69,6 +69,7 @@ export const queryKeys = {
     member: (memberId: number) => ["together", "member", memberId],
     join: () => ["together", "join"],
     leave: () => ["together", "leave"],
+    isParticipating: () => ["together", "participating"],
   },
 
   notifications: {

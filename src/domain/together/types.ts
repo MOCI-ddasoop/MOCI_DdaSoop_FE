@@ -12,11 +12,13 @@ export interface TogetherInfo {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   thumbnailImage: string | null;
   progress: number | null;
   dDay: number;
 }
+
+export type MyTogetherInfo = Omit<TogetherInfo, "dDay"> & { goal: number };
 
 export type TogetherDetailInfo = {
   id: number;
@@ -27,7 +29,7 @@ export type TogetherDetailInfo = {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   progress: number | null;
   thumbnailImage: { imageUrl: string }[] | null;
   goal: number | null;
@@ -64,6 +66,18 @@ export interface TogetherDetailResponse {
   resultCode: string;
   msg: string;
   data: TogetherDetailInfo;
+}
+
+export interface MyTogetherResponse {
+  resultCode: string;
+  msg: string;
+  data: MyTogetherInfo[];
+}
+
+export interface TogetherParticipatingResponse {
+  resultCode: string;
+  msg: string;
+  data: boolean;
 }
 
 export interface TogetherDescriptionResponse {
