@@ -1,3 +1,4 @@
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml/server";
 import { TogetherDescriptionResponse } from "../types";
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
 
@@ -11,5 +12,5 @@ export const getTogetherDescription = async (id: string | number) => {
   }
 
   const data: TogetherDescriptionResponse = await res.json();
-  return data;
+  return sanitizeHtml(data.data);
 };
