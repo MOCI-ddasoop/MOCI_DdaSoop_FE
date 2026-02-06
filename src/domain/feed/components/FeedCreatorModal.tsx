@@ -1,24 +1,18 @@
 "use client";
 import FeedImageInput from "./FeedImageInput";
-import {
-	RefObject,
-	useEffect,
-	useImperativeHandle,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TextBox, { TextBoxHandle } from "../../../shared/components/TextBox";
 import Button from "../../../shared/components/Button";
 import TagInput from "../../../shared/components/TagInput";
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
 import { FeedCreateRequest } from "../types";
 import { ImageUploadResponse } from "@/shared/types/types";
-import Swal, { SweetAlertResult } from "sweetalert2";
+import Swal from "sweetalert2";
 import { usePostFeed } from "../api/usePostFeed";
 import { useGetTogetherList } from "@/domain/together/api/useGetTogetherList";
 import { useAuthStore } from "@/store/authStore";
 import PostVisibilityOptions from "./PostVisibilityOptions";
+import { useModalStore } from "../store/useModalStore";
 
 export interface FeedOptionData {
 	together: Together;
@@ -28,17 +22,11 @@ export interface FeedOptionData {
 	};
 }
 
-export interface CreateFeedModalRef {
-	canClose: () => Promise<boolean | SweetAlertResult<boolean>>;
-}
-
 function FeedCreatorModal({
-	ref,
 	initialTogetherInfo,
 	onClose,
 	userTogetherList,
 }: {
-	ref: RefObject<CreateFeedModalRef | null>;
 	initialTogetherInfo?: FeedOptionData;
 	onClose: () => void;
 	userTogetherList?: FeedOptionData[];
@@ -58,6 +46,8 @@ function FeedCreatorModal({
 	const { me } = useAuthStore();
 	const userId = me?.memberId;
 	const { data: togetherInfoFromUserId } = useGetTogetherList({ userId });
+	const setCanClose = useModalStore((s) => s.setCanClose);
+	const resetCanClose = useModalStore((s) => s.resetCanClose);
 
 	useEffect(() => {
 		console.log(me);
@@ -96,29 +86,32 @@ function FeedCreatorModal({
 		},
 	});
 
-	useImperativeHandle(ref, () => {
-		return {
-			canClose: async () => {
-				if (
-					feedImages.length === 0 &&
-					(!textBoxValue || textBoxValue.trim() === "")
-				) {
-					return true;
-				} else {
-					const result = await Swal.fire({
-						icon: "error",
-						titleText: "게시물을 삭제하시겠습니까?",
-						text: "지금 나가면 수정 내용이 저장되지 않습니다.",
-						showCancelButton: true,
-						showConfirmButton: true,
-						confirmButtonText: "삭제",
-						cancelButtonText: "취소",
-					});
-					return result.isConfirmed;
-				}
-			},
+	useEffect(() => {
+		setCanClose(async () => {
+			if (
+				feedImages.length === 0 &&
+				(!textBoxValue || textBoxValue.trim() === "")
+			) {
+				return true;
+			}
+
+			const result = await Swal.fire({
+				icon: "error",
+				titleText: "게시물을 삭제하시겠어요?",
+				text: "지금 나가면 수정 내용이 저장되지 않습니다.",
+				showCancelButton: true,
+				showConfirmButton: true,
+				confirmButtonText: "삭제",
+				cancelButtonText: "취소",
+			});
+
+			return result.isConfirmed;
+		});
+
+		return () => {
+			resetCanClose();
 		};
-	});
+	}, [feedImages, textBoxValue]);
 
 	const handleFeedFormSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
