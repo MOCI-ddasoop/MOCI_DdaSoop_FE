@@ -5,6 +5,7 @@ import { createFeedEditStore } from "../store/feedEditStore";
 import { useGetFeedById } from "../api/useGetFeedById";
 import { CommentScrollProvider } from "@/domain/comment/provider/CommentScrollProvider";
 import { createCommentScrollStore } from "@/domain/comment/store/commentScrollStore";
+import { SubmitRegistryProvider } from "../provider/SubmitRegistryProvider";
 
 function FeedModal({ feedId }: { feedId: string }) {
 	const { data: feedDetailData } = useGetFeedById(feedId);
@@ -25,7 +26,9 @@ function FeedModal({ feedId }: { feedId: string }) {
 		>
 			<FeedEditStoreProvider store={feedEditStore}>
 				<CommentScrollProvider store={commentScrollStore}>
-					<FeedViewer feed={feedDetailData} />
+					<SubmitRegistryProvider>
+						<FeedViewer feed={feedDetailData} />
+					</SubmitRegistryProvider>
 				</CommentScrollProvider>
 			</FeedEditStoreProvider>
 		</div>

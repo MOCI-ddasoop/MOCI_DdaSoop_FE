@@ -1,7 +1,7 @@
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { BsChatRight } from "react-icons/bs";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { MdIosShare } from "react-icons/md";
@@ -19,6 +19,7 @@ import { useModalStore } from "../store/useModalStore";
 import { useRouter } from "next/navigation";
 import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
+import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -59,12 +60,14 @@ function FeedDetailCard({
 
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
 	const draft = useFeedEditStore((s) => s.draft);
-	const actions = useFeedEditStore((s) => s.actions);
+	const editActions = useFeedEditStore((s) => s.actions);
 	const {
 		content: editedContent,
 		tags: editedTags,
 		visibility: editedVisibility,
 	} = draft;
+	const setCanClose = useModalStore((s) => s.setCanClose);
+	const resetCanClose = useModalStore((s) => s.resetCanClose);
 
 	useEffect(() => {
 		// eslint-disable-next-line react-hooks/set-state-in-effect
@@ -74,10 +77,41 @@ function FeedDetailCard({
 		});
 	}, [bookmarkCount, bookMarkedByMe]);
 
+	useEffect(() => {
+		if (!isFeedEditMode) return;
+
+		setCanClose(async () => {
+			const result = await Swal.fire({
+				icon: "error",
+				titleText: "수정 중인 내용이 있어요",
+				text: "지금 나가면 수정 내용이 저장되지 않습니다.",
+				showCancelButton: true,
+				showDenyButton: true,
+				showConfirmButton: true,
+				confirmButtonText: "창 닫기",
+				denyButtonText: "수정 취소",
+				cancelButtonText: "취소",
+			});
+
+			if (result.isConfirmed) {
+				return true;
+			}
+
+			if (result.isDenied) {
+				editActions.exitEdit();
+				return false;
+			}
+
+			return false;
+		});
+
+		return () => resetCanClose();
+	}, [editActions, isFeedEditMode, resetCanClose, setCanClose]);
+
 	const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
 		null,
 	);
-	const { mutate: toggleBookmarkMutate } = useToggleFeedBookmark();
+	const { mutate: toggleBookmarkMutate, isPending } = useToggleFeedBookmark();
 
 	const handleLike = () => {
 		if (!id) return;
@@ -107,7 +141,7 @@ function FeedDetailCard({
 		setSelectedOwnerOption(option);
 		switch (option) {
 			case "수정":
-				actions.enterEdit();
+				editActions.enterEdit();
 				break;
 			case "삭제":
 				Swal.fire({
@@ -131,7 +165,7 @@ function FeedDetailCard({
 		}
 	};
 
-	const handleEditSubmit = () => {
+	const handleEditSubmit = useCallback(() => {
 		Swal.fire({
 			title: "수정",
 			text: "댓글을 수정하시겠습니까?",
@@ -144,14 +178,23 @@ function FeedDetailCard({
 		}).then((result) => {
 			if (result.isConfirmed) {
 				if (!id) return;
-				const payload = actions.toUpdatePayload(
+				const payload = editActions.toUpdatePayload(
 					textBoxRef.current?.getHTML() ?? "",
 				);
 				updateFeedMutation({ id, content: payload });
-				actions.exitEdit();
+				editActions.exitEdit();
 			}
 		});
-	};
+	}, [editActions, id, updateFeedMutation]);
+
+	const submitRegistry = useSubmitRegistry();
+
+	useEffect(() => {
+		submitRegistry.register("feed-edit", {
+			submit: handleEditSubmit,
+			enabled: () => isFeedEditMode && !isPending,
+		});
+	}, [handleEditSubmit, isFeedEditMode, isPending, submitRegistry]);
 
 	return (
 		<div className={tw("bg-white h-fit", className)}>
@@ -180,6 +223,7 @@ function FeedDetailCard({
 				<div className="p-2 min-h-[100px]">
 					{isFeedEditMode ? (
 						<TextBox
+							submitOwner="feed-edit"
 							ref={textBoxRef}
 							mode="comment"
 							initialValue={editedContent}
@@ -208,7 +252,7 @@ function FeedDetailCard({
 					{isFeedEditMode ? (
 						<TagInput
 							initialValue={editedTags}
-							onTagChanged={actions.setTags}
+							onTagChanged={editActions.setTags}
 						/>
 					) : (
 						<>
@@ -227,7 +271,7 @@ function FeedDetailCard({
 					<PostVisibilityOptions
 						togetherInfo={undefined}
 						value={editedVisibility}
-						setValue={actions.setVisibility}
+						setValue={editActions.setVisibility}
 					/>
 				) : (
 					""
@@ -247,15 +291,14 @@ function FeedDetailCard({
 						<div className="flex-center gap-1 text-sm">
 							<span className="text-gray-400">Enter 키로</span>
 							<button
-								className="text-mainblue underline"
+								className="text-mainblue underline cursor-pointer"
 								onClick={handleEditSubmit}
-								// onKeyDown={}
 							>
 								수정
 							</button>
 							<button
-								className="text-mainblue underline"
-								onClick={() => actions.exitEdit()}
+								className="text-mainblue underline cursor-pointer"
+								onClick={() => editActions.exitEdit()}
 							>
 								취소
 							</button>
