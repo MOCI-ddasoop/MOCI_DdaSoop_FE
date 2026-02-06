@@ -2,6 +2,7 @@
 import FormImageInput from "@/domain/form/FormImageInput";
 import Button from "@/shared/components/Button";
 import Capsule from "@/shared/components/Capsule";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import {
   PERIOD_OPTIONS,
   CUSTOM_PERIOD_ID,
@@ -9,12 +10,9 @@ import {
 import { calcPeriod } from "@/shared/utils/calcPeriod";
 import { ko } from "date-fns/locale";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useCreateTogether } from "../api/useCreateTogether";
-import { useAuthStore } from "@/store/authStore";
-import { categoryType } from "@/shared/constants/filter";
 
 const TOGETHER_CATEGORIES = [
   { id: 1, label: "플로깅", key: "PLOGGING" },
@@ -45,19 +43,32 @@ function TogetherCreateForm() {
     undefined,
   );
   const [images, setImages] = useState<File[]>([]);
+  const textBoxRef = useRef<TextBoxHandle>(null);
   const isFormFilled =
     togetherName.trim() !== "" &&
     onlineType !== null &&
     category !== null &&
     targetFeed !== "" &&
     startDate !== null &&
-    endDate !== null;
+    endDate !== null &&
+    endDate >= startDate &&
+    togetherInfo &&
+    togetherInfo.trim() !== "";
   const today = new Date();
   const maxEndDate = startDate
     ? new Date(new Date(startDate).setFullYear(startDate.getFullYear() + 1))
     : undefined;
+
+  //TODO: 모임 생성 API 연동 후 화면 렌더링 시 sanitizeHtml 적용 필요
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!textBoxRef.current) return;
+    const html = textBoxRef.current.getHTML();
+    if (html.trim() === "") {
+      alert("모임 소개글을 입력해주세요.");
+      return;
+    }
     // handleCreateTogether({
     //   title: togetherName,
     //   description: togetherInfo,
@@ -73,7 +84,15 @@ function TogetherCreateForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-[1000px] flex flex-col p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-[1000px] flex flex-col p-4"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      }}
+    >
       {/* 모임 이름 */}
       <div className="mb-4">
         <div className="flex items-center p-2 gap-3">
@@ -255,11 +274,11 @@ function TogetherCreateForm() {
             * 사진은 최대 5장까지 추가할 수 있습니다
           </span>
         </div>
-        <textarea
+        <TextBox
+          ref={textBoxRef}
           className="border border-gray-300 rounded-lg p-2 w-full h-25 outline-none focus:outline-none focus:ring-2 focus:ring-mainblue resize-none mb-3"
           placeholder="모임 소개글을 입력해주세요"
-          value={togetherInfo}
-          onChange={(e) => setTogetherInfo(e.target.value)}
+          setValue={setTogetherInfo}
         />
         <FormImageInput images={images} onChangeImages={setImages} />
       </div>
