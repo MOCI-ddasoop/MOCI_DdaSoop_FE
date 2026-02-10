@@ -9,6 +9,7 @@ import { DonateResponse } from "../types";
 import { useAuthStore } from "@/store/authStore";
 import { getKeyByValue } from "@/shared/utils/getKeyByValue";
 import { sortType } from "@/shared/constants/filter";
+import { useGetDonationList } from "../api/useGetDonationList";
 
 interface DonateSectionProps {
   initialCategory: string[];
@@ -22,7 +23,7 @@ function DonateSection({
   initialCategory,
   initialPage,
   sort,
-  initialData: items,
+  initialData,
   mypage,
 }: DonateSectionProps) {
   const router = useRouter();
@@ -32,11 +33,12 @@ function DonateSection({
   const [selectedCategory, setSelectedCategory] =
     useState<string[]>(initialCategory);
 
-  const isInitialQuery =
-    page === 1 && selectedCategory.length === 0 && currentSort === "최신순";
+  // const isInitialQuery =
+  //   page === 1 && selectedCategory.length === 0 && currentSort === "최신순";
 
   const userId = useAuthStore((state) => state.me?.memberId);
 
+  const { data: items, isPending, isError } = useGetDonationList({ userId });
   const handleFilter = (item: string) => {
     const newCategory = selectedCategory.includes(item)
       ? selectedCategory.filter((c) => c !== item)
@@ -64,14 +66,15 @@ function DonateSection({
       />
       <ParticipationContainer
         type="donate"
-        items={items?.data.content ?? []}
+        items={items?.data ?? []}
         currentPage={initialPage}
         mypage={mypage}
-        className={
-          items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
-        }
+        className="mb-10"
+        // className={
+        //   items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
+        // }
       />
-      <Pagination totalPages={items?.data.totalPages ?? 0} />
+      {/* <Pagination totalPages={items?.data.totalPages ?? 0} /> */}
     </>
   );
 }

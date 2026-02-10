@@ -42,7 +42,7 @@ function ParticipationCard(
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
         <Image
           fill
-          alt={title}
+          alt={title!}
           src={
             thumbnailImage ??
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU"
@@ -52,15 +52,23 @@ function ParticipationCard(
       </div>
       <div className="px-5 py-3 flex-1 flex flex-col gap-1.5">
         <div className="flex justify-between items-center">
-          <h2 className={`${dDay < 0 ? "text-sm text-mainblue" : "font-bold"}`}>
-            {dDay === 0 ? "D-day" : dDay < 0 ? "모집종료" : `D-${dDay}`}
+          <h2
+            className={`${(dDay ?? 0 < 0) ? "" : "font-bold"} ${type === "donate" ? "text-mainred" : "text-mainblue text-sm"}`}
+          >
+            {dDay === 0 ? "D-day" : (dDay ?? 0 < 0) ? "모집종료" : `D-${dDay}`}
           </h2>
           {type === "together" ? (
             <p className="text-xs text-gray-500">
               {props.startDate}~{props.endDate}
             </p>
           ) : (
-            <ProgressBar type={type} cardUI progress={props.progress ?? 0} />
+            <ProgressBar
+              type={type}
+              cardUI
+              progress={Math.round(
+                (props.currentAmount ?? 0) / (props.goalAmount ?? 0),
+              )}
+            />
           )}
         </div>
         <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>
@@ -68,7 +76,7 @@ function ParticipationCard(
         </h1>
         <div className={`w-full overflow-x-clip`}>
           <div className="flex gap-1.5 items-center w-max hover:overflow-scroll-animation">
-            <Capsule text={categoryType[category] ?? "기타"} readOnly />
+            <Capsule text={categoryType[category!] ?? "기타"} readOnly />
             {type === "together" && (
               <Capsule
                 type="isOnline"

@@ -1,5 +1,5 @@
+import DonateDetailLayout from "@/domain/donate/components/DonationDetailLayout";
 import Loading from "@/domain/participation/components/DetailLoadingSkeleton";
-import TogetherDetailLayout from "@/domain/participation/components/TogetherDetailLayout";
 import { Suspense } from "react";
 
 // const DETAIL_INFO_DUMMY: DetailInfoProps = {
@@ -25,7 +25,7 @@ async function page({
 }) {
   return (
     <Suspense fallback={<Loading />}>
-      <TogetherDetailLayout params={params}>{children}</TogetherDetailLayout>
+      <DonateDetailLayout params={params}>{children}</DonateDetailLayout>
     </Suspense>
   );
 }

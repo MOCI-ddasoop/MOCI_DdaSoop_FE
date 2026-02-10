@@ -14,7 +14,7 @@ interface TogetherContainerProps {
 interface DonateContainerProps {
   type: "donate";
   currentPage?: number;
-  items: TogetherInfo[] | DonateInfo[];
+  items: DonateInfo[];
   mypage?: boolean;
   className?: string;
 }

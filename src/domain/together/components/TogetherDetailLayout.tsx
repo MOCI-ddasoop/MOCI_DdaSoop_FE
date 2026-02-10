@@ -1,9 +1,19 @@
 import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
 import { getInitTogetherDetail } from "@/domain/together/api/getInitTogetherDetail";
 import DetailInfoHydrator from "@/domain/together/provider/DetailInfoHydrator";
+import { TogetherDetailResponse } from "@/domain/together/types";
 import ImageSwiper from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
 import { togetherTabContents } from "@/shared/utils/navigation";
+
+export const toTogetherViewModel = (data: TogetherDetailResponse["data"]) => ({
+  ...data,
+  thumbnailImage: data.thumbnailImage
+    ? data.thumbnailImage.map((url) => ({
+        imageUrl: url,
+      }))
+    : [],
+});
 
 async function TogetherDetailLayout({
   params,
@@ -13,6 +23,7 @@ async function TogetherDetailLayout({
   children: React.ReactNode;
 }) {
   const { id } = await params;
+
   const { data: detailInfo } = await getInitTogetherDetail(id);
 
   return (
