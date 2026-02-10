@@ -19,7 +19,7 @@ export const useCheckIsMember = ({
       );
       return data;
     },
-    enabled: isLogin && !!userId && !!togetherId,
+    enabled: !!isLogin && !!userId && !!togetherId,
     staleTime: 500,
     gcTime: 1000,
   });

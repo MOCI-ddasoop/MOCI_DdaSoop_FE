@@ -30,7 +30,7 @@ function UserAction({ id }: { id: number }) {
     },
   });
 
-  const { data, isError } = useCheckIsMember({
+  const { data, isError, isPending } = useCheckIsMember({
     togetherId: id,
     userId,
     isLogin,
@@ -73,7 +73,7 @@ function UserAction({ id }: { id: number }) {
 
   return (
     <div className="w-full h-fit flex-center flex-col">
-      {!isLogin ? (
+      {isLogin && isPending ? (
         <div className="h-28">
           <div className="loader"></div>
         </div>

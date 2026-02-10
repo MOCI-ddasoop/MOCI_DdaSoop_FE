@@ -60,19 +60,19 @@ function DonateSection({
         setCurrentSort={handleSortChange}
         selectedCategory={selectedCategory}
         onFilterClicked={handleFilter}
-        mypage={mypage}
       />
       <ParticipationContainer
         type="donate"
-        items={items?.data.content ?? []}
+        // items={items?.data ?? []}
+        items={[]}
         currentPage={initialPage}
-        mypage={mypage}
-        className={
-          items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
-        }
+        className="mb-10"
+        // className={
+        //   items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
+        // }
         isLogin={!!userId}
       />
-      <Pagination totalPages={items?.data.totalPages ?? 0} />
+      {/* <Pagination totalPages={items?.data.totalPages ?? 0} /> */}
     </>
   );
 }
