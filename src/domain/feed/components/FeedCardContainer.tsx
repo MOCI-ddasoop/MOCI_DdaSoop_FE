@@ -246,6 +246,7 @@ function FeedCardContainer({
                 bookmarkCount={item.bookmarkCount}
                 authorName={item.authorName}
                 authorProfileImage={item.authorProfileImage}
+                isPinned={item.isPinned}
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
                   params.set("feedId", (item.id ?? "").toString());

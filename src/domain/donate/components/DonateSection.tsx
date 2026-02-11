@@ -62,17 +62,16 @@ function DonateSection({
         setCurrentSort={handleSortChange}
         selectedCategory={selectedCategory}
         onFilterClicked={handleFilter}
-        mypage={mypage}
       />
       <ParticipationContainer
         type="donate"
         items={items?.data ?? []}
         currentPage={initialPage}
-        mypage={mypage}
         className="mb-10"
         // className={
         //   items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
         // }
+        isLogin={!!userId}
       />
       {/* <Pagination totalPages={items?.data.totalPages ?? 0} /> */}
     </>

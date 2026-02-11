@@ -55,8 +55,8 @@ export const useGetTogetherList = (
       );
       return data;
     },
-    staleTime: 500,
-    gcTime: 1000,
+    staleTime: 5000,
+    gcTime: 10000,
     ...options,
   });
 };

@@ -4,9 +4,9 @@ export const syncUrl = (
   type: "together" | "donate",
   category: string[] = [],
   isOnline: string[] = [],
-  sort: string = "최신순",
+  sort: string = "LATEST",
   page: number = 1,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) => {
   const params = new URLSearchParams();
   if (category.length > 0) {
@@ -16,6 +16,6 @@ export const syncUrl = (
     params.set("isOnline", isOnline.join(","));
   }
   params.set("page", page.toString());
-  params.set("sort", sort);
+  if (sort !== "LATEST") params.set("sort", sort);
   router.replace(`/${type}?${params.toString()}`);
 };
