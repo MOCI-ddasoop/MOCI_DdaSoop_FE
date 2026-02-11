@@ -5,39 +5,92 @@ import CommentItem from "./CommentItem";
 import { useMemo } from "react";
 import FeedSummary from "@/domain/feed/components/FeedSummary";
 import { useGetCommentListByUser } from "../api/useGetCommentListByUser";
+import { useAuthStore } from "@/store/authStore";
+import { useIntersection } from "@/shared/hooks/useIntersection";
 
 //마이페이지에 들어갈 내 댓글보기
 function FeedGroupCommentContainer() {
-	const { data } = useGetCommentListByUser("1");
+	const userId = useAuthStore((state) => state.me?.memberId);
 
-	const commentList = useMemo(() => {
-		const content = data?.content || [];
-		return groupById(content, "targetId");
+  const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isFetching,
+		isFetchingNextPage,
+		isPending,
+	} = useGetCommentListByUser(userId);
+	
+	const triggerRef = useIntersection({
+		onIntersect: () => {
+			fetchNextPage();
+		},
+		hasNextPage,
+		rootMargin: "40px",
+		isFetching,
+	});
+
+	const comments = useMemo(() => {
+		return data?.pages.flatMap((page) => page.content) ?? [];
 	}, [data]);
+
+	const sortedGroupedComments = useMemo(() => {
+    if (comments.length === 0) return [];
+
+    const grouped = groupById(comments, "targetId");
+
+    return Object.entries(grouped) //그룹들을 최신 댓글 순으로 정렬
+      .map(([feedId, groupComments]) => {
+        const latestCommentTime = Math.max(
+          ...groupComments.map((c) => new Date(c.createdAt || 0).getTime())
+        );
+        return {
+          feedId: Number(feedId),
+          comments: groupComments,
+          latestCommentTime,
+        };
+      })
+      .sort((a, b) => b.latestCommentTime - a.latestCommentTime); 
+  }, [comments]);
+
+	if (isPending) {
+    return (
+      <div className="w-full flex justify-center py-10">
+        <div className="sm-gray-spinner" />
+      </div>
+    );
+  }
 
 	return (
 		<ul className="flex flex-col gap-2 w-full">
-			{commentList &&
-				Object.keys(commentList).map((comment) => {
-					const feed = commentList[comment][0];
-					return (
-						<div
-							className="flex gap-4 w-full border-b border-gray-100 flex-1"
-							key={feed.id}
-						>
-							<FeedSummary id={feed?.id ?? 0} className="w-1/2 h-fit" />
-							<ul className="flex flex-col gap-2 w-fit flex-1">
-								{commentList[comment].slice(0, 2).map((comment) => (
-									<CommentItem
-										item={comment}
-										key={comment.id}
-										className="w-full"
-									/>
-								))}
-							</ul>
-						</div>
-					);
-				})}
+			{sortedGroupedComments.map(({ feedId, comments: groupComments }) => (
+        <div
+          className="flex gap-4 w-full border-b border-gray-100 flex-1"
+          key={feedId}
+        >
+          <FeedSummary id={feedId} className="w-1/2 h-fit" />
+          
+          <ul className="flex flex-col gap-2 w-fit flex-1">
+            {groupComments.map((comment) => (
+              <CommentItem
+                item={comment}
+                key={comment.id}
+                className="w-full"
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
+
+				<div 
+					ref={triggerRef}
+					className="h-10 flex items-center justify-center"
+				>
+					{isFetchingNextPage && <div className = "sm-gray-spinner"></div>}
+					{!hasNextPage && comments.length > 0 && (
+						<p className="text-sm text-gray-400">마지막 댓글입니다</p>
+					)}
+				</div>
 		</ul>
 	);
 }
