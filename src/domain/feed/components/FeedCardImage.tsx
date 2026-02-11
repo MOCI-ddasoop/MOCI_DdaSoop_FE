@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import tw from "@/shared/utils/tw";
-import { BsChatRight, BsHeart } from "react-icons/bs";
+import { BsChatRight, BsFillPinFill, BsHeart } from "react-icons/bs";
 import { PositionedItem } from "./FeedCardContainer";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 
@@ -32,6 +32,7 @@ function FeedCardImage({
 		bookmarkCount,
 		authorName = "사용자를 찾을 수 없음",
 		authorProfileImage = "/defaultFeedImage.png",
+		isPinned,
 	} = item;
 
 	const aspectRatio = imageWidth / imageHeight;
@@ -55,6 +56,15 @@ function FeedCardImage({
 				className,
 			)}
 		>
+			{isPinned ? (
+				<BsFillPinFill
+					size={24}
+					className="absolute top-2 right-2 z-20 text-gray-500/80 group-hover:text-white/80 duration-300"
+				/>
+			) : (
+				""
+			)}
+
 			<div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 ">
 				<div className="absolute flex items-center gap-2 top-2 left-0 px-4">
 					<div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-300">

@@ -1,6 +1,7 @@
 import { components } from "@/types/api/v1";
 
 export type TogetherDto = components["schemas"]["TogetherDto"]; // unknown
+export type CreateRequest = components["schemas"]["CreateRequest"];
 
 export interface TogetherInfo {
   id: number;
@@ -11,11 +12,13 @@ export interface TogetherInfo {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   thumbnailImage: string | null;
   progress: number | null;
   dDay: number;
 }
+
+export type MyTogetherInfo = Omit<TogetherInfo, "dDay"> & { goal: number };
 
 export type TogetherDetailInfo = {
   id: number;
@@ -26,7 +29,7 @@ export type TogetherDetailInfo = {
   startDate: string; // YYYY-MM-DD
   endDate: string; // YYYY-MM-DD
   memberId: number;
-  participants: number | null;
+  participants: number[] | null;
   progress: number | null;
   thumbnailImage: { imageUrl: string }[] | null;
   goal: number | null;
@@ -65,19 +68,22 @@ export interface TogetherDetailResponse {
   data: TogetherDetailInfo;
 }
 
+export interface MyTogetherResponse {
+  resultCode: string;
+  msg: string;
+  data: MyTogetherInfo[];
+}
+
+export interface TogetherParticipatingResponse {
+  resultCode: string;
+  msg: string;
+  data: boolean;
+}
+
 export interface TogetherDescriptionResponse {
   resultCode: string;
   msg: string;
   data: string;
-}
-
-export interface TogetherPageProps {
-  searchParams: Promise<{
-    category?: string;
-    isOnline?: string;
-    page?: string;
-    sort?: string;
-  }>;
 }
 
 // 카테고리, 온/오프라인, 모집중/모집완료 ->  타입지정해도 좋을듯

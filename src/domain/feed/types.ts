@@ -11,12 +11,12 @@ export type InfiniteScrollResponse =
 
 //무한스크롤 피드 리스트
 export type FeedInfinite = Omit<
-	FeedResponse,
-	"visibility" | "isPinned" | "isReacted" | "isBookmarked" | "updatedAt"
+  FeedResponse,
+  "visibility" | "isReacted" | "isBookmarked" | "updatedAt"
 > & {
-	thumbnailUrl?: string;
-	thumbnailWidth?: number;
-	thumbnailHeight?: number;
+  thumbnailUrl?: string;
+  thumbnailWidth?: number;
+  thumbnailHeight?: number;
 };
 
 export type FeedInfiniteScroll = Omit<InfiniteScrollResponse, "content"> & {

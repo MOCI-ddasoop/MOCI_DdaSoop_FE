@@ -2,11 +2,13 @@
 import FormImageInput from "@/domain/form/FormImageInput";
 import Button from "@/shared/components/Button";
 import Capsule from "@/shared/components/Capsule";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { PERIOD_OPTIONS, CUSTOM_PERIOD_ID } from "@/shared/config/periodOptions";
 import { calcPeriod } from "@/shared/utils/calcPeriod";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { ko } from "date-fns/locale";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -19,7 +21,7 @@ const DONATION_CATEGORIES = [ //TODO: 카테고리 데이터 API 연동
 
 function DonationSuggestForm() {
   const router = useRouter();
-  const [donationname, setDonationname] = useState("");
+  const [donationName, setDonationName] = useState("");
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [targetAmount, setTargetAmount] = useState<number | "">("");
   const [periodId, setPeriodId] = useState<string | null>(null);
@@ -27,15 +29,22 @@ function DonationSuggestForm() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [donationInfo, setDonationInfo] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
-  const isFormFilled = donationname.trim() !== "" && categoryId !== null && typeof targetAmount === "number" &&
-  targetAmount > 0 && startDate !== null && endDate !== null && endDate >= startDate;
+  const textBoxRef = useRef<TextBoxHandle>(null);
+  const isFormFilled = 
+    donationName.trim() !== "" &&
+    categoryId !== null &&
+    typeof targetAmount === "number" && targetAmount > 0 &&
+    startDate !== null && 
+    endDate !== null && 
+    endDate >= startDate &&
+    donationInfo.trim() !== "";
   const today = new Date();
 
   const maxEndDate = startDate
     ? new Date(new Date(startDate).setFullYear(startDate.getFullYear() + 1))
     : undefined;
 
-   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, ""); 
     if(value === ""){
       setTargetAmount("");
@@ -43,17 +52,30 @@ function DonationSuggestForm() {
       setTargetAmount(Number(value));
     }
   } 
-    // TODO: API 연동
-   const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+    // TODO: 후원 제안 API 연동 후 화면 렌더링 시 sanitizeHtml 적용 필요
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if(!textBoxRef.current) return;
+    const html = textBoxRef.current.getHTML(); 
+    if(html.trim() === ""){
+      alert("후원 소개글을 입력해주세요.")
+      return;
+    }
     alert("후원 제안이 완료되었습니다!");
     router.push("/donate");
-  }   
-
+  };
   
   return (
-    <form onSubmit={handleSubmit} className="max-w-[1000px] flex flex-col p-4">
+    <form 
+      onSubmit={handleSubmit}
+      className="max-w-[1000px] flex flex-col p-4"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}
+    >
       {/*후원 이름 입력 */}
       <div className="mb-8">
         <div className="flex items-center p-2 gap-3">
@@ -64,8 +86,8 @@ function DonationSuggestForm() {
           type="text"
           className="border border-gray-300 rounded-lg p-2 h-10 w-[300px] outline-none focus:outline-none focus:ring-2 focus:ring-mainblue"
           placeholder="후원이름을 입력해주세요"
-          value={donationname}
-          onChange={(e) => setDonationname(e.target.value)}
+          value={donationName}
+          onChange={(e) => setDonationName(e.target.value)}
         />
       </div>
       {/*카테고리 선택 */}
@@ -186,11 +208,11 @@ function DonationSuggestForm() {
           <label className="text-xl font-bold">후원 소개글</label>
           <span className="text-mainblue text-sm ml-3">* 사진은 최대 5장까지 추가할 수 있습니다</span>
         </div>
-        <textarea
+        <TextBox
+          ref={textBoxRef}
           className="border border-gray-300 rounded-lg p-2 w-full h-25 outline-none focus:outline-none focus:ring-2 focus:ring-mainblue resize-none mb-3"
           placeholder="후원 소개글을 입력해주세요"
-          value={donationInfo}
-          onChange={(e) => setDonationInfo(e.target.value)}
+          setValue={setDonationInfo}
         />
         <FormImageInput images={images} onChangeImages={setImages} />
       </div>

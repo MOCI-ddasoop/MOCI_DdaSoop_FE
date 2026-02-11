@@ -39,11 +39,11 @@ function NotificationContainer({
         {notification &&
         notification.content &&
         notification.content.length === 0 ? (
-          <p className="w-full flex-center py-5 text-gray-500">
+          <p className="w-full flex-center py-5 text-gray-400">
             알림이 없습니다
           </p>
         ) : isError ? (
-          <p className="w-full flex-center py-5 text-gray-500">
+          <p className="w-full flex-center py-5 text-gray-400">
             알림 가져오기에 실패했습니다
           </p>
         ) : (

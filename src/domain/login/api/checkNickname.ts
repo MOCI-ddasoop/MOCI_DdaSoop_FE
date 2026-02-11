@@ -1,10 +1,9 @@
 import { api } from "@/shared/config/api";
+import { NicknameCheckResponse } from "../types";
 
-export const checkNickname = async (nickname: string) => {
-  try{
-    const res = await api.post("/api/members/check-nickname", { nickname });
-    return res.data;
-  }catch(error){
-    throw new Error("닉네임 중복 체크 실패"); 
-  }
-};
+export const checkNickname = async (
+  nickname: string
+): Promise<NicknameCheckResponse> => {
+  const res = await api.post("/api/members/check-nickname", { nickname });
+  return res.data;
+}
