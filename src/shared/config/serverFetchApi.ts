@@ -1,19 +1,16 @@
 import { BASE_URL } from "../constants/api";
-import { cookies } from "next/headers";
 
 export const serverFetchApi = async (
   url: string,
   options: RequestInit = {},
 ) => {
   const baseURL = BASE_URL;
-  const cookieStore = await cookies();
 
-  return fetch(`${baseURL}${url}`, {
+  const response = await fetch(`${baseURL}${url}`, {
     ...options,
-    headers: {
-      ...options.headers,
-      Cookie: cookieStore.toString(),
-    },
     cache: "no-store",
   });
+
+  if (!response.ok) throw new Error("API 요청실패");
+  return response;
 };
