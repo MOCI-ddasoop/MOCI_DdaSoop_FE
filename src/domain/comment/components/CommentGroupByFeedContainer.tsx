@@ -7,10 +7,14 @@ import FeedSummary from "@/domain/feed/components/FeedSummary";
 import { useGetCommentListByUser } from "../api/useGetCommentListByUser";
 import { useAuthStore } from "@/store/authStore";
 import { useIntersection } from "@/shared/hooks/useIntersection";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 //마이페이지에 들어갈 내 댓글보기
 function FeedGroupCommentContainer() {
 	const userId = useAuthStore((state) => state.me?.memberId);
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
 
   const {
 		data,
@@ -53,6 +57,12 @@ function FeedGroupCommentContainer() {
       .sort((a, b) => b.latestCommentTime - a.latestCommentTime); 
   }, [comments]);
 
+	const openFeedModal = (feedId: number) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("feedId", String(feedId));
+		router.push(`${pathname}?${params.toString()}`, { scroll: false });
+	};
+
 	if (isPending) {
     return (
       <div className="w-full flex justify-center py-10">
@@ -68,15 +78,21 @@ function FeedGroupCommentContainer() {
           className="flex gap-4 w-full border-b border-gray-100 flex-1"
           key={feedId}
         >
-          <FeedSummary id={feedId} className="w-1/2 h-fit" />
+          <FeedSummary
+						id={feedId}
+						className="w-1/2 h-fit cursor-pointer"
+						onClick={() => openFeedModal(feedId)}
+					/>
           
           <ul className="flex flex-col gap-2 w-fit flex-1">
             {groupComments.map((comment) => (
-              <CommentItem
-                item={comment}
-                key={comment.id}
-                className="w-full"
-              />
+							<div
+								key={comment.id}
+								className="cursor-pointer"
+								onClick={() => openFeedModal(feedId)}
+							>
+								<CommentItem item={comment} className="w-full" />
+							</div>
             ))}
           </ul>
         </div>

@@ -5,9 +5,10 @@ import { useGetFeedById } from "../api/useGetFeedById";
 interface FeedSummaryProps {
 	id: number;
 	className?: string;
+	onClick?: () => void;
 }
 
-function FeedSummary({ id, className }: FeedSummaryProps) {
+function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 	const { data: feed, isLoading } = useGetFeedById(id);
 
 	if (isLoading)
@@ -18,6 +19,7 @@ function FeedSummary({ id, className }: FeedSummaryProps) {
 	return (
 		<div
 			className={tw("flex items-center gap-2 bg-gray-100 px-2 py-1", className)}
+			onClick={onClick}
 		>
 			<div className="flex flex-col gap-1 flex-1">
 				<div className="flex items-center gap-2">
