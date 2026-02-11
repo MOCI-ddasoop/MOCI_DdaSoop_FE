@@ -42,7 +42,11 @@ function ParticipationDetailInfo({
         )}
         {type === "together" && props.capacity && (
           <Capsule
-            text={(participants ?? 0) < props.capacity ? "모집중" : "모집완료"}
+            text={
+              (participants?.length ?? 0) < props.capacity
+                ? "모집중"
+                : "모집완료"
+            }
             type="status"
             readOnly
           />
@@ -53,7 +57,7 @@ function ParticipationDetailInfo({
       </p>
       {type === "together" ? (
         <p className="font-semibold whitespace-pre">
-          {participants ?? 0}명이 함께하고 있어요 !
+          {participants?.length ?? 0}명이 함께하고 있어요 !
         </p>
       ) : (
         <p className="text-lg">D-{0}</p> //후원하기 타입 가져와서 바꾸기

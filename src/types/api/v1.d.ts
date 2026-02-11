@@ -535,6 +535,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/together/{togetherId}/{memberId}/participation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 함께하기 참여 여부 조회 */
+        get: operations["isParticipating"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/member/{memberId}": {
         parameters: {
             query?: never;
@@ -646,6 +663,23 @@ export interface paths {
         };
         /** 상세보기별 후원 현황 조회 */
         get: operations["getDonationStatusById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/donation/list/{id}/description": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 후원하기 리스트 설명 조회 */
+        get: operations["getDonationDescription"];
         put?: never;
         post?: never;
         delete?: never;
@@ -886,10 +920,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 태그로 피드 검색
-         * @description 특정 태그가 포함된 피드를 검색합니다.
+         * 태그 검색 무한 스크롤
+         * @description 특정 태그가 포함된 피드를 무한 스크롤로 조회합니다.
          */
-        get: operations["searchByTag"];
+        get: operations["searchByTagInfiniteScroll"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1006,10 +1040,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 특정 회원이 북마크한 피드 목록 조회
-         * @description 특정 회원이 북마크한 피드 목록을 페이징 방식으로 조회합니다. (다른 사람의 북마크 목록)
+         * 특정 회원이 북마크한 피드 무한 스크롤
+         * @description 특정 회원이 북마크한 피드 목록을 무한 스크롤로 조회합니다.
          */
-        get: operations["getMemberBookmarkedFeeds"];
+        get: operations["getMemberBookmarkedFeedsInfiniteScroll"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1026,10 +1060,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 내가 북마크한 피드 목록 조회
-         * @description 특정 회원이 북마크한 피드 목록을 페이징 방식으로 조회합니다. (내가 저장한 게시물)
+         * 내가 북마크한 피드 무한 스크롤
+         * @description 내가 북마크한 피드 목록을 무한 스크롤로 조회합니다.
          */
-        get: operations["getMyBookmarkedFeeds"];
+        get: operations["getMyBookmarkedFeedsInfiniteScroll"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1481,6 +1515,61 @@ export interface components {
             /** @enum {string} */
             visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
         };
+        FeedImageResponse: {
+            /** Format: int64 */
+            id?: number;
+            imageUrl?: string;
+            /** Format: int32 */
+            width?: number;
+            /** Format: int32 */
+            height?: number;
+            /** Format: int32 */
+            displayOrder?: number;
+            /** Format: int64 */
+            fileSize?: number;
+            originalFileName?: string;
+        };
+        FeedResponse: {
+            /** Format: int64 */
+            id?: number;
+            /** @enum {string} */
+            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
+            content?: string;
+            images?: components["schemas"]["FeedImageResponse"][];
+            thumbnailUrl?: string;
+            /** Format: int32 */
+            thumbnailWidth?: number;
+            /** Format: int32 */
+            thumbnailHeight?: number;
+            /** Format: int32 */
+            imageCount?: number;
+            tags?: string[];
+            /** @enum {string} */
+            visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+            /** Format: int32 */
+            reactionCount?: number;
+            /** Format: int32 */
+            commentCount?: number;
+            /** Format: int32 */
+            bookmarkCount?: number;
+            /** Format: int64 */
+            authorId?: number;
+            authorName?: string;
+            authorNickname?: string;
+            authorProfileImage?: string;
+            /** Format: int64 */
+            togetherId?: number;
+            togetherTitle?: string;
+            togetherCategory?: string;
+            togetherMode?: string;
+            isPinned?: boolean;
+            isReacted?: boolean;
+            isBookmarked?: boolean;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         CommentUpdateRequest: {
             content: string;
         };
@@ -1518,17 +1607,35 @@ export interface components {
         };
         CreateRequest: {
             title: string;
-            description: string;
+            description?: string;
             /** @enum {string} */
-            category: "PLOGGING" | "CLEANUP" | "RECYCLING";
+            category: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
             /** @enum {string} */
             mode: "ONLINE" | "OFFLINE";
             /** Format: int64 */
-            capacity: number;
+            capacity?: number;
             /** Format: date */
             startDate: string;
             /** Format: date */
             endDate: string;
+            /** Format: int64 */
+            memberId?: number;
+        };
+        CreateResponse: {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            description?: string;
+            /** @enum {string} */
+            category?: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
+            /** @enum {string} */
+            mode?: "ONLINE" | "OFFLINE";
+            /** Format: int64 */
+            capacity?: number;
+            /** Format: date */
+            startDate?: string;
+            /** Format: date */
+            endDate?: string;
             /** Format: int64 */
             memberId?: number;
         };
@@ -1539,7 +1646,7 @@ export interface components {
             /** Format: int64 */
             amount: number;
             /** Format: int64 */
-            memberId?: number;
+            memberId: number;
         };
         DonationPaymentResponse: {
             /** Format: int64 */
@@ -1547,9 +1654,6 @@ export interface components {
             /** Format: int64 */
             amount?: number;
             paymentMethod?: string;
-            status?: string;
-            /** Format: date-time */
-            approvedAt?: string;
         };
         ReportCreateRequest: {
             /** @enum {string} */
@@ -1624,30 +1728,71 @@ export interface components {
         SystemNotificationCreateRequest: {
             message: string;
         };
-        DonationResponse: {
+        DetailResponse: {
+            /** Format: int64 */
+            id?: number;
             title?: string;
             description?: string;
             /** Format: int64 */
             goalAmount?: number;
             /** Format: int64 */
             currentAmount?: number;
+            /** Format: date */
             startDate?: string;
+            /** Format: date */
             endDate?: string;
             status?: string;
+            thumbnailImage?: string;
+            /** @enum {string} */
+            category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+            /** Format: int64 */
+            dDay?: number;
+        };
+        ListResponse: {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            /** Format: int64 */
+            goalAmount?: number;
+            /** Format: int64 */
+            currentAmount?: number;
+            /** Format: date */
+            endDate?: string;
+            status?: string;
+            thumbnailImage?: string;
+            /** @enum {string} */
+            category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+            /** Format: int64 */
+            dDay?: number;
+        };
+        DescriptionResponse: {
+            description?: string;
+        };
+        DonorListResponse: {
+            /** Format: int64 */
+            donationPaymentId?: number;
+            /** Format: int64 */
+            memberId?: number;
+            memberName?: string;
+            /** Format: int64 */
+            amount?: number;
+            paymentMethod?: string;
+            /** Format: date-time */
+            createdAt?: string;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
@@ -1657,12 +1802,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
+            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1684,8 +1829,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -1704,18 +1849,18 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
@@ -1779,75 +1924,29 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
+            sortByOrDefault?: string;
             /** Format: int32 */
             pageOrDefault?: number;
             /** Format: int32 */
             sizeOrDefault?: number;
-            sortByOrDefault?: string;
         };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
-        };
-        FeedImageResponse: {
-            /** Format: int64 */
-            id?: number;
-            imageUrl?: string;
-            /** Format: int32 */
-            width?: number;
-            /** Format: int32 */
-            height?: number;
-            /** Format: int32 */
-            displayOrder?: number;
-            /** Format: int64 */
-            fileSize?: number;
-            originalFileName?: string;
-        };
-        FeedResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-            content?: string;
-            images?: components["schemas"]["FeedImageResponse"][];
-            tags?: string[];
-            /** @enum {string} */
-            visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-            /** Format: int32 */
-            reactionCount?: number;
-            /** Format: int32 */
-            commentCount?: number;
-            /** Format: int32 */
-            bookmarkCount?: number;
-            /** Format: int64 */
-            authorId?: number;
-            authorName?: string;
-            authorNickname?: string;
-            authorProfileImage?: string;
-            /** Format: int64 */
-            togetherId?: number;
-            togetherTitle?: string;
-            isPinned?: boolean;
-            isReacted?: boolean;
-            isBookmarked?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
         };
         InfiniteScrollResponse: {
             content?: unknown[];
@@ -2119,21 +2218,27 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["FeedResponse"];
+                };
             };
             /** @description 권한 없음 (작성자가 아님) */
             403: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["FeedResponse"];
+                };
             };
             /** @description 피드를 찾을 수 없음 */
             404: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["FeedResponse"];
+                };
             };
         };
     };
@@ -2410,7 +2515,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherDto"];
+                    "*/*": components["schemas"]["CreateResponse"];
                 };
             };
         };
@@ -2984,6 +3089,29 @@ export interface operations {
             };
         };
     };
+    isParticipating: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                togetherId: number;
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 함께하기 참여 여부 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TogetherDto"];
+                };
+            };
+        };
+    };
     getTogetherByMemberId: {
         parameters: {
             query?: never;
@@ -3001,7 +3129,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherDto"];
+                    "*/*": components["schemas"]["DetailResponse"];
                 };
             };
         };
@@ -3009,7 +3137,7 @@ export interface operations {
     getAllTogether: {
         parameters: {
             query?: {
-                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING")[];
+                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC")[];
                 mode?: "ONLINE" | "OFFLINE";
                 status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
                 sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "STATUS" | "CATEGORY" | "MODE";
@@ -3028,7 +3156,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherDto"];
+                    "*/*": components["schemas"]["ListResponse"];
                 };
             };
         };
@@ -3050,7 +3178,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherDto"];
+                    "*/*": components["schemas"]["DetailResponse"];
                 };
             };
         };
@@ -3072,7 +3200,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["TogetherDto"];
+                    "*/*": components["schemas"]["DescriptionResponse"];
                 };
             };
         };
@@ -3092,7 +3220,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DonationResponse"];
+                    "*/*": components["schemas"]["ListResponse"];
                 };
             };
         };
@@ -3114,7 +3242,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DonationResponse"];
+                    "*/*": components["schemas"]["DetailResponse"];
                 };
             };
         };
@@ -3136,7 +3264,29 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["DonationResponse"];
+                    "*/*": components["schemas"]["DonorListResponse"];
+                };
+            };
+        };
+    };
+    getDonationDescription: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 후원하기 리스트 설명 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DescriptionResponse"];
                 };
             };
         };
@@ -3484,7 +3634,7 @@ export interface operations {
             };
         };
     };
-    searchByTag: {
+    searchByTagInfiniteScroll: {
         parameters: {
             query: {
                 /**
@@ -3493,12 +3643,12 @@ export interface operations {
                  */
                 tag: string;
                 /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
+                 * @description 마지막으로 조회한 피드 ID
+                 * @example 100
                  */
-                page?: number;
+                lastFeedId?: number;
                 /**
-                 * @description 페이지 크기
+                 * @description 조회할 개수 (기본 20, 최대 50)
                  * @example 20
                  */
                 size?: number;
@@ -3515,7 +3665,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": string;
+                    "*/*": components["schemas"]["InfiniteScrollResponse"];
                 };
             };
         };
@@ -3666,16 +3816,16 @@ export interface operations {
             };
         };
     };
-    getMemberBookmarkedFeeds: {
+    getMemberBookmarkedFeedsInfiniteScroll: {
         parameters: {
             query?: {
                 /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
+                 * @description 마지막으로 조회한 피드 ID
+                 * @example 100
                  */
-                page?: number;
+                lastFeedId?: number;
                 /**
-                 * @description 페이지 크기
+                 * @description 조회할 개수 (기본 20, 최대 50)
                  * @example 20
                  */
                 size?: number;
@@ -3698,21 +3848,21 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Page"];
+                    "*/*": components["schemas"]["InfiniteScrollResponse"];
                 };
             };
         };
     };
-    getMyBookmarkedFeeds: {
+    getMyBookmarkedFeedsInfiniteScroll: {
         parameters: {
             query?: {
                 /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
+                 * @description 마지막으로 조회한 피드 ID
+                 * @example 100
                  */
-                page?: number;
+                lastFeedId?: number;
                 /**
-                 * @description 페이지 크기
+                 * @description 조회할 개수 (기본 20, 최대 50)
                  * @example 20
                  */
                 size?: number;
@@ -3729,7 +3879,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Page"];
+                    "*/*": components["schemas"]["InfiniteScrollResponse"];
                 };
             };
         };
