@@ -57,25 +57,19 @@ export const queryKeys = {
   together: {
     all: () => ["together"],
     id: (id: string) => ["together", id],
-    list: ({
-      category,
-      mode,
-      status,
-      sortType,
-      page,
-      size,
-    }: {
+    list: (params: {
       category?: string[];
       mode?: string;
       status?: string;
       sortType?: string;
       page?: number;
       size?: number;
-    }) => ["together", "list", category, mode, status, sortType, page, size],
+    }) => ["together", "list", params],
     description: (id: string | number) => ["together", "description", id],
     member: (memberId: number) => ["together", "member", memberId],
     join: () => ["together", "join"],
     leave: () => ["together", "leave"],
+    isParticipating: () => ["together", "participating"],
   },
 
   notifications: {

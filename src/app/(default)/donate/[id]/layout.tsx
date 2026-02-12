@@ -12,7 +12,7 @@ const DETAIL_INFO_DUMMY: DonateDetailInfo = {
   title: "후원하기",
   category: "PLOGGING",
   dDay: 12,
-  participants: 7, // 참여자수(제한인원 있는 경우만 표시)
+  participants: [], // 참여자수(제한인원 있는 경우만 표시)
   startDate: "2024-06-01",
   endDate: "2024-06-30",
   goal: 100,

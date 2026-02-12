@@ -15,7 +15,6 @@ interface ItemFilterProps {
   selectedCategory: string[];
   isOnline?: string[];
   onFilterClicked: (item: string, type: "category" | "isOnline") => void;
-  mypage?: boolean;
 }
 
 function ItemFilter({
@@ -25,11 +24,8 @@ function ItemFilter({
   selectedCategory,
   isOnline,
   onFilterClicked: handleFilter,
-  mypage,
 }: ItemFilterProps) {
-  return mypage ? (
-    <></>
-  ) : (
+  return (
     <div className="flex justify-between py-4">
       <div className="flex items-center flex-wrap">
         <Filter
