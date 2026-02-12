@@ -1,6 +1,6 @@
 "use client";
 import FeedImageInput from "./FeedImageInput";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import TextBox, { TextBoxHandle } from "../../../shared/components/TextBox";
 import Button from "../../../shared/components/Button";
 import TagInput from "../../../shared/components/TagInput";
@@ -9,35 +9,35 @@ import { FeedCreateRequest } from "../types";
 import { ImageUploadResponse } from "@/shared/types/types";
 import Swal from "sweetalert2";
 import { usePostFeed } from "../api/usePostFeed";
-import { useGetTogetherList } from "@/domain/together/api/useGetTogetherList";
 import { useAuthStore } from "@/store/authStore";
 import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useModalStore } from "../store/useModalStore";
+import { MyTogetherInfo } from "@/domain/together/types";
+import { useGetOwnTogetherList } from "@/domain/together/api/useGetOwnTogetherList";
+import { useParams, usePathname } from "next/navigation";
+import { useGetTogetherById } from "@/domain/together/api/useGetTogetherById";
 
-export interface FeedOptionData {
-	together: Together;
-	user: {
-		role: string;
-		IsCheckedIn: boolean;
-	};
-}
+function FeedCreatorModal({ onClose }: { onClose: () => void }) {
+	const pathname = usePathname();
+	const isTogetherRoute = pathname.startsWith("/together");
+	const { id: togetherId } = useParams<{ id: string }>();
 
-function FeedCreatorModal({
-	initialTogetherInfo,
-	onClose,
-	userTogetherList,
-}: {
-	initialTogetherInfo?: FeedOptionData;
-	onClose: () => void;
-	userTogetherList?: FeedOptionData[];
-}) {
+	const { data: initialTogetherInfo, isLoading } = useGetTogetherById(
+		togetherId,
+		{
+			enabled: isTogetherRoute && !!togetherId,
+		},
+	);
+
 	const [feedImages, setFeedImages] = useState<ImageUploadResponse[]>([]);
-	const [selectedTogether, setSelectedTogether] = useState<string>("main");
+	const [selectedTogetherId, setSelectedTogetherId] = useState<
+		number | undefined
+	>();
 	const [textBoxValue, setTextBoxValue] = useState<string>();
 	const [tagsValue, setTagsValue] = useState<string[]>();
-	const [togetherInfo, setTogetherInfo] = useState<FeedOptionData | undefined>(
-		initialTogetherInfo,
-	);
+	const [togetherInfo, setTogetherInfo] = useState<
+		MyTogetherInfo | undefined
+	>();
 	const textBoxRef = useRef<TextBoxHandle>(null);
 	const [selectedPostVisibility, setSelectedPostVisibility] = useState<
 		FeedCreateRequest["visibility"] | null
@@ -45,14 +45,40 @@ function FeedCreatorModal({
 
 	const { me } = useAuthStore();
 	const userId = me?.memberId;
-	const { data: togetherInfoFromUserId } = useGetTogetherList({ userId });
+	const { data: ownTogetherList } = useGetOwnTogetherList(userId!);
 	const setCanClose = useModalStore((s) => s.setCanClose);
 	const resetCanClose = useModalStore((s) => s.resetCanClose);
 
+	const userTogetherList = useMemo(() => {
+		if (pathname === "/") {
+			return ownTogetherList?.data;
+		}
+	}, [ownTogetherList?.data, pathname]);
+
 	useEffect(() => {
-		console.log(me);
-		console.log(togetherInfoFromUserId);
-	}, [togetherInfoFromUserId, me]);
+		if (!isTogetherRoute) return;
+		if (!initialTogetherInfo?.data) return;
+
+		const detailInfo: MyTogetherInfo = {
+			id: initialTogetherInfo.data.id,
+			title: initialTogetherInfo.data.title,
+			category: initialTogetherInfo.data.category,
+			mode: initialTogetherInfo.data.mode,
+			capacity: initialTogetherInfo.data.capacity,
+			startDate: initialTogetherInfo.data.startDate,
+			endDate: initialTogetherInfo.data.endDate,
+			memberId: initialTogetherInfo.data.memberId,
+			participants: initialTogetherInfo.data.participants,
+			progress: initialTogetherInfo.data.progress,
+			thumbnailImage:
+				initialTogetherInfo.data.thumbnailImage?.[0]?.imageUrl ?? null,
+			goal: initialTogetherInfo.data.goal ?? 0,
+		};
+
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setSelectedTogetherId(detailInfo.id);
+		setTogetherInfo(detailInfo);
+	}, [initialTogetherInfo?.data, isTogetherRoute]);
 
 	const { mutate: postFeed, isPending } = usePostFeed({
 		onMutate: () => {
@@ -71,6 +97,7 @@ function FeedCreatorModal({
 			setTimeout(() => {
 				Swal.close();
 				textBoxRef.current?.clear();
+				resetCanClose();
 				onClose();
 			}, 1500);
 		},
@@ -116,8 +143,18 @@ function FeedCreatorModal({
 	const handleFeedFormSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!selectedPostVisibility) return;
+		const feedType = (() => {
+			switch (selectedPostVisibility) {
+				case "MEMBERS":
+					return "TOGETHER_VERIFICATION";
+				case "NOTICE":
+					return "TOGETHER_NOTICE";
+				default:
+					return "GENERAL";
+			}
+		})();
 		const feedFormData: FeedCreateRequest = {
-			feedType: "GENERAL",
+			feedType,
 			content: textBoxRef.current?.getHTML() || "",
 			images: feedImages.map((img, index) => {
 				if (!img.imageUrl || img.width == undefined || img.height == undefined)
@@ -133,8 +170,7 @@ function FeedCreatorModal({
 			}),
 			visibility: selectedPostVisibility,
 			tags: tagsValue || [],
-			togetherId:
-				selectedTogether === "main" ? undefined : parseInt(selectedTogether),
+			togetherId: selectedTogetherId,
 		};
 		postFeed(feedFormData);
 	};
@@ -143,10 +179,8 @@ function FeedCreatorModal({
 		e: React.ChangeEvent<HTMLSelectElement>,
 	) => {
 		const value = e.target.value;
-		setSelectedTogether(value);
-		const selected = userTogetherList?.find(
-			(i) => i.together.id.toString() === value,
-		);
+		setSelectedTogetherId(Number(value));
+		const selected = userTogetherList?.find((i) => i.id.toString() === value);
 		setTogetherInfo(selected ?? undefined);
 
 		let checkedPostVisibility = document.querySelector(
@@ -156,71 +190,115 @@ function FeedCreatorModal({
 		checkedPostVisibility = null;
 	};
 
-	const handleTogetherItemClick = (e: React.MouseEvent) => {
-		e.preventDefault();
-
-		window.open(togetherInfo?.together.href, "noopener,noreferrer");
-	};
+	const handleTogetherItemClick = useCallback(() => {
+		window.open(
+			`/together/${togetherInfo?.id}`,
+			"_blank",
+			"noopener,noreferrer",
+		);
+	}, [togetherInfo?.id]);
 
 	// 함께하기 선택 옵션
-	const selectTogetherOption = initialTogetherInfo ? (
-		<option defaultValue={initialTogetherInfo.together.id}>
-			{initialTogetherInfo.together.name.length > 7
-				? initialTogetherInfo.together.name.slice(0, 7) + "…"
-				: initialTogetherInfo.together.name}
-		</option>
-	) : (
-		<>
-			<option value="main" defaultValue={"main"}>
-				개인 피드
-			</option>
-			{userTogetherList?.map(({ together: { id, name } }) => (
-				<option key={id} value={id}>
-					{name.length > 7 ? name.slice(0, 7) + "…" : name}
+	const selectTogetherOption = useMemo(() => {
+		if (isTogetherRoute) {
+			if (!initialTogetherInfo?.data) {
+				return (
+					<option disabled>
+						{isLoading ? "불러오는 중..." : "데이터 없음"}
+					</option>
+				);
+			}
+
+			return (
+				<option>
+					{initialTogetherInfo.data.title.length > 7
+						? initialTogetherInfo.data.title.slice(0, 7) + "…"
+						: initialTogetherInfo.data.title}
 				</option>
-			))}
-		</>
-	);
+			);
+		} else {
+			return (
+				<>
+					<option value="main" defaultValue={undefined}>
+						개인 피드
+					</option>
+					{userTogetherList?.map(({ id, title }) => (
+						<option key={id} value={id}>
+							{title.length > 7 ? title.slice(0, 7) + "…" : title}
+						</option>
+					))}
+				</>
+			);
+		}
+	}, [initialTogetherInfo, isLoading, isTogetherRoute, userTogetherList]);
 
 	// TextBox 입력 가능 여부
 	const isTextBoxEditable = useMemo(() => {
-		if (togetherInfo?.user.IsCheckedIn && selectedPostVisibility !== "NOTICE") {
-			return false;
-		}
+		// if (
+		// 	togetherInfo?.user.IsCheckedIn &&
+		// 	selectedPostVisibility !== "NOTICE"
+		// ) {
+		// 	return false;
+		// }
 		return true;
 	}, [togetherInfo, selectedPostVisibility]);
 
 	// 함께하기 item: api로 불러올수도있으니 useMemo 사용
-	const togetherItem = useMemo(
-		() =>
-			togetherInfo ? (
-				<TogetherListItem
-					id={togetherInfo.together.id}
-					image={togetherInfo.together.image}
-					name={togetherInfo.together.name}
-					category={togetherInfo.together.category}
-					isOnline={togetherInfo.together.isOnline}
-					href={togetherInfo.together.href}
-					widthClass="w-full"
-				/>
-			) : (
-				""
-			),
-		[togetherInfo],
-	);
+	const togetherItem = useMemo(() => {
+		if (isTogetherRoute) {
+			if (!initialTogetherInfo?.data) {
+				return;
+			} else {
+				return (
+					<TogetherListItem
+						id={initialTogetherInfo.data.id}
+						//initialTogetherInfo.data.thumbnailImage[0].imageUrl ??
+						image={"/defaultFeedImage.png"}
+						name={initialTogetherInfo.data.title}
+						category={initialTogetherInfo.data.category}
+						isOnline={initialTogetherInfo.data.mode}
+						onClick={handleTogetherItemClick}
+						widthClass="w-full"
+					/>
+				);
+			}
+		} else {
+			if (togetherInfo) {
+				return (
+					<TogetherListItem
+						id={togetherInfo.id}
+						image={togetherInfo.thumbnailImage ?? "/defaultFeedImage.png"}
+						name={togetherInfo.title}
+						category={togetherInfo.category}
+						isOnline={togetherInfo.mode}
+						onClick={handleTogetherItemClick}
+						widthClass="w-full"
+					/>
+				);
+			}
+		}
+	}, [
+		handleTogetherItemClick,
+		initialTogetherInfo,
+		isTogetherRoute,
+		togetherInfo,
+	]);
 
 	// 게시 버튼 disable 조건
 	const disableSubmitButton = useMemo(() => {
+		const myRole = togetherInfo?.participants?.find(
+			(p) => p.memberId === userId,
+		)?.participantRole;
 		// 1) 이미 인증한 함께하기일 경우
-		if (togetherInfo?.user.IsCheckedIn) {
-			const isLeader = togetherInfo.user.role === "leader";
-			const isNotice = selectedPostVisibility === "NOTICE";
-			// 리더이면서 notice만 가능
-			if (isLeader && isNotice) return false;
+		// if (togetherInfo?.user.IsCheckedIn) {
+		// 	const isLeader = myRole === "LEADER";
+		// 	const isNotice = selectedPostVisibility === "NOTICE";
+		// 	// 리더이면서 notice만 가능
+		// 	if (isLeader && isNotice) return false;
 
-			// 그 외는 전부 불가능
-			return true;
-		}
+		// 	// 그 외는 전부 불가능
+		// 	return true;
+		// }
 		// 2) 공개 여부가 선택되지 않으면 불가능
 		if (!selectedPostVisibility) return true;
 
@@ -248,7 +326,7 @@ function FeedCreatorModal({
 					<select
 						name="together"
 						id="together"
-						value={selectedTogether}
+						value={selectedTogetherId}
 						onChange={handleTogetherSelectionChange}
 						className="outline-none"
 					>
@@ -284,7 +362,7 @@ function FeedCreatorModal({
 						</div>
 					)}
 					{/* 함께하기 바로가기 */}
-					{togetherInfo ? (
+					{togetherInfo || initialTogetherInfo ? (
 						<div className="p-2" onClick={handleTogetherItemClick}>
 							{togetherItem}
 						</div>
@@ -299,6 +377,7 @@ function FeedCreatorModal({
 					togetherInfo={togetherInfo}
 					value={selectedPostVisibility}
 					setValue={setSelectedPostVisibility}
+					userId={userId}
 				/>
 
 				<Button

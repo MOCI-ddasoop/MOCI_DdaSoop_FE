@@ -1803,11 +1803,11 @@ export interface components {
             offset?: number;
             sort?: components["schemas"]["SortObject"];
             unpaged?: boolean;
+            paged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1829,8 +1829,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -1924,11 +1924,11 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
-            sortByOrDefault?: string;
             /** Format: int32 */
             pageOrDefault?: number;
             /** Format: int32 */
             sizeOrDefault?: number;
+            sortByOrDefault?: string;
         };
         Page: {
             /** Format: int64 */

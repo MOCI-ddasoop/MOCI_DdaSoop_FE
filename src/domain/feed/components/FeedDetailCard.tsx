@@ -25,15 +25,18 @@ type FeedDetailCardProps = {
 	item: FeedResponse;
 	className?: string;
 	onCommentFocus?: () => void;
+	userId?: number;
 };
 
 function FeedDetailCard({
 	item,
 	className,
 	onCommentFocus,
+	userId,
 }: FeedDetailCardProps) {
 	const {
 		id,
+		authorId,
 		authorName: author,
 		authorProfileImage = "/defaultFeedImage.png",
 		content,
@@ -42,10 +45,17 @@ function FeedDetailCard({
 		bookmarkCount = 0,
 		commentCount = 0,
 		isBookmarked: bookMarkedByMe = false,
-		togetherTitle,
 		togetherId,
+		togetherTitle,
+		togetherCategory,
+		togetherMode,
 		tags,
 	} = item;
+
+	useEffect(() => {
+		console.log(item);
+	}, [item]);
+
 	const [bookmarkInfo, setBookmarkInfo] = useState<{
 		bookmarkCount: number;
 		bookMarkedByMe: boolean;
@@ -114,6 +124,7 @@ function FeedDetailCard({
 	const { mutate: toggleBookmarkMutate, isPending } = useToggleFeedBookmark();
 
 	const handleLike = () => {
+		if (!userId) return;
 		if (!id) return;
 		setBookmarkInfo((prev) => ({
 			bookmarkCount: prev.bookMarkedByMe
@@ -189,6 +200,10 @@ function FeedDetailCard({
 
 	const submitRegistry = useSubmitRegistry();
 
+	const handleTogetherItemClick = useCallback(() => {
+		window.open(`/together/${togetherId}`, "_blank", "noopener,noreferrer");
+	}, [togetherId]);
+
 	useEffect(() => {
 		submitRegistry.register("feed-edit", {
 			submit: handleEditSubmit,
@@ -206,15 +221,17 @@ function FeedDetailCard({
 					</div>
 					<div className="text-sm text-nowrap">{author}</div>
 				</div>
-				<DropdownButton
-					options={["수정", "삭제", "신고"]}
-					selected={selectedOwnerOption ?? ""}
-					setSelected={handleOwnerOptionClick}
-					size="md"
-					menuSize="md"
-					placement="bottom-end"
-					highlightingLastOption={true}
-				/>
+				{!!userId && (
+					<DropdownButton
+						options={userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]}
+						selected={selectedOwnerOption ?? ""}
+						setSelected={handleOwnerOptionClick}
+						size="md"
+						menuSize="md"
+						placement="bottom-end"
+						highlightingLastOption={true}
+					/>
+				)}
 			</div>
 
 			{/* 컨텐츠 영역 */}
@@ -236,14 +253,18 @@ function FeedDetailCard({
 				</div>
 
 				{/* 모임 정보 영역 */}
-				{togetherId && togetherTitle && (
+				{togetherId && (
 					<TogetherListItem
-						id={togetherId ?? 1}
-						image={""}
-						name={togetherTitle ?? "예시입니다"}
-						category={""}
-						isOnline={""}
-						href={"/together"}
+						id={togetherId}
+						image={
+							// togetherInfo.data.thumbnailImage[0].imageUrl ??
+							"/defaultFeedImage.png"
+						}
+						name={togetherTitle ?? "함께하기를 찾을수 없습니다."}
+						category={togetherCategory ?? ""}
+						isOnline={togetherMode ?? ""}
+						onClick={handleTogetherItemClick}
+						widthClass="w-full"
 					/>
 				)}
 
@@ -272,6 +293,7 @@ function FeedDetailCard({
 						togetherInfo={undefined}
 						value={editedVisibility}
 						setValue={editActions.setVisibility}
+						userId={userId}
 					/>
 				) : (
 					""

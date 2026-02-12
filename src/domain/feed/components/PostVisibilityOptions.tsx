@@ -1,17 +1,22 @@
 import { useMemo } from "react";
 import { FeedCreateRequest } from "../types";
-import { FeedOptionData } from "./FeedCreatorModal";
+import { MyTogetherInfo } from "@/domain/together/types";
 
 function PostVisibilityOptions({
 	togetherInfo,
 	value: selectedOption,
 	setValue: setSelectedOption,
+	userId,
 }: {
-	togetherInfo: FeedOptionData | undefined;
+	togetherInfo: MyTogetherInfo | undefined;
 	value: FeedCreateRequest["visibility"] | null | undefined;
 	setValue: (prev: FeedCreateRequest["visibility"]) => void;
+	userId?: number;
 }) {
 	const options = useMemo(() => {
+		const myRole = togetherInfo?.participants?.find(
+			(p) => p.memberId === userId,
+		)?.participantRole;
 		const options = [
 			{ value: "PUBLIC", label: "공개" },
 			{ value: "PRIVATE", label: "비공개" },
@@ -22,7 +27,7 @@ function PostVisibilityOptions({
 			return options.filter(
 				({ value }) => value === "PUBLIC" || value === "PRIVATE",
 			);
-		} else if (togetherInfo && togetherInfo.user.role === "member") {
+		} else if (togetherInfo && myRole === "MEMBER") {
 			return options.filter(
 				({ value }) => value === "PUBLIC" || value === "MEMBERS",
 			);
@@ -32,7 +37,7 @@ function PostVisibilityOptions({
 					value === "PUBLIC" || value === "MEMBERS" || value === "NOTICE",
 			);
 		}
-	}, [togetherInfo]);
+	}, [togetherInfo, userId]);
 	return (
 		<fieldset className="flex border-t border-t-pastelblue px-2 pt-2 gap-2">
 			{options.map(({ value, label }, index) => (
