@@ -14,10 +14,12 @@ function CommentContainer({
 	className,
 	onCommentTargetClick,
 	onScrollToComment,
+	userId,
 }: {
 	className?: string;
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 	onScrollToComment: (target?: HTMLElement) => void;
+	userId?: number;
 }) {
 	const feedId = useSearchParams().get("feedId");
 	const {
@@ -83,6 +85,7 @@ function CommentContainer({
 					key={item.id}
 					item={item}
 					feedId={Number(feedId)}
+					userId={userId}
 					onCommentTargetClick={onCommentTargetClick}
 					ref={(el) => {
 						if (!item.id) return;

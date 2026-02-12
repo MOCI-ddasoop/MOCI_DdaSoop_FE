@@ -15,6 +15,7 @@ interface CommentInputProps {
 	targetNickname?: string | null;
 	targetId?: number | null;
 	shouldCommentFocus: number;
+	userId?: number;
 }
 
 function CommentInput({
@@ -22,6 +23,7 @@ function CommentInput({
 	targetId,
 	onCommentTargetClick,
 	shouldCommentFocus,
+	userId,
 }: CommentInputProps) {
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
@@ -139,11 +141,14 @@ function CommentInput({
 				<div className="flex-1 flex items-center border-gray-300 leading-relaxed wrap-break-word">
 					<TextBox
 						submitOwner="comment-create"
-						placeholder="댓글을 입력해주세요."
+						placeholder={
+							userId ? "댓글을 입력해주세요." : "로그인 후 이용해주세요"
+						}
 						ref={textBoxRef}
 						mode="comment"
 						setValue={setComment}
 						className="max-h-20 overflow-auto"
+						isAble={!!userId}
 					/>
 				</div>
 

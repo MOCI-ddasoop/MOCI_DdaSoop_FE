@@ -234,7 +234,6 @@ function FeedCardContainer({
 								item={item}
 								key={item.id}
 								alt={item.thumbnailUrl ?? "따숲"}
-								isPinned={item.isPinned}
 								onClick={() => {
 									const params = new URLSearchParams(searchParams.toString());
 									params.set("feedId", (item.id ?? "").toString());

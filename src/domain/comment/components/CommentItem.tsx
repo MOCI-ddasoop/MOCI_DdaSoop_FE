@@ -26,6 +26,7 @@ interface CommentItemProps {
 	feedId?: number;
 	className?: string;
 	isRelies?: boolean;
+	userId?: number;
 }
 
 function CommentItem({
@@ -35,9 +36,11 @@ function CommentItem({
 	feedId,
 	className,
 	isRelies,
+	userId,
 }: CommentItemProps) {
 	const {
 		id,
+		authorId,
 		authorName,
 		authorNickname,
 		authorProfileImage,
@@ -292,6 +295,7 @@ function CommentItem({
 							type="button"
 							className="cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform"
 							onClick={() => {
+								if (!userId) return;
 								toggleReactMutation(id ?? 0);
 							}}
 							disabled={isPending}
@@ -300,17 +304,21 @@ function CommentItem({
 						</button>
 					</div>
 					{/* TODO: 수정, 삭제 기능은 로그인이 연결되었을 때, ME로 작성자 ID와 내 아이디 비교하여 렌더링 */}
-					<DropdownButton
-						className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-						options={["수정", "삭제", "신고"]}
-						selected={selectedOption ?? ""}
-						setSelected={handleOptionClick}
-						buttonStyle="horizontal"
-						size="sm"
-						menuSize="sm"
-						placement="bottom-end"
-						highlightingLastOption={true}
-					/>
+					{!!userId && (
+						<DropdownButton
+							className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+							options={
+								userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]
+							}
+							selected={selectedOption ?? ""}
+							setSelected={handleOptionClick}
+							buttonStyle="horizontal"
+							size="sm"
+							menuSize="sm"
+							placement="bottom-end"
+							highlightingLastOption={true}
+						/>
+					)}
 				</div>
 
 				{/* 대댓글이 있다면 재귀적으로 호출 

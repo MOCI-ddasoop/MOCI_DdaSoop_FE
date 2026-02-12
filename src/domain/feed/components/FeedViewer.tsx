@@ -9,6 +9,7 @@ import FeedImageInput from "./FeedImageInput";
 import { scrollToNewComment } from "@/domain/comment/utils/scrollToNewComment";
 import { FeedResponse } from "../types";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
+import { useAuthStore } from "@/store/authStore";
 
 function FeedViewer({
 	feed: feedDetailData,
@@ -16,6 +17,7 @@ function FeedViewer({
 	feed: FeedResponse | undefined;
 }) {
 	const contentRef = useRef<HTMLDivElement>(null);
+	const userId = useAuthStore((s) => s.me?.memberId);
 
 	const [targetNickname, setTargetNickname] = useState<string | null>(null);
 	const [targetId, setTargetId] = useState<number | null>(null);
@@ -83,12 +85,14 @@ function FeedViewer({
 					<FeedDetailCard
 						item={feedDetailData ?? {}}
 						onCommentFocus={handleCommentFocus}
+						userId={userId}
 					/>
 
 					{/* comment 영역 */}
 					<CommentContainer
 						onCommentTargetClick={handleCommentTargetClick}
 						onScrollToComment={handleScrollToComment}
+						userId={userId}
 					/>
 				</div>
 
@@ -98,6 +102,7 @@ function FeedViewer({
 						targetId={targetId}
 						onCommentTargetClick={handleCommentTargetClick}
 						shouldCommentFocus={commentFocusSignal}
+						userId={userId}
 					/>
 				</div>
 			</div>
