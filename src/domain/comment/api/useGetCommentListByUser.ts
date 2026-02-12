@@ -19,7 +19,7 @@ export const useGetCommentListByUser = (userId: number | null | undefined) => {
 			return (lastPage.number ?? 0) + 1;
 		},
 		staleTime: 0,
+		gcTime: 5*60*1000, 
 		enabled: !!userId,
-		gcTime: 1000,
 	});
 };
