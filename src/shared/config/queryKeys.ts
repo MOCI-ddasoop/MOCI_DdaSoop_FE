@@ -36,6 +36,7 @@ export const queryKeys = {
 		},
 		togetherNotice: (id: number) => ["feeds", "notice", id],
 		bookmark: () => ["feeds", "bookmark"],
+		reaction: () => ["feeds", "reaction"],
 		del: () => ["feeds", "delete"],
 		udt: () => ["feeds", "update"],
 	},

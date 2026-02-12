@@ -2,8 +2,9 @@ import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { BsChatRight } from "react-icons/bs";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
+import { BsChatRight, BsHeart, BsHeartFill } from "react-icons/bs";
+// import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { MdIosShare } from "react-icons/md";
 import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
 import { FeedResponse } from "../types";
@@ -20,6 +21,8 @@ import { useRouter } from "next/navigation";
 import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
+import { useToggleFeedReact } from "../api/useToggleFeedReact";
+import { useGetTogetherById } from "@/domain/together/api/useGetTogetherById";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -43,8 +46,10 @@ function FeedDetailCard({
 		createdAt,
 		updatedAt,
 		bookmarkCount = 0,
+		reactionCount = 0,
 		commentCount = 0,
 		isBookmarked: bookMarkedByMe = false,
+		isReacted: reactedMarkByMe = false,
 		togetherId,
 		togetherTitle,
 		togetherCategory,
@@ -62,6 +67,13 @@ function FeedDetailCard({
 	}>({
 		bookmarkCount: bookmarkCount,
 		bookMarkedByMe: bookMarkedByMe,
+	});
+	const [reactionInfo, setReactionInfo] = useState<{
+		reactionCount: number;
+		reactedMarkByMe: boolean;
+	}>({
+		reactionCount: reactionCount,
+		reactedMarkByMe: reactedMarkByMe,
 	});
 	const router = useRouter();
 	const textBoxRef = useRef<TextBoxHandle>(null);
@@ -86,6 +98,14 @@ function FeedDetailCard({
 			bookMarkedByMe,
 		});
 	}, [bookmarkCount, bookMarkedByMe]);
+
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setReactionInfo({
+			reactionCount,
+			reactedMarkByMe,
+		});
+	}, [reactionCount, reactedMarkByMe]);
 
 	useEffect(() => {
 		if (!isFeedEditMode) return;
@@ -121,10 +141,10 @@ function FeedDetailCard({
 	const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
 		null,
 	);
-	const { mutate: toggleBookmarkMutate, isPending } = useToggleFeedBookmark();
+	const { mutate: toggleBookmarkMutate, isPending: isToggleBookmarkPending } =
+		useToggleFeedBookmark();
 
-	const handleLike = () => {
-		if (!userId) return;
+	const handleBookmark = () => {
 		if (!id) return;
 		setBookmarkInfo((prev) => ({
 			bookmarkCount: prev.bookMarkedByMe
@@ -134,6 +154,21 @@ function FeedDetailCard({
 		}));
 
 		toggleBookmarkMutate(id.toString());
+	};
+
+	const { mutate: toggleReactionMutate, isPending: isToggleReactionPending } =
+		useToggleFeedReact();
+
+	const handleReaction = () => {
+		if (!id) return;
+		setReactionInfo((prev) => ({
+			reactionCount: prev.reactedMarkByMe
+				? prev.reactionCount - 1
+				: prev.reactionCount + 1,
+			reactedMarkByMe: !prev.reactedMarkByMe,
+		}));
+
+		toggleReactionMutate(id.toString());
 	};
 
 	const { mutate: updateFeedMutation } = useUpdateFeedById();
@@ -207,9 +242,16 @@ function FeedDetailCard({
 	useEffect(() => {
 		submitRegistry.register("feed-edit", {
 			submit: handleEditSubmit,
-			enabled: () => isFeedEditMode && !isPending,
+			enabled: () =>
+				isFeedEditMode && !isToggleBookmarkPending && !isToggleReactionPending,
 		});
-	}, [handleEditSubmit, isFeedEditMode, isPending, submitRegistry]);
+	}, [
+		handleEditSubmit,
+		isFeedEditMode,
+		isToggleBookmarkPending,
+		isToggleReactionPending,
+		submitRegistry,
+	]);
 
 	return (
 		<div className={tw("bg-white h-fit", className)}>
@@ -347,18 +389,45 @@ function FeedDetailCard({
 					<button
 						type="button"
 						className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
-						onClick={handleLike}
+						onClick={handleReaction}
 					>
 						<div className="relative w-6 h-6">
-							<FaBookmark
+							<BsHeartFill
 								size={24}
+								className={tw(
+									"group-hover:text-amber-700 transition absolute",
+									reactionInfo.reactedMarkByMe ? "opacity-100" : "opacity-0",
+								)}
+							/>
+							<BsHeart
+								size={24}
+								className={tw(
+									"group-hover:text-amber-700 transition absolute",
+									reactionInfo.reactedMarkByMe ? "opacity-0" : "opacity-100",
+								)}
+							/>
+						</div>
+						<p className="group-hover:text-amber-700">
+							{reactionInfo.reactionCount}
+						</p>
+					</button>
+
+					{/* 북마크 영역 */}
+					<button
+						type="button"
+						className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+						onClick={handleBookmark}
+					>
+						<div className="relative w-6 h-6">
+							<IoBookmark
+								size={26}
 								className={tw(
 									"group-hover:text-amber-700 transition absolute",
 									bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0",
 								)}
 							/>
-							<FaRegBookmark
-								size={24}
+							<IoBookmarkOutline
+								size={26}
 								className={tw(
 									"group-hover:text-amber-700 transition absolute",
 									bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100",

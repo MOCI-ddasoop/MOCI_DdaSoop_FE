@@ -2,9 +2,15 @@
 
 import Image from "next/image";
 import tw from "@/shared/utils/tw";
-import { BsChatRight, BsFillPinFill, BsHeart } from "react-icons/bs";
+import {
+	BsChatRight,
+	BsFillPinFill,
+	BsHeart,
+	BsHeartFill,
+} from "react-icons/bs";
 import { PositionedItem } from "./FeedCardContainer";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import { useEffect } from "react";
 
 type FeedCardImageProps = {
 	item: PositionedItem;
@@ -29,11 +35,16 @@ function FeedCardImage({
 		y = 0,
 		content,
 		commentCount,
-		bookmarkCount,
+		reactionCount,
 		authorName = "사용자를 찾을 수 없음",
 		authorProfileImage = "/defaultFeedImage.png",
 		isPinned,
+		isReacted,
 	} = item;
+
+	// useEffect(() => {
+	// 	console.log(item.id, item.isReacted);
+	// }, []);
 
 	const aspectRatio = imageWidth / imageHeight;
 	const height = width / aspectRatio;
@@ -92,8 +103,12 @@ function FeedCardImage({
 					<p className="text-white">{commentCount}</p>
 				</div>
 				<div className="flex items-center justify-between gap-2">
-					<BsHeart size={24} className="text-white" />
-					<p className="text-white">{bookmarkCount}</p>
+					{isReacted ? (
+						<BsHeartFill size={24} className="text-white" />
+					) : (
+						<BsHeart size={24} className="text-white" />
+					)}
+					<p className="text-white">{reactionCount}</p>
 				</div>
 			</div>
 
