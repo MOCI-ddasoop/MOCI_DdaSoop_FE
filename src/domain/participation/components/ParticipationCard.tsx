@@ -33,8 +33,7 @@ function ParticipationCard(
     | ({ type: "myTogether" } & MyTogetherInfo)
     | ({ type: "donate" } & DonateInfo),
 ) {
-  const { type, id, thumbnailImage, title, category } = props;
-
+  const { type, id, thumbnailImage, title, category, progress } = props;
   return (
     <Link
       href={`/${type === "myTogether" ? "together" : type}/${id}`}
@@ -55,11 +54,11 @@ function ParticipationCard(
         <div className="flex justify-between items-center">
           {type !== "myTogether" && (
             <h2
-              className={`${props.dDay < 0 ? "" : "font-bold"} ${type === "donate" ? "text-mainred" : "text-mainblue text-sm"}`}
+              className={`${props.dDay! < 0 ? (type === "donate" ? "text-mainred" : "text-mainblue text-sm") : "font-bold"} `}
             >
               {props.dDay === 0
                 ? "D-day"
-                : props.dDay < 0
+                : props.dDay! < 0
                   ? "모집종료"
                   : `D-${props.dDay}`}
             </h2>
@@ -69,13 +68,7 @@ function ParticipationCard(
               {props.startDate}~{props.endDate}
             </p>
           ) : (
-            <ProgressBar
-              type={type}
-              cardUI
-              progress={Math.round(
-                (props.currentAmount ?? 0) / (props.goalAmount ?? 0),
-              )}
-            />
+            <ProgressBar type={type} cardUI progress={progress} />
           )}
         </div>
         <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>
@@ -83,7 +76,10 @@ function ParticipationCard(
         </h1>
         <div className={`w-full overflow-x-clip`}>
           <div className="flex gap-1.5 items-center w-max hover:overflow-scroll-animation">
-            <Capsule text={categoryType[category] ?? "기타"} readOnly />
+            <Capsule
+              text={categoryType[category ?? "ETC"] ?? "기타"}
+              readOnly
+            />
             {(type === "together" || type === "myTogether") && (
               <Capsule
                 type="isOnline"

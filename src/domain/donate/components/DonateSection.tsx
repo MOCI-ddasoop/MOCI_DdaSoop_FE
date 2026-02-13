@@ -38,7 +38,8 @@ function DonateSection({
 
   const userId = useAuthStore((state) => state.me?.memberId);
 
-  const { data: items, isPending, isError } = useGetDonationList({ userId });
+  const { data: items, isPending, isError } = useGetDonationList();
+  console.log(items);
   const handleFilter = (item: string) => {
     const newCategory = selectedCategory.includes(item)
       ? selectedCategory.filter((c) => c !== item)

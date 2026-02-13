@@ -1,36 +1,33 @@
 import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { DonateResponse } from "../types";
+import { DonateResponse, RawDonateResponse } from "../types";
 
 export const useGetDonationList = (
-  {
-    //     category,
-    //     mode,
-    //     status,
-    //     sortType,
-    //     page,
-    //     size,
-    userId,
-  }: {
-    //     category?: string[];
-    //     mode?: string;
-    //     status?: string;
-    //     sortType?: string;
-    //     page?: number;
-    //     size?: number;
-    userId?: number;
-  },
-  options?: Omit<UseQueryOptions<DonateResponse>, "queryKey" | "queryFn">,
+  // {
+  //       category,
+  //       mode,
+  //       status,
+  //       sortType,
+  //       page,
+  //       size,
+  // }: {
+  //       category?: string[];
+  //       mode?: string;
+  //       status?: string;
+  //       sortType?: string;
+  //       page?: number;
+  //       size?: number;
+  //   userId?: number;
+  // },
+  options?: Omit<
+    UseQueryOptions<RawDonateResponse, Error, DonateResponse>,
+    "queryKey" | "queryFn"
+  >,
 ) => {
-  return useQuery<DonateResponse>({
+  return useQuery<RawDonateResponse, Error, DonateResponse>({
     queryKey: queryKeys.donate.list(),
     queryFn: async () => {
-      if (userId) {
-        const { data } = await api.get(`api/v1/together/member/${userId}`);
-        return data;
-      }
-
       //   const params = new URLSearchParams(
       //     Object.entries({ mode, status, sortType, page, size })
       //       .filter(([, v]) => v !== undefined)
@@ -41,8 +38,26 @@ export const useGetDonationList = (
       //     params.append("categories", c);
       //   });
 
+      // param 추가
       const { data } = await api.get(`api/v1/donation/list`);
       return data;
+    },
+    select: (data) => {
+      return {
+        ...data,
+        data: data.data.map((item) => {
+          const current = item.currentAmount ?? 0;
+          const goal = item.goalAmount ?? 0;
+
+          const progress =
+            goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
+
+          return {
+            ...item,
+            progress,
+          };
+        }),
+      };
     },
     staleTime: 500,
     gcTime: 1000,
