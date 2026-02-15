@@ -14,11 +14,12 @@ export const usePostPayment = () => {
       memberId: number;
       paymentKey: string;
       orderId: string;
-      amount: number;
+      amount: string;
     }) => {
+      const payInfo = { paymentKey, orderId, amount, memberId };
       const { data } = await api.post(
-        `api/v1/donation/toss/${donationId}/pay`,
-        { paymentKey, orderId, amount, memberId },
+        `/api/v1/donation/toss/${donationId}/pay`,
+        payInfo,
       );
       return data;
     },

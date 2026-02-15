@@ -5,12 +5,13 @@ import Button from "@/shared/components/Button";
 import { formatMoney } from "../utils/formatMoney";
 import {
   loadTossPayments,
-  TossPaymentsWidgets,
+  TossPaymentsSDK,
 } from "@tosspayments/tosspayments-sdk";
 import { generateOrderId, getCustomerKey } from "../utils/getKeys";
 import { useAuthStore } from "@/store/authStore";
-import { useParams, useRouter } from "next/navigation";
-import { usePostPayment } from "../api/usePostPayment";
+import { useParams } from "next/navigation";
+import { FaRegCreditCard } from "react-icons/fa6";
+import { MdLocalAtm, MdOutlineAtm } from "react-icons/md";
 
 function DonateModal({
   onClose,
@@ -23,7 +24,7 @@ function DonateModal({
   organization: string;
   thumbnailImage?: string;
 }) {
-  const [step, setStep] = useState<"amount" | "payment">("amount");
+  const [step, setStep] = useState<"amount" | "paymethod">("amount");
   const { id } = useParams();
 
   const moneyList = [
@@ -36,20 +37,48 @@ function DonateModal({
     "100만원",
     "직접입력",
   ];
+
+  const paymentList = [
+    {
+      key: "CARD" as const,
+      method: "카드",
+      icon: <FaRegCreditCard size={28} />,
+    },
+    {
+      key: "VIRTUAL_ACCOUNT" as const,
+      method: "가상 계좌",
+      icon: <MdLocalAtm size={28} />,
+    },
+    {
+      key: "TRANSFER" as const,
+      method: "계좌 이체",
+      icon: <MdOutlineAtm size={28} />,
+    },
+  ];
   const [amount, setAmount] = useState<number>(0);
   const [selected, setSelected] = useState<string>("");
+  const [selectedMethod, setSelectedMethod] = useState<
+    "CARD" | "VIRTUAL_ACCOUNT" | "TRANSFER" | null
+  >(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [widgets, setWidgets] = useState<TossPaymentsWidgets | null>(null);
-
-  const router = useRouter();
+  const [tossPayments, setTossPayments] = useState<TossPaymentsSDK | null>(
+    null,
+  );
 
   const me = useAuthStore((s) => s.me);
   const memberId = me?.memberId;
   const name = me?.name;
   const TOSS_CLIENT_KEY = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY;
-  const { mutateAsync: postPayment } = usePostPayment();
+
+  useEffect(() => {
+    const tossSetting = async () => {
+      if (!TOSS_CLIENT_KEY) return;
+      const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
+      setTossPayments(tossPayments);
+    };
+    tossSetting();
+  }, [TOSS_CLIENT_KEY]);
 
   useEffect(() => {
     // ESC 키로 닫기
@@ -65,75 +94,7 @@ function DonateModal({
     };
   }, [onClose]);
 
-  useEffect(() => {
-    async function fetchPaymentWidget() {
-      if (!TOSS_CLIENT_KEY) return;
-      if (!memberId) return;
-      const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
-      const customerKey = getCustomerKey({ memberId });
-      const widgets = tossPayments.widgets({ customerKey });
-
-      setWidgets(widgets);
-    }
-    fetchPaymentWidget();
-  }, [TOSS_CLIENT_KEY, memberId]);
-
-  useEffect(() => {
-    async function renderPaymentWidgets() {
-      if (widgets === null) return;
-      if (step !== "payment") return;
-      await widgets.setAmount({
-        currency: "KRW",
-        value: amount,
-      });
-      await Promise.all([
-        // ------  결제 UI 렌더링 ------
-        widgets.renderPaymentMethods({
-          selector: "#payment-method",
-          variantKey: "DEFAULT",
-        }),
-        widgets.renderAgreement({
-          selector: "#agreement",
-          variantKey: "AGREEMENT",
-        }),
-      ]);
-
-      setReady(true);
-    }
-
-    renderPaymentWidgets();
-  }, [amount, step, widgets]);
-
   if (!memberId) return;
-
-  const handlePayment = async () => {
-    if (!widgets) return;
-    try {
-      // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-      // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-      // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-      const { paymentKey, orderId, amount } = await widgets.requestPayment({
-        orderId: generateOrderId(),
-        orderName: `따숲 후원하기 : ${title}`,
-        customerName: name,
-      });
-      await postPayment({
-        donationId: String(id),
-        paymentKey,
-        orderId,
-        amount: amount.value,
-        memberId,
-      });
-
-      alert(
-        `결제에 성공했습니다\n결제번호 : ${orderId}\n결제금액 : ${amount.value}원`,
-      );
-      router.replace(`/donate/${id}/info`);
-      onClose();
-    } catch (error) {
-      alert(`결제 처리 중 오류가 발생했습니다`);
-    }
-  };
 
   const handleAmount = (money: string) => {
     setSelected(money);
@@ -172,9 +133,40 @@ function DonateModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setStep("paymethod");
+  };
 
-    setReady(false);
-    setStep("payment");
+  const handlePayment = async () => {
+    if (!tossPayments) return;
+    if (!selectedMethod) return;
+    const payment = tossPayments.payment({
+      customerKey: getCustomerKey({ memberId }),
+    });
+    const payOption = {
+      amount: { currency: "KRW", value: amount },
+      orderId: generateOrderId(),
+      orderName: `따숲 후원하기 : ${title}`,
+      customerName: name,
+      successUrl: window.location.origin + `/donate/${id}/info`,
+      failUrl: window.location.origin + `/donate/${id}/info`,
+    };
+    switch (selectedMethod) {
+      case "CARD":
+        return await payment.requestPayment({
+          method: "CARD",
+          ...payOption,
+        });
+      case "TRANSFER":
+        return await payment.requestPayment({
+          method: "TRANSFER",
+          ...payOption,
+        });
+      case "VIRTUAL_ACCOUNT":
+        return await payment.requestPayment({
+          method: "VIRTUAL_ACCOUNT",
+          ...payOption,
+        });
+    }
   };
 
   if (typeof window === "undefined") return null;
@@ -191,12 +183,8 @@ function DonateModal({
         <h1 className="w-full py-4 border-b-2 border-b-mainred text-center text-lg font-semibold">
           후원하기
         </h1>
-        <div
-          className={`w-full flex gap-5 ${step === "amount" ? "p-10" : "px-10 py-5"} border-b-2 border-b-gray-300 `}
-        >
-          <div
-            className={`${step === "amount" ? "w-30 min-h-20" : "w-20 min-h-15"} relative my-auto bg-gray-200`}
-          >
+        <div className={`w-full flex gap-5 p-10 border-b-2 border-b-gray-300 `}>
+          <div className={`w-30 min-h-20 relative my-auto bg-gray-200`}>
             <Image
               src={thumbnailImage ?? "/defaultFeedImage.png"}
               alt="후원이미지"
@@ -210,7 +198,7 @@ function DonateModal({
             <h2 className="text-lg font-semibold">{title}</h2>
             <p className="text-sm text-gray-500">{organization}</p>
           </div>
-          {step === "payment" && (
+          {step === "paymethod" && (
             <p className="font-medium text-mainred self-end">
               {formatMoney(amount)}
               <span className="text-black">원</span>
@@ -234,7 +222,10 @@ function DonateModal({
                   type="numeric"
                   className="max-w-30 text-right font-medium focus:outline-none"
                   value={isEditing ? amount || "" : `${formatMoney(amount)}`}
-                  onFocus={() => setIsEditing(true)}
+                  onFocus={() => {
+                    setIsEditing(true);
+                    setSelected("직접입력");
+                  }}
                   onBlur={() => setIsEditing(false)}
                   onChange={(e) => {
                     const numberAmount = e.target.value.replace(/[^\d]/g, "");
@@ -271,18 +262,48 @@ function DonateModal({
             </Button>
           </form>
         )}
-        {step === "payment" && (
-          <div className="flex flex-col gap-2 px-10 py-5 w-full">
-            <div id="payment-method" className="max-h-70 overflow-y-auto" />
-            <div id="agreement" />
-            <Button
-              className="w-60 m-auto"
-              color="red"
-              onClick={handlePayment}
-              disabled={!ready}
-            >
-              {ready ? "결제하기" : "로딩중"}
-            </Button>
+        {step === "paymethod" && (
+          <div className="flex flex-col gap-5 px-10 py-5 w-full">
+            <div className="grid grid-cols-3 gap-4 py-4">
+              {paymentList.map(({ key, method, icon }, i) => (
+                <Button
+                  key={i}
+                  className={`rounded-xl w-full flex-center flex-col gap-1 ${
+                    selectedMethod === key
+                      ? "bg-mainred text-white hover:bg-mainred"
+                      : "hover:bg-pastelred"
+                  } font-medium`}
+                  color="gray"
+                  size="sm"
+                  onClick={() => setSelectedMethod(key)}
+                >
+                  {icon}
+                  <p className="w-full break-keep whitespace-normal">
+                    {method}
+                  </p>
+                </Button>
+              ))}
+            </div>
+            <div className="flex-center gap-5">
+              <Button
+                className="w-30 hover:bg-pastelred"
+                color="gray"
+                onClick={() => {
+                  setStep("amount");
+                  setSelectedMethod(null);
+                }}
+              >
+                뒤로가기
+              </Button>
+              <Button
+                className="w-30"
+                color="red"
+                onClick={handlePayment}
+                disabled={!selectedMethod}
+              >
+                결제하기
+              </Button>
+            </div>
           </div>
         )}
       </div>

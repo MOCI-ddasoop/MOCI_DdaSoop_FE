@@ -22,11 +22,11 @@ export function middleware(req: NextRequest) {
 
     "font-src 'self' data:",
 
-    "connect-src 'self' https:",
+    "connect-src 'self' https: https://api.tosspayments.com https://js.tosspayments.com",
 
     "frame-ancestors 'none'",
 
-    "frame-src https://js.tosspayments.com https://payment-widget.tosspayments.com https://api.tosspayments.com https://payment-gateway-sandbox.tosspayments.com",
+    "frame-src https://js.tosspayments.com https://payment-gateway-sandbox.tosspayments.com https://toss.im/ https://ui.teledit.com/",
   ].join("; ");
 
   //requestHeader에 함께 첨부

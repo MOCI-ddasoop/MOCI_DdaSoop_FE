@@ -12,5 +12,14 @@ export const getInitDonationDetail = async (
   }
 
   const data = await res.json();
-  return data;
+  const current = data.data.currentAmount ?? 0;
+  const goal = data.data.goalAmount ?? 0;
+  const progress =
+    goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
+
+  return {
+    resultCode: data.resultCode,
+    msg: data.msg,
+    data: { ...data.data, progress },
+  };
 };

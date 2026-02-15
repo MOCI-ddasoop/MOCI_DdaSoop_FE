@@ -10,6 +10,7 @@ export type ListResponse = components["schemas"]["ListResponse"];
 export type DetailResponse = components["schemas"]["DetailResponse"];
 export type DonorListResponse = components["schemas"]["DonorListResponse"];
 export type DescriptionResponse = components["schemas"]["DescriptionResponse"];
+export type DonationTossRequest = components["schemas"]["DonationTossRequest"];
 
 export type DonateInfo = ListResponse & {
   progress: number;

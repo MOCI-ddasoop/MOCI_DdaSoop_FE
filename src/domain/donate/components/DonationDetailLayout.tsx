@@ -1,9 +1,15 @@
 import { getInitDonationDetail } from "@/domain/donate/api/getInitDonationDetail";
-import DetailInfoHydrator from "@/domain/donate/provider/DetailInfoHydrator";
-import ParticipationDetailInfo from "@/domain/participation/components/ParticipationDetailInfo";
 import ImageSwiper from "@/shared/components/ImageSwiper";
 import TabBar from "@/shared/components/TabBar";
+import { queryKeys } from "@/shared/config/queryKeys";
 import { donateTabContents } from "@/shared/utils/navigation";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { DonateDetailInfo as DonateDetailType } from "../types";
+import DonateDetailInfo from "./DonateDetailInfo";
 
 // const DETAIL_INFO_DUMMY: DonateDetailInfo = {
 //   id: 0,
@@ -27,16 +33,28 @@ async function DonateDetailLayout({
   children: React.ReactNode;
 }) {
   const { id } = await params;
-  const { data: detailInfo } = await getInitDonationDetail(id);
+  const queryClient = new QueryClient();
+
+  await queryClient.fetchQuery({
+    queryKey: queryKeys.donate.id(id),
+    queryFn: () => getInitDonationDetail(id),
+  });
+
+  const detailInfo = queryClient.getQueryData<DonateDetailType>(
+    queryKeys.donate.id(id),
+  );
+
+  const dehydratedState = dehydrate(queryClient);
+
   return (
-    <DetailInfoHydrator type="donate" initialData={detailInfo}>
+    <HydrationBoundary state={dehydratedState}>
       <div className="flex justify-between pt-4">
         <div className="w-[calc(100%-280px)]">
           <div className="w-full aspect-10/7">
             <ImageSwiper
               slideList={
-                detailInfo.thumbnailImage
-                  ? [{ imageUrl: detailInfo.thumbnailImage }]
+                detailInfo?.thumbnailImage
+                  ? [{ imageUrl: detailInfo?.thumbnailImage }]
                   : []
               }
             />
@@ -44,9 +62,9 @@ async function DonateDetailLayout({
           <TabBar type="donate" tabContents={donateTabContents(id)} />
           <main className="py-4">{children}</main>
         </div>
-        <ParticipationDetailInfo type="donate" props={detailInfo} />
+        <DonateDetailInfo id={id} />
       </div>
-    </DetailInfoHydrator>
+    </HydrationBoundary>
   );
 }
 
