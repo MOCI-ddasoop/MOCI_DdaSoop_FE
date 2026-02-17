@@ -4,77 +4,75 @@ import { syncUrl } from "@/domain/participation/utils/syncUrl";
 import ItemFilter from "@/shared/components/ItemFilter";
 import Pagination from "@/shared/components/Pagination";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { DonateResponse } from "../types";
 import { useAuthStore } from "@/store/authStore";
 import { getKeyByValue } from "@/shared/utils/getKeyByValue";
 import { sortType } from "@/shared/constants/filter";
 import { useGetDonationList } from "../api/useGetDonationList";
 
-interface DonateSectionProps {
-  initialCategory: string[];
-  initialPage: number;
-  sort: string;
-  initialData: DonateResponse | undefined;
-  mypage?: boolean;
-}
-
-function DonateSection({
-  initialCategory,
-  initialPage,
-  sort,
-  initialData,
-  mypage,
-}: DonateSectionProps) {
+function DonateSection() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
-  const [currentSort, setCurrentSort] = useState<string>(sort);
-  const [selectedCategory, setSelectedCategory] =
-    useState<string[]>(initialCategory);
-
-  // const isInitialQuery =
-  //   page === 1 && selectedCategory.length === 0 && currentSort === "최신순";
+  const selectedCategory =
+    searchParams.get("category")?.split(",").filter(Boolean) ?? [];
+  const currentSort = searchParams.get("sort") ?? "LATEST";
 
   const userId = useAuthStore((state) => state.me?.memberId);
 
-  const { data: items, isPending, isError } = useGetDonationList();
-  console.log(items);
+  const {
+    data: items,
+    isPending,
+    isError,
+  } = useGetDonationList({
+    category: selectedCategory,
+    sortType: currentSort,
+    page: page - 1,
+    size: 12,
+  });
+
   const handleFilter = (item: string) => {
     const newCategory = selectedCategory.includes(item)
       ? selectedCategory.filter((c) => c !== item)
       : [...selectedCategory, item];
 
-    setSelectedCategory(newCategory);
     syncUrl("donate", newCategory, [], currentSort, 1, router);
   };
 
   const handleSortChange = (nextSort: string) => {
-    setCurrentSort(nextSort);
     const selectedSort = getKeyByValue(sortType, nextSort);
     if (!selectedSort) return;
-    syncUrl("donate", selectedCategory, [], nextSort, 1, router);
+    syncUrl("donate", selectedCategory, [], selectedSort, 1, router);
   };
   return (
     <>
       <ItemFilter
         type="donate"
-        currentSort={currentSort}
+        currentSort={sortType[currentSort as keyof typeof sortType]}
         setCurrentSort={handleSortChange}
         selectedCategory={selectedCategory}
         onFilterClicked={handleFilter}
       />
-      <ParticipationContainer
-        type="donate"
-        items={items?.data ?? []}
-        currentPage={initialPage}
-        className="mb-10"
-        // className={
-        //   items?.data.totalPages && items.data.totalPages <= 1 ? "mb-10" : ""
-        // }
-        isLogin={!!userId}
-      />
-      {/* <Pagination totalPages={items?.data.totalPages ?? 0} /> */}
+      {isError ? (
+        <div className="w-full h-28 flex-center">
+          <p className="text-gray-400">오류가 발생했습니다</p>
+        </div>
+      ) : isPending ? (
+        <div className="w-full h-28 flex-center">
+          <div className="loader"></div>
+        </div>
+      ) : (
+        items && (
+          <ParticipationContainer
+            type="donate"
+            items={items.data.content ?? []}
+            currentPage={page}
+            className={items?.data.totalPages <= 1 ? "mb-10" : ""}
+            isLogin={!!userId}
+          />
+        )
+      )}
+
+      {items && <Pagination totalPages={items?.data.totalPages ?? 0} />}
     </>
   );
 }

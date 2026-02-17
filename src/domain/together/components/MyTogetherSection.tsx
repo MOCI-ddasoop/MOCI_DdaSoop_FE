@@ -3,9 +3,14 @@ import ParticipationContainer from "@/domain/participation/components/Participat
 import { useGetOwnTogetherList } from "../api/useGetOwnTogetherList";
 import { useAuthStore } from "@/store/authStore";
 
-function MyTogetherSection() {
+function MyTogetherSection({ type }: { type: "join" | "create" }) {
   const userId = useAuthStore((s) => s.me?.memberId);
-  const { isError, isPending, data: items } = useGetOwnTogetherList(userId!);
+  const { isError, isPending, data } = useGetOwnTogetherList(userId!);
+
+  const items =
+    type === "create"
+      ? data?.data.filter((item) => item.memberId === userId)
+      : data?.data;
 
   return (
     <>
@@ -21,7 +26,7 @@ function MyTogetherSection() {
         items && (
           <ParticipationContainer
             type="myTogether"
-            items={items.data ?? []}
+            items={items ?? []}
             currentPage={0}
             className="mb-10"
             isLogin={!!userId}

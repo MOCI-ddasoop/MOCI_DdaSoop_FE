@@ -47,16 +47,22 @@ export const queryKeys = {
   },
 
   donate: {
-    all: () => ["donate"],
     id: (id: string) => ["donate", id],
-    list: (memberId?: number) => {
-      if (memberId) return ["donate", "list", memberId];
-      else return ["donate", "list"];
-    },
+    list: (params: {
+      category?: string[];
+      status?: string;
+      sortType?: string;
+      page?: number;
+      size?: number;
+    }) => ["donate", "list", params],
+    new: () => ["donate", "new"],
     history: (id: string) => ["donate", "history", id],
+    newsCreate: (id: string) => ["donate", "news", "new", id],
+    news: (id: string) => ["donate", "news", id],
+    member: (memberId: number) => ["together", "member", memberId],
+    summary: () => ["donate", "summary"],
   },
   together: {
-    all: () => ["together"],
     id: (id: string) => ["together", id],
     list: (params: {
       category?: string[];
@@ -68,6 +74,7 @@ export const queryKeys = {
     }) => ["together", "list", params],
     description: (id: string | number) => ["together", "description", id],
     member: (memberId: number) => ["together", "member", memberId],
+    new: () => ["together", "new"],
     join: () => ["together", "join"],
     leave: () => ["together", "leave"],
     isParticipating: () => ["together", "participating"],

@@ -5,9 +5,8 @@ import { CreateRequest } from "../types";
 
 export const useCreateTogether = () => {
   return useMutation({
-    mutationKey: queryKeys.together.join(),
+    mutationKey: queryKeys.together.new(),
     mutationFn: (newTogetherInfo: CreateRequest) => {
-      console.log(newTogetherInfo);
       const res = api.post(`api/v1/together`, newTogetherInfo);
       return res;
     },

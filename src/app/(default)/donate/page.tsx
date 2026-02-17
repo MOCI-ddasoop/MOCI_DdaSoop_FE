@@ -1,6 +1,12 @@
 import { getInitDonationList } from "@/domain/donate/api/getInitDonationList";
 import DonateSection from "@/domain/donate/components/DonateSection";
+import { queryKeys } from "@/shared/config/queryKeys";
 import { sortOptions } from "@/shared/constants/filter";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 interface DonatePageProps {
   searchParams: Promise<{
@@ -29,17 +35,27 @@ async function Donate({ searchParams }: DonatePageProps) {
   //   progress: 75,
   // }));
 
-  const { data: ITEM_LIST } = await getInitDonationList();
+  const queryClient = new QueryClient();
+
+  await queryClient.fetchQuery({
+    queryKey: queryKeys.donate.list({
+      category: [],
+      page: 0,
+      sortType: "LATEST",
+      size: 12,
+    }),
+    queryFn: () => getInitDonationList(),
+  });
+
+  const dehydratedState = dehydrate(queryClient, {
+    shouldDehydrateQuery: () =>
+      category.length === 0 && page === 1 && sort === "최신순",
+  });
 
   return (
-    <>
-      <DonateSection
-        initialCategory={category}
-        initialPage={page}
-        sort={sort}
-        initialData={ITEM_LIST}
-      />
-    </>
+    <HydrationBoundary state={dehydratedState}>
+      <DonateSection />
+    </HydrationBoundary>
   );
 }
 

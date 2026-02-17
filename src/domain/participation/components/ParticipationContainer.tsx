@@ -25,16 +25,26 @@ interface DonateContainerProps {
   className?: string;
   isLogin: boolean;
 }
+// interface MyDonateContainerProps {
+//   type: "myDonate";
+//   currentPage?: number;
+//   items: MyDonationInfo[];
+//   className?: string;
+//   isLogin: boolean;
+// }
 
-function ParticipationContainer({
-  type,
-  currentPage,
-  items,
-  className,
-  isLogin,
-}: TogetherContainerProps | MyTogetherContainerProps | DonateContainerProps) {
+function ParticipationContainer(
+  {
+    type,
+    currentPage,
+    items,
+    className,
+    isLogin,
+  }: TogetherContainerProps | MyTogetherContainerProps | DonateContainerProps,
+  // | MyDonateContainerProps
+) {
   return items.length === 0 ? (
-    type !== "myTogether" ? (
+    type !== "myTogether" /*&& type !== "myDonate"*/ ? (
       <AddParticipationCard type={type} fullWidth isLogin={isLogin} />
     ) : (
       <p className="text-gray-400">내역이 존재하지 않습니다</p>
@@ -46,9 +56,10 @@ function ParticipationContainer({
         className,
       )}
     >
-      {currentPage === 1 && type !== "myTogether" && (
-        <AddParticipationCard type={type} isLogin={isLogin} />
-      )}
+      {currentPage === 1 &&
+        type !== "myTogether" /*&& type !== "myDonate"*/ && (
+          <AddParticipationCard type={type} isLogin={isLogin} />
+        )}
       {type === "together"
         ? items.map((item) => (
             <ParticipationCard type={type} key={item.id} {...item} />
@@ -57,7 +68,11 @@ function ParticipationContainer({
           ? items.map((item) => (
               <ParticipationCard type={type} key={item.id} {...item} />
             ))
-          : items.map((item) => (
+          : /*type === "myDonate"
+            ? items.map((item) => (
+                <ParticipationCard type={type} key={item.id} {...item} />
+              ))
+            : */ items.map((item) => (
               <ParticipationCard type={type} key={item.id} {...item} />
             ))}
     </div>

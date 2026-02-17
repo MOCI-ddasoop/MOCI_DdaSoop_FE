@@ -1,4 +1,5 @@
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
+import { DonateResponse } from "../types";
 
 export const getInitDonationList = async () => {
   const res = await serverFetchApi(`/api/v1/donation/list`);
@@ -8,6 +9,6 @@ export const getInitDonationList = async () => {
     );
   }
 
-  const data = await res.json();
+  const data: DonateResponse = await res.json();
   return data;
 };
