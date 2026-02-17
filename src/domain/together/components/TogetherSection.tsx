@@ -7,16 +7,11 @@ import ItemFilter from "@/shared/components/ItemFilter";
 import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
 import { syncUrl } from "@/domain/participation/utils/syncUrl";
 import { useGetTogetherList } from "../api/useGetTogetherList";
-import { TogetherResponse } from "../types";
 import { getKeyByValue } from "@/shared/utils/getKeyByValue";
 import { sortType } from "@/shared/constants/filter";
 import { useAuthStore } from "@/store/authStore";
 
-interface TogetherSectionProps {
-  initialData: TogetherResponse | undefined;
-}
-
-function TogetherSection({ initialData }: TogetherSectionProps) {
+function TogetherSection() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -27,24 +22,14 @@ function TogetherSection({ initialData }: TogetherSectionProps) {
     searchParams.get("isOnline")?.split(",").filter(Boolean) ?? [];
   const currentSort = searchParams.get("sort") ?? "LATEST";
 
-  const isInitialQuery =
-    page === 1 &&
-    selectedCategory.length === 0 &&
-    isOnline.length === 0 &&
-    currentSort === "LATEST";
   const userId = useAuthStore((state) => state.me?.memberId);
-  const { data, isPending, isError } = useGetTogetherList(
-    {
-      category: selectedCategory,
-      mode: isOnline[0],
-      sortType: currentSort,
-      page: page - 1,
-      size: 12,
-    },
-    {
-      initialData: isInitialQuery ? initialData : undefined,
-    },
-  );
+  const { data, isPending, isError } = useGetTogetherList({
+    category: selectedCategory,
+    mode: isOnline[0],
+    sortType: currentSort,
+    page: page - 1,
+    size: 12,
+  });
 
   const items = useMemo(() => {
     if (!data) return undefined;
