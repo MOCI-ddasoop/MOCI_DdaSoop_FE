@@ -150,23 +150,25 @@ function DonateModal({
       successUrl: window.location.origin + `/donate/${id}/info`,
       failUrl: window.location.origin + `/donate/${id}/info`,
     };
-    switch (selectedMethod) {
-      case "CARD":
-        return await payment.requestPayment({
-          method: "CARD",
-          ...payOption,
-        });
-      case "TRANSFER":
-        return await payment.requestPayment({
-          method: "TRANSFER",
-          ...payOption,
-        });
-      case "VIRTUAL_ACCOUNT":
-        return await payment.requestPayment({
-          method: "VIRTUAL_ACCOUNT",
-          ...payOption,
-        });
-    }
+    try {
+      switch (selectedMethod) {
+        case "CARD":
+          return await payment.requestPayment({
+            method: "CARD",
+            ...payOption,
+          });
+        case "TRANSFER":
+          return await payment.requestPayment({
+            method: "TRANSFER",
+            ...payOption,
+          });
+        case "VIRTUAL_ACCOUNT":
+          return await payment.requestPayment({
+            method: "VIRTUAL_ACCOUNT",
+            ...payOption,
+          });
+      }
+    } catch (error) {}
   };
 
   if (typeof window === "undefined") return null;

@@ -1,11 +1,15 @@
 import TogetherList from "@/domain/main/components/TogetherList";
 import DonationList from "@/domain/main/components/DonationList";
-import { TOGETHER_LIST, DONATION_LIST } from "@/shared/mock/mockup";
+import { DONATION_LIST } from "@/shared/mock/mockup";
 import SearchInput from "@/shared/components/SearchInput";
 import SearchQueryNotation from "@/domain/search/SearchQueryNotation";
 import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
 import { Suspense } from "react";
 import FeedCreateButton from "@/domain/feed/components/FeedCreateButton";
+import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
+import { sortOptions } from "@/shared/constants/filter";
+
+const randomList = sortOptions[Math.floor(Math.random() * sortOptions.length)];
 
 export default async function Home({
   searchParams,
@@ -13,7 +17,11 @@ export default async function Home({
   searchParams: Promise<{ query: string }>;
 }) {
   const { query } = await searchParams;
-  // TODO : SEO 개선을 위해 dehydrate 처리
+
+  const { data } = await getInitTogetherList({
+    fixed: true,
+    randomList: randomList,
+  });
 
   return (
     <div className="flex gap-8 py-4">
@@ -23,7 +31,7 @@ export default async function Home({
       <div className="sticky top-20 h-[calc(100vh-6rem)] flex flex-col justify-between">
         <div className="h-fit flex flex-col gap-2 items-center">
           <SearchInput />
-          <TogetherList items={TOGETHER_LIST} />
+          <TogetherList items={data.content.slice(1)} type={randomList} />
           <DonationList items={DONATION_LIST} />
         </div>
         <FeedCreateButton className="w-full" />

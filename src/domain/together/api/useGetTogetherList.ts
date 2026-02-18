@@ -40,7 +40,6 @@ export const useGetTogetherList = (
       category?.forEach((c) => {
         params.append("categories", c);
       });
-
       const { data } = await api.get(
         `api/v1/together/list?${params.toString()}`,
       );
