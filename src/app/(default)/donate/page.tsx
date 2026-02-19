@@ -1,7 +1,6 @@
 import { getInitDonationList } from "@/domain/donate/api/getInitDonationList";
 import DonateSection from "@/domain/donate/components/DonateSection";
 import { queryKeys } from "@/shared/config/queryKeys";
-import { sortOptions } from "@/shared/constants/filter";
 import {
   dehydrate,
   HydrationBoundary,
@@ -21,7 +20,7 @@ async function Donate({ searchParams }: DonatePageProps) {
 
   const category = searchParam.category?.split(",") ?? [];
   const page = Number(searchParam.page ?? 1);
-  const sort = searchParam.sort ?? sortOptions[0];
+  const sort = searchParam.sort ?? "LATEST";
 
   // // 위에있는거 가지고 api 통신해서 가져오기
   // const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
@@ -37,9 +36,10 @@ async function Donate({ searchParams }: DonatePageProps) {
 
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: queryKeys.donate.list({
       category: [],
+      status: undefined,
       page: 0,
       sortType: "LATEST",
       size: 12,
@@ -49,7 +49,7 @@ async function Donate({ searchParams }: DonatePageProps) {
 
   const dehydratedState = dehydrate(queryClient, {
     shouldDehydrateQuery: () =>
-      category.length === 0 && page === 1 && sort === "최신순",
+      category.length === 0 && page === 1 && sort === "LATEST",
   });
 
   return (

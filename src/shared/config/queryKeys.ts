@@ -1,3 +1,5 @@
+import { isCancel } from "axios";
+
 export const queryKeys = {
   feeds: {
     all: () => ["feeds"],
@@ -61,6 +63,11 @@ export const queryKeys = {
     news: (id: string) => ["donate", "news", id],
     member: (memberId: number) => ["together", "member", memberId],
     summary: () => ["donate", "summary"],
+    isCreator: ({ id, memberId }: { id: string; memberId: number }) => [
+      "donate",
+      "isCreator",
+      { id, memberId },
+    ],
   },
   together: {
     id: (id: string) => ["together", id],

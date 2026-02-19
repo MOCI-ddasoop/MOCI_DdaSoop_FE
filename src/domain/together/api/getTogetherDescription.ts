@@ -1,4 +1,4 @@
-import { sanitizeHtml } from "@/shared/utils/sanitizeHtml/server";
+import { sanitizeHtml } from "@/server/sanitizeHtml";
 import { TogetherDescriptionResponse } from "../types";
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
 

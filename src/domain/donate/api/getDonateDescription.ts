@@ -1,6 +1,6 @@
-import { sanitizeHtml } from "@/shared/utils/sanitizeHtml/server";
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
 import { DonateDescription } from "../types";
+import { sanitizeHtml } from "@/server/sanitizeHtml";
 
 export const getDonateDescription = async (id: string | number) => {
   const res = await serverFetchApi(`/api/v1/donation/list/${id}/description`);

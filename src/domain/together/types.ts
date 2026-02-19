@@ -28,7 +28,16 @@ export interface TogetherInfo {
   dDay: number;
 }
 
-export type MyTogetherInfo = Omit<TogetherInfo, "dDay"> & { goal: number };
+export type MyTogetherInfo = Omit<TogetherInfo, "dDay" | "participants"> & {
+  goal: number;
+  participants: {
+    id: number;
+    memberId: number;
+    togetherId: number;
+    participantsStatus: "PARTICIPATING" | "LEAVED";
+    participantRole: "MEMBER" | "LEADER";
+  }[];
+};
 
 export type TogetherDetailInfo = {
   id: number;

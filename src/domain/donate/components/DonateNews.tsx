@@ -6,13 +6,21 @@ import { useGetNews } from "../api/useGetNews";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import { useAuthStore } from "@/store/authStore";
+import { useGetIsCreator } from "../api/useGetIsCreator";
 
 function DonateNews({ id }: { id: string }) {
-  const isCreator = true;
+  const userId = useAuthStore((s) => s.me?.memberId);
+  const {
+    data: isCreator,
+    isPending,
+    isError,
+  } = useGetIsCreator({ id, memberId: userId! });
   const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef<TextBoxHandle | null>(null);
   const { mutateAsync: postDonationNews } = usePostNews(id);
-  const { data, isPending, isError } = useGetNews(id);
+  const { data, isPending: pendingNews, isError: newsError } = useGetNews(id);
   const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
@@ -27,30 +35,39 @@ function DonateNews({ id }: { id: string }) {
 
   return (
     <div className="w-full flex flex-col items-center gap-4">
-      {isPending ? (
+      {pendingNews || isPending ? (
         <div className="w-full h-28 flex-center">
-          <div className="loader"></div>
+          <div className="loader loader-red"></div>
         </div>
-      ) : isError ? (
+      ) : newsError || isError ? (
         <p className="w-full text-gray-500">오류가 발생했습니다</p>
       ) : (
         <div className="w-full">
           <p
-            dangerouslySetInnerHTML={{ __html: data?.data.description ?? "" }}
+            className={data.data.id ? "" : "text-gray-500 text-center"}
+            dangerouslySetInnerHTML={{
+              __html: data.data.id
+                ? sanitizeHtml(data.data.description ?? "")
+                : "작성된 소식이 없습니다",
+            }}
           ></p>
           <p className="w-full text-sm text-gray-500">{data.data.title}</p>
         </div>
       )}
-      {isCreator && !isEditing && !data && (
-        <Button
-          color="red"
-          className="w-60"
-          onClick={() => setIsEditing(true)}
-          disabled={isPending}
-        >
-          작성하기
-        </Button>
-      )}
+      {!pendingNews &&
+        !isPending &&
+        isCreator?.data &&
+        !isEditing &&
+        !data?.data.description && (
+          <Button
+            color="red"
+            className="w-60"
+            onClick={() => setIsEditing(true)}
+            disabled={pendingNews}
+          >
+            작성하기
+          </Button>
+        )}
       {isEditing && (
         <>
           <div className="w-full">

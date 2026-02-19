@@ -58,7 +58,7 @@ function DonateSection() {
         </div>
       ) : isPending ? (
         <div className="w-full h-28 flex-center">
-          <div className="loader"></div>
+          <div className="loader loader-red"></div>
         </div>
       ) : (
         items && (

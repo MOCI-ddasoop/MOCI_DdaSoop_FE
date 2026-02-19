@@ -688,6 +688,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/donation/member/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 나의 후원하기 조회 */
+        get: operations["getDonationByMemberId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/donation/list": {
         parameters: {
             query?: never;
@@ -1700,7 +1717,8 @@ export interface components {
             startDate?: string;
             /** Format: date */
             endDate?: string;
-            status?: string;
+            /** @enum {string} */
+            status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
             /** @enum {string} */
             category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
             /** Format: int64 */
@@ -1808,7 +1826,8 @@ export interface components {
             startDate?: string;
             /** Format: date */
             endDate?: string;
-            status?: string;
+            /** @enum {string} */
+            status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
             thumbnailImage?: string;
             /** @enum {string} */
             category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
@@ -1835,17 +1854,17 @@ export interface components {
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         PageableObject: {
@@ -1853,11 +1872,11 @@ export interface components {
             offset?: number;
             sort?: components["schemas"]["SortObject"];
             paged?: boolean;
-            /** Format: int32 */
-            pageNumber?: number;
+            unpaged?: boolean;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
+            /** Format: int32 */
+            pageNumber?: number;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1903,17 +1922,17 @@ export interface components {
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         NotificationResponse: {
@@ -1974,28 +1993,28 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
+            sortByOrDefault?: string;
             /** Format: int32 */
             pageOrDefault?: number;
             /** Format: int32 */
             sizeOrDefault?: number;
-            sortByOrDefault?: string;
         };
         Page: {
             /** Format: int64 */
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            numberOfElements?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         InfiniteScrollResponse: {
@@ -3335,6 +3354,28 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description 후원하기 공지 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ListResponse"];
+                };
+            };
+        };
+    };
+    getDonationByMemberId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 나의 후원하기 조회 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;

@@ -118,6 +118,18 @@ export interface DonateDescription {
   data: DescriptionResponse;
 }
 
+export interface MyDonateResponse {
+  resultCode: string;
+  msg: string;
+  data: DonateInfo[];
+}
+
+export interface DonationCreatorResponse {
+  resultCode: string;
+  msg: string;
+  data: boolean;
+}
+
 export interface DonatePageProps {
   searchParams: Promise<{
     category?: string;

@@ -35,14 +35,10 @@ async function DonateDetailLayout({
   const { id } = await params;
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery({
+  const detailInfo = await queryClient.fetchQuery({
     queryKey: queryKeys.donate.id(id),
     queryFn: () => getInitDonationDetail(id),
   });
-
-  const detailInfo = queryClient.getQueryData<DonateDetailType>(
-    queryKeys.donate.id(id),
-  );
 
   const dehydratedState = dehydrate(queryClient);
 
@@ -53,8 +49,8 @@ async function DonateDetailLayout({
           <div className="w-full aspect-10/7">
             <ImageSwiper
               slideList={
-                detailInfo?.thumbnailImage
-                  ? [{ imageUrl: detailInfo?.thumbnailImage }]
+                detailInfo.data.thumbnailImage
+                  ? [{ imageUrl: detailInfo.data.thumbnailImage }]
                   : []
               }
             />

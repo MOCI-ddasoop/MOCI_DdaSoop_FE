@@ -49,8 +49,7 @@ export const useGetDonationList = (
             const current = item.currentAmount ?? 0;
             const goal = item.goalAmount ?? 0;
 
-            const progress =
-              goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
+            const progress = goal > 0 ? Math.round((current * 100) / goal) : 0;
 
             return {
               ...item,
@@ -60,8 +59,8 @@ export const useGetDonationList = (
         },
       };
     },
-    staleTime: 500,
-    gcTime: 1000,
+    staleTime: 5000,
+    gcTime: 10000,
     ...options,
   });
 };

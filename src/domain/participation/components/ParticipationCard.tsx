@@ -31,12 +31,12 @@ function ParticipationCard(
   props:
     | ({ type: "together" } & TogetherInfo)
     | ({ type: "myTogether" } & MyTogetherInfo)
-    | ({ type: "donate" } & DonateInfo),
+    | ({ type: "donate" | "myDonate" } & DonateInfo),
 ) {
   const { type, id, thumbnailImage, title, category, progress } = props;
   return (
     <Link
-      href={`/${type === "myTogether" ? "together" : type}/${id}`}
+      href={`/${type === "myTogether" ? "together" : type === "myDonate" ? "donate" : type}/${id}`}
       className="relative flex flex-col justify-between min-w-[230px] w-full xl:max-w-[230px] h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg"
     >
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
@@ -68,7 +68,7 @@ function ParticipationCard(
               {props.startDate}~{props.endDate}
             </p>
           ) : (
-            <ProgressBar type={type} cardUI progress={progress} />
+            <ProgressBar type="donate" cardUI progress={progress} />
           )}
         </div>
         <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>

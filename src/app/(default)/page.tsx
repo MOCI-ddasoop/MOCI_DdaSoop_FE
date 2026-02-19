@@ -9,14 +9,16 @@ import FeedCreateButton from "@/domain/feed/components/FeedCreateButton";
 import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
 import { sortOptions } from "@/shared/constants/filter";
 
-const randomList = sortOptions[Math.floor(Math.random() * sortOptions.length)];
-
 export default async function Home({
   searchParams,
 }: {
   searchParams: Promise<{ query: string }>;
 }) {
   const { query } = await searchParams;
+
+  const randomList =
+    // eslint-disable-next-line react-hooks/purity
+    sortOptions[Math.floor(Math.random() * sortOptions.length)];
 
   const { data } = await getInitTogetherList({
     fixed: true,
