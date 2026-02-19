@@ -6,6 +6,9 @@ export const categoryType = {
   PLOGGING: "플로깅",
   CLEANUP: "봉사활동",
   RECYCLING: "친환경습관",
+  ANIMAL: "동물",
+  ENVIRONMENT: "환경",
+  SOCIETY: "사회",
   ETC: "기타",
 };
 

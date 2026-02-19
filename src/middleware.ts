@@ -14,19 +14,19 @@ export function middleware(req: NextRequest) {
     "base-uri 'self'",
     "object-src 'none'",
 
-    `script-src 'self' 'nonce-${nonce}' https://www.clarity.ms https://scripts.clarity.ms`,
+    `script-src 'self' 'nonce-${nonce}' https://www.clarity.ms https://scripts.clarity.ms https://js.tosspayments.com`,
 
     `style-src 'self' 'unsafe-inline' `,
 
-    "img-src 'self' data: https:",
+    "img-src 'self' data: https:  https: http://localhost:8000",
 
     "font-src 'self' data:",
 
-    "connect-src 'self' https:",
+    "connect-src 'self' https: https://api.tosspayments.com https://js.tosspayments.com",
 
     "frame-ancestors 'none'",
 
-    "img-src 'self' data: https: http://localhost:8000",
+    "frame-src https://js.tosspayments.com https://payment-gateway-sandbox.tosspayments.com https://toss.im/ https://ui.teledit.com/",
   ].join("; ");
 
   //requestHeader에 함께 첨부

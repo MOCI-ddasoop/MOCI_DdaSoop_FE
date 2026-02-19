@@ -11,7 +11,6 @@ export const useGetTogetherList = (
     sortType,
     page,
     size,
-    userId,
   }: {
     category?: string[];
     mode?: string;
@@ -19,27 +18,19 @@ export const useGetTogetherList = (
     sortType?: string;
     page?: number;
     size?: number;
-    userId?: number;
   },
   options?: Omit<UseQueryOptions<TogetherResponse>, "queryKey" | "queryFn">,
 ) => {
   return useQuery<TogetherResponse>({
-    queryKey: userId
-      ? queryKeys.together.member(userId)
-      : queryKeys.together.list({
-          category,
-          mode,
-          status,
-          sortType,
-          page,
-          size,
-        }),
+    queryKey: queryKeys.together.list({
+      category,
+      mode,
+      status,
+      sortType,
+      page,
+      size,
+    }),
     queryFn: async () => {
-      if (userId) {
-        const { data } = await api.get(`api/v1/together/member/${userId}`);
-        return data;
-      }
-
       const params = new URLSearchParams(
         Object.entries({ mode, status, sortType, page, size })
           .filter(([, v]) => v !== undefined)
@@ -49,7 +40,6 @@ export const useGetTogetherList = (
       category?.forEach((c) => {
         params.append("categories", c);
       });
-
       const { data } = await api.get(
         `api/v1/together/list?${params.toString()}`,
       );

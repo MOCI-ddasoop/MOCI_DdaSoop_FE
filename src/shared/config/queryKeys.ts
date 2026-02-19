@@ -53,6 +53,7 @@ export const queryKeys = {
       if (memberId) return ["donate", "list", memberId];
       else return ["donate", "list"];
     },
+    history: (id: string) => ["donate", "history", id],
   },
   together: {
     all: () => ["together"],

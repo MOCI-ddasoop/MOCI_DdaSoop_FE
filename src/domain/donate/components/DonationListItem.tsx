@@ -4,12 +4,13 @@ import { DonationListItemProps } from "../types";
 import { formatMoney } from "../utils/formatMoney";
 
 function DonationListItem({
-  id,
-  donationImage,
+  donationImage = "/defaultFeedImage.png",
   name,
   amount,
   userName,
   href,
+  createdAt,
+  type = "tab",
 }: DonationListItemProps) {
   const content = (
     <>
@@ -17,7 +18,11 @@ function DonationListItem({
         <Image src={donationImage} alt={name} fill />
       </div>
       <div className="w-38 flex-1 flex gap-0.5 flex-col">
-        <p className="text-sm truncate">{name}</p>
+        <p
+          className={`text-sm ${type === "tab" ? "text-gray-400" : "truncate"}`}
+        >
+          {type === "tab" ? createdAt : name}
+        </p>
         <div className=" font-medium flex justify-between align-center">
           <p className="flex-1 truncate">{userName}</p>
           <p className="font-semibold text-mainred">{formatMoney(amount)}</p>원
