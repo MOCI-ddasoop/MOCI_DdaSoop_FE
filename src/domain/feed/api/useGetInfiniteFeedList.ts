@@ -3,7 +3,7 @@ import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 
 export type InfiniteFeedParams =
-  | { page?: undefined }
+  | { page?: undefined; query?: string }
   | {
       page: "together";
       togetherId: number;
@@ -36,6 +36,19 @@ export const useGetInfiniteFeedList = (
               memberId: infiniteParams.memberId,
             });
       }
+      if (
+        infiniteParams.query &&
+        !(
+          infiniteParams.query.startsWith("#") &&
+          infiniteParams.query.slice(1) === ""
+        )
+      ) {
+        return queryKeys.feeds.search(
+          infiniteParams.query.startsWith("#")
+            ? infiniteParams.query.slice(1)
+            : infiniteParams.query,
+        );
+      }
       return queryKeys.feeds.infinite({});
     })(),
     queryFn: async ({ pageParam }) => {
@@ -55,10 +68,15 @@ export const useGetInfiniteFeedList = (
           break;
 
         default:
-          baseUrl = "/api/feeds/scroll";
+          baseUrl =
+            infiniteParams.query?.startsWith("#") &&
+            infiniteParams.query.slice(1) !== ""
+              ? "/api/feeds/search/tag"
+              : "/api/feeds/scroll";
       }
       const params: {
         size: number;
+        tag?: string;
         lastFeedId?: number;
         togetherId?: number;
         memberId?: number;
@@ -66,6 +84,14 @@ export const useGetInfiniteFeedList = (
 
       if (pageParam !== undefined && pageParam !== null) {
         params.lastFeedId = pageParam;
+      }
+      if (
+        infiniteParams.page !== "together" &&
+        infiniteParams.page !== "member"
+      ) {
+        params.tag = infiniteParams.query?.startsWith("#")
+          ? infiniteParams.query.slice(1)
+          : infiniteParams.query;
       }
 
       const res =

@@ -42,7 +42,7 @@ function FeedCardContainer({
   const containerRef = useRef<HTMLDivElement>(null);
   const memberId = useAuthStore((state) => state.me?.memberId);
 
-  const infiniteParams: InfiniteFeedParams = (() => {
+  const infiniteParams = useMemo<InfiniteFeedParams>(() => {
     if (pageName === "together") {
       return {
         page: "together",
@@ -58,8 +58,8 @@ function FeedCardContainer({
         bookmark,
       };
     }
-    return {};
-  })();
+    return { query: searchParams.get("query") ?? undefined };
+  }, [bookmark, memberId, notice, pageName, queryParams, searchParams]);
 
   const {
     data,
