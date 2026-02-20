@@ -6,8 +6,8 @@ export const getTogetherDescription = async (id: string | number) => {
   const res = await serverFetchApi(`/api/v1/together/list/${id}/description`);
 
   if (!res.ok) {
-    throw new Error(
-      `함께하기 info 조회에 실패했습니다. 오류코드 : ${res.status}`,
+    console.error(
+      new Error(`함께하기 info 조회에 실패했습니다. 오류코드 : ${res.status}`),
     );
   }
 

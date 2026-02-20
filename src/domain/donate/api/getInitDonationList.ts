@@ -11,8 +11,8 @@ export const getInitDonationList = async ({
     `/api/v1/donation/list?sortType=${sortType}${fixed ? "&size=3" : ""}`,
   );
   if (!res.ok) {
-    throw new Error(
-      `후원 리스트 조회에 실패했습니다. 오류코드 : ${res.status}`,
+    console.error(
+      new Error(`후원 리스트 조회에 실패했습니다. 오류코드 : ${res.status}`),
     );
   }
 
