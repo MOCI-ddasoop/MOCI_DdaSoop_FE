@@ -2,13 +2,14 @@
 import { debounce } from "@/shared/utils/debounce";
 import tw from "@/shared/utils/tw";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { InputHTMLAttributes, useMemo } from "react";
+import { InputHTMLAttributes, useMemo, useRef } from "react";
 import { IoMdSearch } from "react-icons/io";
 
 function SearchInput({ className }: InputHTMLAttributes<HTMLInputElement>) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const isComposing = useRef(false);
 
   const handleSearch = useMemo(
     () =>
@@ -36,6 +37,11 @@ function SearchInput({ className }: InputHTMLAttributes<HTMLInputElement>) {
       <input
         placeholder="검색어를 입력해보세요."
         className="w-[calc(100%-24px)] focus:outline-0"
+        onCompositionStart={() => (isComposing.current = true)}
+        onCompositionEnd={(e) => {
+          isComposing.current = false;
+          handleSearch(e.currentTarget.value);
+        }}
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query")?.toString()}
       />
