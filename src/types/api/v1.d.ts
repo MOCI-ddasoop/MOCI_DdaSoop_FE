@@ -327,8 +327,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 피드 목록 조회 (페이징 + QueryDSL 동적 검색)
-         * @description 피드 목록을 페이징 방식으로 조회합니다. QueryDSL 동적 쿼리로 다양한 조건 조합이 가능합니다.
+         * 피드 목록 조회 (무한 스크롤 + QueryDSL 동적 검색)
+         * @description 피드 목록을 무한 스크롤 방식으로 조회합니다. QueryDSL 동적 쿼리로 다양한 조건 조합이 가능합니다.
          */
         get: operations["getFeedList"];
         put?: never;
@@ -663,23 +663,6 @@ export interface paths {
         };
         /** 상세보기별 후원 현황 조회 */
         get: operations["getDonationStatusById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/list/{id}/description": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 후원하기 리스트 설명 조회 */
-        get: operations["getDonationDescription"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1819,12 +1802,12 @@ export interface components {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            unpaged?: boolean;
-            paged?: boolean;
             /** Format: int32 */
             pageSize?: number;
             /** Format: int32 */
             pageNumber?: number;
+            paged?: boolean;
+            unpaged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -1941,29 +1924,11 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
-            /** Format: int32 */
-            pageOrDefault?: number;
+            sortByOrDefault?: string;
             /** Format: int32 */
             sizeOrDefault?: number;
-            sortByOrDefault?: string;
-        };
-        Page: {
             /** Format: int32 */
-            totalPages?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            /** Format: int32 */
-            size?: number;
-            content?: unknown[];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
-            empty?: boolean;
+            pageOrDefault?: number;
         };
         InfiniteScrollResponse: {
             content?: unknown[];
@@ -2001,6 +1966,24 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
             reply?: boolean;
+        };
+        Page: {
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            /** Format: int32 */
+            size?: number;
+            content?: unknown[];
+            /** Format: int32 */
+            number?: number;
+            sort?: components["schemas"]["SortObject"];
+            /** Format: int32 */
+            numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
+            empty?: boolean;
         };
         LastLoginProviderResponse: {
             provider?: string;
@@ -2764,7 +2747,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["Page"];
+                    "*/*": components["schemas"]["InfiniteScrollResponse"];
                 };
             };
         };

@@ -38,18 +38,15 @@ export const useGetInfiniteFeedList = (
       }
       if (
         infiniteParams.query &&
+        // #만 입력한 경우 빼고
         !(
           infiniteParams.query.startsWith("#") &&
           infiniteParams.query.slice(1) === ""
         )
       ) {
-        return queryKeys.feeds.search(
-          infiniteParams.query.startsWith("#")
-            ? infiniteParams.query.slice(1)
-            : infiniteParams.query,
-        );
+        return queryKeys.feeds.search(infiniteParams.query);
       }
-      return queryKeys.feeds.infinite({});
+      return queryKeys.feeds.infinite();
     })(),
     queryFn: async ({ pageParam }) => {
       let baseUrl;
@@ -68,15 +65,19 @@ export const useGetInfiniteFeedList = (
           break;
 
         default:
-          baseUrl =
-            infiniteParams.query?.startsWith("#") &&
-            infiniteParams.query.slice(1) !== ""
-              ? "/api/feeds/search/tag"
-              : "/api/feeds/scroll";
+          if (infiniteParams.query?.startsWith("#")) {
+            baseUrl =
+              infiniteParams.query.slice(1) !== ""
+                ? "/api/feeds/search/tag"
+                : "/api/feeds/scroll";
+          } else {
+            baseUrl = "/api/feeds/scroll";
+          }
       }
       const params: {
         size: number;
         tag?: string;
+        keyword?: string;
         lastFeedId?: number;
         togetherId?: number;
         memberId?: number;
@@ -89,9 +90,11 @@ export const useGetInfiniteFeedList = (
         infiniteParams.page !== "together" &&
         infiniteParams.page !== "member"
       ) {
-        params.tag = infiniteParams.query?.startsWith("#")
-          ? infiniteParams.query.slice(1)
-          : infiniteParams.query;
+        if (infiniteParams.query?.startsWith("#")) {
+          params.tag = infiniteParams.query.slice(1) || undefined;
+        } else if (infiniteParams.query) {
+          params.keyword = infiniteParams.query;
+        }
       }
 
       const res =
