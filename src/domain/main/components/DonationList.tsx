@@ -14,10 +14,9 @@ function DonationList({ items }: { items: DonationListItemProps[] }) {
           더보기
         </Link>
       </div>
-      {items.map(({ id, name, userName, amount, donationImage, href }) => (
+      {items.map(({ name, userName, amount, donationImage, href }, i) => (
         <DonationListItem
-          key={id}
-          id={id}
+          key={i}
           name={name}
           userName={userName}
           amount={amount}

@@ -3,6 +3,16 @@ import { components } from "@/types/api/v1";
 export type TogetherDto = components["schemas"]["TogetherDto"]; // unknown
 export type CreateRequest = components["schemas"]["CreateRequest"];
 
+//    api/v1/together/{togetherId}/participate -> unknown
+//    api/v1/together/{togetherId}/{memberId}/participation -> unknown
+//    api/v1/together/{togetherId}/leave -> unknown
+//    api/v1/together/{togetherId}/drop/{targetId} -> unknown
+
+//    api/v1/together/list -> ListResponse
+//    api/v1/together/member/{memberId} -> DetailResponse
+//    api/v1/together/list/{id} -> DetailResponse
+//    api/v1/together/list/{id}/description -> DescriptionResponse
+
 export interface TogetherInfo {
 	id: number;
 	title: string;

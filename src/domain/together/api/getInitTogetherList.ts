@@ -1,8 +1,18 @@
+import { getKeyByValue } from "@/shared/utils/getKeyByValue";
 import { TogetherResponse } from "../types";
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
+import { sortType } from "@/shared/constants/filter";
 
-export const getInitTogetherList = async () => {
-  const res = await serverFetchApi(`/api/v1/together/list?page=0&size=12`);
+export const getInitTogetherList = async ({
+  fixed = false,
+  randomList,
+}: {
+  fixed?: boolean;
+  randomList?: string;
+} = {}) => {
+  const res = await serverFetchApi(
+    `/api/v1/together/list?page=0&${fixed ? `size=3&sortType=${getKeyByValue(sortType, randomList!)}` : "size=12"}`,
+  );
 
   if (!res.ok) {
     throw new Error(

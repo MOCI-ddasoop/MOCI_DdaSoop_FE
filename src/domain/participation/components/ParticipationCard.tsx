@@ -33,8 +33,7 @@ function ParticipationCard(
     | ({ type: "myTogether" } & MyTogetherInfo)
     | ({ type: "donate" } & DonateInfo),
 ) {
-  const { type, id, thumbnailImage, title, category } = props;
-
+  const { type, id, thumbnailImage, title, category, progress } = props;
   return (
     <Link
       href={`/${type === "myTogether" ? "together" : type}/${id}`}
@@ -43,7 +42,7 @@ function ParticipationCard(
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
         <Image
           fill
-          alt={title}
+          alt={title!}
           src={
             thumbnailImage ??
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU"
@@ -55,11 +54,11 @@ function ParticipationCard(
         <div className="flex justify-between items-center">
           {type !== "myTogether" && (
             <h2
-              className={`${props.dDay < 0 ? "text-sm text-mainblue" : "font-bold"}`}
+              className={`${props.dDay! < 0 ? (type === "donate" ? "text-mainred" : "text-mainblue text-sm") : "font-bold"} `}
             >
               {props.dDay === 0
                 ? "D-day"
-                : props.dDay < 0
+                : props.dDay! < 0
                   ? "모집종료"
                   : `D-${props.dDay}`}
             </h2>
@@ -69,7 +68,7 @@ function ParticipationCard(
               {props.startDate}~{props.endDate}
             </p>
           ) : (
-            <ProgressBar type={type} cardUI progress={props.progress ?? 0} />
+            <ProgressBar type={type} cardUI progress={progress} />
           )}
         </div>
         <h1 className={`font-semibold text-lg min-w-full line-clamp-2`}>
@@ -77,7 +76,10 @@ function ParticipationCard(
         </h1>
         <div className={`w-full overflow-x-clip`}>
           <div className="flex gap-1.5 items-center w-max hover:overflow-scroll-animation">
-            <Capsule text={categoryType[category] ?? "기타"} readOnly />
+            <Capsule
+              text={categoryType[category ?? "ETC"] ?? "기타"}
+              readOnly
+            />
             {(type === "together" || type === "myTogether") && (
               <Capsule
                 type="isOnline"
