@@ -61,7 +61,13 @@ export const queryKeys = {
     history: (id: string) => ["donate", "history", id],
     newsCreate: (id: string) => ["donate", "news", "new", id],
     news: (id: string) => ["donate", "news", id],
-    member: (memberId: number) => ["together", "member", memberId],
+    member: (memberId: number) => ["donate", "member", memberId],
+    memberHistory: (memberId: number) => [
+      "donate",
+      "member",
+      "history",
+      memberId,
+    ],
     summary: () => ["donate", "summary"],
     isCreator: ({ id, memberId }: { id: string; memberId: number }) => [
       "donate",

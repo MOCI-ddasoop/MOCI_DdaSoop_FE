@@ -1,15 +1,7 @@
 import { serverFetchApi } from "@/shared/config/serverFetchApi";
 
-export const getInitDonationList = async ({
-  sortType,
-  fixed,
-}: {
-  sortType?: string;
-  fixed?: boolean;
-} = {}) => {
-  const res = await serverFetchApi(
-    `/api/v1/donation/list?sortType=${sortType}${fixed ? "&size=3" : ""}`,
-  );
+export const getInitDonationList = async () => {
+  const res = await serverFetchApi(`/api/v1/donation/list?`);
   if (!res.ok) {
     console.error(
       new Error(`후원 리스트 조회에 실패했습니다. 오류코드 : ${res.status}`),

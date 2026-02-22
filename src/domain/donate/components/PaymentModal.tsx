@@ -33,7 +33,7 @@ function PaymentModal({
       amount,
       memberId,
     });
-    router.replace(`/donate/${id}/info`);
+    router.replace(`/donate/${id}`);
     setIsOpen(false);
   };
   return (

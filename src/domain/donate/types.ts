@@ -26,6 +26,10 @@ export type DetailResponse = components["schemas"]["DetailResponse"];
 export type DescriptionResponse = components["schemas"]["DescriptionResponse"];
 export type DonationTossRequest = components["schemas"]["DonationTossRequest"];
 export type DonorListResponse = components["schemas"]["ListResponse"];
+export type DonationPaymentListResponse =
+  components["schemas"]["DonationPaymentListResponse"];
+export type RecentDonationPaymentListResponse =
+  components["schemas"]["RecentDonationPaymentListResponse"];
 
 export type DonateCreateRequest = {
   title: string;
@@ -124,6 +128,18 @@ export interface MyDonateResponse {
   data: DonateInfo[];
 }
 
+export interface DonateHistoryResponse {
+  resultCode: string;
+  msg: string;
+  data: DonationPaymentListResponse[];
+}
+
+export interface RecentDonateResponse {
+  resultCode: string;
+  msg: string;
+  data: RecentDonationPaymentListResponse[];
+}
+
 export interface DonationCreatorResponse {
   resultCode: string;
   msg: string;
@@ -143,8 +159,8 @@ export type DonationListItemProps = {
   donationImage?: string;
   name: string;
   amount: number;
-  userName: string;
+  userName?: string;
   href?: string;
-  type?: "summary" | "tab";
+  type?: "summary" | "tab" | "mypage";
   createdAt?: string;
 };

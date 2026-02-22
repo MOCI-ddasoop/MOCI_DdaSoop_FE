@@ -8,7 +8,7 @@ export const useGetOwnDonationList = (id: number) => {
     // 타입설정하기
     queryKey: queryKeys.donate.member(id),
     queryFn: async () => {
-      const { data } = await api.get(`api/v1/donation/member/${id}`);
+      const { data } = await api.get(`api/v1/donation/member/${id}/create`);
       return data;
     },
     select: (data) => ({
@@ -18,7 +18,7 @@ export const useGetOwnDonationList = (id: number) => {
         const goal = item.goalAmount ?? 0;
         return {
           ...item,
-          progress: goal > 0 ? Math.min(100, (current / goal) * 100) : 0,
+          progress: goal > 0 ? Math.round((current * 100) / goal) : 0,
         };
       }),
     }),

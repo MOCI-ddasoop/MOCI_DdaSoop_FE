@@ -6,22 +6,9 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Suspense } from "react";
 
-interface DonatePageProps {
-  searchParams: Promise<{
-    category?: string;
-    page?: string;
-    sort?: string;
-  }>;
-}
-
-async function Donate({ searchParams }: DonatePageProps) {
-  const searchParam = await searchParams;
-
-  const category = searchParam.category?.split(",") ?? [];
-  const page = Number(searchParam.page ?? 1);
-  const sort = searchParam.sort ?? "LATEST";
-
+async function Donate() {
   // // 위에있는거 가지고 api 통신해서 가져오기
   // const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
   //   id: index,
@@ -47,15 +34,14 @@ async function Donate({ searchParams }: DonatePageProps) {
     queryFn: () => getInitDonationList(),
   });
 
-  const dehydratedState = dehydrate(queryClient, {
-    shouldDehydrateQuery: () =>
-      category.length === 0 && page === 1 && sort === "LATEST",
-  });
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <HydrationBoundary state={dehydratedState}>
-      <DonateSection />
-    </HydrationBoundary>
+    <Suspense fallback={<div>Loading...</div>}>
+      <HydrationBoundary state={dehydratedState}>
+        <DonateSection />
+      </HydrationBoundary>
+    </Suspense>
   );
 }
 

@@ -147,8 +147,8 @@ function DonateModal({
       orderId: generateOrderId(),
       orderName: `따숲 후원하기 : ${title}`,
       customerName: name,
-      successUrl: window.location.origin + `/donate/${id}/info`,
-      failUrl: window.location.origin + `/donate/${id}/info`,
+      successUrl: window.location.origin + `/donate/${id}`,
+      failUrl: window.location.origin + `/donate/${id}`,
     };
     try {
       switch (selectedMethod) {

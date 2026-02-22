@@ -7,8 +7,8 @@ export const serverFetchApi = async (
   const baseURL = BASE_URL;
 
   const response = await fetch(`${baseURL}${url}`, {
+    next: { revalidate: 300 },
     ...options,
-    cache: "no-store",
   });
 
   return response;

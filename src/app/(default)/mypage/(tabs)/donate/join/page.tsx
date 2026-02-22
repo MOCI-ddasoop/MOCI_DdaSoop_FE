@@ -1,10 +1,10 @@
-import MyDonateSection from "@/domain/donate/components/MyDonateSection";
+import MyDonateHistory from "@/domain/donate/components/MyDonateHistory";
 import { Suspense } from "react";
 
 async function page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <MyDonateSection />
+      <MyDonateHistory />
     </Suspense>
   );
 }

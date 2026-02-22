@@ -40,7 +40,7 @@ function PaymentAlert({
         alert("결제 중 오류가 발생했습니다. 다시 시도해주세요");
       } finally {
         setIsOpen(false);
-        router.replace(`/donate/${id}/info`);
+        router.replace(`/donate/${id}`);
       }
     }
   };
