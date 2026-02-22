@@ -44,10 +44,5 @@ export function SubmitRegistryProvider({
 
 export function useSubmitRegistry() {
 	const ctx = useContext(SubmitRegistryContext);
-	if (!ctx) {
-		throw new Error(
-			"useSubmitRegistry must be used within SubmitRegistryProvider",
-		);
-	}
 	return ctx;
 }

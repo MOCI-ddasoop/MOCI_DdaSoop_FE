@@ -24,16 +24,13 @@ export function createSubmitRegistry() {
 			console.log("[submitByOwner] called:", owner);
 			const entry = registry.get(owner);
 			if (!entry) {
-				console.log("[submitByOwner] no entry for owner");
 				return;
 			}
 
 			if (!entry.enabled()) {
-				console.log("[submitByOwner] blocked by enabled()");
 				return;
 			}
 
-			console.log("[submitByOwner] executing submit()");
 			await entry.submit();
 		},
 	};
