@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import { usePostFeed } from "../api/usePostFeed";
 import { useAuthStore } from "@/store/authStore";
 import PostVisibilityOptions from "./PostVisibilityOptions";
-import { useModalStore } from "../store/useModalStore";
+import { useModalStore } from "../../modal/store/useModalStore";
 import { MyTogetherInfo } from "@/domain/together/types";
 import { useGetOwnTogetherList } from "@/domain/together/api/useGetOwnTogetherList";
 import { useParams, usePathname } from "next/navigation";
@@ -80,7 +80,11 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 		setTogetherInfo(detailInfo);
 	}, [initialTogetherInfo?.data, isTogetherRoute]);
 
-	const { mutate: postFeed, isPending } = usePostFeed({
+	const {
+		mutate: postFeed,
+		isPending,
+		isSuccess,
+	} = usePostFeed({
 		onMutate: () => {
 			Swal.fire({
 				title: "업로드 중입니다.",
@@ -97,7 +101,8 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 			setTimeout(() => {
 				Swal.close();
 				textBoxRef.current?.clear();
-				resetCanClose();
+				setFeedImages([]);
+				setTextBoxValue("");
 				onClose();
 			}, 1500);
 		},
@@ -114,7 +119,11 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 	});
 
 	useEffect(() => {
-		setCanClose(async () => {
+		setCanClose("feedCreate", async () => {
+			if (isSuccess) {
+				return true;
+			}
+
 			if (
 				feedImages.length === 0 &&
 				(!textBoxValue || textBoxValue.trim() === "")
@@ -136,9 +145,9 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 		});
 
 		return () => {
-			resetCanClose();
+			resetCanClose("feedCreate");
 		};
-	}, [feedImages, textBoxValue]);
+	}, [feedImages.length, isSuccess, resetCanClose, setCanClose, textBoxValue]);
 
 	const handleFeedFormSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -153,6 +162,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 					return "GENERAL";
 			}
 		})();
+
 		const feedFormData: FeedCreateRequest = {
 			feedType,
 			content: textBoxRef.current?.getHTML() || "",

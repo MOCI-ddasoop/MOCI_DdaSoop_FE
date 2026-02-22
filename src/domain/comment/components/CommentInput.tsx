@@ -7,7 +7,7 @@ import { useSetComment } from "../api/useSetComment";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useCommentScrollStore } from "../provider/CommentScrollProvider";
 import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
-import { useModalStore } from "@/domain/feed/store/useModalStore";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
 import Swal from "sweetalert2";
 
 interface CommentInputProps {
@@ -72,7 +72,7 @@ function CommentInput({
 	}, [shouldCommentFocus]);
 
 	useEffect(() => {
-		setCanClose(async () => {
+		setCanClose("feed", async () => {
 			if (!comment || comment.trim() === "") {
 				return true;
 			}
@@ -91,20 +91,20 @@ function CommentInput({
 		});
 
 		return () => {
-			resetCanClose();
+			resetCanClose("feed");
 		};
 	}, [comment, resetCanClose, setCanClose]);
 
 	const submitRegistry = useSubmitRegistry();
 
 	useEffect(() => {
-		submitRegistry.register("comment-create", {
+		submitRegistry?.register("comment-create", {
 			submit: submitComment,
 			enabled: () => !isPending,
 		});
 
 		return () => {
-			submitRegistry.unregister("comment-create");
+			submitRegistry?.unregister("comment-create");
 		};
 	}, [isPending, submitComment, submitRegistry]);
 

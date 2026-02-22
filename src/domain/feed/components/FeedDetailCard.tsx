@@ -16,13 +16,12 @@ import TagInput from "@/shared/components/TagInput";
 import Swal from "sweetalert2";
 import { useUpdateFeedById } from "../api/useUdtFeedById";
 import { useDeleteFeedById } from "../api/useDelFeedById";
-import { useModalStore } from "../store/useModalStore";
+import { useModalStore } from "../../modal/store/useModalStore";
 import { useRouter } from "next/navigation";
 import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
 import { useToggleFeedReact } from "../api/useToggleFeedReact";
-import { useGetTogetherById } from "@/domain/together/api/useGetTogetherById";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -57,10 +56,6 @@ function FeedDetailCard({
 		tags,
 	} = item;
 
-	useEffect(() => {
-		console.log(item);
-	}, [item]);
-
 	const [bookmarkInfo, setBookmarkInfo] = useState<{
 		bookmarkCount: number;
 		bookMarkedByMe: boolean;
@@ -79,6 +74,7 @@ function FeedDetailCard({
 	const textBoxRef = useRef<TextBoxHandle>(null);
 
 	const closeStoreModal = useModalStore((store) => store.close);
+	const openStoreModal = useModalStore((store) => store.open);
 
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
 	const draft = useFeedEditStore((s) => s.draft);
@@ -110,7 +106,7 @@ function FeedDetailCard({
 	useEffect(() => {
 		if (!isFeedEditMode) return;
 
-		setCanClose(async () => {
+		setCanClose("feed", async () => {
 			const result = await Swal.fire({
 				icon: "error",
 				titleText: "수정 중인 내용이 있어요",
@@ -135,7 +131,7 @@ function FeedDetailCard({
 			return false;
 		});
 
-		return () => resetCanClose();
+		return () => resetCanClose("feed");
 	}, [editActions, isFeedEditMode, resetCanClose, setCanClose]);
 
 	const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
@@ -206,7 +202,7 @@ function FeedDetailCard({
 				});
 				break;
 			case "신고":
-				console.log("신고");
+				openStoreModal("report");
 				break;
 		}
 	};
@@ -240,7 +236,7 @@ function FeedDetailCard({
 	}, [togetherId]);
 
 	useEffect(() => {
-		submitRegistry.register("feed-edit", {
+		submitRegistry?.register("feed-edit", {
 			submit: handleEditSubmit,
 			enabled: () =>
 				isFeedEditMode && !isToggleBookmarkPending && !isToggleReactionPending,

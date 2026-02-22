@@ -13,6 +13,7 @@ import {
 import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
 import { useAuthStore } from "@/store/authStore";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
 
 export type PositionedItem = FeedInfinite & {
 	width: number;
@@ -37,6 +38,7 @@ function FeedCardContainer({
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const openStoreModal = useModalStore((store) => store.open);
 
 	const [containerWidth, setContainerWidth] = useState(0);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -240,6 +242,7 @@ function FeedCardContainer({
 									router.push(`${pathname}?${params.toString()}`, {
 										scroll: false,
 									});
+									openStoreModal("feed");
 								}}
 								className="duration-300 ease-in-out absolute"
 							/>
