@@ -41,10 +41,10 @@ export const useGetInfiniteFeedList = (
         // #만 입력한 경우 빼고
         !(
           infiniteParams.query.startsWith("#") &&
-          infiniteParams.query.slice(1) === ""
+          infiniteParams.query.slice(1).trim() === ""
         )
       ) {
-        return queryKeys.feeds.search(infiniteParams.query);
+        return queryKeys.feeds.search(infiniteParams.query.trim());
       }
       return queryKeys.feeds.infinite();
     })(),
@@ -65,13 +65,16 @@ export const useGetInfiniteFeedList = (
           break;
 
         default:
-          if (infiniteParams.query?.startsWith("#")) {
-            baseUrl =
-              infiniteParams.query.slice(1) !== ""
-                ? "/api/feeds/search/tag"
-                : "/api/feeds/scroll";
+          if (infiniteParams.query) {
+            if (infiniteParams.query.startsWith("#")) {
+              // 태그검색
+              baseUrl =
+                infiniteParams.query.slice(1).trim() !== ""
+                  ? "/api/feeds/search/tag"
+                  : "/api/feeds/scroll"; // 태그입력안했으면 전체무한스크롤
+            } else baseUrl = "/api/feeds"; // 그냥검색
           } else {
-            baseUrl = "/api/feeds/scroll";
+            baseUrl = "/api/feeds/scroll"; // 검색아니면 전체무한스크롤
           }
       }
       const params: {
@@ -91,9 +94,9 @@ export const useGetInfiniteFeedList = (
         infiniteParams.page !== "member"
       ) {
         if (infiniteParams.query?.startsWith("#")) {
-          params.tag = infiniteParams.query.slice(1) || undefined;
+          params.tag = infiniteParams.query.slice(1).trim() || undefined;
         } else if (infiniteParams.query) {
-          params.keyword = infiniteParams.query;
+          params.keyword = infiniteParams.query.trim();
         }
       }
 
@@ -103,7 +106,10 @@ export const useGetInfiniteFeedList = (
           : await api.get(baseUrl, { params });
       return res.data;
     },
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNext) return undefined;
+      return lastPage.nextCursor;
+    },
     initialPageParam: undefined,
   });
 };
