@@ -91,7 +91,7 @@ function ModalRoot() {
 							{type === "feedCreate" && (
 								<FeedCreatorModal onClose={handleClose} />
 							)}
-							{type === "report" && <ReportModal />}
+							{type === "report" && <ReportModal onClose={handleClose} />}
 						</div>
 					</div>
 				);

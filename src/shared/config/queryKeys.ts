@@ -42,6 +42,7 @@ export const queryKeys = {
 	},
 	comments: {
 		all: () => ["comments"],
+		id: (id: number) => ["comments", id],
 		list: (feedId: string) => ["comments", feedId],
 		react: () => ["comments", "react"],
 		listByUser: (userId: string) => ["comments", "listByUser", userId],
@@ -94,5 +95,8 @@ export const queryKeys = {
 	members: {
 		me: () => ["members", "me"],
 		counts: () => ["members", "counts"],
+	},
+	report: {
+		create: () => ["report", "create"],
 	},
 };

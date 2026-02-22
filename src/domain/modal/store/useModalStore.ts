@@ -1,3 +1,4 @@
+import reportModalStore from "@/domain/report/stores/useReportModalStore";
 import { create } from "zustand";
 
 export type ModalType = "feedCreate" | "feed" | "report";
@@ -41,6 +42,10 @@ export const useModalStore = create<ModalState>((set, get) => ({
 
 			return { stack: newStack, canCloseMap: newMap };
 		});
+
+		if (top === "report") {
+			reportModalStore.getState().action.resetReportTarget();
+		}
 
 		return true;
 	},

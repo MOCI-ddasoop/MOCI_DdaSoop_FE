@@ -22,6 +22,7 @@ import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
 import { useToggleFeedReact } from "../api/useToggleFeedReact";
+import reportModalStore from "@/domain/report/stores/useReportModalStore";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -75,6 +76,8 @@ function FeedDetailCard({
 
 	const closeStoreModal = useModalStore((store) => store.close);
 	const openStoreModal = useModalStore((store) => store.open);
+
+	const reportAction = reportModalStore((s) => s.action);
 
 	const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
 	const draft = useFeedEditStore((s) => s.draft);
@@ -202,6 +205,8 @@ function FeedDetailCard({
 				});
 				break;
 			case "신고":
+				if (!id) return;
+				reportAction.setReportTarget("FEED", id);
 				openStoreModal("report");
 				break;
 		}
