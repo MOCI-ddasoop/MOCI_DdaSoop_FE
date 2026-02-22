@@ -1,23 +1,22 @@
 "use client";
 
-import reportModalStore from "@/domain/report/stores/reportModalStore";
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
 import React, { Ref, useCallback, useEffect, useRef, useState } from "react";
 import { useToggleReact } from "../api/useToggleReact";
 import { CommentResponse } from "../types";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/shared/config/queryKeys";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
 import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import { BsHeartFill } from "react-icons/bs";
 
 import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
-import { useModalStore } from "@/domain/feed/store/useModalStore";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
+import reportModalStore from "@/domain/report/stores/useReportModalStore";
 
 interface CommentItemProps {
 	ref?: Ref<HTMLLIElement>;
@@ -50,38 +49,24 @@ function CommentItem({
 		replies,
 		replyCount,
 		parentId,
+		reactionCount,
+		isReacted,
 	} = item;
 
-	const qc = useQueryClient();
-
-	const [reactionCount, setReactionCount] = useState<number>(
-		() => item.reactionCount ?? 0,
-	);
 	const [selectedOption, setSelectedOption] = useState<string | null>(null);
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
 	const textBoxRef = useRef<TextBoxHandle>(null);
+	const openStoreModal = useModalStore((store) => store.open);
 	const setCanClose = useModalStore((s) => s.setCanClose);
 	const resetCanClose = useModalStore((s) => s.resetCanClose);
+	const reportAction = reportModalStore((s) => s.action);
 
-	const { mutate: toggleReactMutation, isPending } = useToggleReact({
-		onSuccess: () => {
-			if (!feedId) return;
+	const { mutate: toggleReactMutation, isPending: isToggleReactPending } =
+		useToggleReact(feedId);
 
-			qc.invalidateQueries({
-				queryKey: queryKeys.comments.list(`${feedId}`),
-			});
-		},
-		onMutate: () => {
-			setReactionCount((prev) => prev + 1);
-		},
-		onError: () => {
-			setReactionCount((prev) => prev - 1);
-		},
-	});
-
-	const { mutate: updateCommentMutation } = useUdtCommentById(feedId);
+	const { mutate: updateCommentMutation, isPending: isUdtCommentPending } =
+		useUdtCommentById(feedId);
 	const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
 
 	const editFormSubmit = useCallback(() => {
@@ -115,11 +100,12 @@ function CommentItem({
 	const submitRegistry = useSubmitRegistry();
 
 	useEffect(() => {
+		if (!submitRegistry) return;
 		submitRegistry.register("comment-edit", {
 			submit: editFormSubmit,
-			enabled: () => isEditMode && !isPending,
+			enabled: () => isEditMode && !isUdtCommentPending,
 		});
-	}, [editFormSubmit, isEditMode, isPending, submitRegistry]);
+	}, [editFormSubmit, isEditMode, isUdtCommentPending, submitRegistry]);
 
 	useEffect(() => {
 		if (!isEditMode) return;
@@ -129,7 +115,7 @@ function CommentItem({
 	useEffect(() => {
 		if (!isEditMode) return;
 
-		setCanClose(async () => {
+		setCanClose("feed", async () => {
 			const result = await Swal.fire({
 				icon: "error",
 				titleText: "수정 중인 내용이 있어요",
@@ -154,7 +140,7 @@ function CommentItem({
 			return false;
 		});
 
-		return () => resetCanClose();
+		return () => resetCanClose("feed");
 	}, [isEditMode, resetCanClose, setCanClose]);
 
 	// 이곳에서 드롭다운 메뉴 이벤트가 처리됩니다.
@@ -181,7 +167,9 @@ function CommentItem({
 				});
 				break;
 			case "신고":
-				setReportModalOpen(true);
+				if (!id) return;
+				reportAction.setReportTarget("COMMENT", id);
+				openStoreModal("report");
 				break;
 		}
 	};
@@ -293,13 +281,17 @@ function CommentItem({
 						)}
 						<button
 							type="button"
-							className="cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform"
-							onClick={() => {
+							className={tw(
+								"cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform flex-center gap-1",
+								isReacted ? "text-mainblue" : "",
+							)}
+							onClick={async () => {
 								if (!userId) return;
 								toggleReactMutation(id ?? 0);
 							}}
-							disabled={isPending}
+							disabled={isToggleReactPending}
 						>
+							{isReacted && <BsHeartFill size={14} />}
 							좋아요 {reactionCount}
 						</button>
 					</div>
