@@ -30,7 +30,7 @@ export default async function Home({
   return (
     <div className="flex gap-8 py-4">
       <Suspense fallback={<div>Loading...</div>}>
-        <FeedCardContainer queryParams={query} />
+        <FeedCardContainer />
       </Suspense>
       <div className="sticky top-20 h-[calc(100vh-6rem)] flex flex-col justify-between">
         <div className="h-fit flex flex-col gap-2 items-center">

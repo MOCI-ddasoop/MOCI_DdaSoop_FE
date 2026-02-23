@@ -14,6 +14,7 @@ export const queryKeys = {
       params,
     ],
     infinite: (params?: {
+      query?: string;
       page?: "together" | "member";
       togetherId?: number;
       memberId?: number;
@@ -38,6 +39,8 @@ export const queryKeys = {
     },
     togetherNotice: (id: number) => ["feeds", "notice", id],
     bookmark: () => ["feeds", "bookmark"],
+    search: (query?: string) => ["feeds", "infinite", "search", query],
+
     reaction: () => ["feeds", "reaction"],
     del: () => ["feeds", "delete"],
     udt: () => ["feeds", "update"],
