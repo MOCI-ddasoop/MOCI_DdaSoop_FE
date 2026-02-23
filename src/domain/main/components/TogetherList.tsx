@@ -1,12 +1,21 @@
 import TogetherListItem from "@/domain/together/components/TogetherListItem";
-import { TogetherListItemProps } from "@/domain/together/types";
+import { TogetherInfo } from "@/domain/together/types";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import Link from "next/link";
 
-function TogetherList({ items }: { items: TogetherListItemProps[] }) {
+function TogetherList({
+	items,
+	type,
+}: {
+	items: TogetherInfo[];
+	type: string;
+}) {
 	return (
 		<div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
 			<div className="flex justify-between items-center">
-				<h3>함께하기</h3>
+				<h3>
+					<span className="text-mainblue font-medium">{type}</span> 함께하기
+				</h3>
 				<Link
 					href="/together"
 					className="text-sm hover:underline hover:underline-offset-2"
@@ -14,14 +23,14 @@ function TogetherList({ items }: { items: TogetherListItemProps[] }) {
 					더보기
 				</Link>
 			</div>
-			{items.map(({ id, image, name, category, isOnline }) => (
+			{items.map(({ id, thumbnailImage, title, category, mode }) => (
 				<TogetherListItem
 					key={id}
 					id={id}
-					image={image}
-					name={name}
-					category={category}
-					isOnline={isOnline}
+					image={thumbnailImage ?? "/defaultFeedImage.png"}
+					name={title}
+					category={categoryType[category]}
+					isOnline={isOnlineType[mode]}
 				/>
 			))}
 		</div>
