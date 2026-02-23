@@ -3,7 +3,7 @@ import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 
 export type InfiniteFeedParams =
-  | { page?: undefined }
+  | { page?: undefined; query?: string }
   | {
       page: "together";
       togetherId: number;
@@ -36,7 +36,17 @@ export const useGetInfiniteFeedList = (
               memberId: infiniteParams.memberId,
             });
       }
-      return queryKeys.feeds.infinite({});
+      if (
+        infiniteParams.query &&
+        // #만 입력한 경우 빼고
+        !(
+          infiniteParams.query.startsWith("#") &&
+          infiniteParams.query.slice(1).trim() === ""
+        )
+      ) {
+        return queryKeys.feeds.search(infiniteParams.query.trim());
+      }
+      return queryKeys.feeds.infinite();
     })(),
     queryFn: async ({ pageParam }) => {
       let baseUrl;
@@ -55,10 +65,22 @@ export const useGetInfiniteFeedList = (
           break;
 
         default:
-          baseUrl = "/api/feeds/scroll";
+          if (infiniteParams.query) {
+            if (infiniteParams.query.startsWith("#")) {
+              // 태그검색
+              baseUrl =
+                infiniteParams.query.slice(1).trim() !== ""
+                  ? "/api/feeds/search/tag"
+                  : "/api/feeds/scroll"; // 태그입력안했으면 전체무한스크롤
+            } else baseUrl = "/api/feeds"; // 그냥검색
+          } else {
+            baseUrl = "/api/feeds/scroll"; // 검색아니면 전체무한스크롤
+          }
       }
       const params: {
         size: number;
+        tag?: string;
+        keyword?: string;
         lastFeedId?: number;
         togetherId?: number;
         memberId?: number;
@@ -67,6 +89,16 @@ export const useGetInfiniteFeedList = (
       if (pageParam !== undefined && pageParam !== null) {
         params.lastFeedId = pageParam;
       }
+      if (
+        infiniteParams.page !== "together" &&
+        infiniteParams.page !== "member"
+      ) {
+        if (infiniteParams.query?.startsWith("#")) {
+          params.tag = infiniteParams.query.slice(1).trim() || undefined;
+        } else if (infiniteParams.query) {
+          params.keyword = infiniteParams.query.trim();
+        }
+      }
 
       const res =
         infiniteParams.page === "together" && infiniteParams.notice
@@ -74,7 +106,10 @@ export const useGetInfiniteFeedList = (
           : await api.get(baseUrl, { params });
       return res.data;
     },
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage.hasNext) return undefined;
+      return lastPage.nextCursor;
+    },
     initialPageParam: undefined,
   });
 };
