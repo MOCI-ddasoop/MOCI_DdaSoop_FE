@@ -1,21 +1,22 @@
 "use client";
 
-import reportModalStore from "@/domain/report/stores/reportModalStore";
 import DropdownButton from "@/shared/components/DropdownButton";
 import tw from "@/shared/utils/tw";
 import Image from "next/image";
-import React, { Ref, useEffect, useRef, useState } from "react";
+import React, { Ref, useCallback, useEffect, useRef, useState } from "react";
 import { useToggleReact } from "../api/useToggleReact";
 import { CommentResponse } from "../types";
-import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "@/shared/config/queryKeys";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
 import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
-import { useCommentScrollStore } from "../store/useCommentScrollStore";
+import { BsHeartFill } from "react-icons/bs";
+
 import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
+import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
+import reportModalStore from "@/domain/report/stores/useReportModalStore";
 
 interface CommentItemProps {
 	ref?: Ref<HTMLLIElement>;
@@ -24,6 +25,7 @@ interface CommentItemProps {
 	feedId?: number;
 	className?: string;
 	isRelies?: boolean;
+	userId?: number;
 }
 
 function CommentItem({
@@ -33,9 +35,11 @@ function CommentItem({
 	feedId,
 	className,
 	isRelies,
+	userId,
 }: CommentItemProps) {
 	const {
 		id,
+		authorId,
 		authorName,
 		authorNickname,
 		authorProfileImage,
@@ -45,44 +49,27 @@ function CommentItem({
 		replies,
 		replyCount,
 		parentId,
+		reactionCount,
+		isReacted,
 	} = item;
 
-	const qc = useQueryClient();
-
-	const [reactionCount, setReactionCount] = useState<number>(
-		() => item.reactionCount ?? 0,
-	);
 	const [selectedOption, setSelectedOption] = useState<string | null>(null);
 	const [isRepliesOpen, setIsRepliesOpen] = useState<boolean>(false);
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const setReportModalOpen = reportModalStore((state) => state.setIsOpen);
 	const textBoxRef = useRef<TextBoxHandle>(null);
+	const openStoreModal = useModalStore((store) => store.open);
+	const setCanClose = useModalStore((s) => s.setCanClose);
+	const resetCanClose = useModalStore((s) => s.resetCanClose);
+	const reportAction = reportModalStore((s) => s.action);
 
-	const { lastCreatedCommentParentId, setOpenedReplyParentId } =
-		useCommentScrollStore();
+	const { mutate: toggleReactMutation, isPending: isToggleReactPending } =
+		useToggleReact(feedId);
 
-	const { mutate: toggleReactMutation, isPending } = useToggleReact({
-		onSuccess: () => {
-			if (!feedId) return;
-
-			qc.invalidateQueries({
-				queryKey: queryKeys.comments.list(`${feedId}`),
-			});
-		},
-		onMutate: () => {
-			setReactionCount((prev) => prev + 1);
-		},
-		onError: () => {
-			setReactionCount((prev) => prev - 1);
-		},
-	});
-
-	const { mutate: updateCommentMutation } = useUdtCommentById(feedId);
+	const { mutate: updateCommentMutation, isPending: isUdtCommentPending } =
+		useUdtCommentById(feedId);
 	const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
 
-	const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
+	const editFormSubmit = useCallback(() => {
 		Swal.fire({
 			title: "수정",
 			text: "댓글을 수정하시겠습니까?",
@@ -102,29 +89,59 @@ function CommentItem({
 				setIsEditMode(false);
 			}
 		});
+	}, [id, updateCommentMutation]);
+
+	const handleEditSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		editFormSubmit();
 	};
+
+	const submitRegistry = useSubmitRegistry();
+
 	useEffect(() => {
-		if (item.id === lastCreatedCommentParentId) {
-			// eslint-disable-next-line react-hooks/set-state-in-effect
-			setIsRepliesOpen(true);
-			setOpenedReplyParentId(item.id!);
-		}
-	}, [item.id, lastCreatedCommentParentId, setOpenedReplyParentId]);
-
-	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
-		if (e.key === "Enter") {
-			if (e.metaKey || e.ctrlKey) return;
-
-			e.preventDefault();
-			handleEditSubmit(e);
-		}
-	};
+		if (!submitRegistry) return;
+		submitRegistry.register("comment-edit", {
+			submit: editFormSubmit,
+			enabled: () => isEditMode && !isUdtCommentPending,
+		});
+	}, [editFormSubmit, isEditMode, isUdtCommentPending, submitRegistry]);
 
 	useEffect(() => {
 		if (!isEditMode) return;
 		textBoxRef.current?.focus();
 	}, [isEditMode]);
+
+	useEffect(() => {
+		if (!isEditMode) return;
+
+		setCanClose("feed", async () => {
+			const result = await Swal.fire({
+				icon: "error",
+				titleText: "수정 중인 내용이 있어요",
+				text: "지금 나가면 수정 내용이 저장되지 않습니다.",
+				showCancelButton: true,
+				showDenyButton: true,
+				showConfirmButton: true,
+				confirmButtonText: "창 닫기",
+				denyButtonText: "수정 취소",
+				cancelButtonText: "취소",
+			});
+
+			if (result.isConfirmed) {
+				return true;
+			}
+
+			if (result.isDenied) {
+				setIsEditMode(false);
+				return false;
+			}
+
+			return false;
+		});
+
+		return () => resetCanClose("feed");
+	}, [isEditMode, resetCanClose, setCanClose]);
 
 	// 이곳에서 드롭다운 메뉴 이벤트가 처리됩니다.
 	const handleOptionClick = (option: string) => {
@@ -150,7 +167,9 @@ function CommentItem({
 				});
 				break;
 			case "신고":
-				setReportModalOpen(true);
+				if (!id) return;
+				reportAction.setReportTarget("COMMENT", id);
+				openStoreModal("report");
 				break;
 		}
 	};
@@ -180,9 +199,9 @@ function CommentItem({
 							<form
 								className="flex-center flex-col items-end w-full"
 								onSubmit={(e) => handleEditSubmit(e)}
-								onKeyDown={handleEnterKeyDown}
 							>
 								<TextBox
+									submitOwner="comment-edit"
 									ref={textBoxRef}
 									className="flex-1"
 									mode="comment"
@@ -190,9 +209,11 @@ function CommentItem({
 								/>
 								<div className="flex-center gap-1 text-sm">
 									<span className="text-gray-400">Enter 키로</span>
-									<button className="text-mainblue underline">수정</button>
+									<button className="text-mainblue underline cursor-pointer">
+										수정
+									</button>
 									<button
-										className="text-mainblue underline"
+										className="text-mainblue underline cursor-pointer"
 										onClick={() => setIsEditMode(false)}
 									>
 										취소
@@ -260,27 +281,36 @@ function CommentItem({
 						)}
 						<button
 							type="button"
-							className="cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform"
-							onClick={() => {
+							className={tw(
+								"cursor-pointer text-sm text-gray-500 active:scale-95 transition-transform flex-center gap-1",
+								isReacted ? "text-mainblue" : "",
+							)}
+							onClick={async () => {
+								if (!userId) return;
 								toggleReactMutation(id ?? 0);
 							}}
-							disabled={isPending}
+							disabled={isToggleReactPending}
 						>
+							{isReacted && <BsHeartFill size={14} />}
 							좋아요 {reactionCount}
 						</button>
 					</div>
 					{/* TODO: 수정, 삭제 기능은 로그인이 연결되었을 때, ME로 작성자 ID와 내 아이디 비교하여 렌더링 */}
-					<DropdownButton
-						className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-						options={["수정", "삭제", "신고"]}
-						selected={selectedOption ?? ""}
-						setSelected={handleOptionClick}
-						buttonStyle="horizontal"
-						size="sm"
-						menuSize="sm"
-						placement="bottom-end"
-						highlightingLastOption={true}
-					/>
+					{!!userId && (
+						<DropdownButton
+							className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+							options={
+								userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]
+							}
+							selected={selectedOption ?? ""}
+							setSelected={handleOptionClick}
+							buttonStyle="horizontal"
+							size="sm"
+							menuSize="sm"
+							placement="bottom-end"
+							highlightingLastOption={true}
+						/>
+					)}
 				</div>
 
 				{/* 대댓글이 있다면 재귀적으로 호출 

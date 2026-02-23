@@ -4,7 +4,7 @@ import tw from "@/shared/utils/tw";
 import CommentItem from "./CommentItem";
 import { useCommentListByFeedId } from "../api/useGetCommentListByFeedId";
 import { useSearchParams } from "next/navigation";
-import { useCommentScrollStore } from "../store/useCommentScrollStore";
+import { useCommentScrollStore } from "../provider/CommentScrollProvider";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "@/shared/hooks/useIntersection";
 import { FaRegArrowAltCircleUp } from "react-icons/fa";
@@ -14,10 +14,12 @@ function CommentContainer({
 	className,
 	onCommentTargetClick,
 	onScrollToComment,
+	userId,
 }: {
 	className?: string;
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 	onScrollToComment: (target?: HTMLElement) => void;
+	userId?: number;
 }) {
 	const feedId = useSearchParams().get("feedId");
 	const {
@@ -29,18 +31,18 @@ function CommentContainer({
 		isPending,
 	} = useCommentListByFeedId(feedId);
 	const feedCommentData = data?.pages.flatMap((page) => page.content ?? []);
-	const {
-		lastCreatedCommentId,
-		setLastCreatedCommentId,
-		setLastCreatedCommentParentId,
-		setOpenedReplyParentId,
-	} = useCommentScrollStore();
-	const openedReplyParentId = useCommentScrollStore(
-		(state) => state.openedReplyParentId,
+
+	const lastCreatedCommentId = useCommentScrollStore(
+		(s) => s.lastCreatedCommentId,
 	);
 	const lastCreatedCommentParentId = useCommentScrollStore(
-		(state) => state.lastCreatedCommentParentId,
+		(s) => s.lastCreatedCommentParentId,
 	);
+	const openedReplyParentId = useCommentScrollStore(
+		(s) => s.openedReplyParentId,
+	);
+	const actions = useCommentScrollStore((s) => s.actions);
+
 	const commentRefs = useRef<Map<number, HTMLElement>>(new Map());
 
 	const triggerRef = useIntersection({
@@ -53,35 +55,26 @@ function CommentContainer({
 	});
 
 	useEffect(() => {
-		console.log(feedCommentData);
-	}, [feedCommentData]);
-
-	useEffect(() => {
 		if (lastCreatedCommentParentId) {
 			if (openedReplyParentId !== lastCreatedCommentParentId) return;
 			const target = commentRefs.current.get(lastCreatedCommentParentId);
 			if (!target) return;
 
 			onScrollToComment(target);
-			setLastCreatedCommentId(null);
-			setLastCreatedCommentParentId(null);
-			setOpenedReplyParentId(null);
+			actions.reset();
 		} else {
 			if (!lastCreatedCommentId) return;
 			const target = commentRefs.current.get(lastCreatedCommentId);
 			if (!target) return;
 			onScrollToComment(target);
 		}
-		setLastCreatedCommentId(null);
+		actions.reset();
 	}, [
+		actions,
 		lastCreatedCommentId,
 		lastCreatedCommentParentId,
 		onScrollToComment,
-		setLastCreatedCommentId,
-		feedCommentData,
 		openedReplyParentId,
-		setLastCreatedCommentParentId,
-		setOpenedReplyParentId,
 	]);
 
 	if (!feedCommentData) return null;
@@ -92,6 +85,7 @@ function CommentContainer({
 					key={item.id}
 					item={item}
 					feedId={Number(feedId)}
+					userId={userId}
 					onCommentTargetClick={onCommentTargetClick}
 					ref={(el) => {
 						if (!item.id) return;

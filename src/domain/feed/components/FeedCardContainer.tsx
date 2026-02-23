@@ -13,6 +13,7 @@ import {
 import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
 import { useAuthStore } from "@/store/authStore";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
 
 export type PositionedItem = FeedInfinite & {
   width: number;
@@ -37,6 +38,7 @@ function FeedCardContainer({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const openStoreModal = useModalStore((store) => store.open);
 
   const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -108,7 +110,7 @@ function FeedCardContainer({
     return () => {
       resizeObserver.disconnect();
     };
-  }, []);
+  }, [throttledSetWidth]);
 
   // 반응형 컬럼 개수
   const columnCount = useMemo(() => {
@@ -231,28 +233,16 @@ function FeedCardContainer({
           if (item.id)
             return (
               <FeedCardImage
-                id={item.id}
+                item={item}
                 key={item.id}
-                thumbnailUrl={item.thumbnailUrl ?? "/defaultFeedImage.png"}
                 alt={item.thumbnailUrl ?? "따숲"}
-                width={item.width}
-                height={item.height}
-                thumbnailWidth={item.width}
-                thumbnailHeight={item.height}
-                x={item.x}
-                y={item.y}
-                content={item.content}
-                commentCount={item.commentCount}
-                bookmarkCount={item.bookmarkCount}
-                authorName={item.authorName}
-                authorProfileImage={item.authorProfileImage}
-                isPinned={item.isPinned}
                 onClick={() => {
                   const params = new URLSearchParams(searchParams.toString());
                   params.set("feedId", (item.id ?? "").toString());
                   router.push(`${pathname}?${params.toString()}`, {
                     scroll: false,
                   });
+                  openStoreModal("feed");
                 }}
                 className="duration-300 ease-in-out absolute"
               />
