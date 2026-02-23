@@ -38,9 +38,13 @@ export const queryKeys = {
     },
     togetherNotice: (id: number) => ["feeds", "notice", id],
     bookmark: () => ["feeds", "bookmark"],
+    reaction: () => ["feeds", "reaction"],
+    del: () => ["feeds", "delete"],
+    udt: () => ["feeds", "update"],
   },
   comments: {
     all: () => ["comments"],
+    id: (id: number) => ["comments", id],
     list: (feedId: string) => ["comments", feedId],
     react: () => ["comments", "react"],
     listByUser: (userId: string) => ["comments", "listByUser", userId],
@@ -112,5 +116,8 @@ export const queryKeys = {
   members: {
     me: () => ["members", "me"],
     counts: () => ["members", "counts"],
+  },
+  report: {
+    create: () => ["report", "create"],
   },
 };

@@ -15,6 +15,7 @@ import { cleanupConsecutiveBr } from "./utils/cleanupConsecutiveBr";
 import { handleBackspaceKeydown } from "./utils/handleBackspaceKeydown";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { getScrollCaret } from "./utils/getScrollCaret";
+import { SubmitOwner } from "@/domain/feed/utils/submitRegistry";
 
 export type TextBoxHandle = {
 	getHTML: () => string;
@@ -30,6 +31,7 @@ type TextBoxType = React.HTMLAttributes<HTMLDivElement> & {
 	placeholder?: string | Element;
 	initialValue?: string;
 	setValue?: (value: string) => void;
+	submitOwner?: SubmitOwner;
 };
 
 function TextBox({
@@ -41,6 +43,7 @@ function TextBox({
 	initialValue,
 	hidden,
 	setValue,
+	submitOwner,
 }: TextBoxType) {
 	const textBoxRef = useRef<HTMLDivElement>(null);
 	const [isComposing, setIsComposing] = useState(false);
@@ -234,6 +237,7 @@ function TextBox({
 				className,
 			])}
 			hidden={hidden}
+			data-submit-owner={submitOwner}
 			data-placeholder={placeholder}
 			onKeyDown={handleKeyDown}
 			onInput={handleInput}

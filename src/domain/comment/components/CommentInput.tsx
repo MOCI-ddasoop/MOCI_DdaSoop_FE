@@ -1,31 +1,39 @@
 "use client";
 import tw from "@/shared/utils/tw";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
-import { useCommentScrollStore } from "../store/useCommentScrollStore";
+import { useCommentScrollStore } from "../provider/CommentScrollProvider";
+import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
+import { useModalStore } from "@/domain/modal/store/useModalStore";
+import Swal from "sweetalert2";
 
 interface CommentInputProps {
 	onCommentTargetClick?: (nickname: string | null, id: number | null) => void;
 	targetNickname?: string | null;
 	targetId?: number | null;
+	shouldCommentFocus: number;
+	userId?: number;
 }
 
 function CommentInput({
 	targetNickname,
 	targetId,
 	onCommentTargetClick,
+	shouldCommentFocus,
+	userId,
 }: CommentInputProps) {
 	const [comment, setComment] = useState("");
 	const feedId = useSearchParams().get("feedId");
 	const { mutate: setCommentMutation, isPending } = useSetComment();
 	const textBoxRef = useRef<TextBoxHandle>(null);
-	const { setLastCreatedCommentId, setLastCreatedCommentParentId } =
-		useCommentScrollStore();
+	const scrollActions = useCommentScrollStore((s) => s.actions);
+	const setCanClose = useModalStore((s) => s.setCanClose);
+	const resetCanClose = useModalStore((s) => s.resetCanClose);
 
-	const submitComment = () => {
+	const submitComment = useCallback(() => {
 		if (!textBoxRef.current) return;
 		if (!comment) return;
 		if (!comment.trim()) return;
@@ -39,40 +47,74 @@ function CommentInput({
 			},
 			{
 				onSuccess: (data) => {
-					setLastCreatedCommentId(data);
-					setLastCreatedCommentParentId(targetId ?? null);
+					scrollActions.setLastComment(data);
+					scrollActions.setLastReplyParent(targetId ?? null);
 					onCommentTargetClick?.(null, null);
 					textBoxRef.current?.clear();
 				},
 			},
 		);
-	};
+	}, [
+		comment,
+		feedId,
+		onCommentTargetClick,
+		scrollActions,
+		setCommentMutation,
+		targetId,
+	]);
 
 	useEffect(() => {
 		if (targetId) textBoxRef.current?.focus();
 	}, [targetId]);
+
+	useEffect(() => {
+		if (shouldCommentFocus) textBoxRef.current?.focus();
+	}, [shouldCommentFocus]);
+
+	useEffect(() => {
+		setCanClose("feed", async () => {
+			if (!comment || comment.trim() === "") {
+				return true;
+			}
+
+			const result = await Swal.fire({
+				icon: "error",
+				titleText: "댓글을 작성 중이에요",
+				text: "지금 나가면 작성중인 내용이 저장되지 않습니다.",
+				showCancelButton: true,
+				showConfirmButton: true,
+				confirmButtonText: "창 닫기",
+				cancelButtonText: "취소",
+			});
+
+			return result.isConfirmed;
+		});
+
+		return () => {
+			resetCanClose("feed");
+		};
+	}, [comment, resetCanClose, setCanClose]);
+
+	const submitRegistry = useSubmitRegistry();
+
+	useEffect(() => {
+		submitRegistry?.register("comment-create", {
+			submit: submitComment,
+			enabled: () => !isPending,
+		});
+
+		return () => {
+			submitRegistry?.unregister("comment-create");
+		};
+	}, [isPending, submitComment, submitRegistry]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		submitComment();
 	};
 
-	const handleEnterKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-		if ((e.nativeEvent as KeyboardEvent).isComposing) return;
-		if (e.key === "Enter") {
-			if (e.metaKey || e.ctrlKey) return;
-
-			e.preventDefault();
-			submitComment();
-		}
-	};
-
 	return (
-		<form
-			className="flex flex-col"
-			onSubmit={handleSubmit}
-			onKeyDown={handleEnterKeyDown}
-		>
+		<form className="flex flex-col" onSubmit={handleSubmit}>
 			{targetNickname && (
 				<div
 					className={tw(
@@ -98,11 +140,15 @@ function CommentInput({
 			<div className="flex justify-center items-stretch gap-2 w-full h-full">
 				<div className="flex-1 flex items-center border-gray-300 leading-relaxed wrap-break-word">
 					<TextBox
-						placeholder="댓글을 입력해주세요."
+						submitOwner="comment-create"
+						placeholder={
+							userId ? "댓글을 입력해주세요." : "로그인 후 이용해주세요"
+						}
 						ref={textBoxRef}
 						mode="comment"
 						setValue={setComment}
 						className="max-h-20 overflow-auto"
+						isAble={!!userId}
 					/>
 				</div>
 

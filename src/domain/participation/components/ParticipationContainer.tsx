@@ -33,16 +33,13 @@ interface DonateContainerProps {
 //   isLogin: boolean;
 // }
 
-function ParticipationContainer(
-  {
-    type,
-    currentPage,
-    items,
-    className,
-    isLogin,
-  }: TogetherContainerProps | MyTogetherContainerProps | DonateContainerProps,
-  // | MyDonateContainerProps
-) {
+function ParticipationContainer({
+  type,
+  currentPage,
+  items,
+  className,
+  isLogin,
+}: TogetherContainerProps | MyTogetherContainerProps | DonateContainerProps) {
   return items.length === 0 ? (
     type !== "myTogether" && type !== "myDonate" ? (
       <AddParticipationCard type={type} fullWidth isLogin={isLogin} />
@@ -56,7 +53,7 @@ function ParticipationContainer(
         className,
       )}
     >
-      {currentPage === 1 && type !== "myTogether" && type !== "myDonate" && (
+      {currentPage === 1 && type !== "myTogether" && (
         <AddParticipationCard type={type} isLogin={isLogin} />
       )}
       {type === "together"
@@ -67,13 +64,9 @@ function ParticipationContainer(
           ? items.map((item) => (
               <ParticipationCard type={type} key={item.id} {...item} />
             ))
-          : type === "myDonate"
-            ? items.map((item) => (
-                <ParticipationCard type={type} key={item.id} {...item} />
-              ))
-            : items.map((item) => (
-                <ParticipationCard type={type} key={item.id} {...item} />
-              ))}
+          : items.map((item) => (
+              <ParticipationCard type={type} key={item.id} {...item} />
+            ))}
     </div>
   );
 }

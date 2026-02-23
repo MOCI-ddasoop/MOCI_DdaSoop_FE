@@ -4,4824 +4,4887 @@
  */
 
 export interface paths {
-    "/api/notifications/{notificationId}/read": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["markAsRead"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/read-all": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["markAllAsRead"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/members/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 내 정보 조회
-         * @description 현재 로그인한 회원의 정보를 조회합니다.
-         */
-        get: operations["getMyInfo"];
-        /**
-         * 회원 정보 수정
-         * @description 현재 로그인한 회원의 정보를 수정합니다. 이메일, 닉네임, 프로필 이미지를 수정할 수 있습니다.
-         */
-        put: operations["updateMember"];
-        post?: never;
-        /**
-         * 회원 탈퇴
-         * @description 현재 로그인한 회원을 탈퇴 처리합니다. (Soft Delete)
-         */
-        delete: operations["withdrawMember"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/{feedId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 피드 상세 조회
-         * @description 특정 피드의 상세 정보를 조회합니다. 이미지, 태그, 카운트 정보를 포함합니다.
-         */
-        get: operations["getFeed"];
-        /**
-         * 피드 수정
-         * @description 기존 피드의 내용, 이미지, 태그, 공개 범위를 수정합니다. 작성자만 수정 가능합니다.
-         */
-        put: operations["updateFeed"];
-        post?: never;
-        /**
-         * 피드 삭제
-         * @description 피드를 논리적으로 삭제(Soft Delete)합니다. 작성자만 삭제 가능합니다.
-         */
-        delete: operations["deleteFeed"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/{feedId}/pin": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        /**
-         * 공지 피드 상단 고정 토글
-         * @description 공지 피드의 상단 고정 상태를 토글합니다. 고정되어 있으면 해제하고, 해제되어 있으면 고정합니다. (방장만 가능)
-         */
-        put: operations["togglePinNotice"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/{commentId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 댓글 상세 조회
-         * @description 특정 댓글의 상세 정보를 조회합니다. 대댓글 목록도 포함됩니다.
-         */
-        get: operations["getComment"];
-        /**
-         * 댓글 수정
-         * @description 기존 댓글의 내용을 수정합니다. 작성자만 수정 가능합니다.
-         */
-        put: operations["updateComment"];
-        post?: never;
-        /**
-         * 댓글 삭제
-         * @description 댓글을 논리적으로 삭제(Soft Delete)합니다. 작성자만 삭제 가능합니다.
-         */
-        delete: operations["deleteComment"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/{reportId}/review": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["startReview"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/{reportId}/process": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["processReport"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 함께하기 게시글 등록 */
-        post: operations["create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/{togetherId}/participate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 함께하기 참여 */
-        post: operations["participate"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/toss/{donationId}/pay": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** TOSS 결제 */
-        post: operations["tossPayment"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/notice/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 후원하기 공지 게시글 등록 */
-        post: operations["createDonationNotice"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** 후원하기 게시글 등록 */
-        post: operations["create_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["createReport"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/members/check-nickname": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 닉네임 중복 체크
-         * @description 닉네임이 이미 사용 중인지 확인합니다.
-         */
-        post: operations["checkNickname"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/members/check-email": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 이메일 중복 체크
-         * @description 이메일이 이미 사용 중인지 확인합니다.
-         */
-        post: operations["checkEmail"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/images/upload": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 이미지 업로드
-         * @description 이미지를 업로드하고 URL을 반환합니다. 프론트엔드에서 미리보기 및 피드 생성에 사용할 수 있습니다.
-         */
-        post: operations["uploadImage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/images/upload-multiple": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 다중 이미지 업로드
-         * @description 여러 이미지를 한번에 업로드하고 URL 목록을 반환합니다. 최대 10개까지 가능합니다.
-         */
-        post: operations["uploadMultipleImages"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 피드 목록 조회 (페이징 + QueryDSL 동적 검색)
-         * @description 피드 목록을 페이징 방식으로 조회합니다. QueryDSL 동적 쿼리로 다양한 조건 조합이 가능합니다.
-         */
-        get: operations["getFeedList"];
-        put?: never;
-        /**
-         * 피드 생성
-         * @description 새로운 피드를 생성합니다. content와 tags는 별도로 입력받으며, 최대 10개의 이미지를 첨부할 수 있습니다.
-         */
-        post: operations["createFeed"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/{feedId}/reactions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 피드 리액션 토글 (좋아요)
-         * @description 피드에 좋아요를 추가하거나 취소합니다. 이미 좋아요를 누른 경우 취소되고, 아니면 추가됩니다.
-         */
-        post: operations["toggleReaction"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/{feedId}/bookmarks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 피드 북마크 토글
-         * @description 피드를 북마크에 추가하거나 제거합니다. 이미 북마크한 경우 제거되고, 아니면 추가됩니다.
-         */
-        post: operations["toggleBookmark"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 댓글 생성
-         * @description 새로운 댓글을 생성합니다. commentType에 따라 Feed, Together, Donation 댓글을 구분합니다.
-         */
-        post: operations["createComment"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/{commentId}/reactions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 댓글 리액션 토글 (좋아요)
-         * @description 댓글에 좋아요를 추가하거나 취소합니다.
-         */
-        post: operations["toggleReaction_1"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Access Token 갱신
-         * @description Refresh Token을 사용하여 새로운 Access Token을 발급받습니다. Refresh Token은 쿠키에서 자동으로 읽어옵니다. Access Token은 Authorization 헤더로 반환됩니다.
-         */
-        post: operations["refreshAccessToken"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 로그아웃
-         * @description 현재 로그인한 회원의 Refresh Token을 무효화하고 쿠키에서 삭제합니다.
-         */
-        post: operations["logout"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 로그인
-         * @description 회원 ID를 받아 Access Token과 Refresh Token을 발급합니다. Access Token은 Authorization 헤더로 반환되며, Refresh Token은 쿠키로 저장됩니다.
-         */
-        post: operations["login"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/complete-registration": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 추가 정보 입력 완료
-         * @description 소셜 로그인 후 필수 정보(닉네임, 이메일)를 입력하여 회원가입을 완료합니다. 회원 상태가 확정된 후에만 JWT 토큰이 발급됩니다.
-         */
-        post: operations["completeRegistration"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/notifications/system/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["sendSystemNotification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/notifications/system/broadcast": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["broadcastSystemNotification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/{togetherId}/{memberId}/participation": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 함께하기 참여 여부 조회 */
-        get: operations["isParticipating"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/member/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** ID별 함께하기 조회 */
-        get: operations["getTogetherByMemberId"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 전체 함께하기 조회 */
-        get: operations["getAllTogether"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/list/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 함께하기 상세 조회 */
-        get: operations["getTogether"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/list/{id}/description": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 리스트 설명 조회 */
-        get: operations["getTogetherDescription"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/{donationId}/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 개설자 확인 API */
-        get: operations["isDonationCreator"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/payment/recent": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 최신 2개 후원하기 내역 조회 */
-        get: operations["getRecentDonationPaymentList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/notice/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 후원하기 공지 개별 조회 */
-        get: operations["getDonationNotice"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/notice/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 후원하기 공지 조회 */
-        get: operations["getAllDonationNotices"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/member/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 나의 후원하기 조회 */
-        get: operations["getMyDonationPaymentList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/member/{memberId}/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 개설한 후원 리스트 조회 */
-        get: operations["createDonationList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 전체 후원 조회 */
-        get: operations["getAllDonations"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/list/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 후원 상세 조회 */
-        get: operations["getDonation"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/list/{id}/donorList": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 상세보기별 후원 현황 조회 */
-        get: operations["getDonationStatusById"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/donation/list/{id}/description": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 후원하기 리스트 설명 조회 */
-        get: operations["getDonationDescription"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/reports/{reportId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/reports/my": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getMyReports"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getMyNotifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/{notificationId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getNotification"];
-        put?: never;
-        post?: never;
-        delete: operations["deleteNotification"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/unread": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getUnreadNotifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/unread-count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getUnreadNotificationCount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/type/{notificationType}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getNotificationsByType"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/recent": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getRecentNotifications"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/category/{category}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getNotificationsByCategory"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/members/me/counts": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 내 회원 정보 조회 Counts
-         * @description 현재 로그인한 회원의 통계 정보(좋아요, 댓글, 피드 개수)를 조회합니다.
-         */
-        get: operations["getMyCounts"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/together/{togetherId}/scroll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 Together의 인증 피드 무한 스크롤
-         * @description 특정 함께하기 모임의 인증 피드를 무한 스크롤로 조회합니다.
-         */
-        get: operations["getTogetherFeedsInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/together/{togetherId}/notices": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 Together의 공지 피드 목록 조회
-         * @description 특정 함께하기 모임의 공지 피드를 조회합니다. 상단 고정된 공지가 먼저 표시되고, 최신순으로 정렬됩니다.
-         */
-        get: operations["getTogetherNoticeFeeds"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/together/{togetherId}/notices/pinned": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 Together의 상단 고정된 공지 피드만 조회
-         * @description 특정 함께하기 모임의 상단에 고정된 공지 피드만 조회합니다.
-         */
-        get: operations["getPinnedNoticeFeeds"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/search/tag": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 태그 검색 무한 스크롤
-         * @description 특정 태그가 포함된 피드를 무한 스크롤로 조회합니다.
-         */
-        get: operations["searchByTagInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/scroll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 전체 피드 무한 스크롤
-         * @description 커서 기반 페이징으로 전체 피드를 조회합니다. hasNext를 통해 다음 페이지 존재 여부를 확인할 수 있습니다.
-         */
-        get: operations["getFeedListInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/popular": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 인기 피드 조회 (최근 7일)
-         * @description 리액션(좋아요)이 많은 인기 피드를 조회합니다. (최근 7일 기준)
-         */
-        get: operations["getPopularFeeds"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/most-commented": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 댓글 많은 피드 Top N
-         * @description 댓글이 가장 많은 피드를 조회합니다. (토론 많은 게시물)
-         */
-        get: operations["getMostCommentedFeeds"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/most-bookmarked": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 북마크 많은 피드 Top N
-         * @description 북마크가 가장 많은 피드를 조회합니다. (가장 많이 저장된 게시물)
-         */
-        get: operations["getMostBookmarkedFeeds"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/members/{memberId}/scroll": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 회원의 피드 무한 스크롤
-         * @description 특정 회원이 작성한 피드를 무한 스크롤로 조회합니다. (프로필 페이지, 마이페이지용)
-         */
-        get: operations["getMemberFeedsInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/bookmarks/members/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 회원이 북마크한 피드 무한 스크롤
-         * @description 특정 회원이 북마크한 피드 목록을 무한 스크롤로 조회합니다.
-         */
-        get: operations["getMemberBookmarkedFeedsInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/bookmarks/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 내가 북마크한 피드 무한 스크롤
-         * @description 내가 북마크한 피드 목록을 무한 스크롤로 조회합니다.
-         */
-        get: operations["getMyBookmarkedFeedsInfiniteScroll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/feeds/bookmarks/me/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 내 북마크 개수 조회
-         * @description 현재 로그인한 회원이 북마크한 피드의 총 개수를 조회합니다.
-         */
-        get: operations["getMyBookmarkCount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/{commentId}/replies": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 대댓글 목록 조회
-         * @description 특정 댓글의 대댓글 목록을 조회합니다.
-         */
-        get: operations["getReplies"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/together/{togetherId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Together의 댓글 목록 조회 (페이징)
-         * @description 특정 함께하기의 최상위 댓글 목록을 페이징 방식으로 조회합니다.
-         */
-        get: operations["getTogetherComments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/together/{togetherId}/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Together의 댓글 개수 조회
-         * @description 특정 함께하기의 전체 댓글 개수를 조회합니다. (대댓글 포함)
-         */
-        get: operations["getTogetherCommentCount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/members/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 특정 회원이 작성한 댓글 조회
-         * @description 특정 회원이 작성한 모든 댓글을 페이징 방식으로 조회합니다.
-         */
-        get: operations["getMemberComments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/feeds/{feedId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Feed의 댓글 목록 조회 (페이징)
-         * @description 특정 피드의 최상위 댓글 목록을 페이징 방식으로 조회합니다.
-         */
-        get: operations["getFeedComments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/feeds/{feedId}/recent": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Feed의 최신 댓글 조회
-         * @description 특정 피드의 최신 댓글을 조회합니다. (최대 10개)
-         */
-        get: operations["getRecentFeedComments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/feeds/{feedId}/popular": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Feed의 인기 댓글 조회
-         * @description 특정 피드의 인기 댓글(리액션 많은 순)을 조회합니다.
-         */
-        get: operations["getPopularFeedComments"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/feeds/{feedId}/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Feed의 댓글 개수 조회
-         * @description 특정 피드의 전체 댓글 개수를 조회합니다. (대댓글 포함)
-         */
-        get: operations["getFeedCommentCount"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/comments/feeds/{feedId}/all": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Feed의 댓글 목록 조회 (전체 - 대댓글 포함)
-         * @description 특정 피드의 모든 댓글을 조회합니다. 각 댓글의 대댓글도 포함됩니다.
-         */
-        get: operations["getFeedCommentsAll"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/auth/last-login-provider": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 최근 로그인 방식 조회
-         * @description 쿠키에 저장된 최근 로그인 방식을 조회합니다. 로그인하지 않은 상태에서도 이전 로그인 기록이 있으면 표시됩니다.
-         */
-        get: operations["getLastLoginProvider"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReports"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/{reportId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReport_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/type/{targetType}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReportsByType"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/target": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReportsByTarget"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReportStats"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/member/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getReportsByMember"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/frequent-targets": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getFrequentlyReportedTargets"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/reports/frequent-members": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["getFrequentlyReportedMembers"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/{togetherId}/leave": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** 함께하기 탈퇴 */
-        delete: operations["leave"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/together/{togetherId}/drop/{targetId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** 함께하기 강퇴 */
-        delete: operations["drop"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/read": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["deleteAllReadNotifications"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/notifications/all": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: operations["deleteAllNotifications"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  "/api/notifications/{notificationId}/read": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations["markAsRead"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/read-all": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations["markAllAsRead"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/members/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 내 정보 조회
+     * @description 현재 로그인한 회원의 정보를 조회합니다.
+     */
+    get: operations["getMyInfo"];
+    /**
+     * 회원 정보 수정
+     * @description 현재 로그인한 회원의 정보를 수정합니다. 이메일, 닉네임, 프로필 이미지를 수정할 수 있습니다.
+     */
+    put: operations["updateMember"];
+    post?: never;
+    /**
+     * 회원 탈퇴
+     * @description 현재 로그인한 회원을 탈퇴 처리합니다. (Soft Delete)
+     */
+    delete: operations["withdrawMember"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/{feedId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 피드 상세 조회
+     * @description 특정 피드의 상세 정보를 조회합니다. 이미지, 태그, 카운트 정보를 포함합니다.
+     */
+    get: operations["getFeed"];
+    /**
+     * 피드 수정
+     * @description 기존 피드의 내용, 이미지, 태그, 공개 범위를 수정합니다. 작성자만 수정 가능합니다.
+     */
+    put: operations["updateFeed"];
+    post?: never;
+    /**
+     * 피드 삭제
+     * @description 피드를 논리적으로 삭제(Soft Delete)합니다. 작성자만 삭제 가능합니다.
+     */
+    delete: operations["deleteFeed"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/{feedId}/pin": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /**
+     * 공지 피드 상단 고정 토글
+     * @description 공지 피드의 상단 고정 상태를 토글합니다. 고정되어 있으면 해제하고, 해제되어 있으면 고정합니다. (방장만 가능)
+     */
+    put: operations["togglePinNotice"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/{commentId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 댓글 상세 조회
+     * @description 특정 댓글의 상세 정보를 조회합니다. 대댓글 목록도 포함됩니다.
+     */
+    get: operations["getComment"];
+    /**
+     * 댓글 수정
+     * @description 기존 댓글의 내용을 수정합니다. 작성자만 수정 가능합니다.
+     */
+    put: operations["updateComment"];
+    post?: never;
+    /**
+     * 댓글 삭제
+     * @description 댓글을 논리적으로 삭제(Soft Delete)합니다. 작성자만 삭제 가능합니다.
+     */
+    delete: operations["deleteComment"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/{reportId}/review": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations["startReview"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/{reportId}/process": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: operations["processReport"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 함께하기 게시글 등록 */
+    post: operations["create"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/{togetherId}/participate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 함께하기 참여 */
+    post: operations["participate"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/toss/{donationId}/pay": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** TOSS 결제 */
+    post: operations["tossPayment"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/notice/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 후원하기 공지 게시글 등록 */
+    post: operations["createDonationNotice"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 후원하기 게시글 등록 */
+    post: operations["create_1"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reports": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations["createReport"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/members/check-nickname": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 닉네임 중복 체크
+     * @description 닉네임이 이미 사용 중인지 확인합니다.
+     */
+    post: operations["checkNickname"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/members/check-email": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 이메일 중복 체크
+     * @description 이메일이 이미 사용 중인지 확인합니다.
+     */
+    post: operations["checkEmail"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/images/upload": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 이미지 업로드
+     * @description 이미지를 업로드하고 URL을 반환합니다. 프론트엔드에서 미리보기 및 피드 생성에 사용할 수 있습니다.
+     */
+    post: operations["uploadImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/images/upload-multiple": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 다중 이미지 업로드
+     * @description 여러 이미지를 한번에 업로드하고 URL 목록을 반환합니다. 최대 10개까지 가능합니다.
+     */
+    post: operations["uploadMultipleImages"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 피드 목록 조회 (페이징 + QueryDSL 동적 검색)
+     * @description 피드 목록을 페이징 방식으로 조회합니다. QueryDSL 동적 쿼리로 다양한 조건 조합이 가능합니다.
+     */
+    get: operations["getFeedList"];
+    put?: never;
+    /**
+     * 피드 생성
+     * @description 새로운 피드를 생성합니다. content와 tags는 별도로 입력받으며, 최대 10개의 이미지를 첨부할 수 있습니다.
+     */
+    post: operations["createFeed"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/{feedId}/reactions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 피드 리액션 토글 (좋아요)
+     * @description 피드에 좋아요를 추가하거나 취소합니다. 이미 좋아요를 누른 경우 취소되고, 아니면 추가됩니다.
+     */
+    post: operations["toggleReaction"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/{feedId}/bookmarks": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 피드 북마크 토글
+     * @description 피드를 북마크에 추가하거나 제거합니다. 이미 북마크한 경우 제거되고, 아니면 추가됩니다.
+     */
+    post: operations["toggleBookmark"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 댓글 생성
+     * @description 새로운 댓글을 생성합니다. commentType에 따라 Feed, Together, Donation 댓글을 구분합니다.
+     */
+    post: operations["createComment"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/{commentId}/reactions": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 댓글 리액션 토글 (좋아요)
+     * @description 댓글에 좋아요를 추가하거나 취소합니다.
+     */
+    post: operations["toggleReaction_1"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/refresh": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Access Token 갱신
+     * @description Refresh Token을 사용하여 새로운 Access Token을 발급받습니다. Refresh Token은 쿠키에서 자동으로 읽어옵니다. Access Token은 Authorization 헤더로 반환됩니다.
+     */
+    post: operations["refreshAccessToken"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/logout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 로그아웃
+     * @description 현재 로그인한 회원의 Refresh Token을 무효화하고 쿠키에서 삭제합니다.
+     */
+    post: operations["logout"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/login": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 로그인
+     * @description 회원 ID를 받아 Access Token과 Refresh Token을 발급합니다. Access Token은 Authorization 헤더로 반환되며, Refresh Token은 쿠키로 저장됩니다.
+     */
+    post: operations["login"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/complete-registration": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 추가 정보 입력 완료
+     * @description 소셜 로그인 후 필수 정보(닉네임, 이메일)를 입력하여 회원가입을 완료합니다. 회원 상태가 확정된 후에만 JWT 토큰이 발급됩니다.
+     */
+    post: operations["completeRegistration"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/notifications/system/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations["sendSystemNotification"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/notifications/system/broadcast": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations["broadcastSystemNotification"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/{togetherId}/{memberId}/participation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 함께하기 참여 여부 조회 */
+    get: operations["isParticipating"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/member/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** ID별 함께하기 조회 */
+    get: operations["getTogetherByMemberId"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 전체 함께하기 조회 */
+    get: operations["getAllTogether"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/list/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 함께하기 상세 조회 */
+    get: operations["getTogether"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/list/{id}/description": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 리스트 설명 조회 */
+    get: operations["getTogetherDescription"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/{donationId}/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 개설자 확인 API */
+    get: operations["isDonationCreator"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/payment/recent": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 최신 2개 후원하기 내역 조회 */
+    get: operations["getRecentDonationPaymentList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/notice/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원하기 공지 개별 조회 */
+    get: operations["getDonationNotice"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/notice/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원하기 공지 조회 */
+    get: operations["getAllDonationNotices"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/member/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 나의 후원하기 조회 */
+    get: operations["getMyDonationPaymentList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/member/{memberId}/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 개설한 후원 리스트 조회 */
+    get: operations["createDonationList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 전체 후원 조회 */
+    get: operations["getAllDonations"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/list/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원 상세 조회 */
+    get: operations["getDonation"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/list/{id}/donorList": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 상세보기별 후원 현황 조회 */
+    get: operations["getDonationStatusById"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/list/{id}/description": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원하기 리스트 설명 조회 */
+    get: operations["getDonationDescription"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reports/{reportId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReport"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/reports/my": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getMyReports"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getMyNotifications"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/{notificationId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getNotification"];
+    put?: never;
+    post?: never;
+    delete: operations["deleteNotification"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/unread": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getUnreadNotifications"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/unread-count": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getUnreadNotificationCount"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/type/{notificationType}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getNotificationsByType"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/recent": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getRecentNotifications"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/category/{category}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getNotificationsByCategory"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/members/me/counts": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 내 회원 정보 조회 Counts
+     * @description 현재 로그인한 회원의 통계 정보(좋아요, 댓글, 피드 개수)를 조회합니다.
+     */
+    get: operations["getMyCounts"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/together/{togetherId}/scroll": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 Together의 인증 피드 무한 스크롤
+     * @description 특정 함께하기 모임의 인증 피드를 무한 스크롤로 조회합니다.
+     */
+    get: operations["getTogetherFeedsInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/together/{togetherId}/notices": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 Together의 공지 피드 목록 조회
+     * @description 특정 함께하기 모임의 공지 피드를 조회합니다. 상단 고정된 공지가 먼저 표시되고, 최신순으로 정렬됩니다.
+     */
+    get: operations["getTogetherNoticeFeeds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/together/{togetherId}/notices/pinned": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 Together의 상단 고정된 공지 피드만 조회
+     * @description 특정 함께하기 모임의 상단에 고정된 공지 피드만 조회합니다.
+     */
+    get: operations["getPinnedNoticeFeeds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/search/tag": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 태그 검색 무한 스크롤
+     * @description 특정 태그가 포함된 피드를 무한 스크롤로 조회합니다.
+     */
+    get: operations["searchByTagInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/scroll": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 전체 피드 무한 스크롤
+     * @description 커서 기반 페이징으로 전체 피드를 조회합니다. hasNext를 통해 다음 페이지 존재 여부를 확인할 수 있습니다.
+     */
+    get: operations["getFeedListInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/popular": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 인기 피드 조회 (최근 7일)
+     * @description 리액션(좋아요)이 많은 인기 피드를 조회합니다. (최근 7일 기준)
+     */
+    get: operations["getPopularFeeds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/most-commented": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 댓글 많은 피드 Top N
+     * @description 댓글이 가장 많은 피드를 조회합니다. (토론 많은 게시물)
+     */
+    get: operations["getMostCommentedFeeds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/most-bookmarked": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 북마크 많은 피드 Top N
+     * @description 북마크가 가장 많은 피드를 조회합니다. (가장 많이 저장된 게시물)
+     */
+    get: operations["getMostBookmarkedFeeds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/members/{memberId}/scroll": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 회원의 피드 무한 스크롤
+     * @description 특정 회원이 작성한 피드를 무한 스크롤로 조회합니다. (프로필 페이지, 마이페이지용)
+     */
+    get: operations["getMemberFeedsInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/bookmarks/members/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 회원이 북마크한 피드 무한 스크롤
+     * @description 특정 회원이 북마크한 피드 목록을 무한 스크롤로 조회합니다.
+     */
+    get: operations["getMemberBookmarkedFeedsInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/bookmarks/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 내가 북마크한 피드 무한 스크롤
+     * @description 내가 북마크한 피드 목록을 무한 스크롤로 조회합니다.
+     */
+    get: operations["getMyBookmarkedFeedsInfiniteScroll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/feeds/bookmarks/me/count": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 내 북마크 개수 조회
+     * @description 현재 로그인한 회원이 북마크한 피드의 총 개수를 조회합니다.
+     */
+    get: operations["getMyBookmarkCount"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/{commentId}/replies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 대댓글 목록 조회
+     * @description 특정 댓글의 대댓글 목록을 조회합니다.
+     */
+    get: operations["getReplies"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/together/{togetherId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Together의 댓글 목록 조회 (페이징)
+     * @description 특정 함께하기의 최상위 댓글 목록을 페이징 방식으로 조회합니다.
+     */
+    get: operations["getTogetherComments"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/together/{togetherId}/count": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Together의 댓글 개수 조회
+     * @description 특정 함께하기의 전체 댓글 개수를 조회합니다. (대댓글 포함)
+     */
+    get: operations["getTogetherCommentCount"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/members/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 특정 회원이 작성한 댓글 조회
+     * @description 특정 회원이 작성한 모든 댓글을 페이징 방식으로 조회합니다.
+     */
+    get: operations["getMemberComments"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/feeds/{feedId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Feed의 댓글 목록 조회 (페이징)
+     * @description 특정 피드의 최상위 댓글 목록을 페이징 방식으로 조회합니다.
+     */
+    get: operations["getFeedComments"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/feeds/{feedId}/recent": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Feed의 최신 댓글 조회
+     * @description 특정 피드의 최신 댓글을 조회합니다. (최대 10개)
+     */
+    get: operations["getRecentFeedComments"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/feeds/{feedId}/popular": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Feed의 인기 댓글 조회
+     * @description 특정 피드의 인기 댓글(리액션 많은 순)을 조회합니다.
+     */
+    get: operations["getPopularFeedComments"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/feeds/{feedId}/count": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Feed의 댓글 개수 조회
+     * @description 특정 피드의 전체 댓글 개수를 조회합니다. (대댓글 포함)
+     */
+    get: operations["getFeedCommentCount"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/comments/feeds/{feedId}/all": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Feed의 댓글 목록 조회 (전체 - 대댓글 포함)
+     * @description 특정 피드의 모든 댓글을 조회합니다. 각 댓글의 대댓글도 포함됩니다.
+     */
+    get: operations["getFeedCommentsAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/auth/last-login-provider": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * 최근 로그인 방식 조회
+     * @description 쿠키에 저장된 최근 로그인 방식을 조회합니다. 로그인하지 않은 상태에서도 이전 로그인 기록이 있으면 표시됩니다.
+     */
+    get: operations["getLastLoginProvider"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReports"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/{reportId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReport_1"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/type/{targetType}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReportsByType"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/target": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReportsByTarget"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/stats": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReportStats"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/member/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getReportsByMember"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/frequent-targets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getFrequentlyReportedTargets"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/admin/reports/frequent-members": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: operations["getFrequentlyReportedMembers"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/{togetherId}/leave": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 함께하기 탈퇴 */
+    delete: operations["leave"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/together/{togetherId}/drop/{targetId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 함께하기 강퇴 */
+    delete: operations["drop"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/read": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations["deleteAllReadNotifications"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/notifications/all": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete: operations["deleteAllNotifications"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        MemberUpdateRequest: {
-            /** Format: email */
-            email?: string;
-            nickname?: string;
-            profileImageUrl?: string;
-        };
-        FeedImageRequest: {
-            imageUrl: string;
-            /** Format: int32 */
-            width: number;
-            /** Format: int32 */
-            height: number;
-            /** Format: int32 */
-            displayOrder?: number;
-            /** Format: int64 */
-            fileSize?: number;
-            originalFileName?: string;
-        };
-        FeedUpdateRequest: {
-            content?: string;
-            images?: components["schemas"]["FeedImageRequest"][];
-            tags?: string[];
-            /** @enum {string} */
-            visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-        };
-        FeedImageResponse: {
-            /** Format: int64 */
-            id?: number;
-            imageUrl?: string;
-            /** Format: int32 */
-            width?: number;
-            /** Format: int32 */
-            height?: number;
-            /** Format: int32 */
-            displayOrder?: number;
-            /** Format: int64 */
-            fileSize?: number;
-            originalFileName?: string;
-        };
-        FeedResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-            content?: string;
-            images?: components["schemas"]["FeedImageResponse"][];
-            thumbnailUrl?: string;
-            /** Format: int32 */
-            thumbnailWidth?: number;
-            /** Format: int32 */
-            thumbnailHeight?: number;
-            /** Format: int32 */
-            imageCount?: number;
-            tags?: string[];
-            /** @enum {string} */
-            visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-            /** Format: int32 */
-            reactionCount?: number;
-            /** Format: int32 */
-            commentCount?: number;
-            /** Format: int32 */
-            bookmarkCount?: number;
-            /** Format: int64 */
-            authorId?: number;
-            authorName?: string;
-            authorNickname?: string;
-            authorProfileImage?: string;
-            /** Format: int64 */
-            togetherId?: number;
-            togetherTitle?: string;
-            togetherCategory?: string;
-            togetherMode?: string;
-            isPinned?: boolean;
-            isReacted?: boolean;
-            isBookmarked?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-        };
-        CommentUpdateRequest: {
-            content: string;
-        };
-        ReportResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER";
-            /** Format: int64 */
-            targetId?: number;
-            /** @enum {string} */
-            reasonType?: "SPAM" | "HATE_SPEECH" | "HARASSMENT" | "INAPPROPRIATE_CONTENT" | "VIOLENCE" | "FALSE_INFORMATION" | "COPYRIGHT" | "PRIVACY" | "OTHER";
-            reasonDetail?: string;
-            /** @enum {string} */
-            status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
-            /** Format: int64 */
-            reporterId?: number;
-            reporterNickname?: string;
-            /** Format: int64 */
-            reportedMemberId?: number;
-            reportedMemberNickname?: string;
-            adminComment?: string;
-            /** Format: date-time */
-            processedAt?: string;
-            /** Format: int64 */
-            processedById?: number;
-            processedByNickname?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        ReportProcessRequest: {
-            /** @enum {string} */
-            status: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
-            adminComment: string;
-        };
-        CreateRequest: {
-            title: string;
-            description?: string;
-            /** @enum {string} */
-            category: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
-            /** @enum {string} */
-            mode: "ONLINE" | "OFFLINE";
-            /** Format: int64 */
-            capacity?: number;
-            /** Format: date */
-            startDate: string;
-            /** Format: date */
-            endDate: string;
-            /** Format: int64 */
-            memberId?: number;
-        };
-        CreateResponse: {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            description?: string;
-            /** Format: int64 */
-            goalAmount?: number;
-            /** Format: date */
-            startDate?: string;
-            /** Format: date */
-            endDate?: string;
-            thumbnailImageUrl?: string;
-            /** @enum {string} */
-            status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
-            /** @enum {string} */
-            category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
-            /** Format: int64 */
-            memberId?: number;
-        };
-        TogetherDto: unknown;
-        DonationTossRequest: {
-            paymentKey: string;
-            orderId: string;
-            /** Format: int64 */
-            amount: number;
-            /** Format: int64 */
-            memberId: number;
-        };
-        DonationPaymentResponse: {
-            /** Format: int64 */
-            donationId?: number;
-            /** Format: int64 */
-            amount?: number;
-            paymentMethod?: string;
-        };
-        ReportCreateRequest: {
-            /** @enum {string} */
-            targetType: "FEED" | "COMMENT" | "TOGETHER";
-            /** Format: int64 */
-            targetId: number;
-            /** @enum {string} */
-            reasonType: "SPAM" | "HATE_SPEECH" | "HARASSMENT" | "INAPPROPRIATE_CONTENT" | "VIOLENCE" | "FALSE_INFORMATION" | "COPYRIGHT" | "PRIVACY" | "OTHER";
-            reasonDetail?: string;
-        };
-        NicknameCheckRequest: {
-            nickname: string;
-        };
-        NicknameCheckResponse: {
-            available?: boolean;
-            message?: string;
-        };
-        EmailCheckRequest: {
-            /** Format: email */
-            email: string;
-        };
-        EmailCheckResponse: {
-            available?: boolean;
-            message?: string;
-        };
-        ImageUploadResponse: {
-            imageUrl?: string;
-            /** Format: int32 */
-            width?: number;
-            /** Format: int32 */
-            height?: number;
-            /** Format: int64 */
-            fileSize?: number;
-            originalFileName?: string;
-            savedFileName?: string;
-        };
-        FeedCreateRequest: {
-            /** @enum {string} */
-            feedType: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-            content: string;
-            images?: components["schemas"]["FeedImageRequest"][];
-            tags?: string[];
-            /** @enum {string} */
-            visibility: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-            /** Format: int64 */
-            togetherId?: number;
-        };
-        CommentCreateRequest: {
-            /** @enum {string} */
-            commentType: "FEED" | "TOGETHER" | "DONATION";
-            content: string;
-            /** Format: int64 */
-            targetId: number;
-            /** Format: int64 */
-            parentId?: number;
-        };
-        LoginResponse: {
-            /** Format: int64 */
-            memberId?: number;
-            name?: string;
-            nickname?: string;
-            email?: string;
-            profileImageUrl?: string;
-            lastLoginProvider?: string;
-        };
-        AdditionalInfoRequest: {
-            temporaryToken: string;
-            nickname: string;
-            /** Format: email */
-            email: string;
-        };
-        SystemNotificationCreateRequest: {
-            message: string;
-        };
-        DetailResponse: {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            description?: string;
-            /** Format: int64 */
-            goalAmount?: number;
-            /** Format: int64 */
-            currentAmount?: number;
-            /** Format: date */
-            startDate?: string;
-            /** Format: date */
-            endDate?: string;
-            /** @enum {string} */
-            status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
-            imageUrls?: string[];
-            /** @enum {string} */
-            category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
-            /** Format: int64 */
-            dDay?: number;
-        };
-        ListResponse: {
-            /** Format: int64 */
-            donationPaymentId?: number;
-            /** Format: int64 */
-            memberId?: number;
-            memberName?: string;
-            /** Format: int64 */
-            amount?: number;
-            paymentMethod?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        DescriptionResponse: {
-            description?: string;
-        };
-        RsData: {
-            resultCode?: string;
-            msg?: string;
-            data?: unknown;
-        };
-        RecentDonationPaymentListResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** Format: int64 */
-            donationId?: number;
-            /** Format: int64 */
-            memberId?: number;
-            memberName?: string;
-            title?: string;
-            thumbnailImage?: string;
-            /** Format: int64 */
-            amount?: number;
-            paymentMethod?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        DonationPaymentListResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** Format: int64 */
-            donationId?: number;
-            /** Format: int64 */
-            memberId?: number;
-            title?: string;
-            thumbnailImage?: string;
-            /** Format: int64 */
-            amount?: number;
-            paymentMethod?: string;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        MyDonationListResponse: {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            /** Format: int64 */
-            goalAmount?: number;
-            /** Format: int64 */
-            currentAmount?: number;
-            /** Format: date */
-            endDate?: string;
-            status?: string;
-            thumbnailImage?: string;
-            category?: string;
-            /** Format: int64 */
-            dDay?: number;
-        };
-        PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
-            /** Format: int32 */
-            size?: number;
-            content?: components["schemas"]["ReportSummaryResponse"][];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
-            empty?: boolean;
-        };
-        PageableObject: {
-            unpaged?: boolean;
-            /** Format: int32 */
-            pageSize?: number;
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int64 */
-            offset?: number;
-            sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
-        };
-        ReportSummaryResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER";
-            /** Format: int64 */
-            targetId?: number;
-            /** @enum {string} */
-            reasonType?: "SPAM" | "HATE_SPEECH" | "HARASSMENT" | "INAPPROPRIATE_CONTENT" | "VIOLENCE" | "FALSE_INFORMATION" | "COPYRIGHT" | "PRIVACY" | "OTHER";
-            /** @enum {string} */
-            status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
-            reporterNickname?: string;
-            reportedMemberNickname?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            processedAt?: string;
-        };
-        SortObject: {
-            unsorted?: boolean;
-            empty?: boolean;
-            sorted?: boolean;
-        };
-        NotificationSummaryResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
-            message?: string;
-            isRead?: boolean;
-            senderNickname?: string;
-            senderProfileImage?: string;
-            /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
-            /** Format: int64 */
-            targetId?: number;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
-            /** Format: int32 */
-            size?: number;
-            content?: components["schemas"]["NotificationSummaryResponse"][];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
-            empty?: boolean;
-        };
-        NotificationResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
-            message?: string;
-            isRead?: boolean;
-            /** Format: date-time */
-            readAt?: string;
-            /** Format: int64 */
-            senderId?: number;
-            senderNickname?: string;
-            senderProfileImage?: string;
-            /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
-            /** Format: int64 */
-            targetId?: number;
-            /** Format: date-time */
-            createdAt?: string;
-        };
-        MemberInfoResponse: {
-            /** Format: int64 */
-            memberId?: number;
-            name?: string;
-            nickname?: string;
-            email?: string;
-            profileImageUrl?: string;
-            role?: string;
-            lastLoginProvider?: string;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-        };
-        MemberCountsResponse: {
-            /** Format: int64 */
-            likedCount?: number;
-            /** Format: int64 */
-            commentedCount?: number;
-            /** Format: int64 */
-            feedCount?: number;
-        };
-        FeedSearchRequest: {
-            keyword?: string;
-            tags?: string[];
-            /** @enum {string} */
-            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-            /** Format: int64 */
-            memberId?: number;
-            /** Format: int64 */
-            togetherId?: number;
-            /** Format: int64 */
-            lastFeedId?: number;
-            /** Format: int32 */
-            page?: number;
-            /** Format: int32 */
-            size?: number;
-            sortBy?: string;
-            sortByOrDefault?: string;
-            /** Format: int32 */
-            pageOrDefault?: number;
-            /** Format: int32 */
-            sizeOrDefault?: number;
-        };
-        Page: {
-            /** Format: int32 */
-            totalPages?: number;
-            /** Format: int64 */
-            totalElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
-            /** Format: int32 */
-            size?: number;
-            content?: unknown[];
-            /** Format: int32 */
-            number?: number;
-            sort?: components["schemas"]["SortObject"];
-            /** Format: int32 */
-            numberOfElements?: number;
-            empty?: boolean;
-        };
-        InfiniteScrollResponse: {
-            content?: unknown[];
-            /** Format: int64 */
-            nextCursor?: number;
-            hasNext?: boolean;
-            /** Format: int32 */
-            size?: number;
-            /** Format: int32 */
-            requestedSize?: number;
-        };
-        CommentResponse: {
-            /** Format: int64 */
-            id?: number;
-            /** @enum {string} */
-            commentType?: "FEED" | "TOGETHER" | "DONATION";
-            content?: string;
-            /** Format: int64 */
-            authorId?: number;
-            authorName?: string;
-            authorNickname?: string;
-            authorProfileImage?: string;
-            /** Format: int64 */
-            targetId?: number;
-            /** Format: int64 */
-            parentId?: number;
-            replies?: components["schemas"]["CommentResponse"][];
-            /** Format: int32 */
-            replyCount?: number;
-            /** Format: int32 */
-            reactionCount?: number;
-            isReacted?: boolean;
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            reply?: boolean;
-        };
-        LastLoginProviderResponse: {
-            provider?: string;
-            message?: string;
-        };
-        ReportStatsResponse: {
-            /** Format: int64 */
-            totalPending?: number;
-            /** Format: int64 */
-            feedPending?: number;
-            /** Format: int64 */
-            commentPending?: number;
-            /** Format: int64 */
-            togetherPending?: number;
-        };
-        MemberWithdrawRequest: {
-            reason?: string;
-        };
-        MemberWithdrawResponse: {
-            message?: string;
-        };
+  schemas: {
+    MemberUpdateRequest: {
+      /** Format: email */
+      email?: string;
+      nickname?: string;
+      profileImageUrl?: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    FeedImageRequest: {
+      imageUrl: string;
+      /** Format: int32 */
+      width: number;
+      /** Format: int32 */
+      height: number;
+      /** Format: int32 */
+      displayOrder?: number;
+      /** Format: int64 */
+      fileSize?: number;
+      originalFileName?: string;
+    };
+    FeedUpdateRequest: {
+      content?: string;
+      images?: components["schemas"]["FeedImageRequest"][];
+      tags?: string[];
+      /** @enum {string} */
+      visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+    };
+    FeedImageResponse: {
+      /** Format: int64 */
+      id?: number;
+      imageUrl?: string;
+      /** Format: int32 */
+      width?: number;
+      /** Format: int32 */
+      height?: number;
+      /** Format: int32 */
+      displayOrder?: number;
+      /** Format: int64 */
+      fileSize?: number;
+      originalFileName?: string;
+    };
+    FeedResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
+      content?: string;
+      images?: components["schemas"]["FeedImageResponse"][];
+      thumbnailUrl?: string;
+      /** Format: int32 */
+      thumbnailWidth?: number;
+      /** Format: int32 */
+      thumbnailHeight?: number;
+      /** Format: int32 */
+      imageCount?: number;
+      tags?: string[];
+      /** @enum {string} */
+      visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+      /** Format: int32 */
+      reactionCount?: number;
+      /** Format: int32 */
+      commentCount?: number;
+      /** Format: int32 */
+      bookmarkCount?: number;
+      /** Format: int64 */
+      authorId?: number;
+      authorName?: string;
+      authorNickname?: string;
+      authorProfileImage?: string;
+      /** Format: int64 */
+      togetherId?: number;
+      togetherTitle?: string;
+      togetherCategory?: string;
+      togetherMode?: string;
+      isPinned?: boolean;
+      isReacted?: boolean;
+      isBookmarked?: boolean;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+    };
+    CommentUpdateRequest: {
+      content: string;
+    };
+    ReportResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      targetType?: "FEED" | "COMMENT" | "TOGETHER";
+      /** Format: int64 */
+      targetId?: number;
+      /** @enum {string} */
+      reasonType?:
+        | "SPAM"
+        | "HATE_SPEECH"
+        | "HARASSMENT"
+        | "INAPPROPRIATE_CONTENT"
+        | "VIOLENCE"
+        | "FALSE_INFORMATION"
+        | "COPYRIGHT"
+        | "PRIVACY"
+        | "OTHER";
+      reasonDetail?: string;
+      /** @enum {string} */
+      status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
+      /** Format: int64 */
+      reporterId?: number;
+      reporterNickname?: string;
+      /** Format: int64 */
+      reportedMemberId?: number;
+      reportedMemberNickname?: string;
+      adminComment?: string;
+      /** Format: date-time */
+      processedAt?: string;
+      /** Format: int64 */
+      processedById?: number;
+      processedByNickname?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    ReportProcessRequest: {
+      /** @enum {string} */
+      status: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
+      adminComment: string;
+    };
+    CreateRequest: {
+      title: string;
+      description?: string;
+      /** @enum {string} */
+      category: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
+      /** @enum {string} */
+      mode: "ONLINE" | "OFFLINE";
+      /** Format: int64 */
+      capacity?: number;
+      /** Format: date */
+      startDate: string;
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      memberId?: number;
+    };
+    CreateResponse: {
+      /** Format: int64 */
+      id?: number;
+      title?: string;
+      description?: string;
+      /** Format: int64 */
+      goalAmount?: number;
+      /** Format: date */
+      startDate?: string;
+      /** Format: date */
+      endDate?: string;
+      thumbnailImageUrl?: string;
+      /** @enum {string} */
+      status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+      /** @enum {string} */
+      category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+      /** Format: int64 */
+      memberId?: number;
+    };
+    TogetherDto: unknown;
+    DonationTossRequest: {
+      paymentKey: string;
+      orderId: string;
+      /** Format: int64 */
+      amount: number;
+      /** Format: int64 */
+      memberId: number;
+    };
+    DonationPaymentResponse: {
+      /** Format: int64 */
+      donationId?: number;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+    };
+    ReportCreateRequest: {
+      /** @enum {string} */
+      targetType: "FEED" | "COMMENT" | "TOGETHER";
+      /** Format: int64 */
+      targetId: number;
+      /** @enum {string} */
+      reasonType:
+        | "SPAM"
+        | "HATE_SPEECH"
+        | "HARASSMENT"
+        | "INAPPROPRIATE_CONTENT"
+        | "VIOLENCE"
+        | "FALSE_INFORMATION"
+        | "COPYRIGHT"
+        | "PRIVACY"
+        | "OTHER";
+      reasonDetail?: string;
+    };
+    NicknameCheckRequest: {
+      nickname: string;
+    };
+    NicknameCheckResponse: {
+      available?: boolean;
+      message?: string;
+    };
+    EmailCheckRequest: {
+      /** Format: email */
+      email: string;
+    };
+    EmailCheckResponse: {
+      available?: boolean;
+      message?: string;
+    };
+    ImageUploadResponse: {
+      imageUrl?: string;
+      /** Format: int32 */
+      width?: number;
+      /** Format: int32 */
+      height?: number;
+      /** Format: int64 */
+      fileSize?: number;
+      originalFileName?: string;
+      savedFileName?: string;
+    };
+    FeedCreateRequest: {
+      /** @enum {string} */
+      feedType: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
+      content: string;
+      images?: components["schemas"]["FeedImageRequest"][];
+      tags?: string[];
+      /** @enum {string} */
+      visibility: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+      /** Format: int64 */
+      togetherId?: number;
+    };
+    CommentCreateRequest: {
+      /** @enum {string} */
+      commentType: "FEED" | "TOGETHER" | "DONATION";
+      content: string;
+      /** Format: int64 */
+      targetId: number;
+      /** Format: int64 */
+      parentId?: number;
+    };
+    LoginResponse: {
+      /** Format: int64 */
+      memberId?: number;
+      name?: string;
+      nickname?: string;
+      email?: string;
+      profileImageUrl?: string;
+      lastLoginProvider?: string;
+    };
+    AdditionalInfoRequest: {
+      temporaryToken: string;
+      nickname: string;
+      /** Format: email */
+      email: string;
+    };
+    SystemNotificationCreateRequest: {
+      message: string;
+    };
+    DetailResponse: {
+      /** Format: int64 */
+      id?: number;
+      title?: string;
+      description?: string;
+      /** Format: int64 */
+      goalAmount?: number;
+      /** Format: int64 */
+      currentAmount?: number;
+      /** Format: date */
+      startDate?: string;
+      /** Format: date */
+      endDate?: string;
+      /** @enum {string} */
+      status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+      imageUrls?: string[];
+      /** @enum {string} */
+      category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+      /** Format: int64 */
+      dDay?: number;
+    };
+    ListResponse: {
+      /** Format: int64 */
+      donationPaymentId?: number;
+      /** Format: int64 */
+      memberId?: number;
+      memberName?: string;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    DescriptionResponse: {
+      description?: string;
+    };
+    RsData: {
+      resultCode?: string;
+      msg?: string;
+      data?: unknown;
+    };
+    RecentDonationPaymentListResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** Format: int64 */
+      donationId?: number;
+      /** Format: int64 */
+      memberId?: number;
+      memberName?: string;
+      title?: string;
+      thumbnailImage?: string;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    DonationPaymentListResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** Format: int64 */
+      donationId?: number;
+      /** Format: int64 */
+      memberId?: number;
+      title?: string;
+      thumbnailImage?: string;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    MyDonationListResponse: {
+      /** Format: int64 */
+      id?: number;
+      title?: string;
+      /** Format: int64 */
+      goalAmount?: number;
+      /** Format: int64 */
+      currentAmount?: number;
+      /** Format: date */
+      endDate?: string;
+      status?: string;
+      thumbnailImage?: string;
+      category?: string;
+      /** Format: int64 */
+      dDay?: number;
+    };
+    PageReportSummaryResponse: {
+      /** Format: int32 */
+      totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: components["schemas"]["ReportSummaryResponse"][];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"];
+      /** Format: int32 */
+      numberOfElements?: number;
+      empty?: boolean;
+    };
+    PageableObject: {
+      unpaged?: boolean;
+      /** Format: int32 */
+      pageSize?: number;
+      /** Format: int32 */
+      pageNumber?: number;
+      /** Format: int64 */
+      offset?: number;
+      sort?: components["schemas"]["SortObject"];
+      paged?: boolean;
+    };
+    ReportSummaryResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      targetType?: "FEED" | "COMMENT" | "TOGETHER";
+      /** Format: int64 */
+      targetId?: number;
+      /** @enum {string} */
+      reasonType?:
+        | "SPAM"
+        | "HATE_SPEECH"
+        | "HARASSMENT"
+        | "INAPPROPRIATE_CONTENT"
+        | "VIOLENCE"
+        | "FALSE_INFORMATION"
+        | "COPYRIGHT"
+        | "PRIVACY"
+        | "OTHER";
+      /** @enum {string} */
+      status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
+      reporterNickname?: string;
+      reportedMemberNickname?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      processedAt?: string;
+    };
+    SortObject: {
+      unsorted?: boolean;
+      empty?: boolean;
+      sorted?: boolean;
+    };
+    NotificationSummaryResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      notificationType?:
+        | "FEED_REACTION"
+        | "FEED_COMMENT"
+        | "FEED_COMMENT_REPLY"
+        | "COMMENT_REACTION"
+        | "TOGETHER_INVITE"
+        | "TOGETHER_JOIN"
+        | "TOGETHER_START"
+        | "TOGETHER_END"
+        | "FOLLOW"
+        | "SYSTEM";
+      message?: string;
+      isRead?: boolean;
+      senderNickname?: string;
+      senderProfileImage?: string;
+      /** @enum {string} */
+      targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+      /** Format: int64 */
+      targetId?: number;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    PageNotificationSummaryResponse: {
+      /** Format: int32 */
+      totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: components["schemas"]["NotificationSummaryResponse"][];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"];
+      /** Format: int32 */
+      numberOfElements?: number;
+      empty?: boolean;
+    };
+    NotificationResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      notificationType?:
+        | "FEED_REACTION"
+        | "FEED_COMMENT"
+        | "FEED_COMMENT_REPLY"
+        | "COMMENT_REACTION"
+        | "TOGETHER_INVITE"
+        | "TOGETHER_JOIN"
+        | "TOGETHER_START"
+        | "TOGETHER_END"
+        | "FOLLOW"
+        | "SYSTEM";
+      message?: string;
+      isRead?: boolean;
+      /** Format: date-time */
+      readAt?: string;
+      /** Format: int64 */
+      senderId?: number;
+      senderNickname?: string;
+      senderProfileImage?: string;
+      /** @enum {string} */
+      targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+      /** Format: int64 */
+      targetId?: number;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    MemberInfoResponse: {
+      /** Format: int64 */
+      memberId?: number;
+      name?: string;
+      nickname?: string;
+      email?: string;
+      profileImageUrl?: string;
+      role?: string;
+      lastLoginProvider?: string;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+    };
+    MemberCountsResponse: {
+      /** Format: int64 */
+      likedCount?: number;
+      /** Format: int64 */
+      commentedCount?: number;
+      /** Format: int64 */
+      feedCount?: number;
+    };
+    FeedSearchRequest: {
+      keyword?: string;
+      tags?: string[];
+      /** @enum {string} */
+      feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
+      /** Format: int64 */
+      memberId?: number;
+      /** Format: int64 */
+      togetherId?: number;
+      /** Format: int64 */
+      lastFeedId?: number;
+      /** Format: int32 */
+      page?: number;
+      /** Format: int32 */
+      size?: number;
+      sortBy?: string;
+      sortByOrDefault?: string;
+      /** Format: int32 */
+      pageOrDefault?: number;
+      /** Format: int32 */
+      sizeOrDefault?: number;
+    };
+    Page: {
+      /** Format: int32 */
+      totalPages?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
+      /** Format: int32 */
+      size?: number;
+      content?: unknown[];
+      /** Format: int32 */
+      number?: number;
+      sort?: components["schemas"]["SortObject"];
+      /** Format: int32 */
+      numberOfElements?: number;
+      empty?: boolean;
+    };
+    InfiniteScrollResponse: {
+      content?: unknown[];
+      /** Format: int64 */
+      nextCursor?: number;
+      hasNext?: boolean;
+      /** Format: int32 */
+      size?: number;
+      /** Format: int32 */
+      requestedSize?: number;
+    };
+    CommentResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** @enum {string} */
+      commentType?: "FEED" | "TOGETHER" | "DONATION";
+      content?: string;
+      /** Format: int64 */
+      authorId?: number;
+      authorName?: string;
+      authorNickname?: string;
+      authorProfileImage?: string;
+      /** Format: int64 */
+      targetId?: number;
+      /** Format: int64 */
+      parentId?: number;
+      replies?: components["schemas"]["CommentResponse"][];
+      /** Format: int32 */
+      replyCount?: number;
+      /** Format: int32 */
+      reactionCount?: number;
+      isReacted?: boolean;
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+      reply?: boolean;
+    };
+    LastLoginProviderResponse: {
+      provider?: string;
+      message?: string;
+    };
+    ReportStatsResponse: {
+      /** Format: int64 */
+      totalPending?: number;
+      /** Format: int64 */
+      feedPending?: number;
+      /** Format: int64 */
+      commentPending?: number;
+      /** Format: int64 */
+      togetherPending?: number;
+    };
+    MemberWithdrawRequest: {
+      reason?: string;
+    };
+    MemberWithdrawResponse: {
+      message?: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    markAsRead: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                notificationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    markAllAsRead: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    getMyInfo: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberInfoResponse"];
-                };
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberInfoResponse"];
-                };
-            };
-        };
-    };
-    updateMember: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["MemberUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description 수정 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 잘못된 요청 (유효성 검증 실패) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 중복된 이메일 또는 닉네임 */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    withdrawMember: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["MemberWithdrawRequest"];
-            };
-        };
-        responses: {
-            /** @description 탈퇴 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberWithdrawResponse"];
-                };
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberWithdrawResponse"];
-                };
-            };
-        };
-    };
-    getFeed: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedResponse"];
-                };
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedResponse"];
-                };
-            };
-        };
-    };
-    updateFeed: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FeedUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description 수정 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedResponse"];
-                };
-            };
-            /** @description 권한 없음 (작성자가 아님) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedResponse"];
-                };
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["FeedResponse"];
-                };
-            };
-        };
-    };
-    deleteFeed: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 삭제 성공 */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 권한 없음 (작성자가 아님) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    togglePinNotice: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 토글 성공 (true: 고정됨, false: 고정 해제됨) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 공지 피드가 아님 */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 권한 없음 (방장이 아님) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-        };
-    };
-    getComment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 댓글 ID
-                 * @example 1
-                 */
-                commentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CommentResponse"];
-                };
-            };
-            /** @description 댓글을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CommentResponse"];
-                };
-            };
-        };
-    };
-    updateComment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 댓글 ID
-                 * @example 1
-                 */
-                commentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CommentUpdateRequest"];
-            };
-        };
-        responses: {
-            /** @description 수정 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 권한 없음 (작성자가 아님) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 댓글을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    deleteComment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 댓글 ID
-                 * @example 1
-                 */
-                commentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 삭제 성공 */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 권한 없음 (작성자가 아님) */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 댓글을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    startReview: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                reportId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportResponse"];
-                };
-            };
-        };
-    };
-    processReport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                reportId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ReportProcessRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportResponse"];
-                };
-            };
-        };
-    };
-    create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateRequest"];
-            };
-        };
-        responses: {
-            /** @description 함께하기 게시글 등록 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CreateResponse"];
-                };
-            };
-        };
-    };
-    participate: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 참여 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TogetherDto"];
-                };
-            };
-        };
-    };
-    tossPayment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                donationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DonationTossRequest"];
-            };
-        };
-        responses: {
-            /** @description TOSS 결제 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DonationPaymentResponse"];
-                };
-            };
-        };
-    };
-    createDonationNotice: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateRequest"];
-            };
-        };
-        responses: {
-            /** @description 후원하기 공지 게시글 등록 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CreateResponse"];
-                };
-            };
-        };
-    };
-    create_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateRequest"];
-            };
-        };
-        responses: {
-            /** @description 후원하기 게시글 등록 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["CreateResponse"];
-                };
-            };
-        };
-    };
-    createReport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ReportCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    checkNickname: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["NicknameCheckRequest"];
-            };
-        };
-        responses: {
-            /** @description 체크 완료 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["NicknameCheckResponse"];
-                };
-            };
-        };
-    };
-    checkEmail: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EmailCheckRequest"];
-            };
-        };
-        responses: {
-            /** @description 체크 완료 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["EmailCheckResponse"];
-                };
-            };
-        };
-    };
-    uploadImage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    /**
-                     * Format: binary
-                     * @description 업로드할 이미지 파일
-                     */
-                    file: string;
-                };
-            };
-        };
-        responses: {
-            /** @description 업로드 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ImageUploadResponse"];
-                };
-            };
-            /** @description 잘못된 요청 (파일이 없거나 이미지가 아님) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ImageUploadResponse"];
-                };
-            };
-            /** @description 업로드 실패 */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ImageUploadResponse"];
-                };
-            };
-        };
-    };
-    uploadMultipleImages: {
-        parameters: {
-            query: {
-                /** @description 업로드할 이미지 파일들 (최대 10개) */
-                files: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 업로드 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-            /** @description 잘못된 요청 (파일 개수 초과 등) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ImageUploadResponse"][];
-                };
-            };
-            /** @description 업로드 실패 */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ImageUploadResponse"][];
-                };
-            };
-        };
-    };
-    getFeedList: {
-        parameters: {
-            query: {
-                /** @description 검색 및 필터 조건 */
-                searchRequest: components["schemas"]["FeedSearchRequest"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["Page"];
-                };
-            };
-        };
-    };
-    createFeed: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FeedCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description 피드 생성 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-            /** @description 잘못된 요청 (유효성 검증 실패) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    toggleReaction: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 토글 성공 (true: 좋아요 추가, false: 좋아요 취소) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-        };
-    };
-    toggleBookmark: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 토글 성공 (true: 북마크 추가, false: 북마크 제거) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 피드를 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-        };
-    };
-    createComment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CommentCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description 댓글 생성 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-            /** @description 잘못된 요청 (유효성 검증 실패) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    toggleReaction_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 댓글 ID
-                 * @example 1
-                 */
-                commentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 토글 성공 (true: 좋아요 추가, false: 좋아요 취소) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-            /** @description 댓글을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": boolean;
-                };
-            };
-        };
-    };
-    refreshAccessToken: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 토큰 갱신 성공 (Access Token은 Authorization 헤더에 포함됨) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description 유효하지 않은 Refresh Token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    logout: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 로그아웃 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    login: {
-        parameters: {
-            query: {
-                memberId: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 로그인 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LoginResponse"];
-                };
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LoginResponse"];
-                };
-            };
-        };
-    };
-    completeRegistration: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AdditionalInfoRequest"];
-            };
-        };
-        responses: {
-            /** @description 회원가입 완료 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LoginResponse"];
-                };
-            };
-            /** @description 잘못된 요청 (유효성 검증 실패, 중복된 닉네임/이메일) */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LoginResponse"];
-                };
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LoginResponse"];
-                };
-            };
-        };
-    };
-    sendSystemNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SystemNotificationCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    broadcastSystemNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SystemNotificationCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    isParticipating: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                togetherId: number;
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 참여 여부 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TogetherDto"];
-                };
-            };
-        };
-    };
-    getTogetherByMemberId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description ID별 함께하기 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DetailResponse"];
-                };
-            };
-        };
-    };
-    getAllTogether: {
-        parameters: {
-            query?: {
-                categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC")[];
-                mode?: "ONLINE" | "OFFLINE";
-                status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
-                sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "STATUS" | "CATEGORY" | "MODE";
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 전체 함께하기 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ListResponse"];
-                };
-            };
-        };
-    };
-    getTogether: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 상세 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DetailResponse"];
-                };
-            };
-        };
-    };
-    getTogetherDescription: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 리스트 별 설명 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DescriptionResponse"];
-                };
-            };
-        };
-    };
-    isDonationCreator: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                donationId: number;
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 개설자 확인 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RsData"];
-                };
-            };
-        };
-    };
-    getRecentDonationPaymentList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 최신 후원하기 내역 2개 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["RecentDonationPaymentListResponse"];
-                };
-            };
-        };
-    };
-    getDonationNotice: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 후원하기 공지 개별 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ListResponse"];
-                };
-            };
-        };
-    };
-    getAllDonationNotices: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 후원하기 공지 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ListResponse"];
-                };
-            };
-        };
-    };
-    getMyDonationPaymentList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 나의 후원하기 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DonationPaymentListResponse"];
-                };
-            };
-        };
-    };
-    createDonationList: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 개설한 후원 리스트 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MyDonationListResponse"];
-                };
-            };
-        };
-    };
-    getAllDonations: {
-        parameters: {
-            query?: {
-                categories?: ("ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC")[];
-                sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "CATEGORY";
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 전체 후원 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ListResponse"];
-                };
-            };
-        };
-    };
-    getDonation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 후원 상세 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DetailResponse"];
-                };
-            };
-        };
-    };
-    getDonationStatusById: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 상세보기별 후원 현황 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ListResponse"];
-                };
-            };
-        };
-    };
-    getDonationDescription: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 후원하기 리스트 설명 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["DescriptionResponse"];
-                };
-            };
-        };
-    };
-    getReport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                reportId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportResponse"];
-                };
-            };
-        };
-    };
-    getMyReports: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageReportSummaryResponse"];
-                };
-            };
-        };
-    };
-    getMyNotifications: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageNotificationSummaryResponse"];
-                };
-            };
-        };
-    };
-    getNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                notificationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["NotificationResponse"];
-                };
-            };
-        };
-    };
-    deleteNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                notificationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    getUnreadNotifications: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageNotificationSummaryResponse"];
-                };
-            };
-        };
-    };
-    getUnreadNotificationCount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    getNotificationsByType: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path: {
-                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageNotificationSummaryResponse"];
-                };
-            };
-        };
-    };
-    getRecentNotifications: {
-        parameters: {
-            query?: {
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["NotificationSummaryResponse"][];
-                };
-            };
-        };
-    };
-    getNotificationsByCategory: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path: {
-                category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageNotificationSummaryResponse"];
-                };
-            };
-        };
-    };
-    getMyCounts: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberCountsResponse"];
-                };
-            };
-            /** @description 회원을 찾을 수 없음 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["MemberCountsResponse"];
-                };
-            };
-        };
-    };
-    getTogetherFeedsInfiniteScroll: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 함께하기 ID
-                 * @example 1
-                 */
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getTogetherNoticeFeeds: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 함께하기 ID
-                 * @example 1
-                 */
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getPinnedNoticeFeeds: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 함께하기 ID
-                 * @example 1
-                 */
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    searchByTagInfiniteScroll: {
-        parameters: {
-            query: {
-                /**
-                 * @description 검색할 태그
-                 * @example 여행
-                 */
-                tag: string;
-                /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 검색 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getFeedListInfiniteScroll: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 마지막으로 조회한 피드 ID (첫 조회 시에는 생략)
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getPopularFeeds: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 조회할 개수
-                 * @example 10
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getMostCommentedFeeds: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 조회할 개수
-                 * @example 10
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getMostBookmarkedFeeds: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 조회할 개수
-                 * @example 10
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getMemberFeedsInfiniteScroll: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 회원 ID
-                 * @example 1
-                 */
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getMemberBookmarkedFeedsInfiniteScroll: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 회원 ID
-                 * @example 1
-                 */
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getMyBookmarkedFeedsInfiniteScroll: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 마지막으로 조회한 피드 ID
-                 * @example 100
-                 */
-                lastFeedId?: number;
-                /**
-                 * @description 조회할 개수 (기본 20, 최대 50)
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["InfiniteScrollResponse"];
-                };
-            };
-        };
-    };
-    getMyBookmarkCount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    getReplies: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 부모 댓글 ID
-                 * @example 1
-                 */
-                commentId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getTogetherComments: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
-                 */
-                page?: number;
-                /**
-                 * @description 페이지 크기
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 함께하기 ID
-                 * @example 1
-                 */
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["Page"];
-                };
-            };
-        };
-    };
-    getTogetherCommentCount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 함께하기 ID
-                 * @example 1
-                 */
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    getMemberComments: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
-                 */
-                page?: number;
-                /**
-                 * @description 페이지 크기
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 회원 ID
-                 * @example 1
-                 */
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["Page"];
-                };
-            };
-        };
-    };
-    getFeedComments: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 페이지 번호 (0부터 시작)
-                 * @example 0
-                 */
-                page?: number;
-                /**
-                 * @description 페이지 크기
-                 * @example 20
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["Page"];
-                };
-            };
-        };
-    };
-    getRecentFeedComments: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getPopularFeedComments: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 조회할 개수
-                 * @example 5
-                 */
-                size?: number;
-            };
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getFeedCommentCount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    getFeedCommentsAll: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description 피드 ID
-                 * @example 1
-                 */
-                feedId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    getLastLoginProvider: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["LastLoginProviderResponse"];
-                };
-            };
-        };
-    };
-    getReports: {
-        parameters: {
-            query?: {
-                status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageReportSummaryResponse"];
-                };
-            };
-        };
-    };
-    getReport_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                reportId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportResponse"];
-                };
-            };
-        };
-    };
-    getReportsByType: {
-        parameters: {
-            query?: {
-                status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path: {
-                targetType: "FEED" | "COMMENT" | "TOGETHER";
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageReportSummaryResponse"];
-                };
-            };
-        };
-    };
-    getReportsByTarget: {
-        parameters: {
-            query: {
-                type: "FEED" | "COMMENT" | "TOGETHER";
-                id: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportSummaryResponse"][];
-                };
-            };
-        };
-    };
-    getReportStats: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["ReportStatsResponse"];
-                };
-            };
-        };
-    };
-    getReportsByMember: {
-        parameters: {
-            query?: {
-                page?: number;
-                size?: number;
-            };
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["PageReportSummaryResponse"];
-                };
-            };
-        };
-    };
-    getFrequentlyReportedTargets: {
-        parameters: {
-            query: {
-                type: "FEED" | "COMMENT" | "TOGETHER";
-                minCount?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number[];
-                };
-            };
-        };
-    };
-    getFrequentlyReportedMembers: {
-        parameters: {
-            query?: {
-                minCount?: number;
-                size?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number[];
-                };
-            };
-        };
-    };
-    leave: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                togetherId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 탈퇴 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TogetherDto"];
-                };
-            };
-        };
-    };
-    drop: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                togetherId: number;
-                targetId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 함께하기 강퇴 성공 */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["TogetherDto"];
-                };
-            };
-        };
-    };
-    deleteAllReadNotifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    deleteAllNotifications: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
+  markAsRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        notificationId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  markAllAsRead: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  getMyInfo: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberInfoResponse"];
+        };
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberInfoResponse"];
+        };
+      };
+    };
+  };
+  updateMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MemberUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description 수정 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 잘못된 요청 (유효성 검증 실패) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 중복된 이메일 또는 닉네임 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  withdrawMember: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["MemberWithdrawRequest"];
+      };
+    };
+    responses: {
+      /** @description 탈퇴 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberWithdrawResponse"];
+        };
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberWithdrawResponse"];
+        };
+      };
+    };
+  };
+  getFeed: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["FeedResponse"];
+        };
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["FeedResponse"];
+        };
+      };
+    };
+  };
+  updateFeed: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FeedUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description 수정 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["FeedResponse"];
+        };
+      };
+      /** @description 권한 없음 (작성자가 아님) */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["FeedResponse"];
+        };
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["FeedResponse"];
+        };
+      };
+    };
+  };
+  deleteFeed: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 삭제 성공 */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 권한 없음 (작성자가 아님) */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  togglePinNotice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 토글 성공 (true: 고정됨, false: 고정 해제됨) */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 공지 피드가 아님 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 권한 없음 (방장이 아님) */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+    };
+  };
+  getComment: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 댓글 ID
+         * @example 1
+         */
+        commentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommentResponse"];
+        };
+      };
+      /** @description 댓글을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CommentResponse"];
+        };
+      };
+    };
+  };
+  updateComment: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 댓글 ID
+         * @example 1
+         */
+        commentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentUpdateRequest"];
+      };
+    };
+    responses: {
+      /** @description 수정 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 권한 없음 (작성자가 아님) */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 댓글을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  deleteComment: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 댓글 ID
+         * @example 1
+         */
+        commentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 삭제 성공 */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 권한 없음 (작성자가 아님) */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 댓글을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  startReview: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        reportId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportResponse"];
+        };
+      };
+    };
+  };
+  processReport: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        reportId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReportProcessRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportResponse"];
+        };
+      };
+    };
+  };
+  create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 함께하기 게시글 등록 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CreateResponse"];
+        };
+      };
+    };
+  };
+  participate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 참여 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["TogetherDto"];
+        };
+      };
+    };
+  };
+  tossPayment: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        donationId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DonationTossRequest"];
+      };
+    };
+    responses: {
+      /** @description TOSS 결제 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DonationPaymentResponse"];
+        };
+      };
+    };
+  };
+  createDonationNotice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 후원하기 공지 게시글 등록 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CreateResponse"];
+        };
+      };
+    };
+  };
+  create_1: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 후원하기 게시글 등록 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CreateResponse"];
+        };
+      };
+    };
+  };
+  createReport: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReportCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  checkNickname: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NicknameCheckRequest"];
+      };
+    };
+    responses: {
+      /** @description 체크 완료 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["NicknameCheckResponse"];
+        };
+      };
+    };
+  };
+  checkEmail: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["EmailCheckRequest"];
+      };
+    };
+    responses: {
+      /** @description 체크 완료 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["EmailCheckResponse"];
+        };
+      };
+    };
+  };
+  uploadImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          /**
+           * Format: binary
+           * @description 업로드할 이미지 파일
+           */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description 업로드 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ImageUploadResponse"];
+        };
+      };
+      /** @description 잘못된 요청 (파일이 없거나 이미지가 아님) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ImageUploadResponse"];
+        };
+      };
+      /** @description 업로드 실패 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ImageUploadResponse"];
+        };
+      };
+    };
+  };
+  uploadMultipleImages: {
+    parameters: {
+      query: {
+        /** @description 업로드할 이미지 파일들 (최대 10개) */
+        files: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 업로드 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+      /** @description 잘못된 요청 (파일 개수 초과 등) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ImageUploadResponse"][];
+        };
+      };
+      /** @description 업로드 실패 */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ImageUploadResponse"][];
+        };
+      };
+    };
+  };
+  getFeedList: {
+    parameters: {
+      query: {
+        /** @description 검색 및 필터 조건 */
+        searchRequest: components["schemas"]["FeedSearchRequest"];
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["Page"];
+        };
+      };
+    };
+  };
+  createFeed: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FeedCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 피드 생성 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+      /** @description 잘못된 요청 (유효성 검증 실패) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  toggleReaction: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 토글 성공 (true: 좋아요 추가, false: 좋아요 취소) */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+    };
+  };
+  toggleBookmark: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 토글 성공 (true: 북마크 추가, false: 북마크 제거) */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 피드를 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+    };
+  };
+  createComment: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CommentCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 댓글 생성 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+      /** @description 잘못된 요청 (유효성 검증 실패) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  toggleReaction_1: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 댓글 ID
+         * @example 1
+         */
+        commentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 토글 성공 (true: 좋아요 추가, false: 좋아요 취소) */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+      /** @description 댓글을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": boolean;
+        };
+      };
+    };
+  };
+  refreshAccessToken: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 토큰 갱신 성공 (Access Token은 Authorization 헤더에 포함됨) */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 유효하지 않은 Refresh Token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  logout: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 로그아웃 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  login: {
+    parameters: {
+      query: {
+        memberId: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 로그인 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LoginResponse"];
+        };
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LoginResponse"];
+        };
+      };
+    };
+  };
+  completeRegistration: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AdditionalInfoRequest"];
+      };
+    };
+    responses: {
+      /** @description 회원가입 완료 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LoginResponse"];
+        };
+      };
+      /** @description 잘못된 요청 (유효성 검증 실패, 중복된 닉네임/이메일) */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LoginResponse"];
+        };
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LoginResponse"];
+        };
+      };
+    };
+  };
+  sendSystemNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SystemNotificationCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  broadcastSystemNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SystemNotificationCreateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  isParticipating: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        togetherId: number;
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 참여 여부 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["TogetherDto"];
+        };
+      };
+    };
+  };
+  getTogetherByMemberId: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description ID별 함께하기 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DetailResponse"];
+        };
+      };
+    };
+  };
+  getAllTogether: {
+    parameters: {
+      query?: {
+        categories?: ("PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC")[];
+        mode?: "ONLINE" | "OFFLINE";
+        status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+        sortType?:
+          | "LATEST"
+          | "POPULAR"
+          | "DEADLINE"
+          | "STATUS"
+          | "CATEGORY"
+          | "MODE";
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 전체 함께하기 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getTogether: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 상세 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DetailResponse"];
+        };
+      };
+    };
+  };
+  getTogetherDescription: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 리스트 별 설명 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DescriptionResponse"];
+        };
+      };
+    };
+  };
+  isDonationCreator: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        donationId: number;
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 개설자 확인 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["RsData"];
+        };
+      };
+    };
+  };
+  getRecentDonationPaymentList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 최신 후원하기 내역 2개 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["RecentDonationPaymentListResponse"];
+        };
+      };
+    };
+  };
+  getDonationNotice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원하기 공지 개별 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getAllDonationNotices: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원하기 공지 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getMyDonationPaymentList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 나의 후원하기 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DonationPaymentListResponse"];
+        };
+      };
+    };
+  };
+  createDonationList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 개설한 후원 리스트 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MyDonationListResponse"];
+        };
+      };
+    };
+  };
+  getAllDonations: {
+    parameters: {
+      query?: {
+        categories?: ("ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC")[];
+        sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "CATEGORY";
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 전체 후원 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getDonation: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원 상세 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DetailResponse"];
+        };
+      };
+    };
+  };
+  getDonationStatusById: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 상세보기별 후원 현황 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getDonationDescription: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원하기 리스트 설명 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DescriptionResponse"];
+        };
+      };
+    };
+  };
+  getReport: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        reportId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportResponse"];
+        };
+      };
+    };
+  };
+  getMyReports: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageReportSummaryResponse"];
+        };
+      };
+    };
+  };
+  getMyNotifications: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageNotificationSummaryResponse"];
+        };
+      };
+    };
+  };
+  getNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        notificationId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["NotificationResponse"];
+        };
+      };
+    };
+  };
+  deleteNotification: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        notificationId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  getUnreadNotifications: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageNotificationSummaryResponse"];
+        };
+      };
+    };
+  };
+  getUnreadNotificationCount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  getNotificationsByType: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path: {
+        notificationType:
+          | "FEED_REACTION"
+          | "FEED_COMMENT"
+          | "FEED_COMMENT_REPLY"
+          | "COMMENT_REACTION"
+          | "TOGETHER_INVITE"
+          | "TOGETHER_JOIN"
+          | "TOGETHER_START"
+          | "TOGETHER_END"
+          | "FOLLOW"
+          | "SYSTEM";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageNotificationSummaryResponse"];
+        };
+      };
+    };
+  };
+  getRecentNotifications: {
+    parameters: {
+      query?: {
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["NotificationSummaryResponse"][];
+        };
+      };
+    };
+  };
+  getNotificationsByCategory: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path: {
+        category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageNotificationSummaryResponse"];
+        };
+      };
+    };
+  };
+  getMyCounts: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberCountsResponse"];
+        };
+      };
+      /** @description 회원을 찾을 수 없음 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MemberCountsResponse"];
+        };
+      };
+    };
+  };
+  getTogetherFeedsInfiniteScroll: {
+    parameters: {
+      query?: {
+        /**
+         * @description 마지막으로 조회한 피드 ID
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 함께하기 ID
+         * @example 1
+         */
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getTogetherNoticeFeeds: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 함께하기 ID
+         * @example 1
+         */
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getPinnedNoticeFeeds: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 함께하기 ID
+         * @example 1
+         */
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  searchByTagInfiniteScroll: {
+    parameters: {
+      query: {
+        /**
+         * @description 검색할 태그
+         * @example 여행
+         */
+        tag: string;
+        /**
+         * @description 마지막으로 조회한 피드 ID
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 검색 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getFeedListInfiniteScroll: {
+    parameters: {
+      query?: {
+        /**
+         * @description 마지막으로 조회한 피드 ID (첫 조회 시에는 생략)
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getPopularFeeds: {
+    parameters: {
+      query?: {
+        /**
+         * @description 조회할 개수
+         * @example 10
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getMostCommentedFeeds: {
+    parameters: {
+      query?: {
+        /**
+         * @description 조회할 개수
+         * @example 10
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getMostBookmarkedFeeds: {
+    parameters: {
+      query?: {
+        /**
+         * @description 조회할 개수
+         * @example 10
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getMemberFeedsInfiniteScroll: {
+    parameters: {
+      query?: {
+        /**
+         * @description 마지막으로 조회한 피드 ID
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 회원 ID
+         * @example 1
+         */
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getMemberBookmarkedFeedsInfiniteScroll: {
+    parameters: {
+      query?: {
+        /**
+         * @description 마지막으로 조회한 피드 ID
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 회원 ID
+         * @example 1
+         */
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getMyBookmarkedFeedsInfiniteScroll: {
+    parameters: {
+      query?: {
+        /**
+         * @description 마지막으로 조회한 피드 ID
+         * @example 100
+         */
+        lastFeedId?: number;
+        /**
+         * @description 조회할 개수 (기본 20, 최대 50)
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["InfiniteScrollResponse"];
+        };
+      };
+    };
+  };
+  getMyBookmarkCount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  getReplies: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 부모 댓글 ID
+         * @example 1
+         */
+        commentId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getTogetherComments: {
+    parameters: {
+      query?: {
+        /**
+         * @description 페이지 번호 (0부터 시작)
+         * @example 0
+         */
+        page?: number;
+        /**
+         * @description 페이지 크기
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 함께하기 ID
+         * @example 1
+         */
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["Page"];
+        };
+      };
+    };
+  };
+  getTogetherCommentCount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 함께하기 ID
+         * @example 1
+         */
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  getMemberComments: {
+    parameters: {
+      query?: {
+        /**
+         * @description 페이지 번호 (0부터 시작)
+         * @example 0
+         */
+        page?: number;
+        /**
+         * @description 페이지 크기
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 회원 ID
+         * @example 1
+         */
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["Page"];
+        };
+      };
+    };
+  };
+  getFeedComments: {
+    parameters: {
+      query?: {
+        /**
+         * @description 페이지 번호 (0부터 시작)
+         * @example 0
+         */
+        page?: number;
+        /**
+         * @description 페이지 크기
+         * @example 20
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["Page"];
+        };
+      };
+    };
+  };
+  getRecentFeedComments: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getPopularFeedComments: {
+    parameters: {
+      query?: {
+        /**
+         * @description 조회할 개수
+         * @example 5
+         */
+        size?: number;
+      };
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getFeedCommentCount: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  getFeedCommentsAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        /**
+         * @description 피드 ID
+         * @example 1
+         */
+        feedId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getLastLoginProvider: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["LastLoginProviderResponse"];
+        };
+      };
+    };
+  };
+  getReports: {
+    parameters: {
+      query?: {
+        status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageReportSummaryResponse"];
+        };
+      };
+    };
+  };
+  getReport_1: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        reportId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportResponse"];
+        };
+      };
+    };
+  };
+  getReportsByType: {
+    parameters: {
+      query?: {
+        status?: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path: {
+        targetType: "FEED" | "COMMENT" | "TOGETHER";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageReportSummaryResponse"];
+        };
+      };
+    };
+  };
+  getReportsByTarget: {
+    parameters: {
+      query: {
+        type: "FEED" | "COMMENT" | "TOGETHER";
+        id: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportSummaryResponse"][];
+        };
+      };
+    };
+  };
+  getReportStats: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ReportStatsResponse"];
+        };
+      };
+    };
+  };
+  getReportsByMember: {
+    parameters: {
+      query?: {
+        page?: number;
+        size?: number;
+      };
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["PageReportSummaryResponse"];
+        };
+      };
+    };
+  };
+  getFrequentlyReportedTargets: {
+    parameters: {
+      query: {
+        type: "FEED" | "COMMENT" | "TOGETHER";
+        minCount?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number[];
+        };
+      };
+    };
+  };
+  getFrequentlyReportedMembers: {
+    parameters: {
+      query?: {
+        minCount?: number;
+        size?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number[];
+        };
+      };
+    };
+  };
+  leave: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        togetherId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 탈퇴 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["TogetherDto"];
+        };
+      };
+    };
+  };
+  drop: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        togetherId: number;
+        targetId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 함께하기 강퇴 성공 */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["TogetherDto"];
+        };
+      };
+    };
+  };
+  deleteAllReadNotifications: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
+  deleteAllNotifications: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": number;
+        };
+      };
+    };
+  };
 }
