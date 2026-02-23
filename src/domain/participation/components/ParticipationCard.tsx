@@ -51,7 +51,7 @@ function ParticipationCard(
         />
       </div>
       <div className="px-5 py-3 flex-1 flex flex-col gap-1.5">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center whitespace-nowrap">
           {type !== "myTogether" && (
             <h2
               className={`${props.dDay! < 0 ? (type === "donate" ? "text-mainred" : "text-mainblue text-sm") : "font-bold"} `}

@@ -45,7 +45,7 @@ function DonatePayment({
       }
       queryClient.refetchQueries({ queryKey: queryKeys.donate.id(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.donate.history(id) });
-      router.replace(`/donate/${id}`);
+      router.replace(`/donate/${id}/info`);
     };
     paymentRequest();
   }, [

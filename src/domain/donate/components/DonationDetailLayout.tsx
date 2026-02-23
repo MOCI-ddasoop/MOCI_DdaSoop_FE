@@ -49,9 +49,8 @@ async function DonateDetailLayout({
           <div className="w-full aspect-10/7">
             <ImageSwiper
               slideList={
-                detailInfo.data.thumbnailImage
-                  ? [{ imageUrl: detailInfo.data.thumbnailImage }]
-                  : []
+                detailInfo.data.imageUrls?.map((img) => ({ imageUrl: img })) ??
+                []
               }
             />
           </div>

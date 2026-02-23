@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCreateDonate } from "../api/useCreateDonte";
+import { usePostImage } from "@/shared/api/usePostImage";
 
 const DONATION_CATEGORIES = [
   //TODO: 카테고리 데이터 API 연동
@@ -30,6 +31,7 @@ function DonationSuggestForm() {
   const userId = useAuthStore((s) => s.me?.memberId);
 
   const { mutateAsync: handleCreateDonate } = useCreateDonate();
+  const { mutateAsync: postImages } = usePostImage();
 
   const [donationName, setDonationName] = useState("");
   const [category, setCategory] = useState<string | null>(null);
@@ -73,17 +75,31 @@ function DonationSuggestForm() {
       alert("후원 소개글을 입력해주세요.");
       return;
     }
-    await handleCreateDonate({
-      title: donationName,
-      description: donationInfo,
-      category: category! as "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC",
-      startDate: startDate!.toISOString().slice(0, 10),
-      endDate: endDate!.toISOString().slice(0, 10),
-      goalAmount: targetAmount as number,
-      memberId: userId,
-    });
-    alert("후원 제안이 완료되었습니다!");
-    router.push("/donate");
+    try {
+      let imageUrls;
+      if (images.length !== 0) {
+        const imageUpload = await postImages(images, {
+          onError: (error) => {
+            throw new Error("이미지 업로드 실패");
+          },
+        });
+        imageUrls = imageUpload.map((img) => img.imageUrl!);
+      }
+      await handleCreateDonate({
+        title: donationName,
+        description: donationInfo,
+        category: category! as "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC",
+        startDate: startDate!.toISOString().slice(0, 10),
+        endDate: endDate!.toISOString().slice(0, 10),
+        goalAmount: targetAmount as number,
+        memberId: userId,
+        imageUrls,
+      });
+      alert("후원 제안이 완료되었습니다!");
+      router.push("/donate");
+    } catch (e) {
+      alert("후원 제안에 실패하였습니다");
+    }
   };
 
   return (

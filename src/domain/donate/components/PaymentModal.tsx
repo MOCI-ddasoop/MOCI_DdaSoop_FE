@@ -20,20 +20,20 @@ function PaymentModal({
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const router = useRouter();
-  const { mutate: postPayment } = usePostPayment();
+  const { mutateAsync: postPayment } = usePostPayment();
   const { paymentKey, amount, orderId } = params;
   const memberId = useAuthStore((s) => s.me?.memberId);
   if (!memberId) return;
 
-  const handlePaymentAPI = () => {
-    postPayment({
+  const handlePaymentAPI = async () => {
+    await postPayment({
       donationId: id,
       paymentKey,
       orderId,
       amount,
       memberId,
     });
-    router.replace(`/donate/${id}`);
+    router.replace(`/donate/${id}/info`);
     setIsOpen(false);
   };
   return (

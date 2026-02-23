@@ -18,7 +18,7 @@ export function middleware(req: NextRequest) {
 
     `style-src 'self' 'unsafe-inline' `,
 
-    "img-src 'self' data: https:  https: http://localhost:8000",
+    "img-src 'self' blob: data: https:  https: http://localhost:8000",
 
     "font-src 'self' data:",
 

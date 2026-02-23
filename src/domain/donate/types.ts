@@ -39,6 +39,7 @@ export type DonateCreateRequest = {
   endDate: string;
   category: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
   memberId?: number;
+  imageUrls?: string[];
 };
 
 export type DonateNewsRequest = {

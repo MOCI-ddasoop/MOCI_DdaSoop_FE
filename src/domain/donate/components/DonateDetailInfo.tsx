@@ -37,8 +37,16 @@ function DonateDetailInfo({ id }: Props) {
     );
   }
 
-  const { title, category, startDate, endDate, progress, dDay, goalAmount } =
-    data.data;
+  const {
+    title,
+    category,
+    startDate,
+    endDate,
+    progress,
+    dDay,
+    goalAmount,
+    imageUrls,
+  } = data.data;
 
   return (
     <div className="sticky top-20 w-62 h-fit flex flex-col gap-1.5">
@@ -67,7 +75,10 @@ function DonateDetailInfo({ id }: Props) {
         cardUI={false}
       />
 
-      <DonateButton />
+      <DonateButton
+        donateInfo={{ title, category }}
+        imageUrl={imageUrls ? imageUrls[0] : undefined}
+      />
     </div>
   );
 }

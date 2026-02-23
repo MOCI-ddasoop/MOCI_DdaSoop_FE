@@ -8,7 +8,6 @@ export const useCreateDonate = () => {
   return useMutation({
     mutationKey: queryKeys.donate.new(),
     mutationFn: async (newDonateInfo: DonateCreateRequest) => {
-      console.log(newDonateInfo);
       const res = await api.post(`api/v1/donation/create`, newDonateInfo);
       return res;
     },

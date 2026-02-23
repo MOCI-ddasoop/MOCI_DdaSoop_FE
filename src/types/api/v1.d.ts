@@ -1768,6 +1768,7 @@ export interface components {
             startDate?: string;
             /** Format: date */
             endDate?: string;
+            thumbnailImageUrl?: string;
             /** @enum {string} */
             status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
             /** @enum {string} */
@@ -1879,7 +1880,7 @@ export interface components {
             endDate?: string;
             /** @enum {string} */
             status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
-            thumbnailImage?: string;
+            imageUrls?: string[];
             /** @enum {string} */
             category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
             /** Format: int64 */
@@ -1953,33 +1954,33 @@ export interface components {
             dDay?: number;
         };
         PageReportSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
+            unpaged?: boolean;
+            /** Format: int32 */
+            pageSize?: number;
+            /** Format: int32 */
+            pageNumber?: number;
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
             paged?: boolean;
-            unpaged?: boolean;
-            /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
-            pageSize?: number;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2000,9 +2001,9 @@ export interface components {
             processedAt?: string;
         };
         SortObject: {
+            unsorted?: boolean;
             empty?: boolean;
             sorted?: boolean;
-            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -2021,21 +2022,21 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
@@ -2096,28 +2097,28 @@ export interface components {
             /** Format: int32 */
             size?: number;
             sortBy?: string;
-            /** Format: int32 */
-            sizeOrDefault?: number;
+            sortByOrDefault?: string;
             /** Format: int32 */
             pageOrDefault?: number;
-            sortByOrDefault?: string;
+            /** Format: int32 */
+            sizeOrDefault?: number;
         };
         Page: {
-            /** Format: int64 */
-            totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            /** Format: int64 */
+            totalElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         InfiniteScrollResponse: {

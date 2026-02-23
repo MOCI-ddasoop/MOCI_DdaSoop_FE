@@ -29,13 +29,13 @@ export const mypageTabContents = [
 
 // TODO : path 변경하기(path에 모임id 포함되어야할듯)
 export const togetherTabContents = (id: string) => [
-  { href: `/together/${id}`, name: "모임 소개" },
+  { href: `/together/${id}/info`, name: "모임 소개" },
   { href: `/together/${id}/feeds`, name: "인증피드" },
   { href: `/together/${id}/notice`, name: "공지" },
 ];
 
 export const donateTabContents = (id: string) => [
-  { href: `/donate/${id}`, name: "후원 소개" },
+  { href: `/donate/${id}/info`, name: "후원 소개" },
   { href: `/donate/${id}/history`, name: "기부 현황" },
   { href: `/donate/${id}/news`, name: "소식" },
 ];
