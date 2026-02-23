@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -10,7 +10,7 @@ import { FaPlus } from "react-icons/fa";
 import { FaRegImages } from "react-icons/fa6";
 import tw from "../../../shared/utils/tw";
 import ImageSwiper from "../../../shared/components/ImageSwiper";
-import { ImageUploadResponse } from "@/shared/types/types";
+import { ImageBase } from "@/shared/types/types";
 import { usePostImage } from "@/shared/api/usePostImage";
 import Swal from "sweetalert2";
 
@@ -18,8 +18,8 @@ function FeedImageInput({
 	value,
 	setValue,
 }: {
-	value: ImageUploadResponse[];
-	setValue: Dispatch<SetStateAction<ImageUploadResponse[]>>;
+	value: ImageBase[];
+	setValue: (images: ImageBase[]) => void;
 }) {
 	const [isDragging, setIsDragging] = useState(false);
 	const { mutate: uploadImageFn } = usePostImage();
@@ -30,7 +30,7 @@ function FeedImageInput({
 	const addSlide = (files: File[]) => {
 		uploadImageFn(files, {
 			onSuccess: (data) => {
-				setValue((prev) => [...prev, ...data]);
+				setValue([...value, ...data]);
 			},
 			onError: (error) => {
 				const message = error.response?.data.message;
@@ -65,7 +65,7 @@ function FeedImageInput({
 	};
 
 	const handleDeleteSlide = (index: number) => {
-		setValue((prev) => prev.filter((_, i) => i !== index));
+		setValue(value.filter((_, i) => i !== index));
 	};
 
 	const handleDragOver = (e: React.DragEvent) => {
@@ -84,7 +84,7 @@ function FeedImageInput({
 
 		const newFiles = Array.from(e.dataTransfer.files);
 		const imageFiles = newFiles.filter((file) =>
-			file.type.startsWith("image/")
+			file.type.startsWith("image/"),
 		);
 
 		if (imageFiles.length !== newFiles.length) {
@@ -117,7 +117,7 @@ function FeedImageInput({
 					htmlFor="file"
 					className={tw(
 						"flex-center flex-col w-full h-full border-4 rounded-lg border-dashed p-2 text-mainblue border-mainblue bg-white hover:text-white hover:border-white hover:bg-mainblue",
-						isDragging && "text-white border-white bg-mainblue"
+						isDragging && "text-white border-white bg-mainblue",
 					)}
 					onDragOver={handleDragOver}
 					onDragLeave={handleDragLeave}
@@ -136,14 +136,14 @@ function FeedImageInput({
 			htmlFor="file"
 			className={tw(
 				"flex-center flex-col w-12 h-full",
-				value.length >= MAX_TOTAL ? "cursor-no-drop" : ""
+				value.length >= MAX_TOTAL ? "cursor-no-drop" : "",
 			)}
 		>
 			<FaPlus size={"1rem"} />
 			<span
 				className={tw(
 					"text-sm",
-					value.length === MAX_TOTAL ? "text-mainblue" : "text-black"
+					value.length === MAX_TOTAL ? "text-mainblue" : "text-black",
 				)}
 			>
 				{value.length}/{MAX_TOTAL}
