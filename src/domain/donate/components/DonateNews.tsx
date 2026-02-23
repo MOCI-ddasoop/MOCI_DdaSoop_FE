@@ -1,64 +1,87 @@
 "use client";
 import Button from "@/shared/components/Button";
 import { useRef, useState } from "react";
+import { usePostNews } from "../api/usePostNews";
+import { useGetNews } from "../api/useGetNews";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/shared/config/queryKeys";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import { useAuthStore } from "@/store/authStore";
+import { useGetIsCreator } from "../api/useGetIsCreator";
 
-function DonateNews() {
-  const isCreator = true;
+function DonateNews({ id }: { id: string }) {
+  const userId = useAuthStore((s) => s.me?.memberId);
+  const {
+    data: isCreator,
+    isPending,
+    isError,
+  } = useGetIsCreator({ id, memberId: userId! });
   const [isEditing, setIsEditing] = useState(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<TextBoxHandle | null>(null);
+  const { mutateAsync: postDonationNews } = usePostNews(id);
+  const { data, isPending: pendingNews, isError: newsError } = useGetNews(id);
+  const queryClient = useQueryClient();
 
-  const handleInput = () => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
-
-    textarea.style.height = "auto";
-    const newHeight = textarea.scrollHeight;
-
-    if (newHeight > 424) {
-      textarea.style.height = "424px";
-      textarea.style.overflowY = "auto";
-    } else {
-      textarea.style.height = `${newHeight}px`;
-      textarea.style.overflowY = "hidden";
+  const handleSubmit = async () => {
+    if (!textareaRef.current) return;
+    if (textareaRef.current.getHTML().trim() === "") {
+      alert("소식을 입력해주세요");
     }
-
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-    });
-  };
-
-  const handleSubmit = () => {
-    // 소식올리는 api -
+    await postDonationNews(textareaRef.current.getHTML());
+    queryClient.refetchQueries({ queryKey: queryKeys.donate.news(id) });
     setIsEditing(false);
   };
 
   return (
     <div className="w-full flex flex-col items-center gap-4">
-      {isCreator && !isEditing && (
-        <Button color="red" className="w-60" onClick={() => setIsEditing(true)}>
-          작성하기
-        </Button>
+      {pendingNews || isPending ? (
+        <div className="w-full h-28 flex-center">
+          <div className="loader loader-red"></div>
+        </div>
+      ) : newsError || isError ? (
+        <p className="w-full text-gray-500">오류가 발생했습니다</p>
+      ) : (
+        <div className="w-full">
+          <p
+            className={data.data.id ? "" : "text-gray-500 text-center"}
+            dangerouslySetInnerHTML={{
+              __html: data.data.id
+                ? sanitizeHtml(data.data.description ?? "")
+                : "작성된 소식이 없습니다",
+            }}
+          ></p>
+          <p className="w-full text-sm text-gray-500">{data.data.title}</p>
+        </div>
       )}
+      {!pendingNews &&
+        !isPending &&
+        isCreator?.data &&
+        !isEditing &&
+        !data?.data.description && (
+          <Button
+            color="red"
+            className="w-60"
+            onClick={() => setIsEditing(true)}
+            disabled={pendingNews}
+          >
+            작성하기
+          </Button>
+        )}
       {isEditing && (
         <>
           <div className="w-full">
-            <label htmlFor="donateNews">
-              <textarea
-                ref={textareaRef}
-                name="donateNews"
-                id="donateNews"
-                onInput={handleInput}
-                className="w-full resize-none border border-gray-300 rounded-lg px-4 py-2 overflow-hidden focus:outline-pastelred min-h-15 max-h-106"
-                placeholder="후원 관련 소식과 후원금 사용 내역을 작성해주세요"
-              />
-            </label>
+            <TextBox
+              ref={textareaRef}
+              className="w-full resize-none border border-gray-300 rounded-lg px-4 py-2 overflow-hidden focus:outline-pastelred min-h-15 max-h-106"
+              placeholder={"후원 관련 소식과 후원금 사용 내역을 작성해주세요"}
+            ></TextBox>
           </div>
           <Button className="w-60" color="red" onClick={handleSubmit}>
             작성하기
           </Button>
         </>
       )}
-      {/* <p className="w-full">공지내용</p> */}
     </div>
   );
 }

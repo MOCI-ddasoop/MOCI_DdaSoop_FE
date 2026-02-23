@@ -11,7 +11,7 @@ import { Suspense } from "react";
 async function Together() {
   const queryClient = new QueryClient();
 
-  await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: queryKeys.together.list({
       category: [],
       mode: undefined,

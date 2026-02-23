@@ -15,7 +15,7 @@ function DonationHistoryContainer({ id }: { id: string }) {
         </div>
       ) : isPending ? (
         <div className="w-full h-28 flex-center">
-          <div className="loader"></div>
+          <div className="loader loader-red"></div>
         </div>
       ) : DONATION_LIST.data.length === 0 ? (
         <p className="text-gray-400">기부 내역이 없습니다</p>

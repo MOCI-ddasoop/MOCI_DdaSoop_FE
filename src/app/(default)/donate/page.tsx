@@ -1,22 +1,14 @@
 import { getInitDonationList } from "@/domain/donate/api/getInitDonationList";
 import DonateSection from "@/domain/donate/components/DonateSection";
-import { sortOptions } from "@/shared/constants/filter";
+import { queryKeys } from "@/shared/config/queryKeys";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { Suspense } from "react";
 
-interface DonatePageProps {
-  searchParams: Promise<{
-    category?: string;
-    page?: string;
-    sort?: string;
-  }>;
-}
-
-async function Donate({ searchParams }: DonatePageProps) {
-  const searchParam = await searchParams;
-
-  const category = searchParam.category?.split(",") ?? [];
-  const page = Number(searchParam.page ?? 1);
-  const sort = searchParam.sort ?? sortOptions[0];
-
+async function Donate() {
   // // 위에있는거 가지고 api 통신해서 가져오기
   // const ITEM_LIST = Array.from({ length: 11 }).map((_, index) => ({
   //   id: index,
@@ -29,17 +21,27 @@ async function Donate({ searchParams }: DonatePageProps) {
   //   progress: 75,
   // }));
 
-  const { data: ITEM_LIST } = await getInitDonationList();
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: queryKeys.donate.list({
+      category: [],
+      status: undefined,
+      page: 0,
+      sortType: "LATEST",
+      size: 12,
+    }),
+    queryFn: () => getInitDonationList(),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <>
-      <DonateSection
-        initialCategory={category}
-        initialPage={page}
-        sort={sort}
-        initialData={ITEM_LIST}
-      />
-    </>
+    <Suspense fallback={<div>Loading...</div>}>
+      <HydrationBoundary state={dehydratedState}>
+        <DonateSection />
+      </HydrationBoundary>
+    </Suspense>
   );
 }
 

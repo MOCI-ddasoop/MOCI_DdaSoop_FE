@@ -7,11 +7,9 @@ export const serverFetchApi = async (
   const baseURL = BASE_URL;
 
   const response = await fetch(`${baseURL}${url}`, {
-    headers: { "Content-Type": "application/json" },
+    next: { revalidate: 300 },
     ...options,
-    cache: "no-store",
   });
 
-  if (!response.ok) throw new Error("API 요청실패");
   return response;
 };

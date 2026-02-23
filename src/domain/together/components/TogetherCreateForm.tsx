@@ -13,6 +13,9 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useCreateTogether } from "../api/useCreateTogether";
+import { useAuthStore } from "@/store/authStore";
+import { categoryType } from "@/shared/constants/filter";
 
 const TOGETHER_CATEGORIES = [
   { id: 1, label: "플로깅", key: "PLOGGING" },
@@ -25,9 +28,9 @@ type OnlineType = "ONLINE" | "OFFLINE";
 function TogetherCreateForm() {
   const router = useRouter();
 
-  // const { mutate: handleCreateTogether } = useCreateTogether();
+  const { mutate: handleCreateTogether } = useCreateTogether();
 
-  // const userId = useAuthStore((s) => s.me?.memberId);
+  const userId = useAuthStore((s) => s.me?.memberId);
 
   const [togetherName, setTogetherName] = useState("");
   const [onlineType, setOnlineType] = useState<OnlineType | null>(null);
@@ -69,16 +72,16 @@ function TogetherCreateForm() {
       alert("모임 소개글을 입력해주세요.");
       return;
     }
-    // handleCreateTogether({
-    //   title: togetherName,
-    //   description: togetherInfo,
-    //   category: category! as keyof typeof categoryType,
-    //   mode: onlineType!,
-    //   capacity: maxParticipants,
-    //   startDate: startDate!.toISOString().slice(0, 10),
-    //   endDate: endDate!.toISOString().slice(0, 10),
-    //   memberId: userId,
-    // });
+    handleCreateTogether({
+      title: togetherName,
+      description: togetherInfo,
+      category: category! as "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC",
+      mode: onlineType!,
+      capacity: maxParticipants,
+      startDate: startDate!.toISOString().slice(0, 10),
+      endDate: endDate!.toISOString().slice(0, 10),
+      memberId: userId,
+    });
     alert("함께하기 생성이 완료되었습니다!");
     router.push("/together");
   };

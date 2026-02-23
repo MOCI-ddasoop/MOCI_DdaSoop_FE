@@ -1,9 +1,10 @@
 "use client";
 
 import {
-  categoryOptions,
+  donateCategory,
   onlineOptions,
   sortOptions,
+  togetherCategory,
 } from "@/shared/constants/filter";
 import Filter from "./Filter";
 import DropdownButton from "../DropdownButton";
@@ -29,7 +30,7 @@ function ItemFilter({
     <div className="flex justify-between py-4">
       <div className="flex items-center flex-wrap">
         <Filter
-          items={categoryOptions}
+          items={type === "together" ? togetherCategory : donateCategory}
           selectedItems={selectedCategory}
           type="category"
           onSelected={handleFilter}

@@ -4,7 +4,13 @@ import { useState } from "react";
 import DonateModal from "./DonateModal";
 import { useAuthStore } from "@/store/authStore";
 
-function DonateButton() {
+function DonateButton({
+  donateInfo,
+  imageUrl,
+}: {
+  donateInfo: { title?: string; category?: string };
+  imageUrl?: string;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const user = useAuthStore((s) => s.me);
   const handleClick = () => {
@@ -21,8 +27,9 @@ function DonateButton() {
       </Button>
       {isOpen && (
         <DonateModal
-          title="후원1"
-          organization="후원단체"
+          thumbnailImage={imageUrl}
+          title={donateInfo.title ?? "후원이름"}
+          organization={donateInfo.category ?? "카테고리"}
           onClose={() => setIsOpen(false)}
         />
       )}

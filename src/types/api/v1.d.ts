@@ -223,6 +223,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/donation/notice/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 후원하기 공지 게시글 등록 */
+    post: operations["createDonationNotice"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 후원하기 게시글 등록 */
+    post: operations["create_1"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/reports": {
     parameters: {
       query?: never;
@@ -620,6 +654,108 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/donation/{donationId}/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 개설자 확인 API */
+    get: operations["isDonationCreator"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/payment/recent": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 최신 2개 후원하기 내역 조회 */
+    get: operations["getRecentDonationPaymentList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/notice/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원하기 공지 개별 조회 */
+    get: operations["getDonationNotice"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/notice/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 후원하기 공지 조회 */
+    get: operations["getAllDonationNotices"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/member/{memberId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 나의 후원하기 조회 */
+    get: operations["getMyDonationPaymentList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/v1/donation/member/{memberId}/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 개설한 후원 리스트 조회 */
+    get: operations["createDonationList"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/donation/list": {
     parameters: {
       query?: never;
@@ -663,23 +799,6 @@ export interface paths {
     };
     /** 상세보기별 후원 현황 조회 */
     get: operations["getDonationStatusById"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/v1/donation/list/{id}/description": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** 후원하기 리스트 설명 조회 */
-    get: operations["getDonationDescription"];
     put?: never;
     post?: never;
     delete?: never;
@@ -1652,16 +1771,17 @@ export interface components {
       id?: number;
       title?: string;
       description?: string;
-      /** @enum {string} */
-      category?: "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC";
-      /** @enum {string} */
-      mode?: "ONLINE" | "OFFLINE";
       /** Format: int64 */
-      capacity?: number;
+      goalAmount?: number;
       /** Format: date */
       startDate?: string;
       /** Format: date */
       endDate?: string;
+      thumbnailImageUrl?: string;
+      /** @enum {string} */
+      status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+      /** @enum {string} */
+      category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
       /** Format: int64 */
       memberId?: number;
     };
@@ -1776,34 +1896,15 @@ export interface components {
       startDate?: string;
       /** Format: date */
       endDate?: string;
-      status?: string;
-      thumbnailImage?: string;
+      /** @enum {string} */
+      status?: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+      imageUrls?: string[];
       /** @enum {string} */
       category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
       /** Format: int64 */
       dDay?: number;
     };
     ListResponse: {
-      /** Format: int64 */
-      id?: number;
-      title?: string;
-      /** Format: int64 */
-      goalAmount?: number;
-      /** Format: int64 */
-      currentAmount?: number;
-      /** Format: date */
-      endDate?: string;
-      status?: string;
-      thumbnailImage?: string;
-      /** @enum {string} */
-      category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
-      /** Format: int64 */
-      dDay?: number;
-    };
-    DescriptionResponse: {
-      description?: string;
-    };
-    DonorListResponse: {
       /** Format: int64 */
       donationPaymentId?: number;
       /** Format: int64 */
@@ -1815,11 +1916,69 @@ export interface components {
       /** Format: date-time */
       createdAt?: string;
     };
+    DescriptionResponse: {
+      description?: string;
+    };
+    RsData: {
+      resultCode?: string;
+      msg?: string;
+      data?: unknown;
+    };
+    RecentDonationPaymentListResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** Format: int64 */
+      donationId?: number;
+      /** Format: int64 */
+      memberId?: number;
+      memberName?: string;
+      title?: string;
+      thumbnailImage?: string;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    DonationPaymentListResponse: {
+      /** Format: int64 */
+      id?: number;
+      /** Format: int64 */
+      donationId?: number;
+      /** Format: int64 */
+      memberId?: number;
+      title?: string;
+      thumbnailImage?: string;
+      /** Format: int64 */
+      amount?: number;
+      paymentMethod?: string;
+      /** Format: date-time */
+      createdAt?: string;
+    };
+    MyDonationListResponse: {
+      /** Format: int64 */
+      id?: number;
+      title?: string;
+      /** Format: int64 */
+      goalAmount?: number;
+      /** Format: int64 */
+      currentAmount?: number;
+      /** Format: date */
+      endDate?: string;
+      status?: string;
+      thumbnailImage?: string;
+      category?: string;
+      /** Format: int64 */
+      dDay?: number;
+    };
     PageReportSummaryResponse: {
       /** Format: int32 */
       totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["ReportSummaryResponse"][];
@@ -1828,21 +1987,18 @@ export interface components {
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
       numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
-      first?: boolean;
-      last?: boolean;
       empty?: boolean;
     };
     PageableObject: {
-      /** Format: int64 */
-      offset?: number;
-      sort?: components["schemas"]["SortObject"];
       unpaged?: boolean;
-      paged?: boolean;
       /** Format: int32 */
       pageSize?: number;
       /** Format: int32 */
       pageNumber?: number;
+      /** Format: int64 */
+      offset?: number;
+      sort?: components["schemas"]["SortObject"];
+      paged?: boolean;
     };
     ReportSummaryResponse: {
       /** Format: int64 */
@@ -1872,9 +2028,9 @@ export interface components {
       processedAt?: string;
     };
     SortObject: {
+      unsorted?: boolean;
       empty?: boolean;
       sorted?: boolean;
-      unsorted?: boolean;
     };
     NotificationSummaryResponse: {
       /** Format: int64 */
@@ -1907,6 +2063,9 @@ export interface components {
       totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: components["schemas"]["NotificationSummaryResponse"][];
@@ -1915,9 +2074,6 @@ export interface components {
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
       numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
-      first?: boolean;
-      last?: boolean;
       empty?: boolean;
     };
     NotificationResponse: {
@@ -1988,17 +2144,20 @@ export interface components {
       /** Format: int32 */
       size?: number;
       sortBy?: string;
+      sortByOrDefault?: string;
       /** Format: int32 */
       pageOrDefault?: number;
       /** Format: int32 */
       sizeOrDefault?: number;
-      sortByOrDefault?: string;
     };
     Page: {
       /** Format: int32 */
       totalPages?: number;
       /** Format: int64 */
       totalElements?: number;
+      pageable?: components["schemas"]["PageableObject"];
+      first?: boolean;
+      last?: boolean;
       /** Format: int32 */
       size?: number;
       content?: unknown[];
@@ -2007,9 +2166,6 @@ export interface components {
       sort?: components["schemas"]["SortObject"];
       /** Format: int32 */
       numberOfElements?: number;
-      pageable?: components["schemas"]["PageableObject"];
-      first?: boolean;
-      last?: boolean;
       empty?: boolean;
     };
     InfiniteScrollResponse: {
@@ -2628,6 +2784,54 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["DonationPaymentResponse"];
+        };
+      };
+    };
+  };
+  createDonationNotice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 후원하기 공지 게시글 등록 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CreateResponse"];
+        };
+      };
+    };
+  };
+  create_1: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRequest"];
+      };
+    };
+    responses: {
+      /** @description 후원하기 게시글 등록 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["CreateResponse"];
         };
       };
     };
@@ -3275,9 +3479,143 @@ export interface operations {
       };
     };
   };
-  getAllDonations: {
+  isDonationCreator: {
     parameters: {
       query?: never;
+      header?: never;
+      path: {
+        donationId: number;
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 개설자 확인 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["RsData"];
+        };
+      };
+    };
+  };
+  getRecentDonationPaymentList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 최신 후원하기 내역 2개 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["RecentDonationPaymentListResponse"];
+        };
+      };
+    };
+  };
+  getDonationNotice: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원하기 공지 개별 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getAllDonationNotices: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 후원하기 공지 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["ListResponse"];
+        };
+      };
+    };
+  };
+  getMyDonationPaymentList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 나의 후원하기 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["DonationPaymentListResponse"];
+        };
+      };
+    };
+  };
+  createDonationList: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        memberId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description 개설한 후원 리스트 조회 성공 */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "*/*": components["schemas"]["MyDonationListResponse"];
+        };
+      };
+    };
+  };
+  getAllDonations: {
+    parameters: {
+      query?: {
+        categories?: ("ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC")[];
+        sortType?: "LATEST" | "POPULAR" | "DEADLINE" | "CATEGORY";
+        page?: number;
+        size?: number;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -3334,7 +3672,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "*/*": components["schemas"]["DonorListResponse"];
+          "*/*": components["schemas"]["ListResponse"];
         };
       };
     };

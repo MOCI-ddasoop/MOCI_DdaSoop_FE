@@ -4,7 +4,7 @@ import { Suspense } from "react";
 async function page() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <MyTogetherSection />
+      <MyTogetherSection type="join" />
     </Suspense>
   );
 }

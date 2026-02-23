@@ -19,6 +19,8 @@ function UserAction({ id }: { id: number }) {
   const { mutate: joinTogether } = useJoinTogether({
     onSuccess: () => {
       qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
+      qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
+      qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
       alert("참여가 완료되었습니다.");
     },
   });
@@ -26,6 +28,8 @@ function UserAction({ id }: { id: number }) {
   const { mutate: leaveTogether } = useLeaveTogether({
     onSuccess: () => {
       qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
+      qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
+      qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
       alert("탈퇴가 완료되었습니다.");
     },
   });

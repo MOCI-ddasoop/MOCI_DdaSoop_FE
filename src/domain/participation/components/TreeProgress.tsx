@@ -5,7 +5,7 @@ function TreeProgress({ progress }: { progress: number }) {
     <div className="relative w-7/10 m-auto aspect-square flex-center">
       {progress <= 25 ? (
         <Image
-          src="/loginTree.svg"
+          src="/progress_1.svg"
           fill
           alt="나무이미지"
           className="object-contain"
@@ -13,7 +13,7 @@ function TreeProgress({ progress }: { progress: number }) {
         />
       ) : progress <= 50 ? (
         <Image
-          src="/loginTree.svg"
+          src="/progress_2.svg"
           fill
           alt="나무이미지"
           className="object-contain"
@@ -21,7 +21,7 @@ function TreeProgress({ progress }: { progress: number }) {
         />
       ) : progress <= 75 ? (
         <Image
-          src="/loginTree.svg"
+          src="/progress_3.svg"
           fill
           alt="나무이미지"
           className="object-contain"
@@ -29,7 +29,7 @@ function TreeProgress({ progress }: { progress: number }) {
         />
       ) : (
         <Image
-          src="/loginTree.svg"
+          src="/progress_4.svg"
           fill
           alt="나무이미지"
           className="object-contain"

@@ -1,5 +1,6 @@
 import { getDonateDescription } from "@/domain/donate/api/getDonateDescription";
 import DonatePayment from "@/domain/donate/components/DonatePayment";
+import { Suspense } from "react";
 
 async function page({
   params,
@@ -20,7 +21,13 @@ async function page({
   const info = await getDonateDescription(id);
 
   return (
-    <>
+    <Suspense
+      fallback={
+        <div className="w-full h-28">
+          <div className="loader loader-red" />
+        </div>
+      }
+    >
       <p
         className={info ? "" : "flex-center text-gray-400"}
         dangerouslySetInnerHTML={{
@@ -30,7 +37,7 @@ async function page({
       {paymentParams && Object.keys(paymentParams).length !== 0 && (
         <DonatePayment id={id} params={paymentParams} />
       )}
-    </>
+    </Suspense>
   );
 }
 

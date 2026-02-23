@@ -15,8 +15,10 @@ export const getInitTogetherList = async ({
   );
 
   if (!res.ok) {
-    throw new Error(
-      `함께하기 리스트 조회에 실패했습니다. 오류코드 : ${res.status}`,
+    console.error(
+      new Error(
+        `함께하기 리스트 조회에 실패했습니다. 오류코드 : ${res.status}`,
+      ),
     );
   }
 

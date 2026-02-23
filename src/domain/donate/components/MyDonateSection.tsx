@@ -1,18 +1,11 @@
 "use client";
 import ParticipationContainer from "@/domain/participation/components/ParticipationContainer";
-import { useGetOwnTogetherList } from "../api/useGetOwnTogetherList";
 import { useAuthStore } from "@/store/authStore";
+import { useGetOwnDonationList } from "../api/useGetOwnDonationList";
 
-function MyTogetherSection({ type }: { type: "join" | "create" }) {
+function MyDonateSection() {
   const userId = useAuthStore((s) => s.me?.memberId);
-  const { isError, isPending, data } = useGetOwnTogetherList(userId!);
-
-  const items =
-    type === "create"
-      ? data?.data.filter((item) => item.memberId === userId)
-      : data?.data.filter((item) =>
-          item.participants?.some((p) => p.memberId === userId),
-        );
+  const { isError, isPending, data: items } = useGetOwnDonationList(userId!);
 
   return (
     <>
@@ -27,8 +20,8 @@ function MyTogetherSection({ type }: { type: "join" | "create" }) {
       ) : (
         items && (
           <ParticipationContainer
-            type="myTogether"
-            items={items ?? []}
+            type="myDonate"
+            items={items.data ?? []}
             currentPage={0}
             className="mb-10"
             isLogin={!!userId}
@@ -40,4 +33,4 @@ function MyTogetherSection({ type }: { type: "join" | "create" }) {
   );
 }
 
-export default MyTogetherSection;
+export default MyDonateSection;

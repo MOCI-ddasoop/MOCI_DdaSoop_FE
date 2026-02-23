@@ -6,11 +6,62 @@ import { components } from "@/types/api/v1";
 //    api/v1/donation/list/{id}/donorList -> DonorListResponse
 //    api/v1/donation/list/{id}/description -> DescriptionResponse
 
-export type ListResponse = components["schemas"]["ListResponse"];
+export type ListResponse = {
+  id?: number;
+  title?: string;
+  /** Format: int64 */
+  goalAmount?: number;
+  /** Format: int64 */
+  currentAmount?: number;
+  /** Format: date */
+  endDate?: string;
+  status?: string;
+  thumbnailImage?: string;
+  /** @enum {string} */
+  category?: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+  /** Format: int64 */
+  dDay?: number;
+};
 export type DetailResponse = components["schemas"]["DetailResponse"];
-export type DonorListResponse = components["schemas"]["DonorListResponse"];
 export type DescriptionResponse = components["schemas"]["DescriptionResponse"];
 export type DonationTossRequest = components["schemas"]["DonationTossRequest"];
+export type DonorListResponse = components["schemas"]["ListResponse"];
+export type DonationPaymentListResponse =
+  components["schemas"]["DonationPaymentListResponse"];
+export type RecentDonationPaymentListResponse =
+  components["schemas"]["RecentDonationPaymentListResponse"];
+
+export type DonateCreateRequest = {
+  title: string;
+  description?: string;
+  goalAmount: number;
+  startDate: string;
+  endDate: string;
+  category: "ANIMAL" | "ENVIRONMENT" | "SOCIETY" | "ETC";
+  memberId?: number;
+  imageUrls?: string[];
+};
+
+export type DonateNewsRequest = {
+  donationId: number;
+  title: string;
+  description?: string;
+  progressNews?: string;
+  reviews?: string;
+};
+
+export type DonateNewsResponse = {
+  resultCode: string;
+  msg: string;
+  data: {
+    id: number;
+    donationId: number;
+    title: string;
+    description?: string;
+    progressNews?: string;
+    reviews?: string;
+  };
+};
 
 export type DonateInfo = ListResponse & {
   progress: number;
@@ -23,12 +74,24 @@ export type DonateDetailInfo = DetailResponse & {
 export interface RawDonateResponse {
   resultCode: string;
   msg: string;
-  data: ListResponse[];
+  data: {
+    content: ListResponse[];
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
 export interface DonateResponse {
   resultCode: string;
   msg: string;
-  data: DonateInfo[];
+  data: {
+    content: DonateInfo[];
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
 }
 
 export interface RawDonateDetailResponse {
@@ -60,6 +123,30 @@ export interface DonateDescription {
   data: DescriptionResponse;
 }
 
+export interface MyDonateResponse {
+  resultCode: string;
+  msg: string;
+  data: DonateInfo[];
+}
+
+export interface DonateHistoryResponse {
+  resultCode: string;
+  msg: string;
+  data: DonationPaymentListResponse[];
+}
+
+export interface RecentDonateResponse {
+  resultCode: string;
+  msg: string;
+  data: RecentDonationPaymentListResponse[];
+}
+
+export interface DonationCreatorResponse {
+  resultCode: string;
+  msg: string;
+  data: boolean;
+}
+
 export interface DonatePageProps {
   searchParams: Promise<{
     category?: string;
@@ -73,8 +160,8 @@ export type DonationListItemProps = {
   donationImage?: string;
   name: string;
   amount: number;
-  userName: string;
+  userName?: string;
   href?: string;
-  type?: "summary" | "tab";
+  type?: "summary" | "tab" | "mypage";
   createdAt?: string;
 };
