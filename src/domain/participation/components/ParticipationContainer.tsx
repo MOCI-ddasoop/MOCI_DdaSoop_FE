@@ -53,7 +53,7 @@ function ParticipationContainer({
         className,
       )}
     >
-      {currentPage === 1 && type !== "myTogether" && (
+      {currentPage === 1 && type !== "myTogether" && type !== "myDonate" && (
         <AddParticipationCard type={type} isLogin={isLogin} />
       )}
       {type === "together"
@@ -64,9 +64,13 @@ function ParticipationContainer({
           ? items.map((item) => (
               <ParticipationCard type={type} key={item.id} {...item} />
             ))
-          : items.map((item) => (
-              <ParticipationCard type={type} key={item.id} {...item} />
-            ))}
+          : type === "myDonate"
+            ? items.map((item) => (
+                <ParticipationCard type={type} key={item.id} {...item} />
+              ))
+            : items.map((item) => (
+                <ParticipationCard type={type} key={item.id} {...item} />
+              ))}
     </div>
   );
 }
