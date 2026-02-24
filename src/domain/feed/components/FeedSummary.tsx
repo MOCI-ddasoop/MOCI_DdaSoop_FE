@@ -27,14 +27,14 @@ function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 						{feed?.authorProfileImage && (
 							<Image
 								src={feed.authorProfileImage}
-								alt={feed.authorName ?? "사용자를 찾을 수 없음"}
+								alt={feed.authorNickname ?? "사용자를 찾을 수 없음"}
 								fill
 								className="object-cover"
 							/>
 						)}
 					</div>
 					<div className="p-1 break-all line-clamp-2">
-						<span className="font-bold inline">{feed?.authorName}</span>
+						<span className="font-bold inline">{feed?.authorNickname}</span>
 						<span className="text-gray-500 inline break-all">
 							{feed?.content}
 						</span>
@@ -47,7 +47,7 @@ function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 				<div className="relative h-15 w-15 rounded-md overflow-hidden border border-gray-300 shrink-0">
 					<Image
 						src={feed.images[0].imageUrl ?? "/defaultFeedImage.png"}
-						alt={feed.authorName || "feed image"}
+						alt={feed.authorNickname || "feed image"}
 						fill
 						className="object-cover"
 					/>
