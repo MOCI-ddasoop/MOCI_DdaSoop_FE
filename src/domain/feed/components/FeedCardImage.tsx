@@ -80,8 +80,8 @@ function FeedCardImage({
 				<div className="absolute flex items-center gap-2 top-2 left-0 px-4">
 					<div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-300">
 						<Image
-							src={authorProfileImage}
-							alt={authorName}
+							src={authorProfileImage ?? "/defaultProfileImage.png"}
+							alt={authorName ?? "탈퇴한 회원"}
 							width={50}
 							height={50}
 							className="object-cover"
