@@ -21,25 +21,29 @@ function MyDonateHistory() {
           <div
             className={`w-full ${isError || isPending || items.data.length === 0 ? "flex-center" : "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"}`}
           >
-            {items.data.map(
-              ({
-                id,
-                donationId,
-                title,
-                thumbnailImage,
-                amount,
-                createdAt,
-              }) => (
-                <DonationListItem
-                  key={id}
-                  name={title!}
-                  amount={amount!}
-                  donationImage={thumbnailImage}
-                  createdAt={createdAt?.slice(0, 10)}
-                  href={`/donate/${donationId}`}
-                  type="mypage"
-                />
-              ),
+            {items.data.length === 0 ? (
+              <p className="text-gray-400">내역이 존재하지 않습니다</p>
+            ) : (
+              items.data.map(
+                ({
+                  id,
+                  donationId,
+                  title,
+                  thumbnailImage,
+                  amount,
+                  createdAt,
+                }) => (
+                  <DonationListItem
+                    key={id}
+                    name={title!}
+                    amount={amount!}
+                    donationImage={thumbnailImage}
+                    createdAt={createdAt?.slice(0, 10)}
+                    href={`/donate/${donationId}`}
+                    type="mypage"
+                  />
+                ),
+              )
             )}
           </div>
         )

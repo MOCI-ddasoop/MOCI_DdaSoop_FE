@@ -14,7 +14,6 @@ import TogetherListItem from "@/domain/together/components/TogetherListItem";
 import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import TagInput from "@/shared/components/TagInput";
-import Swal from "sweetalert2";
 import { useUpdateFeedById } from "../api/useUdtFeedById";
 import { useDeleteFeedById } from "../api/useDelFeedById";
 import { useModalStore } from "../../modal/store/useModalStore";
@@ -24,6 +23,7 @@ import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
 import { useToggleFeedReact } from "../api/useToggleFeedReact";
 import reportModalStore from "@/domain/report/stores/useReportModalStore";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 type FeedDetailCardProps = {
   item: FeedResponse;
@@ -111,9 +111,8 @@ function FeedDetailCard({
     if (!isFeedEditMode) return;
 
     setCanClose("feed", async () => {
-      const result = await Swal.fire({
-        icon: "error",
-        titleText: "수정 중인 내용이 있어요",
+      const result = await ConfirmAlert({
+        title: "수정 중인 내용이 있어요",
         text: "지금 나가면 수정 내용이 저장되지 않습니다.",
         showCancelButton: true,
         showDenyButton: true,
@@ -197,15 +196,12 @@ function FeedDetailCard({
         editActions.enterEdit();
         break;
       case "삭제":
-        Swal.fire({
-          title: "삭제",
-          text: "댓글을 삭제하시겠습니까?",
-          icon: "warning",
+        ConfirmAlert({
+          text: "피드를 삭제하시겠습니까?",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
           confirmButtonText: "삭제",
           cancelButtonText: "취소",
+          red: true,
         }).then((result) => {
           if (result.isConfirmed) {
             handleDelete();
@@ -221,13 +217,9 @@ function FeedDetailCard({
   };
 
   const handleEditSubmit = useCallback(() => {
-    Swal.fire({
-      title: "수정",
-      text: "댓글을 수정하시겠습니까?",
-      icon: "warning",
+    ConfirmAlert({
+      text: "피드를 수정하시겠습니까?",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "수정",
       cancelButtonText: "취소",
     }).then((result) => {
@@ -244,9 +236,9 @@ function FeedDetailCard({
 
   const submitRegistry = useSubmitRegistry();
 
-  const handleTogetherItemClick = useCallback(() => {
-    window.open(`/together/${togetherId}`, "_blank", "noopener,noreferrer");
-  }, [togetherId]);
+  // const handleTogetherItemClick = useCallback(() => {
+  //   window.open(`/together/${togetherId}`, "_blank", "noopener,noreferrer");
+  // }, [togetherId]);
 
   useEffect(() => {
     submitRegistry?.register("feed-edit", {
@@ -314,8 +306,9 @@ function FeedDetailCard({
             name={togetherTitle ?? "함께하기를 찾을수 없습니다."}
             category={togetherCategory ?? ""}
             isOnline={togetherMode ?? ""}
-            onClick={handleTogetherItemClick}
+            // onClick={handleTogetherItemClick}
             widthClass="w-full"
+            href={`/together/${togetherId}`}
           />
         )}
 

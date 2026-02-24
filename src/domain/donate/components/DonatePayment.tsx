@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
+import { Alert } from "@/shared/utils/alert";
 
 function DonatePayment({
   id,
@@ -38,10 +39,16 @@ function DonatePayment({
             amount: params.amount,
           });
         } catch (e) {
-          alert("결제 승인에 실패했습니다 다시 시도해주세요");
+          Alert({
+            text: "결제 승인에 실패했습니다 다시 시도해주세요",
+            red: true,
+          });
         }
       } else {
-        alert("결제 승인에 실패했습니다 다시 시도해주세요");
+        Alert({
+          text: "결제 승인에 실패했습니다 다시 시도해주세요",
+          red: true,
+        });
       }
       queryClient.refetchQueries({ queryKey: queryKeys.donate.id(id) });
       queryClient.invalidateQueries({ queryKey: queryKeys.donate.history(id) });

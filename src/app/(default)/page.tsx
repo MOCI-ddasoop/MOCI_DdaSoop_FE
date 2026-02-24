@@ -4,7 +4,7 @@ import { DONATION_LIST } from "@/shared/mock/mockup";
 import SearchInput from "@/shared/components/SearchInput";
 import SearchQueryNotation from "@/domain/search/SearchQueryNotation";
 import FeedCardContainer from "@/domain/feed/components/FeedCardContainer";
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 import FeedCreateButton from "@/domain/feed/components/FeedCreateButton";
 import { getInitTogetherList } from "@/domain/together/api/getInitTogetherList";
 import { sortOptions } from "@/shared/constants/filter";
@@ -17,9 +17,13 @@ export default async function Home({
 }) {
   const { query } = await searchParams;
 
-  const randomList =
-    // eslint-disable-next-line react-hooks/purity
-    sortOptions[Math.floor(Math.random() * sortOptions.length)];
+  const randomList = cache(
+    () =>
+      sortOptions[
+        // eslint-disable-next-line react-hooks/purity
+        Math.floor(Date.now() / (1000 * 60 * 5)) % sortOptions.length
+      ],
+  )();
 
   const { data: togetherList } = await getInitTogetherList({
     fixed: true,

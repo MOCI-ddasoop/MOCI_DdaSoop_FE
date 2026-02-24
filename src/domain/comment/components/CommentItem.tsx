@@ -9,7 +9,6 @@ import { CommentResponse } from "../types";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
-import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { BsHeartFill } from "react-icons/bs";
 
@@ -17,6 +16,7 @@ import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
 import { useModalStore } from "@/domain/modal/store/useModalStore";
 import reportModalStore from "@/domain/report/stores/useReportModalStore";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 interface CommentItemProps {
   ref?: Ref<HTMLLIElement>;
@@ -70,13 +70,9 @@ function CommentItem({
   const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
 
   const editFormSubmit = useCallback(() => {
-    Swal.fire({
-      title: "수정",
+    ConfirmAlert({
       text: "댓글을 수정하시겠습니까?",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "수정",
       cancelButtonText: "취소",
     }).then((result) => {
@@ -116,9 +112,8 @@ function CommentItem({
     if (!isEditMode) return;
 
     setCanClose("feed", async () => {
-      const result = await Swal.fire({
-        icon: "error",
-        titleText: "수정 중인 내용이 있어요",
+      const result = await ConfirmAlert({
+        title: "수정 중인 내용이 있어요",
         text: "지금 나가면 수정 내용이 저장되지 않습니다.",
         showCancelButton: true,
         showDenyButton: true,
@@ -151,13 +146,9 @@ function CommentItem({
         setIsEditMode(true);
         break;
       case "삭제":
-        Swal.fire({
-          title: "삭제",
+        ConfirmAlert({
           text: "댓글을 삭제하시겠습니까?",
-          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
           confirmButtonText: "삭제",
           cancelButtonText: "취소",
         }).then((result) => {

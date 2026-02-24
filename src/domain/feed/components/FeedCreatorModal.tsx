@@ -16,6 +16,7 @@ import { MyTogetherInfo } from "@/domain/together/types";
 import { useGetOwnTogetherList } from "@/domain/together/api/useGetOwnTogetherList";
 import { useParams, usePathname } from "next/navigation";
 import { useGetTogetherById } from "@/domain/together/api/useGetTogetherById";
+import { Alert, ConfirmAlert, UpdateAlert } from "@/shared/utils/alert";
 
 function FeedCreatorModal({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
@@ -86,7 +87,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
     isSuccess,
   } = usePostFeed({
     onMutate: () => {
-      Swal.fire({
+      Alert({
         title: "업로드 중입니다.",
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
@@ -94,9 +95,8 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
     },
     onSuccess: () => {
       Swal.hideLoading();
-      Swal.update({
+      UpdateAlert({
         title: "업로드 성공",
-        icon: "success",
       });
       setTimeout(() => {
         Swal.close();
@@ -108,9 +108,8 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
     },
     onError: () => {
       Swal.hideLoading();
-      Swal.update({
+      UpdateAlert({
         title: "업로드 실패",
-        icon: "error",
       });
       setTimeout(() => {
         Swal.close();
@@ -131,14 +130,14 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
         return true;
       }
 
-      const result = await Swal.fire({
-        icon: "error",
-        titleText: "게시물을 삭제하시겠어요?",
+      const result = await ConfirmAlert({
+        title: "게시물을 삭제하시겠어요?",
         text: "지금 나가면 수정 내용이 저장되지 않습니다.",
         showCancelButton: true,
         showConfirmButton: true,
         confirmButtonText: "삭제",
         cancelButtonText: "취소",
+        red: true,
       });
 
       return result.isConfirmed;

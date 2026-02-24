@@ -9,6 +9,7 @@ import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { useAuthStore } from "@/store/authStore";
 import { useGetIsCreator } from "../api/useGetIsCreator";
+import { Alert } from "@/shared/utils/alert";
 
 function DonateNews({ id }: { id: string }) {
   const userId = useAuthStore((s) => s.me?.memberId);
@@ -16,7 +17,7 @@ function DonateNews({ id }: { id: string }) {
     data: isCreator,
     isPending,
     isError,
-  } = useGetIsCreator({ id, memberId: userId! });
+  } = useGetIsCreator({ id, memberId: userId ?? -1 });
   const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef<TextBoxHandle | null>(null);
   const { mutateAsync: postDonationNews } = usePostNews(id);
@@ -26,7 +27,8 @@ function DonateNews({ id }: { id: string }) {
   const handleSubmit = async () => {
     if (!textareaRef.current) return;
     if (textareaRef.current.getHTML().trim() === "") {
-      alert("소식을 입력해주세요");
+      Alert({ text: "소식을 입력해주세요", timer: 1500, red: true });
+      return;
     }
     await postDonationNews(textareaRef.current.getHTML());
     queryClient.refetchQueries({ queryKey: queryKeys.donate.news(id) });

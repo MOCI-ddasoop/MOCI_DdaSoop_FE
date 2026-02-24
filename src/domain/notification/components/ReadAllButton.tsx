@@ -1,18 +1,14 @@
 "use client";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { useReadAllNotification } from "../api/useReadAllNotification";
-import Swal from "sweetalert2";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 function ReadAllButton() {
   const { mutate: readAllNotification } = useReadAllNotification();
   const handleReadAll = () => {
-    Swal.fire({
-      title: "알림",
+    ConfirmAlert({
       text: "모든 알림을 읽음처리하시겠습니까?",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "확인",
       cancelButtonText: "취소",
     }).then((result) => {
