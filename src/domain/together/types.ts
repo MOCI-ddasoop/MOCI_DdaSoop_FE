@@ -121,4 +121,5 @@ export type TogetherListItemProps = {
   category: string;
   isOnline: string;
   widthClass?: string;
+  href?: string;
 };
