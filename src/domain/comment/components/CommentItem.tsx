@@ -44,7 +44,7 @@ function CommentItem({
 		authorProfileImage,
 		content,
 		createdAt,
-		updatedAt,
+		contentUpdatedAt,
 		replies,
 		replyCount,
 		parentId,
@@ -243,7 +243,7 @@ function CommentItem({
 										__html: sanitizeHtml(content ?? ""),
 									}}
 								></span>
-								{updatedAt !== createdAt ? (
+								{contentUpdatedAt !== createdAt ? (
 									<span className="text-gray-400 ml-1 text-sm">(수정됨)</span>
 								) : (
 									""

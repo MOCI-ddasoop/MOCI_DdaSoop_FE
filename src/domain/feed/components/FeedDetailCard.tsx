@@ -47,7 +47,7 @@ function FeedDetailCard({
 		authorProfileImage = "/defaultFeedImage.png",
 		content,
 		createdAt,
-		updatedAt,
+		contentUpdatedAt,
 		bookmarkCount = 0,
 		reactionCount = 0,
 		commentCount = 0,
@@ -359,7 +359,7 @@ function FeedDetailCard({
 					{/* 날짜 영역 */}
 					<div className="text-sm text-gray-500 p-1">
 						{formatRelativeDate(createdAt ?? "")}
-						{createdAt !== updatedAt ? (
+						{createdAt !== contentUpdatedAt ? (
 							<span className="ml-1">(수정됨)</span>
 						) : (
 							""
