@@ -6,6 +6,7 @@ import {
 	InfiniteData,
 } from "@tanstack/react-query";
 import { CommentPage } from "../types";
+import { updateCommentTreeById } from "../utils/updateCommentTreeById";
 
 type ToggleReactContext = {
 	previousComments?: InfiniteData<CommentPage>;
@@ -37,17 +38,20 @@ export const useToggleReact = (feedId: number | undefined) => {
 					...old,
 					pages: old.pages.map((page) => ({
 						...page,
-						content: page.content.map((comment) => {
-							if (comment.id !== commentId) return comment;
-							const nextReacted = !comment.isReacted;
-							return {
-								...comment,
-								isReacted: nextReacted,
-								reactionCount: nextReacted
-									? (comment.reactionCount ?? 0) + 1
-									: (comment.reactionCount ?? 0) - 1,
-							};
-						}),
+						content: updateCommentTreeById(
+							page.content,
+							commentId,
+							(comment) => {
+								const nextReacted = !comment.isReacted;
+								return {
+									...comment,
+									isReacted: nextReacted,
+									reactionCount: nextReacted
+										? (comment.reactionCount ?? 0) + 1
+										: (comment.reactionCount ?? 0) - 1,
+								};
+							},
+						),
 					})),
 				};
 			});
@@ -65,14 +69,18 @@ export const useToggleReact = (feedId: number | undefined) => {
 					...old,
 					pages: old.pages.map((page) => ({
 						...page,
-						content: page.content.map((comment) => {
-							if (comment.id !== commentId) return comment;
-							return {
-								...comment,
-								isReacted: data.isReacted,
-								reactionCount: data.reactionCount,
-							};
-						}),
+						content: updateCommentTreeById(
+							page.content,
+							commentId,
+							(comment) => {
+								if (comment.id !== commentId) return comment;
+								return {
+									...comment,
+									isReacted: data.isReacted,
+									reactionCount: data.reactionCount,
+								};
+							},
+						),
 					})),
 				};
 			});

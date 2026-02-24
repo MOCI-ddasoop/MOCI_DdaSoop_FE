@@ -294,13 +294,13 @@ function CommentItem({
 						</button>
 					</div>
 					{/* TODO: 수정, 삭제 기능은 로그인이 연결되었을 때, ME로 작성자 ID와 내 아이디 비교하여 렌더링 */}
-					{!!userId && (
+					{userId ? (
 						<DropdownButton
 							className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
 							options={
 								userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]
 							}
-							selected={selectedOption ?? ""}
+							selected={selectedOption}
 							setSelected={handleOptionClick}
 							buttonStyle="horizontal"
 							size="sm"
@@ -308,6 +308,8 @@ function CommentItem({
 							placement="bottom-end"
 							highlightingLastOption={true}
 						/>
+					) : (
+						""
 					)}
 				</div>
 
@@ -320,6 +322,7 @@ function CommentItem({
 							<CommentItem
 								key={reply.id}
 								item={reply}
+								userId={userId}
 								feedId={feedId}
 								onCommentTargetClick={onCommentTargetClick}
 							/>
