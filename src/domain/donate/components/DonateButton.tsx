@@ -3,6 +3,7 @@ import Button from "@/shared/components/Button";
 import { useState } from "react";
 import DonateModal from "./DonateModal";
 import { useAuthStore } from "@/store/authStore";
+import { Alert } from "@/shared/utils/alert";
 
 function DonateButton({
   donateInfo,
@@ -15,7 +16,7 @@ function DonateButton({
   const user = useAuthStore((s) => s.me);
   const handleClick = () => {
     if (!user) {
-      alert("로그인이 필요한 서비스입니다.");
+      Alert({ text: "로그인이 필요한 서비스입니다.", timer: 1500, red: true });
       return;
     }
     setIsOpen(true);
@@ -29,7 +30,7 @@ function DonateButton({
         <DonateModal
           thumbnailImage={imageUrl}
           title={donateInfo.title ?? "후원이름"}
-          organization={donateInfo.category ?? "카테고리"}
+          category={donateInfo.category ?? "카테고리"}
           onClose={() => setIsOpen(false)}
         />
       )}

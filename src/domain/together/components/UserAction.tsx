@@ -6,9 +6,9 @@ import { useAuthStore } from "@/store/authStore";
 import { useJoinTogether } from "../api/useJoinTogether";
 import { useLeaveTogether } from "../api/useLeaveTogether";
 import { useCheckIsMember } from "../api/useCheckIsMember";
-import Swal from "sweetalert2";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
+import { Alert, ConfirmAlert } from "@/shared/utils/alert";
 
 function UserAction({ id }: { id: number }) {
   const qc = useQueryClient();
@@ -21,7 +21,7 @@ function UserAction({ id }: { id: number }) {
       qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
       qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
       qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
-      alert("참여가 완료되었습니다.");
+      Alert({ text: "참여가 완료되었습니다.", timer: 1500 });
     },
   });
 
@@ -30,7 +30,7 @@ function UserAction({ id }: { id: number }) {
       qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
       qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
       qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
-      alert("탈퇴가 완료되었습니다.");
+      Alert({ text: "탈퇴가 완료되었습니다.", timer: 1500, red: true });
     },
   });
 
@@ -44,15 +44,12 @@ function UserAction({ id }: { id: number }) {
 
   const handleJoinParticipate = () => {
     if (!isLogin) {
-      alert("로그인이 필요합니다.");
+      Alert({ text: "로그인이 필요합니다.", timer: 1500 });
       return;
     } else {
-      Swal.fire({
-        title: "함께하기 참여",
+      ConfirmAlert({
         text: "함께하기에 참여하시겠습니까?",
-        icon: "question",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
         confirmButtonText: "참여",
         cancelButtonText: "취소",
       }).then((result) => {
@@ -62,14 +59,12 @@ function UserAction({ id }: { id: number }) {
   };
 
   const handleLeaveParticipate = () => {
-    Swal.fire({
-      title: "함께하기 탈퇴",
+    ConfirmAlert({
       text: "함께하기를 탈퇴하시겠습니까?",
-      icon: "error",
       showCancelButton: true,
-      confirmButtonColor: "#eb5353",
       confirmButtonText: "탈퇴",
       cancelButtonText: "취소",
+      red: true,
     }).then((result) => {
       if (result.isConfirmed) leaveTogether(id);
     });

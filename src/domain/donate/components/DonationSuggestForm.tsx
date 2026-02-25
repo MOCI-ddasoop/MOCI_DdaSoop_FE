@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCreateDonate } from "../api/useCreateDonte";
 import { usePostImage } from "@/shared/api/usePostImage";
+import { Alert } from "@/shared/utils/alert";
 
 const DONATION_CATEGORIES = [
   //TODO: 카테고리 데이터 API 연동
@@ -72,7 +73,7 @@ function DonationSuggestForm() {
     if (!textBoxRef.current) return;
     const html = textBoxRef.current.getHTML();
     if (html.trim() === "") {
-      alert("후원 소개글을 입력해주세요.");
+      Alert({ text: "후원 소개글을 입력해주세요.", red: true });
       return;
     }
     try {
@@ -95,10 +96,14 @@ function DonationSuggestForm() {
         memberId: userId,
         imageUrls,
       });
-      alert("후원 제안이 완료되었습니다!");
+      await Alert({
+        text: "후원 제안이 완료되었습니다!",
+        timer: 1500,
+        red: false,
+      });
       router.push("/donate");
     } catch (e) {
-      alert("후원 제안에 실패하였습니다");
+      Alert({ text: "후원 제안에 실패하였습니다", red: true });
     }
   };
 

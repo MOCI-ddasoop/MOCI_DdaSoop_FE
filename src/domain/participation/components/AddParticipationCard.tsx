@@ -1,3 +1,4 @@
+import { Alert } from "@/shared/utils/alert";
 import Link from "next/link";
 import { HiPlusCircle } from "react-icons/hi";
 
@@ -11,7 +12,12 @@ function AddParticipationCard({
   isLogin: boolean;
 }) {
   const handleAlert = () => {
-    if (!isLogin) alert("로그인이 필요합니다");
+    if (!isLogin)
+      Alert({
+        text: "로그인이 필요합니다",
+        timer: 1500,
+        red: type === "donate" ? true : false,
+      });
   };
   return (
     <Link

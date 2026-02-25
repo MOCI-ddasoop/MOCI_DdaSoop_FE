@@ -12,16 +12,17 @@ import { useAuthStore } from "@/store/authStore";
 import { useParams } from "next/navigation";
 import { FaRegCreditCard } from "react-icons/fa6";
 import { MdLocalAtm, MdOutlineAtm } from "react-icons/md";
+import { categoryType } from "@/shared/constants/filter";
 
 function DonateModal({
   onClose,
   title,
-  organization,
+  category,
   thumbnailImage,
 }: {
   onClose: () => void;
   title: string;
-  organization: string;
+  category: string;
   thumbnailImage?: string;
 }) {
   const [step, setStep] = useState<"amount" | "paymethod">("amount");
@@ -198,7 +199,9 @@ function DonateModal({
 
           <div className="flex flex-col gap-1 flex-1">
             <h2 className="text-lg font-semibold">{title}</h2>
-            <p className="text-sm text-gray-500">{organization}</p>
+            <p className="text-sm text-gray-500">
+              {categoryType[category as keyof typeof categoryType]}
+            </p>
           </div>
           {step === "paymethod" && (
             <p className="font-medium text-mainred self-end">
