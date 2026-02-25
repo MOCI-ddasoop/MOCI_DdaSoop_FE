@@ -17,7 +17,7 @@ import TagInput from "@/shared/components/TagInput";
 import { useUpdateFeedById } from "../api/useUdtFeedById";
 import { useDeleteFeedById } from "../api/useDelFeedById";
 import { useModalStore } from "../../modal/store/useModalStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import PostVisibilityOptions from "./PostVisibilityOptions";
 import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
@@ -26,6 +26,7 @@ import reportModalStore from "@/domain/report/stores/useReportModalStore";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import { TogetherInfo } from "@/domain/together/types";
 import { ConfirmAlert } from "@/shared/utils/alert";
+import { useTogglePin } from "../api/useTogglePin";
 
 type FeedDetailCardProps = {
   item: FeedResponse;
@@ -43,6 +44,8 @@ function FeedDetailCard({
   const {
     id,
     authorId,
+    feedType,
+    isPinned,
     authorNickname: author,
     authorProfileImage,
     content,
@@ -59,6 +62,9 @@ function FeedDetailCard({
     togetherMode,
     tags,
   } = item;
+
+  const pathname = usePathname();
+  const currentPage = pathname.split("/")[1] as "" | "together" | "mypage";
 
   const [bookmarkInfo, setBookmarkInfo] = useState<{
     bookmarkCount: number;
@@ -174,6 +180,11 @@ function FeedDetailCard({
 
   const { mutate: updateFeedMutation } = useUpdateFeedById();
   const { mutateAsync: deleteFeedMutation } = useDeleteFeedById();
+  const { mutateAsync: togglePin } = useTogglePin({
+    currentPage,
+    togetherId: togetherId!,
+    feedId: id!,
+  });
 
   const handleDelete = async () => {
     try {
@@ -194,6 +205,10 @@ function FeedDetailCard({
   const handleOwnerOptionClick = (option: string) => {
     setSelectedOwnerOption(option);
     switch (option) {
+      case "핀고정":
+      case "고정해제":
+        togglePin();
+        break;
       case "수정":
         editActions.enterEdit();
         break;
@@ -262,13 +277,23 @@ function FeedDetailCard({
       <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
         <div className="flex items-center gap-2">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-            <Image src={authorProfileImage ?? "/defaultFeedImage.png"} alt={author ?? "기본이미지"} fill />
+            <Image
+              src={authorProfileImage ?? "/defaultFeedImage.png"}
+              alt={author ?? "기본이미지"}
+              fill
+            />
           </div>
           <div className="text-sm text-nowrap">{author}</div>
         </div>
         {!!userId && (
           <DropdownButton
-            options={userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]}
+            options={
+              userId === authorId
+                ? feedType === "TOGETHER_NOTICE"
+                  ? [isPinned ? "고정해제" : "핀고정", "수정", "삭제", "신고"]
+                  : ["수정", "삭제", "신고"]
+                : ["신고"]
+            }
             selected={selectedOwnerOption ?? ""}
             setSelected={handleOwnerOptionClick}
             size="md"
