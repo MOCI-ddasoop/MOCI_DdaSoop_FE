@@ -3,6 +3,8 @@ import Notification from "@/domain/notification/components/Notification";
 import Pagination from "@/shared/components/Pagination";
 import { useGetNotification } from "../api/useGetNotification";
 import { useSearchParams } from "next/navigation";
+import ReadAllButton from "./ReadAllButton";
+import DeleteReadButton from "./DeleteReadButton";
 
 const notification = Array.from({ length: 3 }).map((_, i) => ({
   isRead: false,
@@ -27,18 +29,28 @@ function NotificationContainer({
     isError,
   } = useGetNotification(type, page, 10);
 
+  const isEmpty = !!(
+    notification &&
+    notification.content &&
+    notification.content.length === 0
+  );
+
   return isPending && !isError ? (
     <div className="h-28 flex-center">
       <div className="loader"></div>
     </div>
   ) : (
     <>
+      {type === "ALL" && (
+        <div className="flex-center self-end gap-2 pt-1">
+          <ReadAllButton isEmpty={isEmpty} />
+          <DeleteReadButton isEmpty={isEmpty} />
+        </div>
+      )}
       <ul
         className={`w-full flex-center flex-col gap-2 pt-2 ${notification && notification.totalPages && notification.totalPages <= 1 ? "mb-5" : ""}`}
       >
-        {notification &&
-        notification.content &&
-        notification.content.length === 0 ? (
+        {isEmpty ? (
           <p className="w-full flex-center py-5 text-gray-400">
             알림이 없습니다
           </p>
