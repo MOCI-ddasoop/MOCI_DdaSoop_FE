@@ -1,9 +1,9 @@
 "use client";
 import { AiOutlineDelete } from "react-icons/ai";
-import Swal from "sweetalert2";
 import { useDeleteReadNotification } from "../api/useDeleteReadNotification.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 function DeleteReadButton() {
   const qc = useQueryClient();
@@ -18,15 +18,12 @@ function DeleteReadButton() {
     },
   });
   const handleDeleteRead = () => {
-    Swal.fire({
-      title: "알림",
+    ConfirmAlert({
       text: "읽은 알림을 삭제하시겠습니까?",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "확인",
       cancelButtonText: "취소",
+      red: true,
     }).then((result) => {
       if (result.isConfirmed) {
         deleteReadNotification();

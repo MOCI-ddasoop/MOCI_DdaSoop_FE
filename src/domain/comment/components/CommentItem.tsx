@@ -9,7 +9,6 @@ import { CommentResponse } from "../types";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useUdtCommentById } from "../api/useUdtCommentById";
 import { useDelCommentById } from "../api/useDelCommentById";
-import Swal from "sweetalert2";
 import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
 import { BsHeartFill } from "react-icons/bs";
 
@@ -17,6 +16,7 @@ import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
 import { useSubmitRegistry } from "@/domain/feed/provider/SubmitRegistryProvider";
 import { useModalStore } from "@/domain/modal/store/useModalStore";
 import reportModalStore from "@/domain/report/stores/useReportModalStore";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 interface CommentItemProps {
   ref?: Ref<HTMLLIElement>;
@@ -40,12 +40,11 @@ function CommentItem({
   const {
     id,
     authorId,
-    authorName,
     authorNickname,
     authorProfileImage,
     content,
     createdAt,
-    updatedAt,
+    contentUpdatedAt,
     replies,
     replyCount,
     parentId,
@@ -70,13 +69,9 @@ function CommentItem({
   const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
 
   const editFormSubmit = useCallback(() => {
-    Swal.fire({
-      title: "수정",
+    ConfirmAlert({
       text: "댓글을 수정하시겠습니까?",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "수정",
       cancelButtonText: "취소",
     }).then((result) => {
@@ -116,9 +111,8 @@ function CommentItem({
     if (!isEditMode) return;
 
     setCanClose("feed", async () => {
-      const result = await Swal.fire({
-        icon: "error",
-        titleText: "수정 중인 내용이 있어요",
+      const result = await ConfirmAlert({
+        title: "수정 중인 내용이 있어요",
         text: "지금 나가면 수정 내용이 저장되지 않습니다.",
         showCancelButton: true,
         showDenyButton: true,
@@ -151,13 +145,9 @@ function CommentItem({
         setIsEditMode(true);
         break;
       case "삭제":
-        Swal.fire({
-          title: "삭제",
+        ConfirmAlert({
           text: "댓글을 삭제하시겠습니까?",
-          icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
           confirmButtonText: "삭제",
           cancelButtonText: "취소",
         }).then((result) => {
@@ -187,7 +177,7 @@ function CommentItem({
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
             <Image
               src={authorProfileImage ?? "/defaultFeedImage.png"}
-              alt={authorName ?? "사용자를 찾을 수 없습니다."}
+              alt={authorNickname ?? "사용자를 찾을 수 없습니다."}
               fill
               className="object-cover"
             />
@@ -236,7 +226,7 @@ function CommentItem({
                     }
                   }}
                 >
-                  {authorName}
+                  {authorNickname}
                 </span>
                 <span
                   className="inline"
@@ -244,7 +234,7 @@ function CommentItem({
                     __html: sanitizeHtml(content ?? ""),
                   }}
                 ></span>
-                {updatedAt !== createdAt ? (
+                {contentUpdatedAt !== createdAt ? (
                   <span className="text-gray-400 ml-1 text-sm">(수정됨)</span>
                 ) : (
                   ""
@@ -295,13 +285,13 @@ function CommentItem({
             </button>
           </div>
           {/* TODO: 수정, 삭제 기능은 로그인이 연결되었을 때, ME로 작성자 ID와 내 아이디 비교하여 렌더링 */}
-          {!!userId && (
+          {userId ? (
             <DropdownButton
               className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               options={
                 userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]
               }
-              selected={selectedOption ?? ""}
+              selected={selectedOption}
               setSelected={handleOptionClick}
               buttonStyle="horizontal"
               size="sm"
@@ -309,6 +299,8 @@ function CommentItem({
               placement="bottom-end"
               highlightingLastOption={true}
             />
+          ) : (
+            ""
           )}
         </div>
 
@@ -321,6 +313,7 @@ function CommentItem({
               <CommentItem
                 key={reply.id}
                 item={reply}
+                userId={userId}
                 feedId={feedId}
                 onCommentTargetClick={onCommentTargetClick}
               />

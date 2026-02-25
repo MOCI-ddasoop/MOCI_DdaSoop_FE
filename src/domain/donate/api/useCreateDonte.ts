@@ -12,7 +12,7 @@ export const useCreateDonate = () => {
       return res;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.donate.list({}) });
+      queryClient.invalidateQueries({ queryKey: ["donate", "list"] });
     },
   });
 };

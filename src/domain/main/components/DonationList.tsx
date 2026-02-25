@@ -41,6 +41,7 @@ function DonationList({
             donationImage={thumbnailImage}
             createdAt={createdAt?.slice(0, 10)}
             type="summary"
+            href={`/donate/${donationId}`}
           />
         ),
       )}

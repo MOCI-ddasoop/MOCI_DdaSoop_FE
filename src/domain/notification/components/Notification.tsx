@@ -8,9 +8,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useEffect, useState } from "react";
 import { useDeleteNotification } from "../api/useDeleteNotification";
-import Swal from "sweetalert2";
 import { notificationOptions, targetOptions } from "@/shared/constants/filter";
 import Capsule from "@/shared/components/Capsule";
+import { ConfirmAlert } from "@/shared/utils/alert";
 
 function Notification({
   summary = false,
@@ -82,15 +82,13 @@ function Notification({
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    Swal.fire({
+    ConfirmAlert({
       title: "알림",
       text: "알림을 삭제하시겠습니까?",
-      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
       confirmButtonText: "삭제",
       cancelButtonText: "취소",
+      red: true,
     }).then((result) => {
       if (result.isConfirmed) {
         deleteNotification(id!);

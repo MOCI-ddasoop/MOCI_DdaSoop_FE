@@ -13,14 +13,7 @@ export const useCreateTogether = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.together.list({
-          category: [],
-          mode: undefined,
-          status: undefined,
-          sortType: "LATEST",
-          page: 0,
-          size: 12,
-        }),
+        queryKey: ["together", "list"],
       });
     },
   });

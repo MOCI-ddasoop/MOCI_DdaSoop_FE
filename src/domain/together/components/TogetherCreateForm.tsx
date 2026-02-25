@@ -16,6 +16,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useCreateTogether } from "../api/useCreateTogether";
 import { useAuthStore } from "@/store/authStore";
 import { categoryType } from "@/shared/constants/filter";
+import { Alert } from "@/shared/utils/alert";
 
 const TOGETHER_CATEGORIES = [
   { id: 1, label: "플로깅", key: "PLOGGING" },
@@ -69,7 +70,7 @@ function TogetherCreateForm() {
     if (!textBoxRef.current) return;
     const html = textBoxRef.current.getHTML();
     if (html.trim() === "") {
-      alert("모임 소개글을 입력해주세요.");
+      Alert({ text: "모임 소개글을 입력해주세요.", timer: 1500 });
       return;
     }
     handleCreateTogether({
@@ -82,7 +83,7 @@ function TogetherCreateForm() {
       endDate: endDate!.toISOString().slice(0, 10),
       memberId: userId,
     });
-    alert("함께하기 생성이 완료되었습니다!");
+    Alert({ text: "함께하기 생성이 완료되었습니다!", timer: 1500 });
     router.push("/together");
   };
 
