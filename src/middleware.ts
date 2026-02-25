@@ -14,7 +14,7 @@ export function middleware(req: NextRequest) {
     "base-uri 'self'",
     "object-src 'none'",
 
-    `script-src 'self' 'nonce-${nonce}' https://www.clarity.ms https://scripts.clarity.ms https://js.tosspayments.com`,
+    `script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://js.tosspayments.com`,
 
     `style-src 'self' 'unsafe-inline' `,
 
@@ -29,24 +29,27 @@ export function middleware(req: NextRequest) {
     "frame-src https://js.tosspayments.com https://payment-gateway-sandbox.tosspayments.com https://toss.im/ https://ui.teledit.com/",
   ].join("; ");
 
+  //TODO: nonce를 활용하여 inline script 허용하기 (현재는 'unsafe-inline'로 허용)
+  
   //requestHeader에 함께 첨부
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("Content-Security-Policy", csp);
-  requestHeaders.set("x-nonce", nonce);
+  // const requestHeaders = new Headers(req.headers);
+  // requestHeaders.set("Content-Security-Policy", csp);
+  // requestHeaders.set("x-nonce", nonce);
 
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  // const response = NextResponse.next({
+  //   request: {
+  //     headers: requestHeaders,
+  //   },
+  // });
 
   //response에서도 확인
-  response.headers.set("Content-Security-Policy", csp);
-  response.headers.set("x-nonce", nonce);
+//   response.headers.set("Content-Security-Policy", csp);
+//   response.headers.set("x-nonce", nonce);
 
-  return response;
+//   return response;
+// }
+
+// export const config = {
+//   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+// };
 }
-
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
-};

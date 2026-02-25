@@ -44,7 +44,7 @@ function FeedDetailCard({
     id,
     authorId,
     authorNickname: author,
-    authorProfileImage = "/defaultFeedImage.png",
+    authorProfileImage,
     content,
     createdAt,
     contentUpdatedAt,
@@ -262,7 +262,7 @@ function FeedDetailCard({
       <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
         <div className="flex items-center gap-2">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-            <Image src={authorProfileImage} alt={author ?? "기본이미지"} fill />
+            <Image src={authorProfileImage ?? "/defaultFeedImage.png"} alt={author ?? "기본이미지"} fill />
           </div>
           <div className="text-sm text-nowrap">{author}</div>
         </div>
