@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { ConfirmAlert } from "@/shared/utils/alert";
 
-function DeleteReadButton() {
+function DeleteReadButton({ isEmpty }: { isEmpty: boolean }) {
   const qc = useQueryClient();
   const { mutate: deleteReadNotification } = useDeleteReadNotification({
     onSuccess: () => {
@@ -35,9 +35,15 @@ function DeleteReadButton() {
       type="button"
       className="flex-center shrink-0 cursor-pointer group p-1 gap-1"
       onClick={handleDeleteRead}
+      disabled={isEmpty}
     >
-      <p className="group-hover:text-mainred">읽은알림삭제</p>
-      <AiOutlineDelete size={24} className="group-hover:text-mainred" />
+      <p className={!isEmpty ? "group-hover:text-mainred" : "text-gray-500"}>
+        읽은알림삭제
+      </p>
+      <AiOutlineDelete
+        size={24}
+        className={!isEmpty ? "group-hover:text-mainred" : "text-gray-500"}
+      />
     </button>
   );
 }
