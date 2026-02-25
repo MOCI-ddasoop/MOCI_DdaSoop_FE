@@ -76,7 +76,7 @@ function FeedCardImage({
 					<div className="relative w-8 h-8 rounded-full overflow-hidden border border-gray-300">
 						<Image
 							src={authorProfileImage ?? "/defaultProfileImage.png"}
-							alt={authorName ?? "탈퇴한 회원"}
+							alt={authorNickname ?? "탈퇴한 회원"}
 							width={50}
 							height={50}
 							className="object-cover"

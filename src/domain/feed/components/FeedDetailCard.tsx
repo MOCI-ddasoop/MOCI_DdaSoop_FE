@@ -43,7 +43,7 @@ function FeedDetailCard({
   const {
     id,
     authorId,
-    authorName: author,
+    authorNickname: author,
     authorProfileImage,
     content,
     createdAt,
