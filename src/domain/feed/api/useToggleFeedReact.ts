@@ -30,7 +30,12 @@ export const useToggleFeedReact = () => {
 							...page,
 							content: page.content.map((feed) =>
 								feed.id === Number(id)
-									? { ...feed, isReacted: res.data }
+									? {
+											...feed,
+											isReacted: res.data,
+											reactionCount:
+												(feed.reactionCount ?? 0) + (res.data ? 1 : -1),
+										}
 									: feed,
 							),
 						})),

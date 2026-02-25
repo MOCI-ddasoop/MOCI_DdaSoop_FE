@@ -40,12 +40,11 @@ function CommentItem({
   const {
     id,
     authorId,
-    authorName,
     authorNickname,
     authorProfileImage,
     content,
     createdAt,
-    updatedAt,
+    contentUpdatedAt,
     replies,
     replyCount,
     parentId,
@@ -178,7 +177,7 @@ function CommentItem({
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
             <Image
               src={authorProfileImage ?? "/defaultFeedImage.png"}
-              alt={authorName ?? "사용자를 찾을 수 없습니다."}
+              alt={authorNickname ?? "사용자를 찾을 수 없습니다."}
               fill
               className="object-cover"
             />
@@ -227,7 +226,7 @@ function CommentItem({
                     }
                   }}
                 >
-                  {authorName}
+                  {authorNickname}
                 </span>
                 <span
                   className="inline"
@@ -235,7 +234,7 @@ function CommentItem({
                     __html: sanitizeHtml(content ?? ""),
                   }}
                 ></span>
-                {updatedAt !== createdAt ? (
+                {contentUpdatedAt !== createdAt ? (
                   <span className="text-gray-400 ml-1 text-sm">(수정됨)</span>
                 ) : (
                   ""
@@ -286,13 +285,13 @@ function CommentItem({
             </button>
           </div>
           {/* TODO: 수정, 삭제 기능은 로그인이 연결되었을 때, ME로 작성자 ID와 내 아이디 비교하여 렌더링 */}
-          {!!userId && (
+          {userId ? (
             <DropdownButton
               className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               options={
                 userId === authorId ? ["수정", "삭제", "신고"] : ["신고"]
               }
-              selected={selectedOption ?? ""}
+              selected={selectedOption}
               setSelected={handleOptionClick}
               buttonStyle="horizontal"
               size="sm"
@@ -300,6 +299,8 @@ function CommentItem({
               placement="bottom-end"
               highlightingLastOption={true}
             />
+          ) : (
+            ""
           )}
         </div>
 
@@ -312,6 +313,7 @@ function CommentItem({
               <CommentItem
                 key={reply.id}
                 item={reply}
+                userId={userId}
                 feedId={feedId}
                 onCommentTargetClick={onCommentTargetClick}
               />

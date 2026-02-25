@@ -35,7 +35,7 @@ const dropdownButton = cva(
 			size: "md",
 			disabled: false,
 		},
-	}
+	},
 );
 
 const dropdownMenu = cva(
@@ -51,7 +51,7 @@ const dropdownMenu = cva(
 		defaultVariants: {
 			size: "md",
 		},
-	}
+	},
 );
 
 const dropdownItem = cva(
@@ -74,13 +74,13 @@ const dropdownItem = cva(
 			variant: "default",
 			size: "md",
 		},
-	}
+	},
 );
 
 interface DropdownButtonProps extends VariantProps<typeof dropdownButton> {
 	dropdown?: boolean;
 	options: string[];
-	selected: string;
+	selected: string | null;
 	setSelected: (selected: string) => void;
 	className?: string;
 	menuSize?: VariantProps<typeof dropdownMenu>["size"];
@@ -147,7 +147,7 @@ function DropdownButton({
 					}),
 					className,
 					// 열린 상태면 항상 보이도록 설정
-					isOpen && "opacity-100"
+					isOpen && "opacity-100",
 				)}
 				disabled={disabled ?? false}
 				aria-expanded={isOpen}

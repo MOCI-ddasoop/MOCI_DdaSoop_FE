@@ -23,6 +23,8 @@ import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
 import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
 import { useToggleFeedReact } from "../api/useToggleFeedReact";
 import reportModalStore from "@/domain/report/stores/useReportModalStore";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
+import { TogetherInfo } from "@/domain/together/types";
 import { ConfirmAlert } from "@/shared/utils/alert";
 
 type FeedDetailCardProps = {
@@ -41,11 +43,11 @@ function FeedDetailCard({
   const {
     id,
     authorId,
-    authorName: author,
+    authorNickname: author,
     authorProfileImage = "/defaultFeedImage.png",
     content,
     createdAt,
-    updatedAt,
+    contentUpdatedAt,
     bookmarkCount = 0,
     reactionCount = 0,
     commentCount = 0,
@@ -304,8 +306,10 @@ function FeedDetailCard({
               "/defaultFeedImage.png"
             }
             name={togetherTitle ?? "함께하기를 찾을수 없습니다."}
-            category={togetherCategory ?? ""}
-            isOnline={togetherMode ?? ""}
+            category={
+              categoryType[togetherCategory as TogetherInfo["category"]]
+            }
+            isOnline={isOnlineType[togetherMode as TogetherInfo["mode"]]}
             // onClick={handleTogetherItemClick}
             widthClass="w-full"
             href={`/together/${togetherId}`}
@@ -335,7 +339,7 @@ function FeedDetailCard({
         </div>
         {isFeedEditMode ? (
           <PostVisibilityOptions
-            togetherInfo={undefined}
+            togetherId={togetherId}
             value={editedVisibility}
             setValue={editActions.setVisibility}
             userId={userId}
@@ -348,7 +352,7 @@ function FeedDetailCard({
           {/* 날짜 영역 */}
           <div className="text-sm text-gray-500 p-1">
             {formatRelativeDate(createdAt ?? "")}
-            {createdAt !== updatedAt ? (
+            {createdAt !== contentUpdatedAt ? (
               <span className="ml-1">(수정됨)</span>
             ) : (
               ""
@@ -381,7 +385,7 @@ function FeedDetailCard({
           {/* 댓글 영역 */}
           <button
             type="button"
-            className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
             onClick={() => onCommentFocus?.()}
           >
             <BsChatRight size={24} className="group-hover:text-amber-700" />
@@ -391,7 +395,7 @@ function FeedDetailCard({
           {/* 좋아요 영역 */}
           <button
             type="button"
-            className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
             onClick={handleReaction}
           >
             <div className="relative w-6 h-6">
@@ -418,7 +422,7 @@ function FeedDetailCard({
           {/* 북마크 영역 */}
           <button
             type="button"
-            className="flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
             onClick={handleBookmark}
           >
             <div className="relative w-6 h-6">

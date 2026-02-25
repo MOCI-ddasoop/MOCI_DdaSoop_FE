@@ -16,6 +16,7 @@ import { MyTogetherInfo } from "@/domain/together/types";
 import { useGetOwnTogetherList } from "@/domain/together/api/useGetOwnTogetherList";
 import { useParams, usePathname } from "next/navigation";
 import { useGetTogetherById } from "@/domain/together/api/useGetTogetherById";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import { Alert, ConfirmAlert, UpdateAlert } from "@/shared/utils/alert";
 
 function FeedCreatorModal({ onClose }: { onClose: () => void }) {
@@ -264,8 +265,8 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
             //initialTogetherInfo.data.thumbnailImage[0].imageUrl ??
             image={"/defaultFeedImage.png"}
             name={initialTogetherInfo.data.title}
-            category={initialTogetherInfo.data.category}
-            isOnline={initialTogetherInfo.data.mode}
+            category={categoryType[initialTogetherInfo.data.category]}
+            isOnline={isOnlineType[initialTogetherInfo.data.mode]}
             onClick={handleTogetherItemClick}
             widthClass="w-full"
           />
@@ -278,8 +279,8 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
             id={togetherInfo.id}
             image={togetherInfo.thumbnailImage ?? "/defaultFeedImage.png"}
             name={togetherInfo.title}
-            category={togetherInfo.category}
-            isOnline={togetherInfo.mode}
+            category={categoryType[togetherInfo.category]}
+            isOnline={isOnlineType[togetherInfo.mode]}
             onClick={handleTogetherItemClick}
             widthClass="w-full"
           />
