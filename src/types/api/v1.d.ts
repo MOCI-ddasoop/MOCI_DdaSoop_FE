@@ -1705,8 +1705,6 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
-            /** Format: date-time */
-            contentUpdatedAt?: string;
         };
         CommentUpdateRequest: {
             content: string;
@@ -1758,6 +1756,7 @@ export interface components {
             endDate: string;
             /** Format: int64 */
             memberId?: number;
+            imageUrls?: string[];
         };
         CreateResponse: {
             /** Format: int64 */
@@ -1961,10 +1960,10 @@ export interface components {
             dDay?: number;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -1973,21 +1972,21 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
+            unpaged?: boolean;
             paged?: boolean;
             /** Format: int32 */
-            pageNumber?: number;
-            /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
+            /** Format: int32 */
+            pageNumber?: number;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2029,10 +2028,10 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -2041,9 +2040,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
@@ -2123,15 +2122,13 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
-            /** Format: date-time */
-            contentUpdatedAt?: string;
             reply?: boolean;
         };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -2140,9 +2137,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         LastLoginProviderResponse: {

@@ -80,7 +80,12 @@ function DonationSuggestForm() {
       let imageUrls;
       if (images.length !== 0) {
         const imageUpload = await postImages(images, {
-          onError: (error) => {
+          onError: async (error) => {
+            Alert({
+              text: "이미지 업로드에 실패했습니다. 다시 시도해주세요.",
+              timer: 1500,
+              red: false,
+            });
             throw new Error("이미지 업로드 실패");
           },
         });
