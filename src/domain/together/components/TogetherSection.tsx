@@ -26,6 +26,7 @@ function TogetherSection() {
   const { data, isPending, isError } = useGetTogetherList({
     category: selectedCategory,
     mode: isOnline[0],
+    status: undefined,
     sortType: currentSort,
     page: page - 1,
     size: 12,

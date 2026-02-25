@@ -27,8 +27,8 @@ async function Donate() {
     queryKey: queryKeys.donate.list({
       category: [],
       status: undefined,
-      page: 0,
       sortType: "LATEST",
+      page: 0,
       size: 12,
     }),
     queryFn: () => getInitDonationList(),
