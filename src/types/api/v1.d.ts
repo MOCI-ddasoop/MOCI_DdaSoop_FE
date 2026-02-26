@@ -1930,6 +1930,8 @@ export interface components {
             /** Format: int64 */
             memberId?: number;
             imageUrls?: string[];
+            /** Format: int64 */
+            goalFeedCount?: number;
         };
         CreateResponse: {
             /** Format: int64 */
@@ -2130,12 +2132,10 @@ export interface components {
             dDay?: number;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
@@ -2145,6 +2145,8 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         PageableObject: {
@@ -2152,11 +2154,11 @@ export interface components {
             offset?: number;
             sort?: components["schemas"]["SortObject"];
             paged?: boolean;
+            unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2198,12 +2200,10 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
@@ -2213,6 +2213,8 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         NotificationResponse: {
@@ -2297,12 +2299,10 @@ export interface components {
             reply?: boolean;
         };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
@@ -2312,6 +2312,8 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             empty?: boolean;
         };
         LastLoginProviderResponse: {
