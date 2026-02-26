@@ -4,8 +4,22 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com', // 구글 프로필 사진 
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com', // 구글 클라우드 스토리지
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
-
+  
   //webpack 설정
   webpack(config) {
     config.module.rules.push({
