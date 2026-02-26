@@ -83,7 +83,6 @@ function Notification({
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     ConfirmAlert({
-      title: "알림",
       text: "알림을 삭제하시겠습니까?",
       showCancelButton: true,
       confirmButtonText: "삭제",

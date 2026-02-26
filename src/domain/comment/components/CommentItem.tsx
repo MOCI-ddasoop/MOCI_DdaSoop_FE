@@ -150,6 +150,7 @@ function CommentItem({
           showCancelButton: true,
           confirmButtonText: "삭제",
           cancelButtonText: "취소",
+          red: true,
         }).then((result) => {
           if (result.isConfirmed) {
             deleteCommentMutation({ id });
