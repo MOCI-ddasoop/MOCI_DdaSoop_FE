@@ -31,6 +31,7 @@ function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 								alt={feed.authorNickname ?? "사용자를 찾을 수 없음"}
 								fill
 								className="object-cover"
+								referrerPolicy="no-referrer"
 							/>
 						)}
 					</div>
@@ -54,6 +55,7 @@ function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 						alt={feed.authorNickname || "feed image"}
 						fill
 						className="object-cover"
+						referrerPolicy="no-referrer"
 					/>
 				</div>
 			)}
