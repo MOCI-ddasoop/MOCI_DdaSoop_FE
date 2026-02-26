@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { FeedInfiniteScroll } from "../types";
 import { useAuthStore } from "@/store/authStore";
+import { Alert } from "@/shared/utils/alert";
 
 export const useTogglePin = ({
   currentPage,
@@ -33,46 +34,55 @@ export const useTogglePin = ({
       return res;
     },
     onMutate: () => {
-      // qc.setQueriesData<InfiniteData<FeedInfiniteScroll>>(
-      //   { queryKey: queryKeys.feeds.infinite(infiniteParams) },
-      //   (oldData) => {
-      //     if (!oldData) return oldData;
-      //     return {
-      //       ...oldData,
-      //       pages: oldData.pages.map((page) => ({
-      //         ...page,
-      //         content: page.content.map((feed) =>
-      //           feed.id === feedId
-      //             ? { ...feed, isPinned: !feed.isPinned }
-      //             : { ...feed },
-      //         ),
-      //       })),
-      //     };
-      //   },
-      // );
-      qc.invalidateQueries({
-        queryKey: queryKeys.feeds.infinite({
-          page: "together",
-          togetherId,
-          query: undefined,
-          memberId: undefined,
-        }),
+      const previousData = qc.getQueriesData<InfiniteData<FeedInfiniteScroll>>({
+        queryKey: queryKeys.feeds.infinite(infiniteParams),
       });
-      qc.invalidateQueries({
-        queryKey: queryKeys.feeds.infinite({
-          page: "member",
-          memberId,
-          query: undefined,
-          togetherId: undefined,
-        }),
-      });
-      qc.refetchQueries({
-        queryKey: queryKeys.feeds.togetherNotice(togetherId),
-      });
+
+      const updateFn = (
+        oldData: InfiniteData<FeedInfiniteScroll> | undefined,
+      ) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => ({
+            ...page,
+            content: page.content.map((feed) =>
+              feed.id === feedId ? { ...feed, isPinned: !feed.isPinned } : feed,
+            ),
+          })),
+        };
+      };
+
+      qc.setQueriesData<InfiniteData<FeedInfiniteScroll>>(
+        { queryKey: queryKeys.feeds.infinite(infiniteParams) },
+        updateFn,
+      );
+      return { previousData };
     },
-    onSuccess: () =>
+    onSuccess: () => {
+      Alert({ text: "변경되었습니다", timer: 1500 });
       qc.invalidateQueries({
         queryKey: queryKeys.feeds.togetherNotice(togetherId),
-      }),
+      });
+      if (currentPage !== "") {
+        qc.invalidateQueries({ queryKey: queryKeys.feeds.infinite() });
+      }
+      if (currentPage !== "mypage") {
+        qc.invalidateQueries({
+          queryKey: queryKeys.feeds.infinite({ page: "member", memberId }),
+        });
+      }
+      if (currentPage !== "together") {
+        qc.invalidateQueries({
+          queryKey: queryKeys.feeds.infinite({ page: "together", togetherId }),
+        });
+      }
+    },
+    onError: (_, __, context) => {
+      context?.previousData.forEach(([queryKey, data]) => {
+        qc.setQueryData(queryKey, data);
+      });
+      Alert({ text: "핀 고정 토글에 실패했습니다", timer: 1500 });
+    },
   });
 };

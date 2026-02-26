@@ -208,6 +208,8 @@ function FeedDetailCard({
       case "핀고정":
       case "고정해제":
         togglePin();
+        closeStoreModal();
+        router.back();
         break;
       case "수정":
         editActions.enterEdit();
