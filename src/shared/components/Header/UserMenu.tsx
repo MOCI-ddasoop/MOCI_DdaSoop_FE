@@ -25,7 +25,8 @@ import { queryKeys } from "@/shared/config/queryKeys";
 function UserMenu() {
   const queryClient = useQueryClient();
 
-  const isLogin = useAuthStore((state) => state.me);
+  const me = useAuthStore((state) => state.me);
+  const mypageHref = me?.role === "ADMIN" ? "/admin" : "/mypage";
 
   const [isOpen, setIsOpen] = useState(false);
   // 로그인되었는지 여부 가져오는거 추가하기
@@ -50,15 +51,15 @@ function UserMenu() {
     data: notifications = [],
     isPending,
     isError,
-  } = useGetRecentNotification(!!isLogin);
+  } = useGetRecentNotification(!!me);
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!me) {
       queryClient.removeQueries({ queryKey: queryKeys.notifications.recent });
     }
-  }, [isLogin, queryClient]);
+  }, [me, queryClient]);
 
-  if (!isLogin)
+  if (!me)
     return (
       <Link
         href="/login"
@@ -90,7 +91,7 @@ function UserMenu() {
       </li>
       <li>
         <Link
-          href="/mypage"
+          href={mypageHref}
           className="h-hover:bg-gray-100 flex justify-center items-center"
         >
           <FaCircleUser size={28} />
