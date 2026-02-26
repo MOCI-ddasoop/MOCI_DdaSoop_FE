@@ -10,7 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { Alert, ConfirmAlert } from "@/shared/utils/alert";
 
-function UserAction({ id }: { id: number }) {
+function UserAction({ id, recruiting }: { id: number; recruiting: boolean }) {
   const qc = useQueryClient();
   const user = useAuthStore((store) => store.me);
   const isLogin = !!user;
@@ -26,9 +26,11 @@ function UserAction({ id }: { id: number }) {
   });
 
   const { mutate: leaveTogether } = useLeaveTogether({
-    onSuccess: () => {
-      qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
-      qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
+    onSuccess: async () => {
+      await qc.refetchQueries({
+        queryKey: queryKeys.together.isParticipating(),
+      });
+      await qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
       qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
       Alert({ text: "탈퇴가 완료되었습니다.", timer: 1500, red: true });
     },
@@ -79,6 +81,10 @@ function UserAction({ id }: { id: number }) {
       ) : isError ? (
         <p className="text-gray-400 px-10 py-2 text-center">
           사용자 정보를 가져오는 중 오류가 발생했습니다
+        </p>
+      ) : !recruiting && !isMember ? (
+        <p className="text-gray-400 px-10 py-2 text-center">
+          모집이 마감되었습니다
         </p>
       ) : isMember ? (
         <>

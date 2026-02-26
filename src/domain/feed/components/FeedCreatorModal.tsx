@@ -159,6 +159,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
         case "NOTICE":
           return "TOGETHER_NOTICE";
         default:
+          if (selectedTogetherId) return "TOGETHER_VERIFICATION";
           return "GENERAL";
       }
     })();
@@ -200,13 +201,13 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
     checkedPostVisibility = null;
   };
 
-  const handleTogetherItemClick = useCallback(() => {
-    window.open(
-      `/together/${togetherInfo?.id}`,
-      "_blank",
-      "noopener,noreferrer",
-    );
-  }, [togetherInfo?.id]);
+  // const handleTogetherItemClick = useCallback(() => {
+  //   window.open(
+  //     `/together/${togetherInfo?.id}`,
+  //     "_blank",
+  //     "noopener,noreferrer",
+  //   );
+  // }, [togetherInfo?.id]);
 
   // 함께하기 선택 옵션
   const selectTogetherOption = useMemo(() => {
@@ -267,8 +268,9 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
             name={initialTogetherInfo.data.title}
             category={categoryType[initialTogetherInfo.data.category]}
             isOnline={isOnlineType[initialTogetherInfo.data.mode]}
-            onClick={handleTogetherItemClick}
+            // onClick={handleTogetherItemClick}
             widthClass="w-full"
+            href={`/together/${initialTogetherInfo.data.id}`}
           />
         );
       }
@@ -281,18 +283,14 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
             name={togetherInfo.title}
             category={categoryType[togetherInfo.category]}
             isOnline={isOnlineType[togetherInfo.mode]}
-            onClick={handleTogetherItemClick}
+            // onClick={handleTogetherItemClick}
             widthClass="w-full"
+            href={`/together/${togetherInfo.id}`}
           />
         );
       }
     }
-  }, [
-    handleTogetherItemClick,
-    initialTogetherInfo,
-    isTogetherRoute,
-    togetherInfo,
-  ]);
+  }, [initialTogetherInfo, isTogetherRoute, togetherInfo]);
 
   // 게시 버튼 disable 조건
   const disableSubmitButton = useMemo(() => {
@@ -372,13 +370,11 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
             </div>
           )}
           {/* 함께하기 바로가기 */}
-          {togetherInfo || initialTogetherInfo ? (
-            <div className="p-2" onClick={handleTogetherItemClick}>
-              {togetherItem}
-            </div>
-          ) : (
-            ""
-          )}
+          {togetherInfo || initialTogetherInfo
+            ? // <div className="p-2" onClick={handleTogetherItemClick}>
+              togetherItem
+            : // </div>
+              ""}
           {/* 태그 입력 */}
           <TagInput onTagChanged={setTagsValue} />
         </div>

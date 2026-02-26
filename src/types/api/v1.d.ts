@@ -2136,6 +2136,8 @@ export interface components {
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
@@ -2145,20 +2147,18 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
             empty?: boolean;
         };
         PageableObject: {
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
             unpaged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
+            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2180,20 +2180,20 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2204,6 +2204,8 @@ export interface components {
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
@@ -2213,15 +2215,13 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
             empty?: boolean;
         };
         NotificationResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             /** Format: date-time */
@@ -2231,7 +2231,7 @@ export interface components {
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2303,6 +2303,8 @@ export interface components {
             totalElements?: number;
             /** Format: int32 */
             totalPages?: number;
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
@@ -2312,8 +2314,6 @@ export interface components {
             /** Format: int32 */
             numberOfElements?: number;
             pageable?: components["schemas"]["PageableObject"];
-            first?: boolean;
-            last?: boolean;
             empty?: boolean;
         };
         LastLoginProviderResponse: {
@@ -4075,7 +4075,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             };
             cookie?: never;
         };
@@ -4122,7 +4122,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
+                category: "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM" | "FOLLOW";
             };
             cookie?: never;
         };
