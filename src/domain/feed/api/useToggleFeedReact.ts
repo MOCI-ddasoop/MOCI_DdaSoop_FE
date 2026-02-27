@@ -14,7 +14,6 @@ export const useToggleFeedReact = () => {
 	return useMutation({
 		mutationFn: async (feedId: string) => {
 			const res = await api.post(`api/feeds/${feedId}/reactions`);
-			console.log(res);
 			return res;
 		},
 		onSuccess(res, id) {
