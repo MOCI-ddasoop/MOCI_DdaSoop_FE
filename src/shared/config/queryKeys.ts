@@ -1,5 +1,3 @@
-import { isCancel } from "axios";
-
 export const queryKeys = {
 	feeds: {
 		all: () => ["feeds"],
