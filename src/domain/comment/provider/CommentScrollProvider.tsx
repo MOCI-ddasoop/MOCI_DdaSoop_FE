@@ -1,6 +1,9 @@
 import { createContext, useContext } from "react";
 import { StoreApi, useStore } from "zustand";
-import { CommentScrollState } from "../store/commentScrollStore";
+import {
+	CommentScrollState,
+	createCommentScrollStore,
+} from "../store/commentScrollStore";
 
 export const CommentScrollContext =
 	createContext<StoreApi<CommentScrollState> | null>(null);
@@ -20,14 +23,12 @@ export function CommentScrollProvider({
 		);
 }
 
+const DEFAULT_STORE = createCommentScrollStore();
+
 export function useCommentScrollStore<T>(
 	selector: (state: CommentScrollState) => T,
 ) {
 	const store = useContext(CommentScrollContext);
-	if (!store) {
-		throw new Error(
-			"useFeedEditStore must be used within FeedEditStoreProvider",
-		);
-	}
-	return useStore(store, selector);
+
+	return useStore(store ?? DEFAULT_STORE, selector);
 }
