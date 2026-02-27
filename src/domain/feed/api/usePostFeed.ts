@@ -1,8 +1,19 @@
 import { api } from "@/shared/config/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FeedCreateRequest } from "../types";
+import {
+	useMutation,
+	UseMutationOptions,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { ApiErrorResponse, FeedCreateRequest } from "../types";
+import { AxiosError } from "axios";
 
-export const usePostFeed = (options?: Parameters<typeof useMutation>[0]) => {
+export const usePostFeed = (
+	options?: UseMutationOptions<
+		unknown,
+		AxiosError<ApiErrorResponse>,
+		FeedCreateRequest
+	>,
+) => {
 	const qc = useQueryClient();
 
 	return useMutation({
