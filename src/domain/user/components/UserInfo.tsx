@@ -96,6 +96,7 @@ function UserInfo({ className }: { className?: string }) {
           alt="profile image"
           fill
           className="w-full h-full object-cover rounded-full"
+          referrerPolicy="no-referrer" 
         />
       </div>
       <div className="w-full h-full flex flex-col flex-1 gap-2">

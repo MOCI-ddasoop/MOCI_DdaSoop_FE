@@ -9,7 +9,7 @@ import { usePostImage } from "@/shared/api/usePostImage";
 import { useUpdateMyInfo } from "@/domain/user/api/useUpdateMyInfo";
 import { checkNickname } from "@/domain/login/api/checkNickname";
 import { checkEmail } from "@/domain/login/api/checkEmail";
-import { Alert } from "@/shared/utils/alert";
+import { Alert, ConfirmAlert } from "@/shared/utils/alert";
 
 function EditUserInfoForm() {
   const me = useAuthStore((s) => s.me);
@@ -31,6 +31,9 @@ function EditUserInfoForm() {
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
 
   if (!me) return null;
+
+  const isNicknameChanged = nickname !== me.nickname;
+  const isEmailChanged = email !== me.email;
 
   const handleClickChangeImage = () => {
     fileInputRef.current?.click();
@@ -74,6 +77,25 @@ function EditUserInfoForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if(!nickname.trim() || !email.trim()) {
+      return Alert({
+        text: "닉네임과 이메일을 입력해주세요.",
+        timer: 1500,
+      })
+    }
+    if (isNicknameChanged && nicknameAvailable === false) {
+      return Alert({
+        text: "닉네임 중복 확인을 해주세요.",
+        timer: 1500,
+      });
+    }
+    if (isEmailChanged && emailAvailable === false) {
+      return Alert({
+        text: "이메일 중복 확인을 해주세요.",
+        timer: 1500,
+      });
+    }
+
     updateMyInfo.mutate(
       {
         nickname,
@@ -170,7 +192,15 @@ function EditUserInfoForm() {
         >
           취소
         </button>
-        <Button type="submit" disabled={updateMyInfo.isPending}>
+        <Button 
+          type="submit" 
+          disabled={
+            updateMyInfo.isPending
+            || !nickname.trim()
+            || !email.trim()
+            || (isNicknameChanged && nicknameAvailable !== true)
+            || (isEmailChanged && emailAvailable !== true)
+          }>
           저장
         </Button>
       </div>

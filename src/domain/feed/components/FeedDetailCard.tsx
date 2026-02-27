@@ -266,6 +266,7 @@ function FeedDetailCard({
 							src={authorProfileImage ?? "/defaultFeedImage.png"}
 							alt={author ?? "기본이미지"}
 							fill
+							referrerPolicy="no-referrer"
 						/>
 					</div>
 					<div className="text-sm text-nowrap">{author}</div>
