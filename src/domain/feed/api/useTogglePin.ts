@@ -5,7 +5,7 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { FeedInfiniteScroll } from "../types";
+import { FeedInfinite, FeedInfiniteScroll } from "../types";
 import { useAuthStore } from "@/store/authStore";
 import { Alert } from "@/shared/utils/alert";
 
@@ -20,12 +20,6 @@ export const useTogglePin = ({
 }) => {
   const qc = useQueryClient();
   const memberId = useAuthStore((s) => s.me?.memberId);
-  const infiniteParams =
-    currentPage === ""
-      ? { page: undefined }
-      : currentPage === "mypage"
-        ? { page: "member" as const, memberId }
-        : { page: "together" as const, togetherId };
 
   return useMutation({
     mutationKey: queryKeys.feeds.togetherNoticePin(feedId),
@@ -35,8 +29,21 @@ export const useTogglePin = ({
     },
     onMutate: () => {
       const previousData = qc.getQueriesData<InfiniteData<FeedInfiniteScroll>>({
-        queryKey: queryKeys.feeds.infinite(infiniteParams),
+        predicate: (query) => {
+          const key = query.queryKey as string[];
+          return (
+            key[0] === "feeds" &&
+            key[1] === "infinite" &&
+            typeof key[2] !== "number"
+          );
+        },
       });
+      const previousMemberData = qc.getQueryData<
+        InfiniteData<FeedInfiniteScroll>
+      >(["feeds", "infinite", memberId]);
+      const previousTogetherNoticeData = qc.getQueryData<FeedInfinite[]>(
+        queryKeys.feeds.togetherNotice(togetherId),
+      );
 
       const updateFn = (
         oldData: InfiniteData<FeedInfiniteScroll> | undefined,
@@ -54,35 +61,53 @@ export const useTogglePin = ({
       };
 
       qc.setQueriesData<InfiniteData<FeedInfiniteScroll>>(
-        { queryKey: queryKeys.feeds.infinite(infiniteParams) },
+        {
+          predicate: (query) => {
+            const key = query.queryKey as string[];
+            return (
+              key[0] === "feeds" &&
+              key[1] === "infinite" &&
+              typeof key[2] !== "number"
+            );
+          },
+        },
         updateFn,
       );
-      return { previousData };
+      qc.setQueriesData<InfiniteData<FeedInfiniteScroll>>(
+        { queryKey: ["feeds", "infinite", memberId] },
+        updateFn,
+      );
+      qc.setQueriesData<FeedInfinite[]>(
+        { queryKey: queryKeys.feeds.togetherNotice(togetherId) },
+        (oldData) => {
+          if (!oldData) return oldData;
+          return oldData.map((feed) =>
+            feed.id === feedId ? { ...feed, isPinned: !feed.isPinned } : feed,
+          );
+        },
+      );
+      return { previousData, previousMemberData, previousTogetherNoticeData };
     },
     onSuccess: () => {
       Alert({ text: "변경되었습니다", timer: 1500 });
-      qc.invalidateQueries({
-        queryKey: queryKeys.feeds.togetherNotice(togetherId),
-      });
-      if (currentPage !== "") {
-        qc.invalidateQueries({ queryKey: queryKeys.feeds.infinite() });
-      }
-      if (currentPage !== "mypage") {
-        qc.invalidateQueries({
-          queryKey: queryKeys.feeds.infinite({ page: "member", memberId }),
-        });
-      }
-      if (currentPage !== "together") {
-        qc.invalidateQueries({
-          queryKey: queryKeys.feeds.infinite({ page: "together", togetherId }),
-        });
-      }
     },
     onError: (_, __, context) => {
+      Alert({ text: "핀 고정 토글에 실패했습니다", timer: 1500 });
       context?.previousData.forEach(([queryKey, data]) => {
         qc.setQueryData(queryKey, data);
       });
-      Alert({ text: "핀 고정 토글에 실패했습니다", timer: 1500 });
+      if (context?.previousMemberData) {
+        qc.setQueryData(
+          ["feeds", "infinite", memberId],
+          context.previousMemberData,
+        );
+      }
+      if (togetherId && context?.previousTogetherNoticeData) {
+        qc.setQueryData(
+          queryKeys.feeds.togetherNotice(togetherId),
+          context.previousTogetherNoticeData,
+        );
+      }
     },
   });
 };
