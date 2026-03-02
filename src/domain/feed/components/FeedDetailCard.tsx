@@ -43,6 +43,7 @@ function FeedDetailCard({
 }: FeedDetailCardProps) {
   const {
     id,
+    // feedType,
     authorId,
     feedType,
     isPinned,
@@ -164,7 +165,7 @@ function FeedDetailCard({
   };
 
   const { mutate: toggleReactionMutate, isPending: isToggleReactionPending } =
-    useToggleFeedReact();
+    useToggleFeedReact({ togetherId });
 
   const handleReaction = () => {
     if (!id) return;
@@ -178,8 +179,12 @@ function FeedDetailCard({
     toggleReactionMutate(id.toString());
   };
 
-  const { mutate: updateFeedMutation } = useUpdateFeedById();
-  const { mutateAsync: deleteFeedMutation } = useDeleteFeedById();
+  const { mutate: updateFeedMutation } = useUpdateFeedById({
+    togetherId,
+  });
+  const { mutateAsync: deleteFeedMutation } = useDeleteFeedById({
+    togetherId,
+  });
   const { mutateAsync: togglePin } = useTogglePin({
     currentPage,
     togetherId: togetherId!,
@@ -283,6 +288,7 @@ function FeedDetailCard({
               src={authorProfileImage ?? "/defaultFeedImage.png"}
               alt={author ?? "기본이미지"}
               fill
+              referrerPolicy="no-referrer"
             />
           </div>
           <div className="text-sm text-nowrap">{author}</div>
@@ -422,7 +428,7 @@ function FeedDetailCard({
           {/* 좋아요 영역 */}
           <button
             type="button"
-            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
             onClick={handleReaction}
           >
             <div className="relative w-6 h-6">
@@ -449,7 +455,7 @@ function FeedDetailCard({
           {/* 북마크 영역 */}
           <button
             type="button"
-            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
             onClick={handleBookmark}
           >
             <div className="relative w-6 h-6">

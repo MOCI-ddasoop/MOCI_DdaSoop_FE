@@ -14,6 +14,7 @@ import { FeedInfinite } from "../types";
 import { preloadAndDecode } from "../utils/imageDecodeCache";
 import { useAuthStore } from "@/store/authStore";
 import { useModalStore } from "@/domain/modal/store/useModalStore";
+import { useGetTogetherNotice } from "../api/useGetTogetherNotice";
 
 export type PositionedItem = FeedInfinite & {
   width: number;
@@ -45,11 +46,10 @@ function FeedCardContainer({
   const memberId = useAuthStore((state) => state.me?.memberId);
 
   const infiniteParams = useMemo<InfiniteFeedParams>(() => {
-    if (pageName === "together") {
+    if (pageName === "together" && !notice) {
       return {
         page: "together",
         togetherId: Number(queryParams),
-        notice,
       };
     }
 
@@ -60,7 +60,7 @@ function FeedCardContainer({
         bookmark,
       };
     }
-    return { query: searchParams.get("query") ?? undefined };
+    return { query: searchParams.get("query") ?? undefined, memberId };
   }, [bookmark, memberId, notice, pageName, queryParams, searchParams]);
 
   const {
@@ -71,6 +71,11 @@ function FeedCardContainer({
     isFetchingNextPage,
     isPending,
   } = useGetInfiniteFeedList(infiniteParams);
+
+  const { data: noticeData, isPending: isNoticePending } = useGetTogetherNotice(
+    { notice, queryParams },
+  );
+
   //무한스크롤 target ref
   const triggerRef = useIntersection({
     onIntersect: () => {
@@ -123,9 +128,9 @@ function FeedCardContainer({
   const items: FeedInfinite[] = useMemo(
     () =>
       notice
-        ? (data?.pages.flatMap((p) => p) ?? [])
+        ? (noticeData ?? [])
         : (data?.pages.flatMap((p) => p.content) ?? []),
-    [data, notice],
+    [data, notice, noticeData],
   );
 
   const positionedItems = useMemo(() => {

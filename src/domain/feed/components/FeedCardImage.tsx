@@ -80,6 +80,7 @@ function FeedCardImage({
 							width={50}
 							height={50}
 							className="object-cover"
+							referrerPolicy="no-referrer"
 						/>
 					</div>
 					<div className="text-sm text-white text-nowrap">{authorNickname}</div>

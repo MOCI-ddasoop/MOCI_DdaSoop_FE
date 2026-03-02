@@ -103,7 +103,11 @@ function FeedGroupCommentContainer() {
 					className="h-10 flex items-center justify-center"
 				>
 					{isFetchingNextPage && <div className = "sm-gray-spinner"></div>}
-					{!hasNextPage && comments.length > 0 && (
+					{!isFetchingNextPage && comments.length === 0 && !isFetching && (
+						<p className="text-sm text-gray-400">작성한 댓글이 없습니다</p>
+					)}
+
+					{!isFetchingNextPage && comments.length > 0 && !hasNextPage && (
 						<p className="text-sm text-gray-400">마지막 댓글입니다</p>
 					)}
 				</div>
