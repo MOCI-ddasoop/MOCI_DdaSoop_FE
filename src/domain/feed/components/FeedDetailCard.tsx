@@ -4,7 +4,6 @@ import tw from "@/shared/utils/tw";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BsChatRight, BsHeart, BsHeartFill } from "react-icons/bs";
-// import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
 import { MdIosShare } from "react-icons/md";
 import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";

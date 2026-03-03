@@ -154,14 +154,13 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
 		e.preventDefault();
 		if (!selectedPostVisibility) return;
 		const feedType = (() => {
-			switch (selectedPostVisibility) {
-				case "MEMBERS":
-					return "TOGETHER_VERIFICATION";
-				case "NOTICE":
+			if (selectedTogetherId) {
+				if (selectedPostVisibility === "NOTICE") {
 					return "TOGETHER_NOTICE";
-				default:
-					return "GENERAL";
+				}
+				return "TOGETHER_VERIFICATION";
 			}
+			return "GENERAL";
 		})();
 
 		const feedFormData: FeedCreateRequest = {
