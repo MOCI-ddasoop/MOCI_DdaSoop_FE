@@ -25,6 +25,7 @@ import reportModalStore from "@/domain/report/stores/useReportModalStore";
 import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import { TogetherInfo } from "@/domain/together/types";
 import { ConfirmAlert } from "@/shared/utils/alert";
+import Swal from "sweetalert2";
 
 type FeedDetailCardProps = {
 	item: FeedResponse;
@@ -255,6 +256,28 @@ function FeedDetailCard({
 		submitRegistry,
 	]);
 
+	const handleShareClick = async () => {
+		const shareUrl = `${window.location.origin}/?feedId=${id}`;
+		try {
+			await navigator.clipboard.writeText(shareUrl);
+			Swal.fire({
+				title: "클립보드에 복사되었습니다.",
+				toast: true,
+				position: "bottom",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		} catch (err) {
+			Swal.fire({
+				title: "복사에 실패했습니다.",
+				toast: true,
+				position: "bottom",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+		}
+	};
+
 	return (
 		<div className={tw("bg-white h-fit", className)}>
 			{/* 작성자 정보 영역 */}
@@ -451,7 +474,11 @@ function FeedDetailCard({
 					</button>
 				</div>
 
-				<button type="button" className="cursor-pointer duration-100 group">
+				<button
+					type="button"
+					className="cursor-pointer duration-100 group"
+					onClick={handleShareClick}
+				>
 					<MdIosShare
 						size={24}
 						className="text-gray-500 group-hover:text-amber-700"

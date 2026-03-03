@@ -1,3 +1,4 @@
+"use client";
 import { useMemo } from "react";
 import FeedViewer from "./FeedViewer";
 import { FeedEditStoreProvider } from "../provider/FeedEditStoreProvider";
