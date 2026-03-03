@@ -42,6 +42,7 @@ function FeedDetailCard({
 }: FeedDetailCardProps) {
 	const {
 		id,
+		// feedType,
 		authorId,
 		authorNickname: author,
 		authorProfileImage,
@@ -158,7 +159,7 @@ function FeedDetailCard({
 	};
 
 	const { mutate: toggleReactionMutate, isPending: isToggleReactionPending } =
-		useToggleFeedReact();
+		useToggleFeedReact({ togetherId });
 
 	const handleReaction = () => {
 		if (!id) return;
@@ -172,8 +173,12 @@ function FeedDetailCard({
 		toggleReactionMutate(id.toString());
 	};
 
-	const { mutate: updateFeedMutation } = useUpdateFeedById();
-	const { mutateAsync: deleteFeedMutation } = useDeleteFeedById();
+	const { mutate: updateFeedMutation } = useUpdateFeedById({
+		togetherId,
+	});
+	const { mutateAsync: deleteFeedMutation } = useDeleteFeedById({
+		togetherId,
+	});
 
 	const handleDelete = async () => {
 		try {
