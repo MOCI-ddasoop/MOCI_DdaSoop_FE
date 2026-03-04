@@ -9,6 +9,31 @@ import Button from "@/shared/components/Button";
 import { ADMIN_REPORTS_QUERY_KEY } from "../api/useAdminReports";
 import Swal from "sweetalert2";
 
+const STATUS_LABELS: Record<string, string> = {
+  PENDING: "대기",
+  REVIEWING: "검토중",
+  APPROVED: "승인",
+  REJECTED: "기각",
+};
+
+const REASON_TYPE_LABELS: Record<string, string> = {
+  SPAM: "스팸 / 홍보성 도배",
+  HATE_SPEECH: "증오심 표현 / 차별",
+  HARASSMENT: "괴롭힘 / 모욕",
+  INAPPROPRIATE_CONTENT: "부적절한 콘텐츠",
+  VIOLENCE: "폭력 또는 위험한 행위",
+  FALSE_INFORMATION: "허위 정보 / 유언비어",
+  COPYRIGHT: "저작권 침해",
+  PRIVACY: "개인정보 노출",
+  OTHER: "기타 사유",
+};
+
+const TARGET_TYPE_LABELS: Record<string, string> = {
+  FEED: "피드",
+  COMMENT: "댓글",
+  TOGETHER: "함께하기",
+};
+
 type ReportDetailProps = {
   reportId: number;
 };
@@ -98,16 +123,21 @@ export default function ReportDetail({ reportId }: ReportDetailProps) {
     <div className="rounded-lg border border-pastelblue-border overflow-hidden">
       <div className="bg-pastelblue p-4">
         <h2 className="text-lg font-bold">
-          신고 #{report.id} · {report.targetType} #{report.targetId}
+          신고 #{report.id} ·{" "}
+          {report.targetType ? TARGET_TYPE_LABELS[report.targetType] ?? report.targetType : "-"}{" "}
+          #{report.targetId}
         </h2>
         <p className="text-sm text-gray-600">
-          상태: <span className="font-medium">{report.status}</span>
+          상태:{" "}
+          <span className="font-medium">
+            {report.status ? STATUS_LABELS[report.status] ?? report.status : "-"}
+          </span>
         </p>
       </div>
       <div className="p-4 space-y-2 text-sm">
         <p>
           <span className="text-gray-500">사유 유형:</span>{" "}
-          {report.reasonType ?? "-"}
+          {report.reasonType ? REASON_TYPE_LABELS[report.reasonType] ?? report.reasonType : "-"}
         </p>
         {report.reasonDetail && (
           <p>
