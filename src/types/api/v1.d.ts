@@ -172,6 +172,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/members/{memberId}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * 회원 역할 변경
+         * @description 회원 역할을 USER 또는 ADMIN으로 변경합니다.
+         */
+        put: operations["updateMemberRole"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/members/{memberId}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * 회원 복구
+         * @description 탈퇴 처리된 회원을 복구합니다.
+         */
+        put: operations["restoreMember"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/feeds/{feedId}/visibility/private": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * 피드 비공개 처리
+         * @description 피드를 비공개로 변경합니다.
+         */
+        put: operations["setFeedPrivate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together": {
         parameters: {
             query?: never;
@@ -531,38 +591,6 @@ export interface paths {
          * @description 소셜 로그인 후 필수 정보(닉네임, 이메일)를 입력하여 회원가입을 완료합니다. 회원 상태가 확정된 후에만 JWT 토큰이 발급됩니다.
          */
         post: operations["completeRegistration"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/notifications/system/{memberId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["sendSystemNotification"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/notifications/system/broadcast": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["broadcastSystemNotification"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1428,6 +1456,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 관리자 API 진입 확인
+         * @description 관리자 API 사용 가능 여부를 확인합니다.
+         */
+        get: operations["adminEntry"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/reports": {
         parameters: {
             query?: never;
@@ -1556,6 +1604,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 회원 목록 페이징
+         * @description 탈퇴 회원 포함 회원 목록을 페이징 조회합니다.
+         */
+        get: operations["getMemberPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/members/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 회원 상세 조회
+         * @description 회원 상세 정보를 조회합니다. 탈퇴 회원도 조회 가능합니다.
+         */
+        get: operations["getMemberDetail"];
+        put?: never;
+        post?: never;
+        /**
+         * 회원 탈퇴 처리
+         * @description 회원을 탈퇴 처리합니다. (Soft Delete, 프로필 익명화)
+         */
+        delete: operations["softDeleteMember"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/dashboard/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 대시보드 통계 조회
+         * @description 관리자 대시보드용 통계를 조회합니다.
+         */
+        get: operations["getDashboardStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/together/{togetherId}/leave": {
         parameters: {
             query?: never;
@@ -1622,6 +1734,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/feeds/{feedId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 피드 강제 삭제
+         * @description 피드를 강제 삭제합니다. (Soft Delete)
+         */
+        delete: operations["forceDeleteFeed"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/comments/{commentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 댓글 강제 삭제
+         * @description 댓글을 강제 삭제합니다. (Soft Delete)
+         */
+        delete: operations["forceDeleteComment"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1646,6 +1798,8 @@ export interface components {
         };
         FeedUpdateRequest: {
             content?: string;
+            /** @enum {string} */
+            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
             images?: components["schemas"]["FeedImageRequest"][];
             tags?: string[];
             /** @enum {string} */
@@ -1743,6 +1897,25 @@ export interface components {
             status: "PENDING" | "REVIEWING" | "APPROVED" | "REJECTED";
             adminComment: string;
         };
+        AdminMemberRoleUpdateRequest: {
+            role: string;
+        };
+        AdminMemberDetailResponse: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+            nickname?: string;
+            email?: string;
+            memberCode?: string;
+            profileImageUrl?: string;
+            role?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         CreateRequest: {
             title: string;
             description?: string;
@@ -1758,6 +1931,9 @@ export interface components {
             endDate: string;
             /** Format: int64 */
             memberId?: number;
+            imageUrls?: string[];
+            /** Format: int64 */
+            goalFeedCount?: number;
         };
         CreateResponse: {
             /** Format: int64 */
@@ -1869,9 +2045,6 @@ export interface components {
             /** Format: email */
             email: string;
         };
-        SystemNotificationCreateRequest: {
-            message: string;
-        };
         DetailResponse: {
             /** Format: int64 */
             id?: number;
@@ -1965,17 +2138,17 @@ export interface components {
             totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
@@ -2016,13 +2189,13 @@ export interface components {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2033,24 +2206,24 @@ export interface components {
             totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             /** Format: date-time */
@@ -2060,7 +2233,7 @@ export interface components {
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2111,6 +2284,7 @@ export interface components {
             authorProfileImage?: string;
             /** Format: int64 */
             targetId?: number;
+            feedInfo?: components["schemas"]["FeedInfo"];
             /** Format: int64 */
             parentId?: number;
             replies?: components["schemas"]["CommentResponse"][];
@@ -2127,22 +2301,30 @@ export interface components {
             contentUpdatedAt?: string;
             reply?: boolean;
         };
+        FeedInfo: {
+            /** Format: int64 */
+            feedId?: number;
+            feedContent?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            deleted?: boolean;
+        };
         Page: {
             /** Format: int32 */
             totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
-            first?: boolean;
-            last?: boolean;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
-            pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
+            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         LastLoginProviderResponse: {
@@ -2158,6 +2340,38 @@ export interface components {
             commentPending?: number;
             /** Format: int64 */
             togetherPending?: number;
+        };
+        AdminMemberSummaryResponse: {
+            /** Format: int64 */
+            id?: number;
+            nickname?: string;
+            email?: string;
+            role?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            isDeleted?: boolean;
+        };
+        DashboardStatsResponse: {
+            /** Format: int64 */
+            memberCount?: number;
+            /** Format: int64 */
+            feedCount?: number;
+            /** Format: int64 */
+            commentCount?: number;
+            /** Format: int64 */
+            togetherCount?: number;
+            /** Format: int64 */
+            donationCount?: number;
+            /** Format: int64 */
+            reportPendingTotal?: number;
+            /** Format: int64 */
+            reportPendingFeed?: number;
+            /** Format: int64 */
+            reportPendingComment?: number;
+            /** Format: int64 */
+            reportPendingTogether?: number;
         };
         MemberWithdrawRequest: {
             reason?: string;
@@ -2653,6 +2867,108 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["ReportResponse"];
                 };
+            };
+        };
+    };
+    updateMemberRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminMemberRoleUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description 변경 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+            /** @description 잘못된 요청 (유효성 검증 실패) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+            /** @description 회원을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+        };
+    };
+    restoreMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 복구 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+            /** @description 회원을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+        };
+    };
+    setFeedPrivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 처리 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 피드를 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -3273,56 +3589,6 @@ export interface operations {
             };
         };
     };
-    sendSystemNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SystemNotificationCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
-    broadcastSystemNotification: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SystemNotificationCreateRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": number;
-                };
-            };
-        };
-    };
     isParticipating: {
         parameters: {
             query?: never;
@@ -3820,7 +4086,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             };
             cookie?: never;
         };
@@ -3867,7 +4133,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
+                category: "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM" | "FOLLOW";
             };
             cookie?: never;
         };
@@ -4565,6 +4831,28 @@ export interface operations {
             };
         };
     };
+    adminEntry: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 정상 진입 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
     getReports: {
         parameters: {
             query?: {
@@ -4752,6 +5040,107 @@ export interface operations {
             };
         };
     };
+    getMemberPage: {
+        parameters: {
+            query?: {
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberSummaryResponse"];
+                };
+            };
+        };
+    };
+    getMemberDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+            /** @description 회원을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminMemberDetailResponse"];
+                };
+            };
+        };
+    };
+    softDeleteMember: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 탈퇴 처리 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 회원을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    getDashboardStats: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DashboardStatsResponse"];
+                };
+            };
+        };
+    };
     leave: {
         parameters: {
             query?: never;
@@ -4834,6 +5223,60 @@ export interface operations {
                 content: {
                     "*/*": number;
                 };
+            };
+        };
+    };
+    forceDeleteFeed: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                feedId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 삭제 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 피드를 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    forceDeleteComment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                commentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 삭제 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 댓글을 찾을 수 없음 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
