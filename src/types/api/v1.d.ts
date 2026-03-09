@@ -1798,6 +1798,8 @@ export interface components {
         };
         FeedUpdateRequest: {
             content?: string;
+            /** @enum {string} */
+            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
             images?: components["schemas"]["FeedImageRequest"][];
             tags?: string[];
             /** @enum {string} */
@@ -1930,6 +1932,8 @@ export interface components {
             /** Format: int64 */
             memberId?: number;
             imageUrls?: string[];
+            /** Format: int64 */
+            goalFeedCount?: number;
         };
         CreateResponse: {
             /** Format: int64 */
@@ -2142,9 +2146,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         PageableObject: {
@@ -2178,20 +2182,20 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2210,16 +2214,16 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         NotificationResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             /** Format: date-time */
@@ -2229,7 +2233,7 @@ export interface components {
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2280,6 +2284,7 @@ export interface components {
             authorProfileImage?: string;
             /** Format: int64 */
             targetId?: number;
+            feedInfo?: components["schemas"]["FeedInfo"];
             /** Format: int64 */
             parentId?: number;
             replies?: components["schemas"]["CommentResponse"][];
@@ -2296,6 +2301,14 @@ export interface components {
             contentUpdatedAt?: string;
             reply?: boolean;
         };
+        FeedInfo: {
+            /** Format: int64 */
+            feedId?: number;
+            feedContent?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            deleted?: boolean;
+        };
         Page: {
             /** Format: int32 */
             totalPages?: number;
@@ -2309,9 +2322,9 @@ export interface components {
             /** Format: int32 */
             number?: number;
             sort?: components["schemas"]["SortObject"];
+            pageable?: components["schemas"]["PageableObject"];
             /** Format: int32 */
             numberOfElements?: number;
-            pageable?: components["schemas"]["PageableObject"];
             empty?: boolean;
         };
         LastLoginProviderResponse: {
@@ -4073,7 +4086,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             };
             cookie?: never;
         };
@@ -4120,7 +4133,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
+                category: "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM" | "FOLLOW";
             };
             cookie?: never;
         };
