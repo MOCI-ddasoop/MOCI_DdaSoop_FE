@@ -42,6 +42,7 @@ function FeedDetailCard({
 }: FeedDetailCardProps) {
   const {
     id,
+    // feedType,
     authorId,
     authorNickname: author,
     authorProfileImage,
@@ -158,7 +159,7 @@ function FeedDetailCard({
   };
 
   const { mutate: toggleReactionMutate, isPending: isToggleReactionPending } =
-    useToggleFeedReact();
+    useToggleFeedReact({ togetherId });
 
   const handleReaction = () => {
     if (!id) return;
@@ -172,8 +173,12 @@ function FeedDetailCard({
     toggleReactionMutate(id.toString());
   };
 
-  const { mutate: updateFeedMutation } = useUpdateFeedById();
-  const { mutateAsync: deleteFeedMutation } = useDeleteFeedById();
+  const { mutate: updateFeedMutation } = useUpdateFeedById({
+    togetherId,
+  });
+  const { mutateAsync: deleteFeedMutation } = useDeleteFeedById({
+    togetherId,
+  });
 
   const handleDelete = async () => {
     try {
@@ -262,7 +267,12 @@ function FeedDetailCard({
       <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
         <div className="flex items-center gap-2">
           <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
-            <Image src={authorProfileImage ?? "/defaultFeedImage.png"} alt={author ?? "기본이미지"} fill  referrerPolicy="no-referrer" />
+            <Image
+              src={authorProfileImage ?? "/defaultFeedImage.png"}
+              alt={author ?? "기본이미지"}
+              fill
+              referrerPolicy="no-referrer"
+            />
           </div>
           <div className="text-sm text-nowrap">{author}</div>
         </div>
@@ -395,7 +405,7 @@ function FeedDetailCard({
           {/* 좋아요 영역 */}
           <button
             type="button"
-            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
             onClick={handleReaction}
           >
             <div className="relative w-6 h-6">
@@ -422,7 +432,7 @@ function FeedDetailCard({
           {/* 북마크 영역 */}
           <button
             type="button"
-            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
             onClick={handleBookmark}
           >
             <div className="relative w-6 h-6">

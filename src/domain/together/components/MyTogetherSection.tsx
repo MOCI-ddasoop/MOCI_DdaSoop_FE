@@ -10,9 +10,7 @@ function MyTogetherSection({ type }: { type: "join" | "create" }) {
   const items =
     type === "create"
       ? data?.data.filter((item) => item.memberId === userId)
-      : data?.data.filter((item) =>
-          item.participants?.some((p) => p.memberId === userId),
-        );
+      : data?.data.filter((item) => item.memberId !== userId);
 
   return (
     <>

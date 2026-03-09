@@ -17,6 +17,7 @@ import { useCreateTogether } from "../api/useCreateTogether";
 import { useAuthStore } from "@/store/authStore";
 import { categoryType } from "@/shared/constants/filter";
 import { Alert } from "@/shared/utils/alert";
+import { usePostImage } from "@/shared/api/usePostImage";
 
 const TOGETHER_CATEGORIES = [
   { id: 1, label: "플로깅", key: "PLOGGING" },
@@ -30,6 +31,7 @@ function TogetherCreateForm() {
   const router = useRouter();
 
   const { mutate: handleCreateTogether } = useCreateTogether();
+  const { mutateAsync: postImages } = usePostImage();
 
   const userId = useAuthStore((s) => s.me?.memberId);
 
@@ -64,7 +66,7 @@ function TogetherCreateForm() {
     : undefined;
 
   //TODO: 모임 생성 API 연동 후 화면 렌더링 시 sanitizeHtml 적용 필요
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!textBoxRef.current) return;
@@ -73,18 +75,33 @@ function TogetherCreateForm() {
       Alert({ text: "모임 소개글을 입력해주세요.", timer: 1500 });
       return;
     }
-    handleCreateTogether({
-      title: togetherName,
-      description: togetherInfo,
-      category: category! as "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC",
-      mode: onlineType!,
-      capacity: maxParticipants,
-      startDate: startDate!.toISOString().slice(0, 10),
-      endDate: endDate!.toISOString().slice(0, 10),
-      memberId: userId,
-    });
-    Alert({ text: "함께하기 생성이 완료되었습니다!", timer: 1500 });
-    router.push("/together");
+    try {
+      let imageUrls;
+      if (images.length !== 0) {
+        const imageUpload = await postImages(images, {
+          onError: (error) => {
+            alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+            throw new Error("이미지 업로드 실패");
+          },
+        });
+        imageUrls = imageUpload.map((img) => img.imageUrl!);
+      }
+      handleCreateTogether({
+        title: togetherName,
+        description: togetherInfo,
+        category: category! as "PLOGGING" | "CLEANUP" | "RECYCLING" | "ETC",
+        mode: onlineType!,
+        capacity: maxParticipants,
+        startDate: startDate!.toISOString().slice(0, 10),
+        endDate: endDate!.toISOString().slice(0, 10),
+        memberId: userId,
+        imageUrls,
+      });
+      Alert({ text: "함께하기 생성이 완료되었습니다!", timer: 1500 });
+      router.push("/together");
+    } catch (error) {
+      Alert({ text: "함께하기 생성에 실패하였습니다", red: true });
+    }
   };
 
   return (

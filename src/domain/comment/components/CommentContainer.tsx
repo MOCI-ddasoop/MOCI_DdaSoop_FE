@@ -57,24 +57,29 @@ function CommentContainer({
 	useEffect(() => {
 		if (lastCreatedCommentParentId) {
 			if (openedReplyParentId !== lastCreatedCommentParentId) return;
-			const target = commentRefs.current.get(lastCreatedCommentParentId);
-			if (!target) return;
+			requestAnimationFrame(() => {
+				const target = commentRefs.current.get(lastCreatedCommentParentId);
+				if (!target) return;
 
-			onScrollToComment(target);
-			actions.reset();
+				onScrollToComment(target);
+				actions.reset();
+			});
 		} else {
 			if (!lastCreatedCommentId) return;
-			const target = commentRefs.current.get(lastCreatedCommentId);
-			if (!target) return;
-			onScrollToComment(target);
+			requestAnimationFrame(() => {
+				const target = commentRefs.current.get(lastCreatedCommentId);
+				if (!target) return;
+				onScrollToComment(target);
+				actions.reset();
+			});
 		}
-		actions.reset();
 	}, [
 		actions,
 		lastCreatedCommentId,
 		lastCreatedCommentParentId,
 		onScrollToComment,
 		openedReplyParentId,
+		feedCommentData,
 	]);
 
 	if (!feedCommentData) return null;

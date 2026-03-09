@@ -25,6 +25,7 @@ function DonateSection() {
     isError,
   } = useGetDonationList({
     category: selectedCategory,
+    status: undefined,
     sortType: currentSort,
     page: page - 1,
     size: 12,
