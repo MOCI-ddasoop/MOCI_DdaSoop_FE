@@ -12,6 +12,7 @@ export const getInitTogetherList = async ({
 } = {}) => {
   const res = await serverFetchApi(
     `/api/v1/together/list?page=0&${fixed ? `size=3&sortType=${getKeyByValue(sortType, randomList!)}` : "size=12"}`,
+    { cache: "no-cache" },
   );
 
   if (!res.ok) {
