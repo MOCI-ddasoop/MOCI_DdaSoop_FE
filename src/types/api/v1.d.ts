@@ -1800,8 +1800,6 @@ export interface components {
             content?: string;
             /** @enum {string} */
             feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-            /** @enum {string} */
-            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
             images?: components["schemas"]["FeedImageRequest"][];
             tags?: string[];
             /** @enum {string} */
@@ -2136,10 +2134,10 @@ export interface components {
             dDay?: number;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["ReportSummaryResponse"][];
@@ -2147,20 +2145,22 @@ export interface components {
             number?: number;
             sort?: components["schemas"]["SortObject"];
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             empty?: boolean;
         };
         PageableObject: {
+            unpaged?: boolean;
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
-            /** Format: int32 */
-            pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
+            /** Format: int32 */
+            pageNumber?: number;
+            paged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2182,8 +2182,8 @@ export interface components {
         };
         SortObject: {
             empty?: boolean;
-            unsorted?: boolean;
             sorted?: boolean;
+            unsorted?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
@@ -2202,10 +2202,10 @@ export interface components {
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: components["schemas"]["NotificationSummaryResponse"][];
@@ -2213,6 +2213,8 @@ export interface components {
             number?: number;
             sort?: components["schemas"]["SortObject"];
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             empty?: boolean;
@@ -2308,10 +2310,10 @@ export interface components {
             deleted?: boolean;
         };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             /** Format: int32 */
             size?: number;
             content?: unknown[];
@@ -2319,6 +2321,8 @@ export interface components {
             number?: number;
             sort?: components["schemas"]["SortObject"];
             pageable?: components["schemas"]["PageableObject"];
+            first?: boolean;
+            last?: boolean;
             /** Format: int32 */
             numberOfElements?: number;
             empty?: boolean;
