@@ -3,7 +3,10 @@ import { createStore, StoreApi } from "zustand";
 import { FeedResponse, FeedUpdateRequest } from "../types";
 import { immer } from "zustand/middleware/immer";
 
-type FeedDraft = Omit<FeedUpdateRequest, "images"> & { images: ImageBase[] };
+type FeedDraft = Omit<FeedUpdateRequest, "images"> & {
+	images: ImageBase[];
+	togetherId?: number;
+};
 
 export type FeedEditStore = {
 	isEditMode: boolean;
@@ -18,7 +21,7 @@ export type FeedEditStore = {
 		setImages(images: FeedDraft["images"]): void;
 		setContent(content: string): void;
 		setTags(tags: string[]): void;
-		setVisibility(v: FeedDraft["visibility"]): void;
+		setVisibility(v: FeedDraft["visibility"], togetherId?: number): void;
 
 		reset(): void;
 	};
@@ -28,10 +31,12 @@ export function createFeedEditStore(
 	feed: FeedResponse,
 ): StoreApi<FeedEditStore> {
 	const createInitialDraft = (): FeedDraft => ({
+		feedType: feed.feedType,
 		content: feed.content ?? "",
 		images: feed.images ?? [],
 		tags: feed.tags ?? [],
 		visibility: feed.visibility,
+		togetherId: feed.togetherId,
 	});
 
 	return createStore(
@@ -62,6 +67,7 @@ export function createFeedEditStore(
 							};
 						}),
 						visibility: draft.visibility,
+						feedType: draft.feedType,
 						tags: draft.tags,
 					};
 				},
@@ -84,6 +90,16 @@ export function createFeedEditStore(
 				setVisibility: (visibility) =>
 					set((state) => {
 						state.draft.visibility = visibility;
+
+						if (state.draft.togetherId) {
+							if (visibility === "NOTICE") {
+								state.draft.feedType = "TOGETHER_NOTICE";
+							} else {
+								state.draft.feedType = "TOGETHER_VERIFICATION";
+							}
+						} else {
+							state.draft.feedType = "GENERAL";
+						}
 					}),
 
 				reset: () =>
