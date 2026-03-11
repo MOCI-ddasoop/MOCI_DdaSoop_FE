@@ -1,9 +1,23 @@
 import { api } from "@/shared/config/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FeedCreateRequest } from "../types";
+import {
+	useMutation,
+	UseMutationOptions,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { ApiErrorResponse, FeedCreateRequest } from "../types";
+import { queryKeys } from "@/shared/config/queryKeys";
+import { useAuthStore } from "@/store/authStore";
+import { AxiosError } from "axios";
 
-export const usePostFeed = (options?: Parameters<typeof useMutation>[0]) => {
+export const usePostFeed = (
+	options?: UseMutationOptions<
+		unknown,
+		AxiosError<ApiErrorResponse>,
+		FeedCreateRequest
+	>,
+) => {
 	const qc = useQueryClient();
+	const memberId = useAuthStore((s) => s.me?.memberId);
 
 	return useMutation({
 		...options,
@@ -12,8 +26,22 @@ export const usePostFeed = (options?: Parameters<typeof useMutation>[0]) => {
 			return data;
 		},
 		onSuccess: (data, variables, context, mutation) => {
+			if (variables.feedType === "TOGETHER_NOTICE")
+				qc.invalidateQueries({
+					queryKey: queryKeys.feeds.togetherNotice(variables.togetherId!),
+				});
 			qc.invalidateQueries({
-				queryKey: ["feeds", "infinite"],
+				predicate: (query) => {
+					const key = query.queryKey as string[];
+					return (
+						key[0] === "feeds" &&
+						key[1] === "infinite" &&
+						typeof key[2] !== "number"
+					);
+				},
+			});
+			qc.invalidateQueries({
+				queryKey: ["feeds", "infinite", memberId],
 			});
 
 			options?.onSuccess?.(data, variables, context, mutation);

@@ -21,7 +21,6 @@ export function createSubmitRegistry() {
 			registry.delete(owner);
 		},
 		async submitByOwner(owner: SubmitOwner) {
-			console.log("[submitByOwner] called:", owner);
 			const entry = registry.get(owner);
 			if (!entry) {
 				return;

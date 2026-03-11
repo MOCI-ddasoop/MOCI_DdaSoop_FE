@@ -107,10 +107,11 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
         onClose();
       }, 1500);
     },
-    onError: () => {
+    onError: (error) => {
       Swal.hideLoading();
       UpdateAlert({
         title: "업로드 실패",
+        text: error.response?.data.message,
       });
       setTimeout(() => {
         Swal.close();
@@ -153,15 +154,13 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
     e.preventDefault();
     if (!selectedPostVisibility) return;
     const feedType = (() => {
-      switch (selectedPostVisibility) {
-        case "MEMBERS":
-          return "TOGETHER_VERIFICATION";
-        case "NOTICE":
+      if (selectedTogetherId) {
+        if (selectedPostVisibility === "NOTICE") {
           return "TOGETHER_NOTICE";
-        default:
-          if (selectedTogetherId) return "TOGETHER_VERIFICATION";
-          return "GENERAL";
+        }
+        return "TOGETHER_VERIFICATION";
       }
+      return "GENERAL";
     })();
 
     const feedFormData: FeedCreateRequest = {

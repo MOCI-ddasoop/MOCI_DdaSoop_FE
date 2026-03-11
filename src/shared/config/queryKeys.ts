@@ -1,5 +1,3 @@
-import { isCancel } from "axios";
-
 export const queryKeys = {
   feeds: {
     all: () => ["feeds"],
@@ -20,25 +18,17 @@ export const queryKeys = {
       memberId?: number;
     }) => {
       if (!params?.page) {
-        return ["feeds", "infinite"];
+        return ["feeds", "infinite", params?.memberId];
       }
 
       if (params.page === "together") {
-        return [
-          "feeds",
-          "infinite",
-          { page: "together", togetherId: params.togetherId },
-        ];
+        return ["feeds", "infinite", "together", params.togetherId];
       }
 
-      return [
-        "feeds",
-        "infinite",
-        { page: "member", memberId: params.memberId },
-      ];
+      return ["feeds", "infinite", "member", params.memberId];
     },
-    togetherNotice: (id: number) => ["feeds", "notice", id],
-    bookmark: () => ["feeds", "bookmark"],
+    togetherNotice: (id: number) => ["feeds", "together", "notice", id],
+    bookmark: () => ["feeds", "infinite", "bookmark"],
     search: (query?: string) => ["feeds", "infinite", "search", query],
 
     reaction: () => ["feeds", "reaction"],
