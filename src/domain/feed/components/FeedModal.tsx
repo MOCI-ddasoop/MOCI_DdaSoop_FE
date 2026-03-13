@@ -8,15 +8,15 @@ import { CommentScrollProvider } from "@/domain/comment/provider/CommentScrollPr
 import { createCommentScrollStore } from "@/domain/comment/store/commentScrollStore";
 import { SubmitRegistryProvider } from "../provider/SubmitRegistryProvider";
 import axios from "axios";
-import { ApiErrorResponse } from "../types";
+import { ApiErrorResponse, FeedResponse } from "../types";
 
-function FeedModal({ feedId }: { feedId: string }) {
+function FeedModal({ feedId,initialData }: { feedId: string,initialData?:FeedResponse }) {
 	const {
 		data: feedDetailData,
 		isLoading,
 		isError,
 		error,
-	} = useGetFeedById(feedId);
+	} = useGetFeedById(feedId,{initialData, initialDataUpdatedAt: 0});
 
 	const feedEditStore = useMemo(() => {
 		if (!feedDetailData) return;
