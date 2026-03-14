@@ -6,6 +6,7 @@ import { completeRegistration } from "../api/completeRegistration";
 import { checkNickname } from "../api/checkNickname";
 import { checkEmail } from "../api/checkEmail";
 import { Alert } from "@/shared/utils/alert";
+import { AxiosError } from "axios";
 
 export default function AdditionalForm() {
   const router = useRouter();
@@ -27,30 +28,57 @@ export default function AdditionalForm() {
     setEmailAvailable(null);
   }, [email]);
 
+  const validateNickname = (value: string) => {
+    const trimmed = value.trim();
+    if (trimmed.length < 2 || trimmed.length > 12) {
+      Alert({ text: "닉네임은 2~12자 사이여야 합니다." });
+      return false;
+    }
+    return true;
+  };
+  const validateEmail = (value: string) => {
+    const trimmed = value.trim();
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(trimmed)) {
+      Alert({ text: "올바른 이메일 형식이 아닙니다." });
+      return false;
+    }
+    return true;
+  };
   const handleNicknameCheck = async () => {
     if (!nickname.trim()) return Alert({ text: "닉네임을 입력해주세요." });
+    if (!validateNickname(nickname)) return;
+
     try {
       const { available, message } = await checkNickname(nickname.trim());
       setNicknameAvailable(available ?? false);
       Alert({ text: message });
     } catch (e) {
+      const error = e as AxiosError<{ message: string }>;
+      const message = error.response?.data?.message;
+      
       Alert({
-        text: "닉네임 중복 체크 중 오류가 발생했습니다.",
+        text: message ?? "닉네임 중복 체크 중 오류가 발생했습니다.",
         timer: 1500,
       });
+      setNicknameAvailable(false);
     }
   };
   const handleEmailCheck = async () => {
     if (!email.trim()) return Alert({ text: "이메일을 입력해주세요." });
+    if (!validateEmail(email)) return;
     try {
       const { available, message } = await checkEmail(email.trim());
       setEmailAvailable(available ?? false);
       Alert({ text: message });
     } catch (e) {
+      const error = e as AxiosError<{ message: string }>;
+      const message = error.response?.data?.message;
       Alert({
-        text: "이메일 중복 체크 중 오류가 발생했습니다.",
+        text: message ?? "이메일 중복 체크 중 오류가 발생했습니다.",
         timer: 1500,
       });
+      setEmailAvailable(false);
     }
   };
   const isFormFilled =

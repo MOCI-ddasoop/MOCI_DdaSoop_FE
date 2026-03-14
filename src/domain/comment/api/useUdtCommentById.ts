@@ -2,7 +2,7 @@ import { api } from "@/shared/config/api";
 import { queryKeys } from "@/shared/config/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useUdtCommentById = (feedId?: number) => {
+export const useUdtCommentById = (feedId?: number, userId?: number) => {
 	const qc = useQueryClient();
 
 	return useMutation({
@@ -17,6 +17,11 @@ export const useUdtCommentById = (feedId?: number) => {
 					queryKey: queryKeys.comments.list(
 						typeof feedId === "string" ? feedId : String(feedId),
 					),
+				});
+			}
+			if (userId) {
+				qc.invalidateQueries({
+					queryKey: queryKeys.comments.listByUser(userId.toString()),
 				});
 			}
 		},

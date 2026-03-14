@@ -13,7 +13,7 @@ type ToggleReactContext = {
 	queryKey: ReturnType<typeof queryKeys.comments.list>;
 };
 
-export const useToggleReact = (feedId: number | undefined) => {
+export const useToggleReact = (feedId: number | undefined, userId?: number) => {
 	const qc = useQueryClient();
 	return useMutation<
 		{ isReacted: boolean; reactionCount: number },
@@ -63,6 +63,11 @@ export const useToggleReact = (feedId: number | undefined) => {
 			}
 		},
 		onSuccess: (data, commentId, context) => {
+			if (userId) {
+				qc.invalidateQueries({
+					queryKey: queryKeys.comments.listByUser(userId.toString()),
+				});
+			}
 			qc.setQueryData<InfiniteData<CommentPage>>(context!.queryKey, (old) => {
 				if (!old) return old;
 				return {

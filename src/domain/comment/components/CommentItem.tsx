@@ -63,11 +63,11 @@ function CommentItem({
 	const reportAction = reportModalStore((s) => s.action);
 
 	const { mutate: toggleReactMutation, isPending: isToggleReactPending } =
-		useToggleReact(feedId);
+		useToggleReact(feedId, userId);
 
 	const { mutate: updateCommentMutation, isPending: isUdtCommentPending } =
-		useUdtCommentById(feedId);
-	const { mutate: deleteCommentMutation } = useDelCommentById(feedId);
+		useUdtCommentById(feedId, userId);
+	const { mutate: deleteCommentMutation } = useDelCommentById(feedId, userId);
 
 	const editFormSubmit = useCallback(() => {
 		ConfirmAlert({
