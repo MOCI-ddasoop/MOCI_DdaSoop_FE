@@ -14,6 +14,31 @@ const STATUS_OPTIONS = [
   { value: "REJECTED", label: "기각" },
 ] as const;
 
+const STATUS_LABELS: Record<string, string> = {
+  PENDING: "대기",
+  REVIEWING: "검토중",
+  APPROVED: "승인",
+  REJECTED: "기각",
+};
+
+const REASON_TYPE_LABELS: Record<string, string> = {
+  SPAM: "스팸 / 홍보성 도배",
+  HATE_SPEECH: "증오심 표현 / 차별",
+  HARASSMENT: "괴롭힘 / 모욕",
+  INAPPROPRIATE_CONTENT: "부적절한 콘텐츠",
+  VIOLENCE: "폭력 또는 위험한 행위",
+  FALSE_INFORMATION: "허위 정보 / 유언비어",
+  COPYRIGHT: "저작권 침해",
+  PRIVACY: "개인정보 노출",
+  OTHER: "기타 사유",
+};
+
+const TARGET_TYPE_LABELS: Record<string, string> = {
+  FEED: "피드",
+  COMMENT: "댓글",
+  TOGETHER: "함께하기",
+};
+
 const PAGE_SIZE = 20;
 
 export default function ReportList() {
@@ -103,9 +128,13 @@ export default function ReportList() {
                     className="border-b border-gray-100 hover:bg-pastelblue/30"
                   >
                     <td className="p-3">{r.id}</td>
-                    <td className="p-3">{r.targetType ?? "-"}</td>
+                    <td className="p-3">
+                      {r.targetType ? TARGET_TYPE_LABELS[r.targetType] ?? r.targetType : "-"}
+                    </td>
                     <td className="p-3">{r.targetId ?? "-"}</td>
-                    <td className="p-3">{r.reasonType ?? "-"}</td>
+                    <td className="p-3">
+                      {r.reasonType ? REASON_TYPE_LABELS[r.reasonType] ?? r.reasonType : "-"}
+                    </td>
                     <td className="p-3">
                       <span
                         className={tw(
@@ -115,7 +144,7 @@ export default function ReportList() {
                           r.status === "REJECTED" && "text-gray-600"
                         )}
                       >
-                        {r.status ?? "-"}
+                        {r.status ? STATUS_LABELS[r.status] ?? r.status : "-"}
                       </span>
                     </td>
                     <td className="p-3">{r.reporterNickname ?? "-"}</td>
