@@ -1648,6 +1648,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/feeds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 피드 목록 페이징 (관리자)
+         * @description 관리자용 피드 리스트를 필터/페이징하여 조회합니다.
+         */
+        get: operations["getFeedPageForAdmin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/dashboard/stats": {
         parameters: {
             query?: never;
@@ -1660,6 +1680,26 @@ export interface paths {
          * @description 관리자 대시보드용 통계를 조회합니다.
          */
         get: operations["getDashboardStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 댓글 목록 페이징 (관리자)
+         * @description 관리자용 댓글 리스트를 필터/페이징하여 조회합니다.
+         */
+        get: operations["getCommentPageForAdmin"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1798,6 +1838,8 @@ export interface components {
         };
         FeedUpdateRequest: {
             content?: string;
+            /** @enum {string} */
+            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
             images?: components["schemas"]["FeedImageRequest"][];
             tags?: string[];
             /** @enum {string} */
@@ -1930,6 +1972,8 @@ export interface components {
             /** Format: int64 */
             memberId?: number;
             imageUrls?: string[];
+            /** Format: int64 */
+            goalFeedCount?: number;
         };
         CreateResponse: {
             /** Format: int64 */
@@ -2130,10 +2174,10 @@ export interface components {
             dDay?: number;
         };
         PageReportSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -2148,15 +2192,15 @@ export interface components {
             empty?: boolean;
         };
         PageableObject: {
+            paged?: boolean;
+            unpaged?: boolean;
             /** Format: int64 */
             offset?: number;
             sort?: components["schemas"]["SortObject"];
-            paged?: boolean;
             /** Format: int32 */
             pageNumber?: number;
             /** Format: int32 */
             pageSize?: number;
-            unpaged?: boolean;
         };
         ReportSummaryResponse: {
             /** Format: int64 */
@@ -2177,31 +2221,31 @@ export interface components {
             processedAt?: string;
         };
         SortObject: {
-            empty?: boolean;
-            sorted?: boolean;
             unsorted?: boolean;
+            sorted?: boolean;
+            empty?: boolean;
         };
         NotificationSummaryResponse: {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
             createdAt?: string;
         };
         PageNotificationSummaryResponse: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -2219,7 +2263,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             /** @enum {string} */
-            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+            notificationType?: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             message?: string;
             isRead?: boolean;
             /** Format: date-time */
@@ -2229,7 +2273,7 @@ export interface components {
             senderNickname?: string;
             senderProfileImage?: string;
             /** @enum {string} */
-            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "MEMBER" | "NONE";
+            targetType?: "FEED" | "COMMENT" | "TOGETHER" | "DONATION" | "MEMBER" | "NONE";
             /** Format: int64 */
             targetId?: number;
             /** Format: date-time */
@@ -2280,6 +2324,7 @@ export interface components {
             authorProfileImage?: string;
             /** Format: int64 */
             targetId?: number;
+            feedInfo?: components["schemas"]["FeedInfo"];
             /** Format: int64 */
             parentId?: number;
             replies?: components["schemas"]["CommentResponse"][];
@@ -2296,11 +2341,19 @@ export interface components {
             contentUpdatedAt?: string;
             reply?: boolean;
         };
+        FeedInfo: {
+            /** Format: int64 */
+            feedId?: number;
+            feedContent?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            deleted?: boolean;
+        };
         Page: {
-            /** Format: int32 */
-            totalPages?: number;
             /** Format: int64 */
             totalElements?: number;
+            /** Format: int32 */
+            totalPages?: number;
             first?: boolean;
             last?: boolean;
             /** Format: int32 */
@@ -2340,6 +2393,31 @@ export interface components {
             createdAt?: string;
             isDeleted?: boolean;
         };
+        AdminFeedSummaryResponse: {
+            /** Format: int64 */
+            id?: number;
+            /** @enum {string} */
+            feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
+            /** @enum {string} */
+            visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+            /** Format: int64 */
+            authorId?: number;
+            authorNickname?: string;
+            contentPreview?: string;
+            /** Format: int32 */
+            reactionCount?: number;
+            /** Format: int32 */
+            commentCount?: number;
+            /** Format: int32 */
+            bookmarkCount?: number;
+            /** Format: int64 */
+            reportCount?: number;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            isDeleted?: boolean;
+        };
         DashboardStatsResponse: {
             /** Format: int64 */
             memberCount?: number;
@@ -2359,6 +2437,27 @@ export interface components {
             reportPendingComment?: number;
             /** Format: int64 */
             reportPendingTogether?: number;
+        };
+        AdminCommentSummaryResponse: {
+            /** Format: int64 */
+            id?: number;
+            /** @enum {string} */
+            commentType?: "FEED" | "TOGETHER" | "DONATION";
+            /** Format: int64 */
+            targetId?: number;
+            /** Format: int64 */
+            authorId?: number;
+            authorNickname?: string;
+            contentPreview?: string;
+            /** Format: int32 */
+            reactionCount?: number;
+            /** Format: int64 */
+            reportCount?: number;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            deletedAt?: string;
+            isDeleted?: boolean;
         };
         MemberWithdrawRequest: {
             reason?: string;
@@ -4073,7 +4172,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "FOLLOW" | "SYSTEM";
+                notificationType: "FEED_REACTION" | "FEED_COMMENT" | "FEED_COMMENT_REPLY" | "COMMENT_REACTION" | "TOGETHER_INVITE" | "TOGETHER_JOIN" | "TOGETHER_START" | "TOGETHER_END" | "TOGETHER_CREATE" | "TOGETHER_PARTICIPATE" | "TOGETHER_LEAVE" | "TOGETHER_LEAVE_MEMBER" | "TOGETHER_DROP" | "DONATION_RECEIVED" | "DONATION_COMPLETE" | "DONATION_NOTICE" | "FOLLOW" | "SYSTEM";
             };
             cookie?: never;
         };
@@ -4120,7 +4219,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                category: "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM" | "FOLLOW";
+                category: "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM" | "FOLLOW";
             };
             cookie?: never;
         };
@@ -5108,6 +5207,32 @@ export interface operations {
             };
         };
     };
+    getFeedPageForAdmin: {
+        parameters: {
+            query?: {
+                visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
+                authorId?: number;
+                reportedOnly?: boolean;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminFeedSummaryResponse"];
+                };
+            };
+        };
+    };
     getDashboardStats: {
         parameters: {
             query?: never;
@@ -5124,6 +5249,32 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["DashboardStatsResponse"];
+                };
+            };
+        };
+    };
+    getCommentPageForAdmin: {
+        parameters: {
+            query?: {
+                commentType?: "FEED" | "TOGETHER" | "DONATION";
+                authorId?: number;
+                reportedOnly?: boolean;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminCommentSummaryResponse"];
                 };
             };
         };

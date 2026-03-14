@@ -6,7 +6,35 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const title = `후원하기 목록`;
+
+  const description = "다양한 후원에 참여하고 소식을 알아보세요.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "https://www.ddasoop.xyz/donate",
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://www.ddasoop.xyz/donate`,
+      siteName: "따숲",
+      locale: "ko_KR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 async function Donate() {
   // // 위에있는거 가지고 api 통신해서 가져오기
@@ -37,11 +65,24 @@ async function Donate() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HydrationBoundary state={dehydratedState}>
-        <DonateSection />
-      </HydrationBoundary>
-    </Suspense>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "따숲 후원하기 목록",
+            url: "https://www.ddasoop.xyz/donate",
+          }),
+        }}
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <HydrationBoundary state={dehydratedState}>
+          <DonateSection />
+        </HydrationBoundary>
+      </Suspense>
+    </>
   );
 }
 

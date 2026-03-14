@@ -8,8 +8,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { DonateDetailInfo as DonateDetailType } from "../types";
+import Loading from "@/domain/participation/components/DetailLoadingSkeleton";
 import DonateDetailInfo from "./DonateDetailInfo";
+import { Metadata } from "next";
+import { Suspense } from "react";
 
 // const DETAIL_INFO_DUMMY: DonateDetailInfo = {
 //   id: 0,
@@ -24,6 +26,40 @@ import DonateDetailInfo from "./DonateDetailInfo";
 //   progress: 40,
 //   memberId: 1,
 // };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const data = await getInitDonationDetail(params.id);
+  const detail = data.data;
+
+  return {
+    title: `따숲 후원하기 | ${detail.title}`,
+    description: detail.description ?? "따숲 후원하기 상세 페이지",
+    keywords: ["후원", "후원하기", "목표달성", "커뮤니티"],
+    alternates: {
+      canonical: `https://www.ddasoop.xyz/donate/${params.id}`,
+    },
+    openGraph: {
+      title: `따숲 후원하기 | ${detail.title}`,
+      description: detail.description,
+      url: `https://www.ddasoop.xyz/donate/${params.id}`,
+      siteName: "따숲",
+      images: detail.imageUrls?.[0] ?? "",
+      locale: "ko_KR",
+      type: "website",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: detail.title,
+      description: detail.description ?? "",
+      images: [detail.imageUrls?.[0] ?? ""],
+    },
+  };
+}
 
 async function DonateDetailLayout({
   params,
@@ -44,21 +80,26 @@ async function DonateDetailLayout({
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="flex justify-between pt-4">
-        <div className="w-[calc(100%-280px)]">
-          <div className="w-full aspect-10/7">
-            <ImageSwiper
-              slideList={
-                detailInfo.data.imageUrls?.map((img) => ({ imageUrl: img })) ??
-                []
-              }
-            />
-          </div>
-          <TabBar type="donate" tabContents={donateTabContents(id)} />
-          <main className="py-4">{children}</main>
+      <Suspense fallback={<Loading />}>
+        <div className="flex justify-between pt-4">
+          <section className="w-[calc(100%-280px)]">
+            <div className="w-full aspect-10/7">
+              <ImageSwiper
+                slideList={
+                  detailInfo.data.imageUrls?.map((img) => ({
+                    imageUrl: img,
+                  })) ?? []
+                }
+              />
+            </div>
+            <nav>
+              <TabBar type="donate" tabContents={donateTabContents(id)} />
+            </nav>
+            <main className="py-4">{children}</main>
+          </section>
+          <DonateDetailInfo id={id} />
         </div>
-        <DonateDetailInfo id={id} />
-      </div>
+      </Suspense>
     </HydrationBoundary>
   );
 }

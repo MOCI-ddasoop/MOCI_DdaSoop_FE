@@ -51,6 +51,7 @@ export type TogetherDetailInfo = {
   id: number;
   title: string;
   category: "CLEANUP" | "PLOGGING" | "RECYCLING";
+  description: string;
   mode: "ONLINE" | "OFFLINE";
   capacity?: number;
   startDate: string; // YYYY-MM-DD
