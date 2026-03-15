@@ -21,29 +21,33 @@ function DonationList({
           더보기
         </Link>
       </div>
-      {items.map(
-        ({
-          id,
-          donationId,
-          memberId,
-          memberName,
-          title,
-          thumbnailImage,
-          amount,
-          paymentMethod,
-          createdAt,
-        }) => (
-          <DonationListItem
-            key={id}
-            name={title!}
-            userName={memberName}
-            amount={amount!}
-            donationImage={thumbnailImage}
-            createdAt={createdAt?.slice(0, 10)}
-            type="summary"
-            href={`/donate/${donationId}`}
-          />
-        ),
+      {items.length === 0 ? (
+        <p className="text-gray-400">후원내역이 존재하지 않습니다</p>
+      ) : (
+        items.map(
+          ({
+            id,
+            donationId,
+            memberId,
+            memberName,
+            title,
+            thumbnailImage,
+            amount,
+            paymentMethod,
+            createdAt,
+          }) => (
+            <DonationListItem
+              key={id}
+              name={title!}
+              userName={memberName}
+              amount={amount!}
+              donationImage={thumbnailImage}
+              createdAt={createdAt?.slice(0, 10)}
+              type="summary"
+              href={`/donate/${donationId}`}
+            />
+          ),
+        )
       )}
     </div>
   );

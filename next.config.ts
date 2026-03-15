@@ -6,20 +6,20 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // 구글 프로필 사진 
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com", // 구글 프로필 사진
+        port: "",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com', // 구글 클라우드 스토리지
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "storage.googleapis.com", // 구글 클라우드 스토리지
+        port: "",
+        pathname: "/**",
       },
     ],
   },
-  
+
   //webpack 설정
   webpack(config) {
     config.module.rules.push({
@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/proxy-api/:path*",
-        destination: "http://localhost:8080/:path*",
+        destination: "https://api.ddasoop.xyz/:path*",
       },
     ];
   },
