@@ -30,9 +30,11 @@ import { Suspense } from "react";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const data = await getInitDonationDetail(params.id);
+  const { id } = await params;
+
+  const data = await getInitDonationDetail(id);
   const detail = data.data;
 
   return {
@@ -40,12 +42,12 @@ export async function generateMetadata({
     description: detail.description ?? "따숲 후원하기 상세 페이지",
     keywords: ["후원", "후원하기", "목표달성", "커뮤니티"],
     alternates: {
-      canonical: `https://www.ddasoop.xyz/donate/${params.id}`,
+      canonical: `https://www.ddasoop.xyz/donate/${id}`,
     },
     openGraph: {
       title: `따숲 후원하기 | ${detail.title}`,
       description: detail.description,
-      url: `https://www.ddasoop.xyz/donate/${params.id}`,
+      url: `https://www.ddasoop.xyz/donate/${id}`,
       siteName: "따숲",
       images: detail.imageUrls?.[0] ?? "",
       locale: "ko_KR",

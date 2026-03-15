@@ -16,9 +16,11 @@ import { Suspense } from "react";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const data = await getInitTogetherDetail(params.id);
+  const { id } = await params;
+
+  const data = await getInitTogetherDetail(id);
 
   const detail = data.data;
 
@@ -27,14 +29,14 @@ export async function generateMetadata({
     description: detail.description ?? "따숲 함께하기 상세 페이지",
     keywords: ["챌린지", "함께하기", "목표달성", "커뮤니티"],
     alternates: {
-      canonical: `https://www.ddasoop.xyz/together/${params.id}`,
+      canonical: `https://www.ddasoop.xyz/together/${id}`,
     },
     openGraph: {
       title: `따숲 함께하기 | ${detail.title}`,
       description: detail.description,
-      url: `https://www.ddasoop.xyz/together/${params.id}`,
+      url: `https://www.ddasoop.xyz/together/${id}`,
       siteName: "따숲",
-      images: detail.thumbnailImage?.[0]["imageUrl"] ?? "",
+      images: detail.thumbnailImage?.[0]?.["imageUrl"] ?? "",
       locale: "ko_KR",
       type: "website",
     },
@@ -42,7 +44,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: detail.title,
       description: detail.description,
-      images: [detail.thumbnailImage?.[0]["imageUrl"] ?? ""],
+      images: detail.thumbnailImage?.[0]?.["imageUrl"] ?? "",
     },
   };
 }

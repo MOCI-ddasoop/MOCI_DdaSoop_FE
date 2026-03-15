@@ -45,5 +45,6 @@ export const notificationTabContents = [
   { href: "/notification/like", name: "좋아요" },
   { href: "/notification/comment", name: "댓글" },
   { href: "/notification/together", name: "함께하기" },
+  { href: "/notification/donate", name: "후원하기" },
   { href: "/notification/system", name: "시스템" },
 ];

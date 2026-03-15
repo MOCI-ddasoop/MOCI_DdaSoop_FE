@@ -18,7 +18,7 @@ const notification = Array.from({ length: 3 }).map((_, i) => ({
 function NotificationContainer({
   type = "ALL",
 }: {
-  type?: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM";
+  type?: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM";
 }) {
   const searchParams = useSearchParams();
   const page = searchParams.get("page") ?? "1";

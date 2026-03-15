@@ -18,8 +18,8 @@ export const getInitTogetherDetail = async (
     ...data,
     data: {
       ...data.data,
-      thumbnailImage: data.data.thumbnailImage
-        ? data.data.thumbnailImage.map((url: string) => ({ imageUrl: url }))
+      thumbnailImage: data.data.imageUrls
+        ? data.data.imageUrls.map((url: string) => ({ imageUrl: url }))
         : [],
     },
   };
