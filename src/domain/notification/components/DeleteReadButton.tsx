@@ -10,7 +10,7 @@ function DeleteReadButton({ isEmpty }: { isEmpty: boolean }) {
   const { mutate: deleteReadNotification } = useDeleteReadNotification({
     onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: queryKeys.notifications.list("ALL"),
+        queryKey: [queryKeys.notifications.list()],
       });
       qc.invalidateQueries({
         queryKey: queryKeys.notifications.recent,

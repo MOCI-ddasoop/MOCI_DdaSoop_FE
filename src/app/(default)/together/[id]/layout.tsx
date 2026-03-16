@@ -10,7 +10,44 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  const data = await getInitTogetherDetail(id);
+
+  const detail = data.data;
+
+  return {
+    title: `따숲 함께하기 | ${detail.title}`,
+    description: detail.description ?? "따숲 함께하기 상세 페이지",
+    keywords: ["챌린지", "함께하기", "목표달성", "커뮤니티"],
+    alternates: {
+      canonical: `https://www.ddasoop.xyz/together/${id}`,
+    },
+    openGraph: {
+      title: `따숲 함께하기 | ${detail.title}`,
+      description: detail.description,
+      url: `https://www.ddasoop.xyz/together/${id}`,
+      siteName: "따숲",
+      images: detail.thumbnailImage?.[0]?.["imageUrl"] ?? "",
+      locale: "ko_KR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: detail.title,
+      description: detail.description,
+      images: detail.thumbnailImage?.[0]?.["imageUrl"] ?? "",
+    },
+  };
+}
 
 async function page({
   params,
@@ -28,21 +65,25 @@ async function page({
   });
   const dehydratedState = dehydrate(queryClient);
   return (
-    <Suspense fallback={<Loading />}>
-      <HydrationBoundary state={dehydratedState}>
+    <HydrationBoundary state={dehydratedState}>
+      <Suspense fallback={<Loading />}>
         <div className="flex justify-between pt-4">
-          <div className="w-[calc(100%-280px)]">
+          <section className="w-[calc(100%-280px)]">
             <div className="w-full aspect-10/7">
               {/* slideList -> detailInfo에 들어있는 이미지전달 */}
               <ImageSwiper slideList={detailInfo.data.thumbnailImage ?? []} />
             </div>
-            <TabBar type="together" tabContents={togetherTabContents(id)} />
+            <nav>
+              <TabBar type="together" tabContents={togetherTabContents(id)} />
+            </nav>
             <main className="py-4">{children}</main>
-          </div>
-          <TogetherDetailInfo id={id} />
+          </section>
+          <aside>
+            <TogetherDetailInfo id={id} />
+          </aside>
         </div>
-      </HydrationBoundary>
-    </Suspense>
+      </Suspense>
+    </HydrationBoundary>
   );
 }
 

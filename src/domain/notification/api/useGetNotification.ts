@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PageNotificationSummaryResponse } from "../types";
 
 export const useGetNotification = (
-  type: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "SYSTEM",
+  type: "ALL" | "LIKES" | "COMMENTS" | "TOGETHER" | "DONATION" | "SYSTEM",
   pageNum: number | string,
   size?: number,
 ) => {

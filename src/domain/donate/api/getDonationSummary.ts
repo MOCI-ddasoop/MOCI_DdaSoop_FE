@@ -2,7 +2,9 @@ import { serverFetchApi } from "@/shared/config/serverFetchApi";
 import { RecentDonateResponse } from "../types";
 
 export const getDonationSummary = async () => {
-  const res = await serverFetchApi(`/api/v1/donation/payment/recent`);
+  const res = await serverFetchApi(`/api/v1/donation/payment/recent`, {
+    cache: "no-cache",
+  });
 
   if (!res.ok) {
     console.error(

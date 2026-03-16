@@ -23,17 +23,21 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {items.map(({ id, thumbnailImage, title, category, mode }) => (
-        <TogetherListItem
-          key={id}
-          id={id}
-          image={thumbnailImage ?? "/defaultFeedImage.png"}
-          name={title}
-          category={categoryType[category]}
-          isOnline={isOnlineType[mode]}
-          href={`/together/${id}`}
-        />
-      ))}
+      {items.length === 0 ? (
+        <p className="text-gray-400">함께하기가 존재하지 않습니다</p>
+      ) : (
+        items.map(({ id, thumbnailImage, title, category, mode }) => (
+          <TogetherListItem
+            key={id}
+            id={id}
+            image={thumbnailImage ?? "/defaultFeedImage.png"}
+            name={title}
+            category={categoryType[category]}
+            isOnline={isOnlineType[mode]}
+            href={`/together/${id}`}
+          />
+        ))
+      )}
     </div>
   );
 }

@@ -40,5 +40,6 @@ export const notificationOptions = {
 export const targetOptions: { [key: string]: string } = {
   FEED: "?feedId=",
   TOGETHER: "/together/",
+  DONATION: "/donate/",
   MEMBER: "/mypage", // 수정필요
 };

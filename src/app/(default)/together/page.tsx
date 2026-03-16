@@ -6,7 +6,35 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
+import { Metadata } from "next";
 import { Suspense } from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const title = `함께하기 챌린지 목록`;
+
+  const description = "다양한 챌린지에 참여하고 목표를 함께 달성해보세요.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: "https://www.ddasoop.xyz/together",
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://www.ddasoop.xyz/together`,
+      siteName: "따숲",
+      locale: "ko_KR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 async function Together() {
   const queryClient = new QueryClient();
@@ -26,11 +54,24 @@ async function Together() {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <HydrationBoundary state={dehydratedState}>
-        <TogetherSection />
-      </HydrationBoundary>
-    </Suspense>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "따숲 함께하기 챌린지 목록",
+            url: "https://www.ddasoop.xyz/together",
+          }),
+        }}
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <HydrationBoundary state={dehydratedState}>
+          <TogetherSection />
+        </HydrationBoundary>
+      </Suspense>
+    </>
   );
 }
 

@@ -114,13 +114,10 @@ function Notification({
         {!summary && (
           <div className="relative w-12 h-12 rounded-full shrink-0">
             <Image
-              src={
-                senderProfileImage ??
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU"
-              }
+              src={senderProfileImage ?? "/defaultFeedImage.png"}
               alt={`${senderNickname} 프로필이미지`}
               fill
-              className="w-full h-full object-cover rounded-full"
+              className="w-full h-full object-cover rounded-full bg-white"
             />
           </div>
         )}
@@ -142,7 +139,9 @@ function Notification({
               ]
             }
           </span>
-          <p className={`${summary ? `w-45 truncate` : "w-full"}`}>
+          <p
+            className={`${summary ? `w-45 truncate` : "w-full flex items-center"} min-h-10`}
+          >
             {senderNickname && (
               <Capsule
                 text={senderNickname}

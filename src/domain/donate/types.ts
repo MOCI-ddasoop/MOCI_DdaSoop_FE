@@ -108,7 +108,7 @@ export interface DonateDetailResponse {
 export interface DonateDescriptionResponse {
   resultCode: string;
   msg: string;
-  data: string;
+  data: { description: string };
 }
 
 export interface DonorList {
