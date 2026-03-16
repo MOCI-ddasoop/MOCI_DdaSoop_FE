@@ -82,3 +82,54 @@ export interface AdminReportStatsResponse {
   commentPending?: number;
   togetherPending?: number;
 }
+
+/** 관리자 피드 요약 응답 */
+export interface AdminFeedSummaryResponse {
+  id: number;
+  feedType: string;
+  visibility: string;
+  authorId: number;
+  authorNickname: string;
+  contentPreview: string;
+  reactionCount: number;
+  commentCount: number;
+  bookmarkCount: number;
+  reportCount: number;
+  createdAt: string;
+  deletedAt?: string | null;
+  isDeleted: boolean;
+}
+
+/** 관리자 피드 목록 페이지 응답 */
+export interface AdminFeedListResponse {
+  totalPages: number;
+  totalElements: number;
+  content: AdminFeedSummaryResponse[];
+  number: number;
+  size: number;
+}
+
+/** 관리자 댓글 요약 응답 */
+export interface AdminCommentSummaryResponse {
+  id: number;
+  commentType: string;
+  targetId: number;
+  authorId: number;
+  authorNickname: string;
+  contentPreview: string;
+  reactionCount: number;
+  reportCount: number;
+  createdAt: string;
+  deletedAt?: string | null;
+  isDeleted: boolean;
+}
+
+/** 관리자 댓글 목록 페이지 응답 */
+export interface AdminCommentListResponse {
+  totalPages: number;
+  totalElements: number;
+  content: AdminCommentSummaryResponse[];
+  number: number;
+  size: number;
+}
+
