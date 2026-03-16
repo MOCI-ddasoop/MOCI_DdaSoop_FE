@@ -1,0 +1,520 @@
+"use client";
+import DropdownButton from "@/shared/components/DropdownButton";
+import tw from "@/shared/utils/tw";
+import Image from "next/image";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { BsChatRight, BsHeart, BsHeartFill } from "react-icons/bs";
+import { IoBookmarkOutline, IoBookmark } from "react-icons/io5";
+import { MdIosShare } from "react-icons/md";
+import { useToggleFeedBookmark } from "../api/useToggleFeedBookmark";
+import { FeedResponse } from "../types";
+import { sanitizeHtml } from "@/shared/utils/sanitizeHtml";
+import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { formatRelativeDate } from "@/shared/utils/timeFormatRelativeDate";
+import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
+import TagInput from "@/shared/components/TagInput";
+import { useUpdateFeedById } from "../api/useUdtFeedById";
+import { useDeleteFeedById } from "../api/useDelFeedById";
+import { useModalStore } from "../../modal/store/useModalStore";
+import { usePathname, useRouter } from "next/navigation";
+import PostVisibilityOptions from "./PostVisibilityOptions";
+import { useFeedEditStore } from "../provider/FeedEditStoreProvider";
+import { useSubmitRegistry } from "../provider/SubmitRegistryProvider";
+import { useToggleFeedReact } from "../api/useToggleFeedReact";
+import reportModalStore from "@/domain/report/stores/useReportModalStore";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
+import { TogetherInfo } from "@/domain/together/types";
+import { ConfirmAlert } from "@/shared/utils/alert";
+import { useTogglePin } from "../api/useTogglePin";
+import Swal from "sweetalert2";
+
+type FeedDetailCardProps = {
+  item: FeedResponse;
+  className?: string;
+  onCommentFocus?: () => void;
+  userId?: number;
+};
+
+function FeedDetailCard({
+  item,
+  className,
+  onCommentFocus,
+  userId,
+}: FeedDetailCardProps) {
+  const {
+    id,
+    // feedType,
+    authorId,
+    feedType,
+    isPinned,
+    authorNickname: author,
+    authorProfileImage,
+    content,
+    createdAt,
+    contentUpdatedAt,
+    bookmarkCount = 0,
+    reactionCount = 0,
+    commentCount = 0,
+    isBookmarked: bookMarkedByMe = false,
+    isReacted: reactedMarkByMe = false,
+    togetherId,
+    togetherTitle,
+    togetherCategory,
+    togetherMode,
+    tags,
+  } = item;
+
+  const pathname = usePathname();
+  const currentPage = pathname.split("/")[1] as "" | "together" | "mypage";
+
+  const [bookmarkInfo, setBookmarkInfo] = useState<{
+    bookmarkCount: number;
+    bookMarkedByMe: boolean;
+  }>({
+    bookmarkCount: bookmarkCount,
+    bookMarkedByMe: bookMarkedByMe,
+  });
+  const [reactionInfo, setReactionInfo] = useState<{
+    reactionCount: number;
+    reactedMarkByMe: boolean;
+  }>({
+    reactionCount: reactionCount,
+    reactedMarkByMe: reactedMarkByMe,
+  });
+  const router = useRouter();
+  const textBoxRef = useRef<TextBoxHandle>(null);
+
+  const closeStoreModal = useModalStore((store) => store.close);
+  const openStoreModal = useModalStore((store) => store.open);
+
+  const reportAction = reportModalStore((s) => s.action);
+
+  const isFeedEditMode = useFeedEditStore((s) => s.isEditMode);
+  const draft = useFeedEditStore((s) => s.draft);
+  const editActions = useFeedEditStore((s) => s.actions);
+  const {
+    content: editedContent,
+    tags: editedTags,
+    visibility: editedVisibility,
+  } = draft;
+  const setCanClose = useModalStore((s) => s.setCanClose);
+  const resetCanClose = useModalStore((s) => s.resetCanClose);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBookmarkInfo({
+      bookmarkCount,
+      bookMarkedByMe,
+    });
+  }, [bookmarkCount, bookMarkedByMe]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setReactionInfo({
+      reactionCount,
+      reactedMarkByMe,
+    });
+  }, [reactionCount, reactedMarkByMe]);
+
+  useEffect(() => {
+    if (!isFeedEditMode) return;
+
+    setCanClose("feed", async () => {
+      const result = await ConfirmAlert({
+        title: "수정 중인 내용이 있어요",
+        text: "지금 나가면 수정 내용이 저장되지 않습니다.",
+        showCancelButton: true,
+        showDenyButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "창 닫기",
+        denyButtonText: "수정 취소",
+        cancelButtonText: "취소",
+      });
+
+      if (result.isConfirmed) {
+        return true;
+      }
+
+      if (result.isDenied) {
+        editActions.exitEdit();
+        return false;
+      }
+
+      return false;
+    });
+
+    return () => resetCanClose("feed");
+  }, [editActions, isFeedEditMode, resetCanClose, setCanClose]);
+
+  const [selectedOwnerOption, setSelectedOwnerOption] = useState<string | null>(
+    null,
+  );
+  const { mutate: toggleBookmarkMutate, isPending: isToggleBookmarkPending } =
+    useToggleFeedBookmark();
+
+  const handleBookmark = () => {
+    if (!id) return;
+    setBookmarkInfo((prev) => ({
+      bookmarkCount: prev.bookMarkedByMe
+        ? prev.bookmarkCount - 1
+        : prev.bookmarkCount + 1,
+      bookMarkedByMe: !prev.bookMarkedByMe,
+    }));
+
+    toggleBookmarkMutate(id.toString());
+  };
+
+  const { mutate: toggleReactionMutate, isPending: isToggleReactionPending } =
+    useToggleFeedReact({ togetherId });
+
+  const handleReaction = () => {
+    if (!id) return;
+    setReactionInfo((prev) => ({
+      reactionCount: prev.reactedMarkByMe
+        ? prev.reactionCount - 1
+        : prev.reactionCount + 1,
+      reactedMarkByMe: !prev.reactedMarkByMe,
+    }));
+
+    toggleReactionMutate(id.toString());
+  };
+
+  const { mutate: updateFeedMutation } = useUpdateFeedById({
+    togetherId,
+  });
+  const { mutateAsync: deleteFeedMutation } = useDeleteFeedById({
+    togetherId,
+  });
+  const { mutateAsync: togglePin } = useTogglePin({
+    currentPage,
+    togetherId: togetherId!,
+    feedId: id!,
+  });
+
+  const handleDelete = async () => {
+    try {
+      await deleteFeedMutation({ id });
+      closeStoreModal();
+      router.back();
+    } catch (e) {}
+  };
+
+  const handleTagClick = (tag: string) => {
+    const params = new URLSearchParams();
+    params.set("query", `#${tag}`);
+
+    router.push(`/?${params.toString()}`);
+  };
+
+  // 옵션은 switch문으로 처리
+  const handleOwnerOptionClick = (option: string) => {
+    setSelectedOwnerOption(option);
+    switch (option) {
+      case "핀고정":
+      case "고정해제":
+        togglePin();
+        closeStoreModal();
+        router.back();
+        break;
+      case "수정":
+        editActions.enterEdit();
+        break;
+      case "삭제":
+        ConfirmAlert({
+          text: "피드를 삭제하시겠습니까?",
+          showCancelButton: true,
+          confirmButtonText: "삭제",
+          cancelButtonText: "취소",
+          red: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            handleDelete();
+          }
+        });
+        break;
+      case "신고":
+        if (!id) return;
+        reportAction.setReportTarget("FEED", id);
+        openStoreModal("report");
+        break;
+    }
+  };
+
+  const handleEditSubmit = useCallback(() => {
+    ConfirmAlert({
+      text: "피드를 수정하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "수정",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (!id) return;
+        const payload = editActions.toUpdatePayload(
+          textBoxRef.current?.getHTML() ?? "",
+        );
+        updateFeedMutation({ id, content: payload });
+        editActions.exitEdit();
+      }
+    });
+  }, [editActions, id, updateFeedMutation]);
+
+  const submitRegistry = useSubmitRegistry();
+
+  // const handleTogetherItemClick = useCallback(() => {
+  //   window.open(`/together/${togetherId}`, "_blank", "noopener,noreferrer");
+  // }, [togetherId]);
+
+  useEffect(() => {
+    submitRegistry?.register("feed-edit", {
+      submit: handleEditSubmit,
+      enabled: () =>
+        isFeedEditMode && !isToggleBookmarkPending && !isToggleReactionPending,
+    });
+  }, [
+    handleEditSubmit,
+    isFeedEditMode,
+    isToggleBookmarkPending,
+    isToggleReactionPending,
+    submitRegistry,
+  ]);
+
+  const handleShareClick = async () => {
+    const shareUrl = `${window.location.origin}/?feedId=${id}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      Swal.fire({
+        title: "클립보드에 복사되었습니다.",
+        toast: true,
+        position: "bottom",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (err) {
+      Swal.fire({
+        title: "복사에 실패했습니다.",
+        toast: true,
+        position: "bottom",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  };
+
+  return (
+    <div className={tw("bg-white h-fit", className)}>
+      {/* 작성자 정보 영역 */}
+      <div className="flex items-center gap-2 border-b border-gray-200 p-4 justify-between">
+        <div className="flex items-center gap-2">
+          <div className="relative w-11 h-11 rounded-full overflow-hidden border border-gray-300">
+            <Image
+              src={authorProfileImage ?? "/defaultFeedImage.png"}
+              alt={author ?? "기본이미지"}
+              fill
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="text-sm text-nowrap">{author}</div>
+        </div>
+        {!!userId && (
+          <DropdownButton
+            options={
+              userId === authorId
+                ? feedType === "TOGETHER_NOTICE"
+                  ? [isPinned ? "고정해제" : "핀고정", "수정", "삭제", "신고"]
+                  : ["수정", "삭제", "신고"]
+                : ["신고"]
+            }
+            selected={selectedOwnerOption ?? ""}
+            setSelected={handleOwnerOptionClick}
+            size="md"
+            menuSize="md"
+            placement="bottom-end"
+            highlightingLastOption={true}
+          />
+        )}
+      </div>
+
+      {/* 컨텐츠 영역 */}
+      <div className="border-b border-gray-200 p-2">
+        {/* 내용 영역 */}
+        <div className="p-2 min-h-[100px]">
+          {isFeedEditMode ? (
+            <TextBox
+              submitOwner="feed-edit"
+              ref={textBoxRef}
+              mode="comment"
+              initialValue={editedContent}
+            />
+          ) : (
+            <p
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(content ?? "") }}
+            />
+          )}
+        </div>
+
+        {/* 모임 정보 영역 */}
+        {togetherId && (
+          <TogetherListItem
+            id={togetherId}
+            image={
+              // togetherInfo.data.thumbnailImage[0].imageUrl ??
+              "/defaultFeedImage.png"
+            }
+            name={togetherTitle ?? "함께하기를 찾을수 없습니다."}
+            category={
+              categoryType[togetherCategory as TogetherInfo["category"]]
+            }
+            isOnline={isOnlineType[togetherMode as TogetherInfo["mode"]]}
+            // onClick={handleTogetherItemClick}
+            widthClass="w-full"
+            href={`/together/${togetherId}`}
+          />
+        )}
+
+        {/* 태그 영역 */}
+        <div className="flex items-center gap-2 flex-wrap p-1">
+          {isFeedEditMode ? (
+            <TagInput
+              initialValue={editedTags}
+              onTagChanged={editActions.setTags}
+            />
+          ) : (
+            <>
+              {tags?.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-mainblue cursor-pointer hover:underline"
+                  onClick={() => handleTagClick(tag)}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </>
+          )}
+        </div>
+        {isFeedEditMode ? (
+          <PostVisibilityOptions
+            togetherId={togetherId}
+            value={editedVisibility}
+            setValue={editActions.setVisibility}
+            userId={userId}
+          />
+        ) : (
+          ""
+        )}
+
+        <div className="flex w-full justify-between">
+          {/* 날짜 영역 */}
+          <div className="text-sm text-gray-500 p-1">
+            {formatRelativeDate(createdAt ?? "")}
+            {createdAt !== contentUpdatedAt ? (
+              <span className="ml-1">(수정됨)</span>
+            ) : (
+              ""
+            )}
+          </div>
+          {isFeedEditMode ? (
+            <div className="flex-center gap-1 text-sm">
+              <span className="text-gray-400">Enter 키로</span>
+              <button
+                className="text-mainblue underline cursor-pointer"
+                onClick={handleEditSubmit}
+              >
+                수정
+              </button>
+              <button
+                className="text-mainblue underline cursor-pointer"
+                onClick={() => editActions.exitEdit()}
+              >
+                취소
+              </button>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 py-1 px-2 border-b border-gray-200 justify-between">
+        <div className="flex items-center gap-2">
+          {/* 댓글 영역 */}
+          <button
+            type="button"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId ? "" : "pointer-events-none"}`}
+            onClick={() => onCommentFocus?.()}
+          >
+            <BsChatRight size={24} className="group-hover:text-amber-700" />
+            <p className="group-hover:text-amber-700">{commentCount}</p>
+          </button>
+
+          {/* 좋아요 영역 */}
+          <button
+            type="button"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
+            onClick={handleReaction}
+          >
+            <div className="relative w-6 h-6">
+              <BsHeartFill
+                size={24}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  reactionInfo.reactedMarkByMe ? "opacity-100" : "opacity-0",
+                )}
+              />
+              <BsHeart
+                size={24}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  reactionInfo.reactedMarkByMe ? "opacity-0" : "opacity-100",
+                )}
+              />
+            </div>
+            <p className="group-hover:text-amber-700">
+              {reactionInfo.reactionCount}
+            </p>
+          </button>
+
+          {/* 북마크 영역 */}
+          <button
+            type="button"
+            className={`flex items-center gap-2 p-2 text-gray-500 group cursor-pointer duration-100 ${userId && !isFeedEditMode ? "" : "pointer-events-none"}`}
+            onClick={handleBookmark}
+          >
+            <div className="relative w-6 h-6">
+              <IoBookmark
+                size={26}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  bookmarkInfo.bookMarkedByMe ? "opacity-100" : "opacity-0",
+                )}
+              />
+              <IoBookmarkOutline
+                size={26}
+                className={tw(
+                  "group-hover:text-amber-700 transition absolute",
+                  bookmarkInfo.bookMarkedByMe ? "opacity-0" : "opacity-100",
+                )}
+              />
+            </div>
+            <p className="group-hover:text-amber-700">
+              {bookmarkInfo.bookmarkCount}
+            </p>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          className="cursor-pointer duration-100 group"
+          onClick={handleShareClick}
+        >
+          <MdIosShare
+            size={24}
+            className="text-gray-500 group-hover:text-amber-700"
+          />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default FeedDetailCard;

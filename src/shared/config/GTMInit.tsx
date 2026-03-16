@@ -5,7 +5,7 @@ import TagManager from "react-gtm-module";
 
 function GTMInit() {
   useEffect(() => {
-    const gtmId = process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID;
+    const gtmId = "u8t3nll15o";
 
     if (gtmId) {
       TagManager.initialize({

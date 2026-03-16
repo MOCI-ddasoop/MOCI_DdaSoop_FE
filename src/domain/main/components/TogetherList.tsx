@@ -1,17 +1,21 @@
-import TogetherListItem, {
-  TogetherListItemProps,
-} from "@/shared/components/TogetherListItem";
+import TogetherListItem from "@/domain/together/components/TogetherListItem";
+import { TogetherInfo } from "@/domain/together/types";
+import { categoryType, isOnlineType } from "@/shared/constants/filter";
 import Link from "next/link";
 
 function TogetherList({
-  togetherList,
+  items,
+  type,
 }: {
-  togetherList: TogetherListItemProps[];
+  items: TogetherInfo[];
+  type: string;
 }) {
   return (
     <div className="w-62 h-fit p-3 shadow-md rounded-lg flex flex-col gap-3">
       <div className="flex justify-between items-center">
-        <h3>함께하기</h3>
+        <h3>
+          <span className="text-mainblue font-medium">{type}</span> 함께하기
+        </h3>
         <Link
           href="/together"
           className="text-sm hover:underline hover:underline-offset-2"
@@ -19,16 +23,21 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {togetherList.map(({ image, name, category, isOnline, href }, index) => (
-        <TogetherListItem
-          key={index}
-          image={image}
-          name={name}
-          category={category}
-          isOnline={isOnline}
-          href={href}
-        />
-      ))}
+      {items.length === 0 ? (
+        <p className="text-gray-400">함께하기가 존재하지 않습니다</p>
+      ) : (
+        items.map(({ id, thumbnailImage, title, category, mode }) => (
+          <TogetherListItem
+            key={id}
+            id={id}
+            image={thumbnailImage ?? "/defaultFeedImage.png"}
+            name={title}
+            category={categoryType[category]}
+            isOnline={isOnlineType[mode]}
+            href={`/together/${id}`}
+          />
+        ))
+      )}
     </div>
   );
 }

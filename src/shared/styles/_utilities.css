@@ -42,7 +42,7 @@
 
 @utility shake-rotate-animation {
   animation: shake-rotate 4s ease-in-out infinite;
-  transform-origin: center bottom
+  transform-origin: center bottom;
 }
 
 @keyframes shake-rotate {
@@ -63,5 +63,155 @@
   }
   100% {
     transform: rotate(20deg);
+  }
+}
+
+/* HTML: <div class="loader"></div> */
+@utility loader {
+  width: 12px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: threeDotLoader 1s infinite linear alternate;
+}
+@keyframes threeDotLoader {
+  0% {
+    box-shadow:
+      20px 0 #237db1,
+      -20px 0 #e4eff6;
+    background: #237db1;
+  }
+  33% {
+    box-shadow:
+      20px 0 #237db1,
+      -20px 0 #e4eff6;
+    background: #e4eff6;
+  }
+  66% {
+    box-shadow:
+      20px 0 #e4eff6,
+      -20px 0 #237db1;
+    background: #e4eff6;
+  }
+  100% {
+    box-shadow:
+      20px 0 #e4eff6,
+      -20px 0 #237db1;
+    background: #237db1;
+  }
+}
+
+.loader-red {
+  animation: threeDotLoaderRed 1s infinite linear alternate;
+}
+
+@keyframes threeDotLoaderRed {
+  0% {
+    box-shadow:
+      20px 0 #eb5353,
+      -20px 0 #f5e7e4;
+    background: #eb5353;
+  }
+  33% {
+    box-shadow:
+      20px 0 #eb5353,
+      -20px 0 #f5e7e4;
+    background: #f5e7e4;
+  }
+  66% {
+    box-shadow:
+      20px 0 #f5e7e4,
+      -20px 0 #eb5353;
+    background: #f5e7e4;
+  }
+  100% {
+    box-shadow:
+      20px 0 #f5e7e4,
+      -20px 0 #eb5353;
+    background: #eb5353;
+  }
+}
+
+@utility sm-gray-spinner {
+  width: 4.8px;
+  height: 4.8px;
+  border-radius: 4.8px;
+  box-shadow:
+    12px 0px 0 0 rgba(107, 114, 128, 0.2),
+    9.7px 7.1px 0 0 rgba(107, 114, 128, 0.4),
+    3.7199999999999998px 11.4px 0 0 rgba(107, 114, 128, 0.6),
+    -3.7199999999999998px 11.4px 0 0 rgba(107, 114, 128, 0.8),
+    -9.7px 7.1px 0 0 #6b7280;
+  animation: spinner-b87k6z 1s infinite linear;
+}
+@keyframes spinner-b87k6z {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*sweetAlert2 관련 클래스*/
+.swal2-popup {
+  width: 300px;
+  background-color: var(--background);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.swal2-title {
+  font-weight: 600;
+  font-size: 18px;
+  font-family: inherit;
+  padding-top: 8px;
+}
+
+.swal2-icon {
+  border: none;
+}
+.swal2-icon-content {
+  justify-self: baseline;
+}
+
+.swal2-actions {
+  margin-top: 0;
+}
+
+.swal2-actions button {
+  border-radius: 12px;
+  padding: 8px 14px;
+  width: 90px;
+}
+
+.swal2-html-container {
+  font-size: 16px;
+  padding: 8px;
+}
+
+.swal2-textarea {
+  margin: 8px;
+}
+
+.swal2-loader {
+  width: 32px;
+  height: 32px;
+  border: 6px solid transparent;
+  border-top: 6px solid #237db1;
+  border-right: 6px solid #237db1;
+  border-left: 6px solid #e4eff6;
+  border-bottom: 6px solid #e4eff6;
+  border-radius: 50%;
+  animation: swal-spin 1s linear infinite;
+  margin: 24px;
+}
+
+.swal2-popup.red-loader .swal2-loader {
+  border-top: 6px solid #eb5353;
+  border-right: 6px solid #eb5353;
+  border-left: 6px solid #f5e7e4;
+  border-bottom: 6px solid #f5e7e4;
+}
+
+@keyframes swal-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

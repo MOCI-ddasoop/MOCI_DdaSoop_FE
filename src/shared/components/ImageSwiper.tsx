@@ -6,35 +6,28 @@ import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import {
+	FreeMode,
+	Keyboard,
+	Navigation,
+	Pagination,
+	Thumbs,
+} from "swiper/modules";
 
-import backCircle from "@/assets/icons/backCircle.svg";
-import forwardCircle from "@/assets/icons/forwardCircle.svg";
+import backwardCircle from "@/assets/icons/backwardCircle.png";
+import forwardCircle from "@/assets/icons/forwardCircle.png";
 import { IoClose } from "react-icons/io5";
 
-type Slide = Partial<File> & { url?: string };
-
 interface ImageSwiperProps {
-	slideList: Slide[];
-	mode?: "default" | "input";
+	slideList: { imageUrl?: string; imageFileName?: string }[];
+	mode?: "default" | "input" | "feed";
 	mainSlideInput?: React.ReactElement;
 	thumbsSlideInput?: React.ReactElement;
 	deleteSlide?: (index: number) => void;
 }
-
-export const dummyImageList = [
-	{
-		url: "https://i.namu.wiki/i/qwuEdVbMFB8VPtfK38ltdrbnNGmu__9oOdcVNPec3agexDRCaGPXtAeVoacZQr_Kurwn1wl2LfYCk8yJB3LTnQwmRq-uvygSvvqM5WOg2ysW6zaB46XPQOGToMB4uuq460tB0f27iGrLOQGr074UEA.webp",
-	},
-	{
-		url: "https://www.nintendo.com/kr/character/pikmin/assets/img/book/blue_pikmin/3/1.png",
-	},
-	{
-		url: "https://cdn.gamemeca.com/data_center/299/560/20250121121637.jpg",
-	},
-];
 
 function ImageSwiper({
 	slideList,
@@ -87,7 +80,7 @@ function ImageSwiper({
 		return (
 			<button
 				onClick={() => deleteSlide(index)}
-				className="absolute top-1 right-0 opacity-20 hover:opacity-100"
+				className="absolute top-1 right-0 z-10 opacity-20 hover:opacity-100"
 			>
 				<IoClose />
 			</button>
@@ -102,24 +95,33 @@ function ImageSwiper({
 				spaceBetween={10}
 				navigation={false}
 				thumbs={{ swiper: thumbsSwiper }}
-				modules={[FreeMode, Navigation, Thumbs]}
+				modules={[FreeMode, Navigation, Thumbs, Keyboard, Pagination]}
 				centeredSlides={true}
+				keyboard={{ enabled: true }}
+				pagination={
+					mode === "feed"
+						? {
+								clickable: true,
+							}
+						: false
+				}
 				onSwiper={handleMainSwiper}
-				className="w-full h-4/5 box-border"
+				className={`w-full ${mode === "feed" ? "h-full" : "h-4/5"} box-border`}
 			>
 				{slideList.length !== 0 ? (
-					slideList.map(({ url }, idx) => (
+					slideList.map(({ imageUrl: url }, idx) => (
 						<SwiperSlide key={idx}>
-							<div className={`w-full h-full flex-center`}>
+							<div
+								className={`w-full h-full flex-center ${
+									mode === "input" ? "bg-black" : ""
+								}`}
+							>
 								{/* <Image/> 삽입 예정 */}
 								<Image
-									src={
-										url ??
-										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
-									}
+									src={url ?? "/defaultFeedImage.png"}
 									alt=""
-									width={500}
-									height={500}
+									fill
+									className="object-contain"
 								/>
 							</div>
 						</SwiperSlide>
@@ -127,61 +129,83 @@ function ImageSwiper({
 				) : mode === "input" ? (
 					<SwiperSlide>{mainSlideInput}</SwiperSlide>
 				) : (
-					""
+					<SwiperSlide>
+						<div className={`w-full h-full flex-center bg-white`}>
+							<Image
+								src={"/defaultFeedImage.png"}
+								alt=""
+								fill
+								className="object-contain"
+							/>
+						</div>
+					</SwiperSlide>
 				)}
-				<div className="position-center w-full flex-center justify-between z-10">
+				<div className="position-center w-full flex-center justify-between z-10 p-2">
 					<button
 						ref={prevButtonRef}
-						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0"
+						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0 [&.swiper-button-disabled]:cursor-default"
 					>
-						<Image src={backCircle} alt="왼쪽으로 이동" />
+						<Image
+							src={backwardCircle}
+							alt="왼쪽으로 이동"
+							className="w-6 select-none pointer-events-none"
+						/>
 					</button>
 					<button
 						ref={nextButtonRef}
-						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0"
+						className="cursor-pointer opacity-50 hover:opacity-100 [&.swiper-button-disabled]:opacity-0 [&.swiper-button-disabled]:hover:opacity-0 [&.swiper-button-disabled]:cursor-default"
 					>
-						<Image src={forwardCircle} alt="오른쪽으로 이동" />
+						<Image
+							src={forwardCircle}
+							alt="오른쪽으로 이동"
+							className="w-6 select-none pointer-events-none"
+						/>
 					</button>
 				</div>
 			</Swiper>
 
 			{/* Thumbs swiper */}
-			<Swiper
-				ref={thumbsSwiperRef}
-				onSwiper={(swiper) => handleThumbsSwiper(swiper)}
-				spaceBetween={10}
-				slidesPerView={mode === "input" ? "auto" : 5}
-				centeredSlides={false}
-				freeMode={true}
-				watchSlidesProgress={true}
-				modules={[FreeMode, Navigation, Thumbs]}
-				className="w-full flex-center justify-start h-1/5"
-			>
-				{slideList.map(({ url }, index) => (
-					<SwiperSlide key={index}>
-						<div className="p-1 h-full">
-							<div
-								className={`slide flex-center w-full h-full bg-black/30 rounded-lg relative overflow-hidden ${
-									mode === "input" ? "aspect-square" : ""
-								}`}
-							>
-								{deleteButton(index)}
-								{/* 이미지 삽입 */}
-								<Image
-									src={
-										url ??
-										"https://i.pinimg.com/736x/89/77/cd/8977cdb66c81b51e69e8c148f227e5c1.jpg"
-									}
-									alt=""
-									height={500}
-									width={500}
-								/>
+			{mode === "feed" ? (
+				""
+			) : (
+				<Swiper
+					ref={thumbsSwiperRef}
+					onSwiper={(swiper) => handleThumbsSwiper(swiper)}
+					spaceBetween={10}
+					slidesPerView={mode === "input" ? "auto" : 5}
+					centeredSlides={false}
+					freeMode={true}
+					watchSlidesProgress={true}
+					modules={[FreeMode, Navigation, Thumbs]}
+					className="w-full flex items-center justify-start h-1/5"
+				>
+					{slideList.map(({ imageUrl: url }, index) => (
+						<SwiperSlide key={index}>
+							<div className="p-1 h-full">
+								<div
+									className={`slide flex-center w-full h-full bg-black/30 rounded-lg relative overflow-hidden ${
+										mode === "input" ? "aspect-square" : ""
+									}`}
+								>
+									{deleteButton(index)}
+									{/* 이미지 삽입 */}
+									<Image
+										src={url ?? "/defaultFeedImage.png"}
+										alt=""
+										fill
+										className="object-contain"
+									/>
+								</div>
 							</div>
-						</div>
-					</SwiperSlide>
-				))}
-				{mode === "input" ? <SwiperSlide>{thumbsSlideInput}</SwiperSlide> : ""}
-			</Swiper>
+						</SwiperSlide>
+					))}
+					{mode === "input" ? (
+						<SwiperSlide>{thumbsSlideInput}</SwiperSlide>
+					) : (
+						""
+					)}
+				</Swiper>
+			)}
 		</>
 	);
 }

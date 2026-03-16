@@ -1,5 +1,5 @@
 import Image from "next/image";
-import treeGroup from "@/assets/tree-group.svg";
+// import treeGroup from "@/assets/tree-group.svg";
 import BackButton from "@/shared/components/BackButton";
 
 // 별들의 고정된 위치 배열 (상단 70%에만 배치)
@@ -13,7 +13,7 @@ const stars = Array.from({ length: 50 }, (_, i) => ({
 
 function NotFound() {
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-[#2B2D42] to-[#1A1B2E] overflow-hidden z-50">
+    <div className="fixed inset-0 bg-linear-to-b from-[#2B2D42] to-[#1A1B2E] overflow-hidden z-50">
       {/* 별들 */}
       <div className="absolute inset-0 z-0">
         {stars.map((star) => (
@@ -40,8 +40,7 @@ function NotFound() {
         </BackButton>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[#1c140b] to-gray-900/40" />
-
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-liner-to-t from-[#1c140b] to-gray-900/40" />
 
       <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
         <div
@@ -54,7 +53,7 @@ function NotFound() {
 
         {/* 나무 SVG */}
         <div className="relative z-10 mb-8">
-          <Image src={treeGroup} alt="나무" width={300} height={300} />
+          <Image src="/tree-group.svg" alt="나무" width={300} height={300} />
         </div>
         <div className="absolute bottom-14 left-1/2 transform -translate-x-1/2 shake-rotate-animation w-48 h-screen overflow-hidden z-1">
           <svg

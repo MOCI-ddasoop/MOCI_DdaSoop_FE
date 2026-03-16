@@ -1,9 +1,5 @@
 "use client";
-import Image from "next/image";
-import notification from "@/assets/icons/notification.svg";
-import mypage from "@/assets/icons/mypage.svg";
 import Link from "next/link";
-import Notification from "./Notification";
 import {
   useClick,
   useFloating,
@@ -15,17 +11,23 @@ import {
   autoUpdate,
   useDismiss,
 } from "@floating-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FaCircleUser } from "react-icons/fa6";
+import { IoNotificationsOutline } from "react-icons/io5";
 
-export interface NotificationProps {
-  read: boolean;
-  type: string;
-  comment: string;
-  href: string;
-}
+import { usePathname } from "next/navigation";
+import Notification from "@/domain/notification/components/Notification";
+import { useGetRecentNotification } from "@/domain/notification/api/useGetRecentNotification";
+import { useAuthStore } from "@/store/authStore";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/shared/config/queryKeys";
 
 function UserMenu() {
-  const isLogin = true;
+  const queryClient = useQueryClient();
+
+  const me = useAuthStore((state) => state.me);
+  const mypageHref = me?.role === "ADMIN" ? "/admin" : "/mypage";
+
   const [isOpen, setIsOpen] = useState(false);
   // 로그인되었는지 여부 가져오는거 추가하기
   const [arrowElement, setArrowElement] = useState<SVGSVGElement | null>(null);
@@ -44,16 +46,20 @@ function UserMenu() {
     dismiss,
     click,
   ]);
-  const notifications: NotificationProps[] = Array.from({ length: 3 }).map(
-    () => ({
-      read: false,
-      type: "댓글",
-      comment: "바보님이 댓글을 달았습니다",
-      href: "/mypage",
-    })
-  );
+  const pathname = usePathname();
+  const {
+    data: notifications = [],
+    isPending,
+    isError,
+  } = useGetRecentNotification(!!me);
 
-  if (!isLogin)
+  useEffect(() => {
+    if (!me) {
+      queryClient.removeQueries({ queryKey: queryKeys.notifications.recent });
+    }
+  }, [me, queryClient]);
+
+  if (!me)
     return (
       <Link
         href="/login"
@@ -63,33 +69,35 @@ function UserMenu() {
       </Link>
     );
   return (
-    <ul className="h-full flex items-center justify-center gap-6 lg:gap-8">
-      <li ref={setReference} {...getReferenceProps()}>
-        <Image
-          src={notification}
-          width={0}
-          height={0}
-          alt="알림 아이콘"
-          style={{ width: "auto", height: "24px" }}
-          loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
-          className="cursor-pointer"
-        ></Image>
+    <ul
+      className={`h-full flex items-center justify-center ${
+        isOpen || pathname.startsWith("/notification")
+          ? "gap-4 lg:gap-6"
+          : "gap-6 lg:gap-8"
+      }`}
+    >
+      <li
+        ref={setReference}
+        {...getReferenceProps()}
+        className={
+          isOpen || pathname.startsWith("/notification")
+            ? "rounded-full bg-pastelblue p-2"
+            : ""
+        }
+      >
+        <button type="button" className="flex-center cursor-pointer">
+          <IoNotificationsOutline size={28} />
+        </button>
       </li>
       <li>
         <Link
-          href="/mypage"
+          href={mypageHref}
           className="h-hover:bg-gray-100 flex justify-center items-center"
         >
-          <Image
-            src={mypage}
-            width={28}
-            height={28}
-            alt="마이페이지 아이콘"
-            loading="eager" // LCP요소까지는 아니기 때문에 eager로 설정
-          ></Image>
+          <FaCircleUser size={28} />
         </Link>
       </li>
-      {isOpen && (
+      {isOpen ? (
         <div
           className="w-fit h-fit flex-center flex-col bg-white rounded-lg p-2 border-2 border-skyBlue shadow"
           ref={setFloating}
@@ -99,22 +107,38 @@ function UserMenu() {
           <div className="w-full flex justify-between items-center pb-2 px-1">
             <h1 className="font-medium">알림</h1>
             <Link
-              href="/mypage"
+              href="/notification"
               className="hover:underline hover:underline-offset-2"
               onClick={() => setIsOpen(false)}
             >
               더보기
             </Link>
           </div>
-          <ul className="flex-center flex-col gap-2">
-            {notifications.map((notification, i) => (
-              <Notification
-                key={i}
-                notification={notification}
-                onClick={() => setIsOpen(false)}
-              />
-            ))}
-          </ul>
+
+          {isPending ? (
+            <div className="h-28 flex-center">
+              <div className="loader"></div>
+            </div>
+          ) : isError ? (
+            <p>오류가 발생했습니다</p>
+          ) : (
+            <ul className="flex-center flex-col gap-2">
+              {notifications.length === 0 ? (
+                <p className="w-50 px-1 py-5 flex-center text-gray-500">
+                  알림이 없습니다
+                </p>
+              ) : (
+                notifications.map((notification, i) => (
+                  <Notification
+                    key={i}
+                    notification={notification}
+                    onClick={() => setIsOpen(false)}
+                    summary
+                  />
+                ))
+              )}
+            </ul>
+          )}
           <FloatingArrow
             ref={setArrowElement}
             context={context}
@@ -125,7 +149,7 @@ function UserMenu() {
             style={{ transform: "translateY(-1px)" }}
           ></FloatingArrow>
         </div>
-      )}
+      ) : null}
     </ul>
   );
 }
