@@ -22,3 +22,10 @@ export type FeedInfinite = Omit<
 export type FeedInfiniteScroll = Omit<InfiniteScrollResponse, "content"> & {
 	content: FeedResponse[];
 };
+
+export type ApiErrorResponse = {
+	errorCode: string;
+	message: string;
+	status: number;
+	timestamp: string;
+};

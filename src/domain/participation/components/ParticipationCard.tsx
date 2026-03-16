@@ -95,8 +95,8 @@ function ParticipationCard(
             text={
               (props.participants?.length ?? 0) >= props.capacity ||
               props.dDay < 0
-                ? `${props.dDay < 0 ? "모집종료" : "모집완료"} ${props.participants?.length ?? 0}/${props.capacity}`
-                : `모집중 ${props.participants?.length ?? 0}/${props.capacity}`
+                ? `${props.dDay < 0 ? "모집종료" : "모집완료"} ${props.participants?.filter((p) => p.participantsStatus === "PARTICIPATING").length ?? 0}/${props.capacity}`
+                : `모집중 ${props.participants?.filter((p) => p.participantsStatus === "PARTICIPATING").length ?? 0}/${props.capacity}`
             }
             className="absolute top-3 right-3"
           />

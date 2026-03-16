@@ -27,7 +27,13 @@ export const queryKeys = {
 
       return ["feeds", "infinite", "member", params.memberId];
     },
-    togetherNotice: (id: number) => ["feeds", "together", "notice", id],
+    togetherNotice: (togetherId: number) => [
+      "feeds",
+      "together",
+      "notice",
+      togetherId,
+    ],
+    togetherNoticePin: (feedId: number) => ["feeds", "notice", "pin", feedId],
     bookmark: () => ["feeds", "infinite", "bookmark"],
     search: (query?: string) => ["feeds", "infinite", "search", query],
 

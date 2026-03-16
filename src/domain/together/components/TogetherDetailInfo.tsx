@@ -29,7 +29,10 @@ function TogetherDetailInfo({ id }: Props) {
     goal,
   } = data.data;
 
-  const participantCount = participants?.length ?? 0;
+  const currentParticipant =
+    participants.filter((p) => p.participantsStatus === "PARTICIPATING")
+      .length ?? 0;
+  const participantCount = participants.length ?? 0;
 
   return (
     <div className="sticky top-20 w-62 h-fit flex flex-col gap-1.5">
@@ -58,7 +61,7 @@ function TogetherDetailInfo({ id }: Props) {
       </p>
 
       <p className="font-semibold whitespace-pre">
-        {participantCount}명이 함께하고 있어요 !
+        {currentParticipant}명이 함께하고 있어요 !
       </p>
 
       <TreeProgress progress={progress ?? 0} />
@@ -70,7 +73,10 @@ function TogetherDetailInfo({ id }: Props) {
         cardUI={false}
       />
 
-      <UserAction id={Number(id)} />
+      <UserAction
+        id={Number(id)}
+        recruiting={(!!capacity && participantCount < capacity) || !!!capacity}
+      />
     </div>
   );
 }

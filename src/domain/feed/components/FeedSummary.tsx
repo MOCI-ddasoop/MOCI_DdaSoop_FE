@@ -7,10 +7,21 @@ interface FeedSummaryProps {
 	id: number;
 	className?: string;
 	onClick?: () => void;
+	isDeleted?: boolean;
 }
 
-function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
-	const { data: feed, isLoading } = useGetFeedById(id);
+function FeedSummary({ id, className, onClick, isDeleted}: FeedSummaryProps) {
+	const { data: feed, isLoading } = useGetFeedById(id,{}, !isDeleted);
+
+	if(isDeleted){
+		return (
+			<div
+				className={tw("flex items-center gap-2 bg-gray-100 px-3 py-4 text-sm text-gray-400", className)}
+			>
+				삭제된 피드입니다
+			</div>
+		)
+	}
 
 	if (isLoading)
 		return (
@@ -36,7 +47,7 @@ function FeedSummary({ id, className, onClick }: FeedSummaryProps) {
 						)}
 					</div>
 					<div className="p-1 break-all line-clamp-2">
-						<span className="font-bold inline">{feed?.authorNickname}</span>
+						<span className="font-bold inline">{feed?.authorNickname}</span>{" "}
 						<span 
 							className="text-gray-500 inline break-all"
 							dangerouslySetInnerHTML={{
