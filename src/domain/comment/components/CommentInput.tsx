@@ -2,7 +2,7 @@
 import tw from "@/shared/utils/tw";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useSetComment } from "../api/useSetComment";
 import TextBox, { TextBoxHandle } from "@/shared/components/TextBox";
 import { useCommentScrollStore } from "../provider/CommentScrollProvider";
@@ -25,8 +25,11 @@ function CommentInput({
 	shouldCommentFocus,
 	userId,
 }: CommentInputProps) {
+	const params = useParams();
+	const searchParams = useSearchParams();
+
 	const [comment, setComment] = useState("");
-	const feedId = useSearchParams().get("feedId");
+	const feedId = (params?.id ?? searchParams.get("feedId")) as string;
 	const { mutate: setCommentMutation, isPending } = useSetComment(userId);
 	const textBoxRef = useRef<TextBoxHandle>(null);
 	const scrollActions = useCommentScrollStore((s) => s.actions);

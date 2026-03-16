@@ -2,7 +2,7 @@ import {
   applyAnchorHook,
   sanitizeOptions,
 } from "@/shared/config/sanitizeConfig";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 export function sanitizeHtml(rawHtml: string) {
   applyAnchorHook(DOMPurify);

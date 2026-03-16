@@ -1648,26 +1648,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/admin/feeds": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 피드 목록 페이징 (관리자)
-     * @description 관리자용 피드 리스트를 필터/페이징하여 조회합니다.
-     */
-    get: operations["getFeedPageForAdmin"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/api/admin/dashboard/stats": {
     parameters: {
       query?: never;
@@ -1680,26 +1660,6 @@ export interface paths {
      * @description 관리자 대시보드용 통계를 조회합니다.
      */
     get: operations["getDashboardStats"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/admin/comments": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /**
-     * 댓글 목록 페이징 (관리자)
-     * @description 관리자용 댓글 리스트를 필터/페이징하여 조회합니다.
-     */
-    get: operations["getCommentPageForAdmin"];
     put?: never;
     post?: never;
     delete?: never;
@@ -2248,9 +2208,9 @@ export interface components {
       processedAt?: string;
     };
     SortObject: {
+      empty?: boolean;
       unsorted?: boolean;
       sorted?: boolean;
-      empty?: boolean;
     };
     NotificationSummaryResponse: {
       /** Format: int64 */
@@ -2468,31 +2428,6 @@ export interface components {
       createdAt?: string;
       isDeleted?: boolean;
     };
-    AdminFeedSummaryResponse: {
-      /** Format: int64 */
-      id?: number;
-      /** @enum {string} */
-      feedType?: "GENERAL" | "TOGETHER_VERIFICATION" | "TOGETHER_NOTICE";
-      /** @enum {string} */
-      visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-      /** Format: int64 */
-      authorId?: number;
-      authorNickname?: string;
-      contentPreview?: string;
-      /** Format: int32 */
-      reactionCount?: number;
-      /** Format: int32 */
-      commentCount?: number;
-      /** Format: int32 */
-      bookmarkCount?: number;
-      /** Format: int64 */
-      reportCount?: number;
-      /** Format: date-time */
-      createdAt?: string;
-      /** Format: date-time */
-      deletedAt?: string;
-      isDeleted?: boolean;
-    };
     DashboardStatsResponse: {
       /** Format: int64 */
       memberCount?: number;
@@ -2512,27 +2447,6 @@ export interface components {
       reportPendingComment?: number;
       /** Format: int64 */
       reportPendingTogether?: number;
-    };
-    AdminCommentSummaryResponse: {
-      /** Format: int64 */
-      id?: number;
-      /** @enum {string} */
-      commentType?: "FEED" | "TOGETHER" | "DONATION";
-      /** Format: int64 */
-      targetId?: number;
-      /** Format: int64 */
-      authorId?: number;
-      authorNickname?: string;
-      contentPreview?: string;
-      /** Format: int32 */
-      reactionCount?: number;
-      /** Format: int64 */
-      reportCount?: number;
-      /** Format: date-time */
-      createdAt?: string;
-      /** Format: date-time */
-      deletedAt?: string;
-      isDeleted?: boolean;
     };
     MemberWithdrawRequest: {
       reason?: string;
@@ -5312,32 +5226,6 @@ export interface operations {
       };
     };
   };
-  getFeedPageForAdmin: {
-    parameters: {
-      query?: {
-        visibility?: "PUBLIC" | "FOLLOWERS" | "PRIVATE" | "MEMBERS" | "NOTICE";
-        authorId?: number;
-        reportedOnly?: boolean;
-        page?: number;
-        size?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description 조회 성공 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["AdminFeedSummaryResponse"];
-        };
-      };
-    };
-  };
   getDashboardStats: {
     parameters: {
       query?: never;
@@ -5354,32 +5242,6 @@ export interface operations {
         };
         content: {
           "*/*": components["schemas"]["DashboardStatsResponse"];
-        };
-      };
-    };
-  };
-  getCommentPageForAdmin: {
-    parameters: {
-      query?: {
-        commentType?: "FEED" | "TOGETHER" | "DONATION";
-        authorId?: number;
-        reportedOnly?: boolean;
-        page?: number;
-        size?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description 조회 성공 */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "*/*": components["schemas"]["AdminCommentSummaryResponse"];
         };
       };
     };

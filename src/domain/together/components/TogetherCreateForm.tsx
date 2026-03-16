@@ -15,7 +15,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCreateTogether } from "../api/useCreateTogether";
 import { useAuthStore } from "@/store/authStore";
-import { categoryType } from "@/shared/constants/filter";
 import { Alert } from "@/shared/utils/alert";
 import { usePostImage } from "@/shared/api/usePostImage";
 
@@ -96,6 +95,7 @@ function TogetherCreateForm() {
         endDate: endDate!.toISOString().slice(0, 10),
         memberId: userId,
         imageUrls,
+        goalFeedCount: Number(targetFeed),
       });
       Alert({ text: "함께하기 생성이 완료되었습니다!", timer: 1500 });
       router.push("/together");

@@ -11,7 +11,7 @@ interface FeedSummaryProps {
 }
 
 function FeedSummary({ id, className, onClick, isDeleted}: FeedSummaryProps) {
-	const { data: feed, isLoading } = useGetFeedById(id, !isDeleted);
+	const { data: feed, isLoading } = useGetFeedById(id,{}, !isDeleted);
 
 	if(isDeleted){
 		return (
