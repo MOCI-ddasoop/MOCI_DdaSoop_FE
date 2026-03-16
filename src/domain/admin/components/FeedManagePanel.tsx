@@ -187,12 +187,24 @@ export default function FeedManagePanel() {
                 </div>
               )}
               <div className="p-4 border-t border-pastelblue-border flex flex-wrap gap-2">
-                <Button size="sm" color="red" onClick={() => confirmDelete(feedId!)} disabled={deleteMutation.isPending}>
+                <Button
+                  size="sm"
+                  color="red"
+                  onClick={() => confirmDelete(feedId!)}
+                  disabled={deleteMutation.isPending}
+                >
                   강제 삭제
                 </Button>
-                <Button size="sm" color="skyblue" onClick={() => confirmPrivate(feedId!)} disabled={privateMutation.isPending}>
-                  비공개 처리
-                </Button>
+                {feed.visibility !== "PRIVATE" && (
+                  <Button
+                    size="sm"
+                    color="skyblue"
+                    onClick={() => confirmPrivate(feedId!)}
+                    disabled={privateMutation.isPending}
+                  >
+                    비공개 처리
+                  </Button>
+                )}
               </div>
             </>
           )}
