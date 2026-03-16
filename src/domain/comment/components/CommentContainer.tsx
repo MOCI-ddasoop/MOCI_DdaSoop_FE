@@ -3,7 +3,7 @@
 import tw from "@/shared/utils/tw";
 import CommentItem from "./CommentItem";
 import { useCommentListByFeedId } from "../api/useGetCommentListByFeedId";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useCommentScrollStore } from "../provider/CommentScrollProvider";
 import { useEffect, useRef } from "react";
 import { useIntersection } from "@/shared/hooks/useIntersection";
@@ -21,7 +21,9 @@ function CommentContainer({
 	onScrollToComment: (target?: HTMLElement) => void;
 	userId?: number;
 }) {
-	const feedId = useSearchParams().get("feedId");
+	const params = useParams();
+	const searchParams = useSearchParams();
+	const feedId = (params?.id ?? searchParams.get("feedId")) as string;
 	const {
 		data,
 		fetchNextPage,
