@@ -26,7 +26,6 @@ export function useAdminComments(params: AdminCommentsQueryParams) {
         page,
         size,
       }),
-    keepPreviousData: true,
   });
 }
 

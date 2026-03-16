@@ -26,7 +26,6 @@ export function useAdminFeeds(params: AdminFeedsQueryParams) {
         page,
         size,
       }),
-    keepPreviousData: true,
   });
 }
 
