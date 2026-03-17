@@ -30,7 +30,7 @@ async function page() {
 
       <div className="flex flex-col gap-5">
         <Link
-          href={'https://api.ddasoop.xyz/login/oauth2/code/kakao'}
+          href={'https://api.ddasoop.xyz/oauth2/authorization/kakao'}
           className="w-full h-12 rounded-lg bg-[#FEE500] flex items-center justify-center gap-3 px-4 hover:bg-[#FEE500]/70"
           aria-label="카카오 소셜 로그인"
         >
@@ -38,7 +38,7 @@ async function page() {
           <span className="font-medium">카카오로 로그인하기</span>
         </Link>
         <Link
-          href={'https://api.ddasoop.xyz/login/oauth2/code/naver'}
+          href={'https://api.ddasoop.xyz/oauth2/authorization/naver'}
           className="w-full h-12 rounded-lg bg-[#03C75A] flex items-center justify-center gap-3 px-4 text-white hover:bg-[#03C75A]/80"
           aria-label="네이버 소셜 로그인"
         >
@@ -46,7 +46,7 @@ async function page() {
           <span className="font-medium">네이버로 로그인하기</span>
         </Link>
         <Link
-          href={'https://api.ddasoop.xyz/login/oauth2/code/google'}
+          href={'https://api.ddasoop.xyz/oauth2/authorization/google'}
           className="w-full h-12 rounded-lg bg-white border border-[#DADCE0] flex items-center justify-center gap-3 px-4 hover:bg-[#F7F7F7]"
           aria-label="구글 소셜 로그인"
         >
