@@ -23,7 +23,9 @@ function TogetherList({
           더보기
         </Link>
       </div>
-      {items.length === 0 ? (
+      {!items ? (
+        <p className="text-gray-400">오류가 발생했습니다</p>
+      ) : items.length === 0 ? (
         <p className="text-gray-400">함께하기가 존재하지 않습니다</p>
       ) : (
         items.map(({ id, thumbnailImage, title, category, mode }) => (
