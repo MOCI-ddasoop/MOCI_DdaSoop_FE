@@ -40,15 +40,22 @@ function ParticipationCard(
       className="relative flex flex-col justify-between min-w-[230px] w-full xl:max-w-[230px] h-75 rounded-lg bg-white ring ring-gray-300 hover:shadow-lg"
     >
       <div className="relative w-full h-[150px] rounded-t-lg overflow-hidden shrink-0">
-        <Image
-          fill
-          alt={title!}
-          src={
-            thumbnailImage ??
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVnmRPneza69AMFkeXJ2uLkV9It4h9_ZB45FI4B8zE8dVc-pbjs35N1RQXisDKyojvLlA&usqp=CAU"
-          }
-          className="object-cover"
-        />
+        {thumbnailImage ? (
+          <Image
+            fill
+            alt={title!}
+            src={thumbnailImage}
+            className="object-cover"
+          />
+        ) : (
+          <Image
+            alt={title!}
+            src="/defaultFeedImage.png"
+            width={150}
+            height={150}
+            className="h-full position-center"
+          />
+        )}
       </div>
       <div className="px-5 py-3 flex-1 flex flex-col gap-1.5">
         <div className="flex justify-between items-center whitespace-nowrap">
@@ -59,7 +66,9 @@ function ParticipationCard(
               {props.dDay === 0
                 ? "D-day"
                 : props.dDay! < 0
-                  ? "모집종료"
+                  ? props.type === "donate" || props.type === "myDonate"
+                    ? "기간종료"
+                    : "모집종료"
                   : `D-${props.dDay}`}
             </h2>
           )}

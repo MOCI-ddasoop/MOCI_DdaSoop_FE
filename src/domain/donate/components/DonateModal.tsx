@@ -42,7 +42,7 @@ function DonateModal({
   const paymentList = [
     {
       key: "CARD" as const,
-      method: "카드",
+      method: "카드 및 간편결제",
       icon: <FaRegCreditCard size={28} />,
     },
     {
@@ -50,16 +50,11 @@ function DonateModal({
       method: "가상 계좌",
       icon: <MdLocalAtm size={28} />,
     },
-    {
-      key: "TRANSFER" as const,
-      method: "계좌 이체",
-      icon: <MdOutlineAtm size={28} />,
-    },
   ];
   const [amount, setAmount] = useState<number>(0);
   const [selected, setSelected] = useState<string>("");
   const [selectedMethod, setSelectedMethod] = useState<
-    "CARD" | "VIRTUAL_ACCOUNT" | "TRANSFER" | null
+    "CARD" | "VIRTUAL_ACCOUNT" | null
   >(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -156,11 +151,6 @@ function DonateModal({
         case "CARD":
           return await payment.requestPayment({
             method: "CARD",
-            ...payOption,
-          });
-        case "TRANSFER":
-          return await payment.requestPayment({
-            method: "TRANSFER",
             ...payOption,
           });
         case "VIRTUAL_ACCOUNT":
@@ -269,7 +259,7 @@ function DonateModal({
         )}
         {step === "paymethod" && (
           <div className="flex flex-col gap-5 px-10 py-5 w-full">
-            <div className="grid grid-cols-3 gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4 py-4">
               {paymentList.map(({ key, method, icon }, i) => (
                 <Button
                   key={i}

@@ -64,7 +64,7 @@ function DonateDetailInfo({ id }: Props) {
         기간 {startDate} - {endDate}
       </p>
 
-      <p className="text-lg">D-{dDay}</p>
+      <p className="text-lg">{dDay && dDay < 0 ? "기간종료" : `D-${dDay}`}</p>
 
       <TreeProgress progress={progress ?? 0} />
 
@@ -75,10 +75,16 @@ function DonateDetailInfo({ id }: Props) {
         cardUI={false}
       />
 
-      <DonateButton
-        donateInfo={{ title, category }}
-        imageUrl={imageUrls ? imageUrls[0] : undefined}
-      />
+      {dDay && dDay < 0 ? (
+        <p className="text-gray-400 h-12 w-full flex-center">
+          기간이 종료된 후원입니다
+        </p>
+      ) : (
+        <DonateButton
+          donateInfo={{ title, category }}
+          imageUrl={imageUrls ? imageUrls[0] : undefined}
+        />
+      )}
     </div>
   );
 }

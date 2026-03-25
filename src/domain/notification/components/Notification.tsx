@@ -140,7 +140,7 @@ function Notification({
             }
           </span>
           <p
-            className={`${summary ? `w-45 truncate` : "w-full flex items-center"} min-h-10`}
+            className={`${summary ? `w-45 truncate` : "w-full flex items-center min-h-10"}`}
           >
             {senderNickname && (
               <Capsule
