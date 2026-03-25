@@ -42,13 +42,8 @@ function DonateModal({
   const paymentList = [
     {
       key: "CARD" as const,
-      method: "카드",
+      method: "간편결제 및 카드",
       icon: <FaRegCreditCard size={28} />,
-    },
-    {
-      key: "VIRTUAL_ACCOUNT" as const,
-      method: "가상 계좌",
-      icon: <MdLocalAtm size={28} />,
     },
     {
       key: "TRANSFER" as const,
@@ -59,7 +54,7 @@ function DonateModal({
   const [amount, setAmount] = useState<number>(0);
   const [selected, setSelected] = useState<string>("");
   const [selectedMethod, setSelectedMethod] = useState<
-    "CARD" | "VIRTUAL_ACCOUNT" | "TRANSFER" | null
+    "CARD" | "TRANSFER" | null
   >(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -161,11 +156,6 @@ function DonateModal({
         case "TRANSFER":
           return await payment.requestPayment({
             method: "TRANSFER",
-            ...payOption,
-          });
-        case "VIRTUAL_ACCOUNT":
-          return await payment.requestPayment({
-            method: "VIRTUAL_ACCOUNT",
             ...payOption,
           });
       }

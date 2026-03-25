@@ -10,7 +10,7 @@ function DeleteReadButton({ isEmpty }: { isEmpty: boolean }) {
   const { mutate: deleteReadNotification } = useDeleteReadNotification({
     onSuccess: () => {
       qc.invalidateQueries({
-        queryKey: [queryKeys.notifications.list()],
+        queryKey: queryKeys.notifications.list(),
       });
       qc.invalidateQueries({
         queryKey: queryKeys.notifications.recent,
@@ -33,7 +33,7 @@ function DeleteReadButton({ isEmpty }: { isEmpty: boolean }) {
   return (
     <button
       type="button"
-      className="flex-center shrink-0 cursor-pointer group p-1 gap-1"
+      className={`${!isEmpty ? "cursor-pointer" : ""} flex-center shrink-0 cursor-pointer group p-1 gap-1`}
       onClick={handleDeleteRead}
       disabled={isEmpty}
     >
