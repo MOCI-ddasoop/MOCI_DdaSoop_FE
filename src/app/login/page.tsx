@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 };
 
 async function page() {
- const lastLoginProvider = await getLastLoginProvider();
+const lastLoginProvider = await getLastLoginProvider();
 
- const providerMap: Record<string, string> = {
+const providerMap: Record<string, string> = {
   KAKAO: "카카오",
   NAVER: "네이버",
   GOOGLE: "구글",
- };
+};
 
   return (
     <div className="w-[400px] h-[480px] rounded-xl shadow-lg bg-white flex flex-col px-10 py-10">

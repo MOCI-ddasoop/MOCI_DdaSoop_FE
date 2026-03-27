@@ -53,8 +53,15 @@ export function middleware(request: NextRequest) {
 	//   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 	// };
 
-	const feedId = request.nextUrl.searchParams.get("feedId");
 	const pathname = request.nextUrl.pathname;
+
+// refreshToken이 있는 사용자가 /login 페이지에 접근하려고 할 때, 메인페이지로 리다이렉트
+	const refreshToken = request.cookies.get("refreshToken");
+	if(refreshToken && pathname === "/login"){
+		return NextResponse.redirect(new URL("/", request.url));
+	}
+
+	const feedId = request.nextUrl.searchParams.get("feedId");
 
 	// 1. feedId가 있는데 정식 페이지(/feed/...)가 아닐 때만 개입
 	if (feedId && !pathname.startsWith("/feed/")) {
