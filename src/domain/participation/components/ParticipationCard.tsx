@@ -47,6 +47,13 @@ function ParticipationCard(
             src={thumbnailImage}
             className="object-cover"
           />
+        ) : type === "myTogether" && props.imageUrls.length !== 0 ? (
+          <Image
+            fill
+            alt={title!}
+            src={props.imageUrls[0]}
+            className="object-cover"
+          />
         ) : (
           <Image
             alt={title!}

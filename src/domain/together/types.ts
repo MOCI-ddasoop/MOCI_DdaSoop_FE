@@ -45,6 +45,7 @@ export type MyTogetherInfo = Omit<TogetherInfo, "dDay" | "participants"> & {
     participantsStatus: "PARTICIPATING" | "LEAVED";
     participantRole: "MEMBER" | "LEADER";
   }[];
+  imageUrls: string[];
 };
 
 export type TogetherDetailInfo = {

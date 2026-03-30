@@ -4,7 +4,9 @@ import { DonateDetailResponse } from "../types";
 export const getInitDonationDetail = async (
   id: string,
 ): Promise<DonateDetailResponse> => {
-  const res = await serverFetchApi(`/api/v1/donation/list/${id}`);
+  const res = await serverFetchApi(`/api/v1/donation/list/${id}`, {
+    cache: "no-cache",
+  });
   if (!res.ok) {
     console.error(
       new Error(`후원 상세정보조회에 실패했습니다. 오류코드 : ${res.status}`),
