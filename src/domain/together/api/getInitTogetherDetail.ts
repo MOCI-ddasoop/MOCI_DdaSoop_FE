@@ -4,7 +4,9 @@ import { TogetherDetailResponse } from "../types";
 export const getInitTogetherDetail = async (
   id: string,
 ): Promise<TogetherDetailResponse> => {
-  const res = await serverFetchApi(`/api/v1/together/list/${id}`);
+  const res = await serverFetchApi(`/api/v1/together/list/${id}`, {
+    cache: "no-cache",
+  });
   if (!res.ok) {
     console.error(
       new Error(
