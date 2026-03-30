@@ -74,6 +74,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
       progress: initialTogetherInfo.data.progress,
       thumbnailImage:
         initialTogetherInfo.data.thumbnailImage?.[0]?.imageUrl ?? null,
+      imageUrls: [],
       goal: initialTogetherInfo.data.goal ?? 0,
     };
 

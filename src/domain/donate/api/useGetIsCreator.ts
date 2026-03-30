@@ -13,7 +13,16 @@ export const useGetIsCreator = ({
   useQuery<DonationCreatorResponse>({
     queryKey: queryKeys.donate.isCreator({ id, memberId }),
     queryFn: async () => {
-      const { data } = await api.get(`api/v1/donation/${id}/${memberId}`);
+      const { data } =
+        memberId === -1
+          ? {
+              data: {
+                resultCode: "FAIL",
+                msg: "로그인이 필요합니다",
+                data: null,
+              },
+            }
+          : await api.get(`api/v1/donation/${id}/${memberId}`);
       return data;
     },
     enabled: !!id && !!memberId,
