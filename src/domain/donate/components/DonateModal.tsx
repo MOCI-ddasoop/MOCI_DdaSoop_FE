@@ -269,7 +269,7 @@ function DonateModal({
         )}
         {step === "paymethod" && (
           <div className="flex flex-col gap-5 px-10 py-5 w-full">
-            <div className="grid grid-cols-2 gap-4 py-4">
+            <div className="grid grid-cols-3 gap-4 py-4">
               {paymentList.map(({ key, method, icon }, i) => (
                 <Button
                   key={i}

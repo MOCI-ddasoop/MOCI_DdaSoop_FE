@@ -64,7 +64,9 @@ function DonateDetailInfo({ id }: Props) {
         기간 {startDate} - {endDate}
       </p>
 
-      <p className="text-lg">{dDay && dDay < 0 ? "기간종료" : `D-${dDay}`}</p>
+      <p className="text-lg">
+        {dDay === 0 ? "D-day" : dDay && dDay < 0 ? "기간종료" : `D-${dDay}`}
+      </p>
 
       <TreeProgress progress={progress ?? 0} />
 
