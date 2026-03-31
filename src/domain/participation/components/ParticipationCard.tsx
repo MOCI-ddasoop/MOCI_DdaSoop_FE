@@ -47,13 +47,23 @@ function ParticipationCard(
             src={thumbnailImage}
             className="object-cover"
           />
-        ) : type === "myTogether" && props.imageUrls.length !== 0 ? (
-          <Image
-            fill
-            alt={title!}
-            src={props.imageUrls[0]}
-            className="object-cover"
-          />
+        ) : type === "myTogether" && props.imageUrls ? (
+          props.imageUrls.length !== 0 ? (
+            <Image
+              fill
+              alt={title!}
+              src={props.imageUrls[0]}
+              className="object-cover"
+            />
+          ) : (
+            <Image
+              alt={title!}
+              src="/defaultFeedImage.png"
+              width={150}
+              height={150}
+              className="h-full position-center"
+            />
+          )
         ) : (
           <Image
             alt={title!}
