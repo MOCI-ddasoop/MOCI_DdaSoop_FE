@@ -4,6 +4,7 @@ interface CompressImagesOptions {
 	maxSizeMB?: number;
 	maxWidthOrHeight?: number;
 	useWebWorker?: boolean;
+	onProgress?: (progress: { current: number; total: number }) => void;
 }
 
 /**
@@ -22,39 +23,32 @@ export async function compressImages(
 		useWebWorker: options?.useWebWorker ?? true,
 	};
 
-	const compressedFiles = await Promise.all(
-		files.map(async (file) => {
-			const originalSize = file.size;
-			const originalSizeMB = (originalSize / (1024 * 1024)).toFixed(2);
+	const compressedFiles: File[] = [];
 
-			// 이미 목표 사이즈 이하면 압축 스킵
-			if (file.size <= compressionOptions.maxSizeMB * 1024 * 1024) {
-				console.log(
-					`📁 ${file.name}: 이미 ${originalSizeMB}MB로 목표 크기 이하이므로 압축을 생략합니다.`,
-				);
-				return file;
-			}
+	for (let i = 0; i < files.length; i++) {
+		const file = files[i];
 
-			console.log(`🗜️ ${file.name}: 압축 시작 (${originalSizeMB}MB)`);
+		// 이미 목표 사이즈 이하면 압축 스킵
+		if (file.size <= compressionOptions.maxSizeMB * 1024 * 1024) {
+			compressedFiles.push(file);
+		} else {
 			const compressedBlob = await imageCompression(file, compressionOptions);
-			const compressedSize = compressedBlob.size;
-			const compressedSizeMB = (compressedSize / (1024 * 1024)).toFixed(2);
-			const compressionRatio = (
-				((originalSize - compressedSize) / originalSize) *
-				100
-			).toFixed(1);
-
-			console.log(
-				`✅ ${file.name}: 압축 완료 (${originalSizeMB}MB → ${compressedSizeMB}MB, ${compressionRatio}% 감소)`,
-			);
 
 			// Blob → File 변환 (원본 파일명 유지)
-			return new File([compressedBlob], file.name, {
-				type: compressedBlob.type,
-				lastModified: Date.now(),
-			});
-		}),
-	);
+			compressedFiles.push(
+				new File([compressedBlob], file.name, {
+					type: compressedBlob.type,
+					lastModified: Date.now(),
+				}),
+			);
+		}
+
+		// 진행 상황 업데이트
+		options?.onProgress?.({
+			current: i + 1,
+			total: files.length,
+		});
+	}
 
 	return compressedFiles;
 }
