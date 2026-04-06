@@ -76,6 +76,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
         initialTogetherInfo.data.thumbnailImage?.[0]?.imageUrl ?? null,
       imageUrls: [],
       goal: initialTogetherInfo.data.goal ?? 0,
+      status: initialTogetherInfo.data.status,
     };
 
     // eslint-disable-next-line react-hooks/set-state-in-effect

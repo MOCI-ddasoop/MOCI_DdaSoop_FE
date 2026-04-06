@@ -21,11 +21,11 @@ function DonationHistoryContainer({ id }: { id: string }) {
         <p className="text-gray-400">기부 내역이 없습니다</p>
       ) : (
         DONATION_LIST.data.map(
-          ({ donationPaymentId, memberName, amount, createdAt }) => (
+          ({ donationPaymentId, nickname, amount, createdAt }) => (
             <DonationListItem
               key={donationPaymentId}
-              name={memberName!}
-              userName={memberName!}
+              name={nickname!}
+              userName={nickname!}
               amount={amount!}
               // donationIImage 추가필요
               createdAt={createdAt?.slice(0, 10)}

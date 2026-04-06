@@ -27,6 +27,8 @@ function TogetherDetailInfo({ id }: Props) {
     capacity,
     participants,
     goal,
+    status,
+    dDay,
   } = data.data;
 
   const currentParticipant =
@@ -49,7 +51,14 @@ function TogetherDetailInfo({ id }: Props) {
 
         {capacity && (
           <Capsule
-            text={participantCount < capacity ? "모집중" : "모집완료"}
+            text={
+              status === "RECRUITING" ||
+              (status === "LEAVED" && participantCount < capacity)
+                ? "모집중"
+                : status === "CLOSED" || status === "LEAVED"
+                  ? "모집종료"
+                  : "참여불가"
+            }
             type="status"
             readOnly
           />
@@ -75,7 +84,11 @@ function TogetherDetailInfo({ id }: Props) {
 
       <UserAction
         id={Number(id)}
-        recruiting={(!!capacity && participantCount < capacity) || !!!capacity}
+        recruiting={
+          (status === "RECRUITING" ||
+            (status === "LEAVED" && participantCount < (capacity ?? 0))) &&
+          dDay! >= 0
+        }
       />
     </div>
   );
