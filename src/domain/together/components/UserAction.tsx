@@ -82,10 +82,16 @@ function UserAction({ id, recruiting }: { id: number; recruiting: boolean }) {
         <p className="text-gray-400 px-10 py-2 text-center">
           사용자 정보를 가져오는 중 오류가 발생했습니다
         </p>
-      ) : !recruiting && !isMember ? (
-        <p className="text-gray-400 px-10 py-2 text-center">
-          모집이 마감되었습니다
-        </p>
+      ) : !recruiting ? (
+        !isMember ? (
+          <p className="text-gray-400 px-10 py-2 text-center">
+            모집이 마감되었습니다
+          </p>
+        ) : (
+          <p className="text-gray-400 px-10 py-2 text-center">
+            활동기간이 종료되었습니다
+          </p>
+        )
       ) : isMember ? (
         <>
           <FeedCreateButton className="w-60" />

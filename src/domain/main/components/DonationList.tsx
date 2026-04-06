@@ -31,7 +31,7 @@ function DonationList({
             id,
             donationId,
             memberId,
-            memberName,
+            nickName,
             title,
             thumbnailImage,
             amount,
@@ -41,7 +41,7 @@ function DonationList({
             <DonationListItem
               key={id}
               name={title!}
-              userName={memberName}
+              userName={nickName}
               amount={amount!}
               donationImage={thumbnailImage}
               createdAt={createdAt?.slice(0, 10)}

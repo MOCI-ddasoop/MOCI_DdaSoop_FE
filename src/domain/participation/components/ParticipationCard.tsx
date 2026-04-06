@@ -47,13 +47,23 @@ function ParticipationCard(
             src={thumbnailImage}
             className="object-cover"
           />
-        ) : type === "myTogether" && props.imageUrls.length !== 0 ? (
-          <Image
-            fill
-            alt={title!}
-            src={props.imageUrls[0]}
-            className="object-cover"
-          />
+        ) : type === "myTogether" && props.imageUrls ? (
+          props.imageUrls.length !== 0 ? (
+            <Image
+              fill
+              alt={title!}
+              src={props.imageUrls[0]}
+              className="object-cover"
+            />
+          ) : (
+            <Image
+              alt={title!}
+              src="/defaultFeedImage.png"
+              width={150}
+              height={150}
+              className="h-full position-center"
+            />
+          )
         ) : (
           <Image
             alt={title!}
@@ -109,10 +119,17 @@ function ParticipationCard(
           <Capsule
             type="participant"
             text={
-              (props.participants?.length ?? 0) >= props.capacity ||
-              props.dDay < 0
-                ? `${props.dDay < 0 ? "모집종료" : "모집완료"} ${props.participants?.filter((p) => p.participantsStatus === "PARTICIPATING").length ?? 0}/${props.capacity}`
-                : `모집중 ${props.participants?.filter((p) => p.participantsStatus === "PARTICIPATING").length ?? 0}/${props.capacity}`
+              props.dDay! < 0
+                ? `기간종료`
+                : props.status === "RECRUITING" ||
+                    (props.status === "LEAVED" &&
+                      props.participants?.length !== props.capacity)
+                  ? `모집중 ${props.participants?.length ?? 0}/${props.capacity}`
+                  : props.status === "CLOSED" ||
+                      (props.status === "LEAVED" &&
+                        props.participants?.length === props.capacity)
+                    ? `모집종료 ${props.participants?.length ?? 0}/${props.capacity}`
+                    : `참여불가`
             }
             className="absolute top-3 right-3"
           />
