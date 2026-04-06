@@ -25,6 +25,7 @@ export interface TogetherInfo {
   participants: Participant[] | null;
   thumbnailImage: string | null;
   progress: number | null;
+  status: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
   dDay: number;
 }
 
@@ -62,6 +63,8 @@ export type TogetherDetailInfo = {
   progress: number | null;
   thumbnailImage: { imageUrl: string }[] | null;
   goal: number | null;
+  status: "RECRUITING" | "CLOSED" | "LEAVED" | "DROPPED";
+  dDay: number;
 };
 
 export interface TogetherResponseData {
