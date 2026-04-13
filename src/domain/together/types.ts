@@ -37,7 +37,7 @@ interface Participant {
   participantRole: "MEMBER" | "LEADER";
 }
 
-export type MyTogetherInfo = Omit<TogetherInfo, "dDay" | "participants"> & {
+export type MyTogetherInfo = Omit<TogetherInfo, "participants"> & {
   goal: number;
   participants: {
     id: number;

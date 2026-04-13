@@ -22,7 +22,7 @@ function FeedImageInput({
   setValue: (images: ImageBase[]) => void;
 }) {
   const [isDragging, setIsDragging] = useState(false);
-  const { mutate: uploadImageFn } = usePostImage();
+  const { mutate: uploadImageFn, compressionProgress } = usePostImage();
 
   const MAX_TOTAL = 10;
 
@@ -110,28 +110,47 @@ function FeedImageInput({
           className={tw(
             "flex-center flex-col w-full h-full border-4 rounded-lg border-dashed p-2 text-mainblue border-mainblue bg-white hover:text-white hover:border-white hover:bg-mainblue",
             isDragging && "text-white border-white bg-mainblue",
+            compressionProgress && "cursor-not-allowed opacity-50",
           )}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <FaRegImages size={"8rem"} />
-          <div>여기에 파일을 놓거나 클릭하여</div>
-          <div>이미지를 추가하세요.</div>
+          {compressionProgress ? (
+            <>
+              <div className="upload-spinner" />
+              <div className="text-lg font-medium">이미지 업로드중...</div>
+              <div className="text-sm mt-2">
+                ({compressionProgress.current}/{compressionProgress.total})
+              </div>
+            </>
+          ) : (
+            <>
+              <FaRegImages size={"8rem"} />
+              <div>여기에 파일을 놓거나 클릭하여</div>
+              <div>이미지를 추가하세요.</div>
+            </>
+          )}
         </label>
       </div>
     </div>
   );
+
+  const isLoading = compressionProgress !== null;
 
   const thumbsInput = (
     <label
       htmlFor="file"
       className={tw(
         "flex-center flex-col w-12 h-full",
-        value.length >= MAX_TOTAL ? "cursor-no-drop" : "",
+        value.length >= MAX_TOTAL || isLoading ? "cursor-no-drop" : "",
       )}
     >
-      <FaPlus size={"1rem"} />
+      {isLoading ? (
+        <div className="small-upload-spinner" />
+      ) : (
+        <FaPlus size={"1rem"} />
+      )}
       <span
         className={tw(
           "text-sm",
