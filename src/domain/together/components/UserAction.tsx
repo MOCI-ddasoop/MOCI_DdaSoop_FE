@@ -21,6 +21,13 @@ function UserAction({ id, recruiting }: { id: number; recruiting: boolean }) {
       qc.refetchQueries({ queryKey: queryKeys.together.isParticipating() });
       qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
       qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
+      qc.invalidateQueries({
+        queryKey: queryKeys.feeds.infinite({
+          page: "together",
+          togetherId: id,
+        }),
+      });
+      qc.invalidateQueries({ queryKey: queryKeys.feeds.togetherNotice(id) });
       Alert({ text: "참여가 완료되었습니다.", timer: 1500 });
     },
   });
@@ -32,6 +39,13 @@ function UserAction({ id, recruiting }: { id: number; recruiting: boolean }) {
       });
       await qc.refetchQueries({ queryKey: queryKeys.together.id(String(id)) });
       qc.invalidateQueries({ queryKey: queryKeys.together.member(userId!) });
+      qc.invalidateQueries({
+        queryKey: queryKeys.feeds.infinite({
+          page: "together",
+          togetherId: id,
+        }),
+      });
+      qc.invalidateQueries({ queryKey: queryKeys.feeds.togetherNotice(id) });
       Alert({ text: "탈퇴가 완료되었습니다.", timer: 1500, red: true });
     },
   });
