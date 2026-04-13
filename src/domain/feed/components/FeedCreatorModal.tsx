@@ -48,14 +48,17 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
   const { me } = useAuthStore();
   const userId = me?.memberId;
   const { data: ownTogetherList } = useGetOwnTogetherList(userId!);
+  const ownTogetherListFiltered = ownTogetherList?.data.filter(
+    (t) => t.dDay >= 0,
+  );
   const setCanClose = useModalStore((s) => s.setCanClose);
   const resetCanClose = useModalStore((s) => s.resetCanClose);
 
   const userTogetherList = useMemo(() => {
     if (pathname === "/") {
-      return ownTogetherList?.data;
+      return ownTogetherListFiltered;
     }
-  }, [ownTogetherList?.data, pathname]);
+  }, [ownTogetherListFiltered, pathname]);
 
   useEffect(() => {
     if (!isTogetherRoute) return;
@@ -77,6 +80,7 @@ function FeedCreatorModal({ onClose }: { onClose: () => void }) {
       imageUrls: [],
       goal: initialTogetherInfo.data.goal ?? 0,
       status: initialTogetherInfo.data.status,
+      dDay: initialTogetherInfo.data.dDay,
     };
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
